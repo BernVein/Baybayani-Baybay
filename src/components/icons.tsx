@@ -165,6 +165,7 @@ export const ShoppingBag = (props: IconSvgProps) => (
 		stroke-width="1.5"
 		stroke="currentColor"
 		className="size-6"
+		{...props}
 	>
 		<path
 			stroke-linecap="round"
@@ -182,6 +183,7 @@ export const CartIcon = (props: IconSvgProps) => (
 		stroke-width="1.5"
 		stroke="currentColor"
 		className="size-6"
+		{...props}
 	>
 		<path
 			stroke-linecap="round"
@@ -198,6 +200,7 @@ export const OrdersIcon = (props: IconSvgProps) => (
 		stroke-width="1.5"
 		stroke="currentColor"
 		className="size-6"
+		{...props}
 	>
 		<path
 			stroke-linecap="round"
@@ -242,6 +245,7 @@ export const BaybayaniLogo = (props: IconSvgProps) => (
 		height="30pt"
 		viewBox="0 0 187.000000 262.000000"
 		preserveAspectRatio="xMidYMid meet"
+		{...props}
 	>
 		<g
 			transform="translate(0.000000,262.000000) scale(0.100000,-0.100000)"
