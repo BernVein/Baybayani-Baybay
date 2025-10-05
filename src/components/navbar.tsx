@@ -42,7 +42,7 @@ export function Navbar() {
 			>
 				<NavbarItem isActive={active === "Shop"}>
 					<Link
-						href="#"
+						href="/"
 						color={active === "Shop" ? "success" : "foreground"}
 						onClick={() => setActive("Shop")}
 					>
@@ -54,7 +54,7 @@ export function Navbar() {
 				</NavbarItem>
 				<NavbarItem isActive={active === "Cart"}>
 					<Link
-						href="#"
+						href="/cart"
 						color={active === "Cart" ? "success" : "foreground"}
 						onClick={() => setActive("Cart")}
 					>
@@ -66,7 +66,7 @@ export function Navbar() {
 				</NavbarItem>
 				<NavbarItem isActive={active === "Orders"}>
 					<Link
-						href="#"
+						href="/orders"
 						color={active === "Orders" ? "success" : "foreground"}
 						onClick={() => setActive("Orders")}
 					>
@@ -89,15 +89,24 @@ export function Navbar() {
 						/>
 					</DropdownTrigger>
 					<DropdownMenu aria-label="Profile Actions" variant="flat">
-						<DropdownItem key="profile" className="h-14 gap-2">
+						<DropdownItem
+							key="profile"
+							href="/profile"
+							className="h-14 gap-2"
+						>
 							<p className="font-semibold">Signed in as</p>
 							<p className="font-semibold">
 								realbernvein@gmail.com
 							</p>
 						</DropdownItem>
-						<DropdownItem key="settings">Settings</DropdownItem>
-						<DropdownItem key="analytics">Analytics</DropdownItem>
-						<DropdownItem key="logout" color="danger">
+						<DropdownItem key="settings" href="/settings">
+							Settings
+						</DropdownItem>
+						<DropdownItem
+							key="logout"
+							href="/logout"
+							color="danger"
+						>
 							Log Out
 						</DropdownItem>
 					</DropdownMenu>
