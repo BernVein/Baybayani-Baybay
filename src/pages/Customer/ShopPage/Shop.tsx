@@ -1,8 +1,8 @@
-import ItemCard from "./ItemCard";
+import ShopItems from "./ShopItems";
 export default function Shop() {
-  return (
-    <div>
-      <ItemCard />
-    </div>
-  );
+	return (
+		<div>
+			<ShopItems />
+		</div>
+	);
 }
