@@ -116,12 +116,12 @@ export default function ItemCard({
 						</div>
 					</div>
 					<Button
-						color="primary"
+						color="success"
 						variant="solid"
 						className="w-full mt-3"
 					>
-						<CartIcon className="size-5" />
-						Add to Cart
+						<CartIcon className="size-5 text-white" />
+						<p className="text-white">Add to Cart</p>
 					</Button>
 				</div>
 			</CardFooter>
