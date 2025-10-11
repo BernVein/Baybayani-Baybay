@@ -5,7 +5,7 @@ export default function ShopItems() {
 		{
 			title: "Orange",
 			img: "https://picsum.photos/300/300",
-			price: "$5.50",
+			price: "₱5.50",
 			stocks: "232",
 			soldBy: "Kilo",
 			description:
@@ -14,7 +14,7 @@ export default function ShopItems() {
 		{
 			title: "Tangerine",
 			img: "https://picsum.photos/300/300",
-			price: "$3.00",
+			price: "₱3.00",
 			stocks: "2232",
 			soldBy: "Piece",
 
@@ -27,7 +27,7 @@ export default function ShopItems() {
 			stocks: "102",
 			soldBy: "Bulk",
 
-			price: "$10.00",
+			price: "₱10.00",
 			description:
 				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer arcu leo, dictum nec est ac, ",
 		},
