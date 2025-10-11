@@ -157,14 +157,14 @@ export const HeartFilledIcon = ({
 	</svg>
 );
 
-export const ShoppingBag = (props: IconSvgProps) => (
+export const ShoppingBag = (props: IconSvgProps, className: string) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
 		viewBox="0 0 24 24"
 		strokeWidth={1.5}
 		stroke="currentColor"
-		className="size-6"
+		className={className}
 		{...props}
 	>
 		<path
@@ -175,14 +175,14 @@ export const ShoppingBag = (props: IconSvgProps) => (
 	</svg>
 );
 
-export const CartIcon = (props: IconSvgProps) => (
+export const CartIcon = (props: IconSvgProps, className: string) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
 		viewBox="0 0 24 24"
 		strokeWidth={1.5}
 		stroke="currentColor"
-		className="size-6"
+		className={className}
 		{...props}
 	>
 		<path
@@ -209,7 +209,7 @@ export const OrdersIcon = (props: IconSvgProps) => (
 		/>
 	</svg>
 );
-export const SearchIcon = (props: IconSvgProps) => (
+export const SearchIcon = (props: IconSvgProps, className: string) => (
 	<svg
 		aria-hidden="true"
 		fill="none"
@@ -218,6 +218,7 @@ export const SearchIcon = (props: IconSvgProps) => (
 		role="presentation"
 		viewBox="0 0 24 24"
 		width="1em"
+		className={className}
 		{...props}
 	>
 		<path
