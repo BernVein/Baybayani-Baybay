@@ -9,7 +9,6 @@ import {
 	Dropdown,
 	DropdownMenu,
 	Avatar,
-	Input,
 	Autocomplete,
 	AutocompleteItem,
 } from "@heroui/react";

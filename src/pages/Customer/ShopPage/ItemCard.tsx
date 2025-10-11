@@ -111,7 +111,7 @@ export default function ItemCard({
 						</div>
 						<div className="w-full sm:w-1/2 text-right mt-2 sm:mt-0">
 							<span className="text-xs font-light">
-								Stocks: {item.stocks}
+								Stocks: {item.stocks} {item.soldBy}s
 							</span>
 						</div>
 					</div>
