@@ -11,6 +11,7 @@ import {
 	Avatar,
 	Autocomplete,
 	AutocompleteItem,
+	Badge,
 } from "@heroui/react";
 import { BaybayaniLogo, CartIcon, SearchIcon } from "./icons";
 import { useState } from "react";
@@ -94,7 +95,11 @@ export function Navbar() {
 		<HeroNavBar>
 			{/* Brand */}
 			<NavbarBrand className="flex-shrink-0">
-				<Link href="/" className="flex items-center gap-2">
+				<Link
+					href="/"
+					className="flex items-center gap-2"
+					onClick={() => setActive("")}
+				>
 					<BaybayaniLogo />
 					<p className="font-bold hidden sm:block sm:text-lg">
 						<span className="text-[#146A38]">BAYBAY</span>
@@ -140,7 +145,14 @@ export function Navbar() {
 						onClick={() => setActive("Cart")}
 					>
 						<div className="flex items-center gap-2">
-							<CartIcon className="size-6" />
+							<Badge
+								content="3"
+								color="success"
+								shape="circle"
+								showOutline={false}
+							>
+								<CartIcon className="size-6" />
+							</Badge>
 							<span className="hidden sm:inline">Cart</span>
 						</div>
 					</Link>
