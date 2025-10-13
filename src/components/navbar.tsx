@@ -100,8 +100,9 @@ export function Navbar() {
 		<HeroNavBar>
 			<NavbarBrand className="hidden md:flex">
 				<BaybayaniLogo />
-				<p className="font-bold hidden sm:block sm:text-lg text-green-700">
-					BAYBAYANI
+				<p className="font-bold hidden sm:block sm:text-lg">
+					<span className="text-[#146A38]">BAYBAY</span>
+					<span className="text-[#F9C424]">ANI</span>
 				</p>
 			</NavbarBrand>
 			<NavbarContent>
@@ -110,7 +111,6 @@ export function Navbar() {
 					fullWidth={true}
 					className="pl-4 w-full opacity-80"
 					defaultItems={animals}
-					defaultSelectedKey="cat"
 					placeholder="Search"
 					startContent={<SearchIcon className="md:size-6 size-12" />}
 					variant="flat"
