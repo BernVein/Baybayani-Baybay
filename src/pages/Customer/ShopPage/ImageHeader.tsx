@@ -15,21 +15,24 @@ export default function ImageHeader() {
 			<div className="absolute inset-0 z-10 bg-gradient-to-r from-black/90 via-black/50 to-transparent pointer-events-none" />
 
 			{/* Text content */}
-			<div className="absolute inset-0 flex flex-col justify-center items-start text-left z-20 px-10 md:px-16">
-				<h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
+			<div className="absolute inset-0 flex flex-col justify-center items-start text-left z-20 px-10 md:px-16 space-y-3">
+				<h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg leading-tight">
 					Welcome to
 					<span className="text-[#36975f]"> BAYBAY</span>
 					<span className="text-[#F9C424]">ANI</span>
 				</h1>
-				<p className="text-gray-200 mt-3 max-w-md text-lg">
-					<span className="sm:text-base text-sm">
-						Ani gikan sa Baybay <br></br>Para sa Baybayanon
-					</span>
-					<br></br>
-					<Highlight className="font-bold sm:text-lg text-sm">
+
+				<div className="text-gray-200 max-w-md">
+					<p className="sm:text-base text-sm leading-snug">
+						Ani gikan sa Baybay
+						<br />
+						Para sa Baybayanon
+					</p>
+
+					<Highlight className="font-bold sm:text-lg text-sm inline-block">
 						PRESKO, LIMPYO, BARATO
 					</Highlight>
-				</p>
+				</div>
 			</div>
 		</div>
 	);
