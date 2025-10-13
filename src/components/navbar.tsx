@@ -151,18 +151,7 @@ export function Navbar() {
 						</div>
 					</Link>
 				</NavbarItem>
-				<NavbarItem isActive={active === "Orders"}>
-					<Link
-						href="/orders"
-						color={active === "Orders" ? "success" : "foreground"}
-						onClick={() => setActive("Orders")}
-					>
-						<div className="flex items-center gap-2">
-							<OrdersIcon />
-							<span className="hidden sm:inline">Orders</span>
-						</div>
-					</Link>
-				</NavbarItem>
+
 				<Dropdown placement="bottom-end">
 					<DropdownTrigger>
 						<Avatar
@@ -186,13 +175,25 @@ export function Navbar() {
 								realbernvein@gmail.com
 							</p>
 						</DropdownItem>
-						<DropdownItem key="settings" href="/settings">
+						<DropdownItem
+							key="orders"
+							href="/orders"
+							onClick={() => setActive("")}
+						>
+							Orders
+						</DropdownItem>
+						<DropdownItem
+							key="settings"
+							href="/settings"
+							onClick={() => setActive("")}
+						>
 							Settings
 						</DropdownItem>
 						<DropdownItem
 							key="logout"
 							href="/logout"
 							color="danger"
+							onClick={() => setActive("")}
 						>
 							Log Out
 						</DropdownItem>
