@@ -12,13 +12,7 @@ import {
 	Autocomplete,
 	AutocompleteItem,
 } from "@heroui/react";
-import {
-	BaybayaniLogo,
-	ShoppingBag,
-	CartIcon,
-	OrdersIcon,
-	SearchIcon,
-} from "./icons";
+import { BaybayaniLogo, ShoppingBag, CartIcon, SearchIcon } from "./icons";
 import { useState } from "react";
 export const AcmeLogo = () => {
 	return (
