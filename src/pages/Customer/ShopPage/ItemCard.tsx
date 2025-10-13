@@ -51,8 +51,8 @@ export default function ItemCard({
 
 			<CardFooter className="text-small">
 				<div className="flex flex-col w-full ">
-					<b className="font-light text-center md:text-left text-sm">
-						{item.title}
+					<b className="font-extralight text-center md:text-left text-xs md:text-sm">
+						{item.title}, sold by <strong>{item.soldBy}</strong>
 					</b>
 					<b className="text-center md:text-left text-lg md:text-xl">
 						{item.title}
@@ -60,28 +60,26 @@ export default function ItemCard({
 
 					<div className="flex flex-col w-full text-default-500 space-y-2 mt-2">
 						{/* Retail */}
-						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
 									₱3.00
 								</span>
-								<span className="text-sm">/ piece</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
-								Retail
+								for <strong>Retail</strong>
 							</p>
 						</div>
 
 						{/* Wholesale */}
-						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
 									₱2.00
 								</span>
-								<span className="text-sm">/ piece</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
-								Wholesale
+								for <strong>Wholesale</strong>
 							</p>
 						</div>
 					</div>
