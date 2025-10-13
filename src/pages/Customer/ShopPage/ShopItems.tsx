@@ -8,8 +8,7 @@ export default function ShopItems() {
 			price: "₱5.50",
 			stocks: "232",
 			soldBy: "Kilo",
-			description:
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer arcu leo, dictum nec est ac, ",
+			description: "Lorem ium nec est ac, ",
 		},
 		{
 			title: "Tangerine",
@@ -18,8 +17,7 @@ export default function ShopItems() {
 			stocks: "2232",
 			soldBy: "Piece",
 
-			description:
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer arcu leo, dictum nec est ac, ",
+			description: "",
 		},
 		{
 			title: "Raspberry",

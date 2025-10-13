@@ -50,24 +50,61 @@ export default function ItemCard({
 			</CardBody>
 
 			<CardFooter className="text-small">
-				<div className="flex flex-col w-full">
-					{/* Product Name and Price */}
-					<div className="flex justify-between w-full flex-col sm:flex-row items-center sm:items-baseline">
-						<b>{item.title}</b>
-						<p className="text-default-500 flex items-baseline mt-2 sm:mt-0 justify-center sm:justify-start">
-							<span className="mr-1">{item.price}</span>
-							<span className="font-bold text-sm">
-								/ {item.soldBy}
-							</span>
-						</p>
+				<div className="flex flex-col w-full ">
+					<b className="font-light text-center md:text-left text-sm">
+						{item.title}
+					</b>
+					<b className="text-center md:text-left text-lg md:text-xl">
+						{item.title}
+					</b>
+
+					<div className="flex flex-col w-full text-default-500 space-y-2 mt-2">
+						{/* Retail */}
+						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+							<p>
+								<span className="mr-1 font-semibold text-base">
+									₱3.00
+								</span>
+								<span className="text-sm">/ piece</span>
+							</p>
+							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
+								Retail
+							</p>
+						</div>
+
+						{/* Wholesale */}
+						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+							<p>
+								<span className="mr-1 font-semibold text-base">
+									₱2.00
+								</span>
+								<span className="text-sm">/ piece</span>
+							</p>
+							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
+								Wholesale
+							</p>
+						</div>
 					</div>
 
 					<Divider className="my-2" />
 
-					<span className="text-left text-xs font-light">
-						{item.description.split(" ").slice(0, 10).join(" ")}
-						{item.description.split(" ").length > 10 && " ..."}
-					</span>
+					<div className="relative w-full h-[48px] flex items-center">
+						{!item.description ||
+						item.description.trim().length === 0 ? (
+							<p className="w-full text-center text-xs italic text-default-400 opacity-60">
+								No description available.
+							</p>
+						) : (
+							<p className="text-left text-xs font-light text-default-500 line-clamp-2">
+								{item.description
+									.split(" ")
+									.slice(0, 10)
+									.join(" ")}
+								{item.description.split(" ").length > 10 &&
+									" ..."}
+							</p>
+						)}
+					</div>
 
 					<Divider className="my-3" />
 
