@@ -102,7 +102,7 @@ export default function ShopItems() {
 		{
 			title: "Raspberry",
 			img: "https://picsum.photos/300/300",
-			stocks: "102",
+			stocks: "10",
 			soldBy: "Bulk",
 
 			price: "$10.00",
@@ -122,7 +122,7 @@ export default function ShopItems() {
 	];
 
 	return (
-		<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 p-4 mt-2">
+		<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2">
 			{list.map((item, index) => (
 				<ItemCard item={item} index={index} key={index} />
 			))}
