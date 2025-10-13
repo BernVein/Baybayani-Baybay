@@ -34,11 +34,20 @@ export default function ItemCard({
 				</div>
 			));
 	};
+	const determinePluralText = (stock: number, soldBy: string) => {
+		if (stock > 1) {
+			return `${stock} ${soldBy}s left`;
+		} else {
+			return `${stock} ${soldBy} left`;
+		}
+	};
+
 	return (
 		<Card
 			key={index}
 			shadow="sm"
 			onPress={() => console.log("item pressed")}
+			className="transform transition-transform duration-300 hover:scale-105 cursor-pointer"
 		>
 			<CardBody className="overflow-visible p-0">
 				<div className="relative">
@@ -111,7 +120,10 @@ export default function ItemCard({
 						</div>
 						<div className="w-full sm:w-1/2 text-right mt-2 sm:mt-0">
 							<span className="text-xs font-light">
-								Stocks: {item.stocks} {item.soldBy}s
+								{determinePluralText(
+									Number(item.stocks),
+									item.soldBy
+								)}
 							</span>
 						</div>
 					</div>
