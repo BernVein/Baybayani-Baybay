@@ -13,7 +13,7 @@ import {
 	AutocompleteItem,
 	Badge,
 } from "@heroui/react";
-import { BaybayaniLogo, CartIcon, SearchIcon } from "./icons";
+import { BaybayaniLogo, CartIcon, SearchIcon, MessageIcon } from "./icons";
 import { useState } from "react";
 export const AcmeLogo = () => {
 	return (
@@ -94,7 +94,7 @@ export function Navbar() {
 	return (
 		<HeroNavBar>
 			{/* Brand */}
-			<NavbarBrand className="flex-shrink-0">
+			<NavbarBrand className="flex-shrink-0 hidden sm:flex">
 				<Link
 					href="/"
 					className="flex items-center gap-2"
@@ -118,7 +118,7 @@ export function Navbar() {
 					fullWidth
 					className="w-full opacity-90"
 					defaultItems={animals}
-					placeholder="Search"
+					placeholder="Search products..."
 					startContent={
 						<SearchIcon className="size-5 text-default-500" />
 					}
@@ -135,10 +135,38 @@ export function Navbar() {
 			{/* Cart + Avatar */}
 			<NavbarContent
 				as="div"
-				className="flex-shrink-0 items-center gap-4"
+				className="flex-shrink-0 items-center gap-4 hidden sm:flex"
 				justify="end"
 			>
-				<NavbarItem isActive={active === "Cart"}>
+				<NavbarItem
+					className="hidden sm:inline-block"
+					isActive={active === "Messages"}
+				>
+					<Link
+						href="/messages"
+						color={active === "Messages" ? "success" : "foreground"}
+						onClick={() => setActive("Messages")}
+					>
+						<div className="flex items-center gap-2">
+							<Badge
+								content="3"
+								color="danger"
+								shape="circle"
+								showOutline={false}
+							>
+								<MessageIcon className="size-6" />
+							</Badge>
+							<span className="hidden sm:inline font-normal">
+								Messages
+							</span>
+						</div>
+					</Link>
+				</NavbarItem>
+
+				<NavbarItem
+					className="hidden sm:inline-block"
+					isActive={active === "Cart"}
+				>
 					<Link
 						href="/cart"
 						color={active === "Cart" ? "success" : "foreground"}
@@ -153,7 +181,9 @@ export function Navbar() {
 							>
 								<CartIcon className="size-6" />
 							</Badge>
-							<span className="hidden sm:inline">Cart</span>
+							<span className="hidden sm:inline font-normal">
+								Cart
+							</span>
 						</div>
 					</Link>
 				</NavbarItem>
