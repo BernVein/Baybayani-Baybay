@@ -1,18 +1,14 @@
 import { Highlight } from "@/ui/hero-highlight";
 import { Image } from "@heroui/react";
-import useIsMobile from "@/lib/isMobile";
 
 export default function ImageHeader() {
-	const isMobile = useIsMobile();
-
 	return (
-		<div className="relative h-72 md:h-80 overflow-hidden rounded-2xl">
+		<div className="relative h-50 md:h-70 overflow-hidden rounded-2xl">
 			{/* Image background */}
 			<Image
 				alt="HeroUI hero Image"
 				src="/cover.jpg"
-				className="w-full h-full object-cover rounded-2xl z-0"
-				removeWrapper={isMobile}
+				className="w-full h-auto object-cover rounded-2xl z-0"
 			/>
 
 			{/* Feathered gradient overlay */}
