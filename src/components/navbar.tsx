@@ -12,7 +12,7 @@ import {
 	Autocomplete,
 	AutocompleteItem,
 } from "@heroui/react";
-import { BaybayaniLogo, ShoppingBag, CartIcon, SearchIcon } from "./icons";
+import { BaybayaniLogo, CartIcon, SearchIcon } from "./icons";
 import { useState } from "react";
 export const AcmeLogo = () => {
 	return (
@@ -89,24 +89,34 @@ export const animals = [
 ];
 
 export function Navbar() {
-	const [active, setActive] = useState("Shop");
+	const [active, setActive] = useState("");
 	return (
 		<HeroNavBar>
-			<NavbarBrand className="hidden md:flex">
-				<BaybayaniLogo />
-				<p className="font-bold hidden sm:block sm:text-lg">
-					<span className="text-[#146A38]">BAYBAY</span>
-					<span className="text-[#F9C424]">ANI</span>
-				</p>
+			{/* Brand */}
+			<NavbarBrand className="flex-shrink-0">
+				<Link href="/" className="flex items-center gap-2">
+					<BaybayaniLogo />
+					<p className="font-bold hidden sm:block sm:text-lg">
+						<span className="text-[#146A38]">BAYBAY</span>
+						<span className="text-[#F9C424]">ANI</span>
+					</p>
+				</Link>
 			</NavbarBrand>
-			<NavbarContent>
+
+			{/* Search bar (make it expand!) */}
+			<NavbarContent
+				className="flex-grow px-2 max-w-full"
+				justify="center"
+			>
 				<Autocomplete
 					size="sm"
-					fullWidth={true}
-					className="pl-4 w-full opacity-80"
+					fullWidth
+					className="w-full opacity-90"
 					defaultItems={animals}
 					placeholder="Search"
-					startContent={<SearchIcon className="md:size-6 size-12" />}
+					startContent={
+						<SearchIcon className="size-5 text-default-500" />
+					}
 					variant="flat"
 				>
 					{(item) => (
@@ -116,23 +126,13 @@ export function Navbar() {
 					)}
 				</Autocomplete>
 			</NavbarContent>
+
+			{/* Cart + Avatar */}
 			<NavbarContent
 				as="div"
-				className="items-center gap-6"
+				className="flex-shrink-0 items-center gap-4"
 				justify="end"
 			>
-				<NavbarItem isActive={active === "Shop"}>
-					<Link
-						href="/"
-						color={active === "Shop" ? "success" : "foreground"}
-						onClick={() => setActive("Shop")}
-					>
-						<div className="flex items-center gap-2">
-							<ShoppingBag className="size-6" />
-							<span className="hidden sm:inline">Shop</span>
-						</div>
-					</Link>
-				</NavbarItem>
 				<NavbarItem isActive={active === "Cart"}>
 					<Link
 						href="/cart"
@@ -169,25 +169,16 @@ export function Navbar() {
 								realbernvein@gmail.com
 							</p>
 						</DropdownItem>
-						<DropdownItem
-							key="orders"
-							href="/orders"
-							onClick={() => setActive("")}
-						>
+						<DropdownItem key="orders" href="/orders">
 							Orders
 						</DropdownItem>
-						<DropdownItem
-							key="settings"
-							href="/settings"
-							onClick={() => setActive("")}
-						>
+						<DropdownItem key="settings" href="/settings">
 							Settings
 						</DropdownItem>
 						<DropdownItem
 							key="logout"
 							href="/logout"
 							color="danger"
-							onClick={() => setActive("")}
 						>
 							Log Out
 						</DropdownItem>
