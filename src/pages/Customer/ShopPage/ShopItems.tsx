@@ -120,7 +120,7 @@ export default function ShopItems() {
 	];
 
 	return (
-		<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2">
+		<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
 			{list.map((item, index) => (
 				<ItemCard item={item} index={index} key={index} />
 			))}
