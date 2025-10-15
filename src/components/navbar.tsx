@@ -17,18 +17,16 @@ import { BaybayaniLogo, CartIcon, SearchIcon, MessageIcon } from "./icons";
 import { useState } from "react";
 import { item } from "@/data/items";
 
-export const AcmeLogo = () => {
-	return (
-		<svg fill="none" height="36" viewBox="0 0 32 32" width="36">
-			<path
-				clipRule="evenodd"
-				d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-				fill="currentColor"
-				fillRule="evenodd"
-			/>
-		</svg>
-	);
-};
+export const AcmeLogo = () => (
+	<svg fill="none" height="36" viewBox="0 0 32 32" width="36">
+		<path
+			clipRule="evenodd"
+			d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+			fill="currentColor"
+			fillRule="evenodd"
+		/>
+	</svg>
+);
 
 const searchItems = item.map((i, index) => ({
 	label: i.title,
@@ -43,6 +41,7 @@ export function Navbar({
 }) {
 	const [active, setActive] = useState("");
 	const [searchValue, setSearchValue] = useState("");
+	const [showSuggestions, setShowSuggestions] = useState(true);
 
 	return (
 		<HeroNavBar>
@@ -61,7 +60,7 @@ export function Navbar({
 				</Link>
 			</NavbarBrand>
 
-			{/* Search bar (make it expand!) */}
+			{/* Search bar */}
 			<NavbarContent
 				className="flex-grow px-2 max-w-full"
 				justify="center"
@@ -72,12 +71,22 @@ export function Navbar({
 					className="w-full opacity-90"
 					defaultItems={searchItems}
 					placeholder="Search products..."
+					selectorIcon={null}
 					startContent={
 						<SearchIcon className="size-5 text-default-500" />
 					}
 					variant="flat"
 					value={searchValue}
-					onValueChange={(val) => setSearchValue(val)}
+					onValueChange={(val) => {
+						setSearchValue(val);
+
+						if (val.trim() === "") {
+							setSearchTerm(""); // reset search
+							setShowSuggestions(false); // hide suggestions
+						} else {
+							setShowSuggestions(true); // show suggestions
+						}
+					}}
 					allowsCustomValue
 					onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 						if (e.key === "Enter") {
@@ -86,24 +95,26 @@ export function Navbar({
 						}
 					}}
 				>
-					{(item) => (
-						<AutocompleteItem
-							key={item.key}
-							onClick={() => {
-								setSearchValue(item.label);
-								setSearchTerm(item.label);
+					{showSuggestions
+						? searchItems.slice(0, 20).map((item) => (
+								<AutocompleteItem
+									key={item.key}
+									onClick={() => {
+										setSearchValue(item.label);
+										setSearchTerm(item.label);
 
-								// delay blur to let mobile finish the tap
-								setTimeout(() => {
-									const inputEl =
-										document.activeElement as HTMLInputElement;
-									inputEl?.blur();
-								}, 100); // 50ms usually works, 100 ms for lower end phones
-							}}
-						>
-							{item.label}
-						</AutocompleteItem>
-					)}
+										// hide keyboard on mobile
+										setTimeout(() => {
+											(
+												document.activeElement as HTMLInputElement
+											)?.blur();
+										}, 100);
+									}}
+								>
+									{item.label}
+								</AutocompleteItem>
+							))
+						: null}
 				</Autocomplete>
 			</NavbarContent>
 
