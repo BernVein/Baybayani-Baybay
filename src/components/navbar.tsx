@@ -15,6 +15,8 @@ import {
 } from "@heroui/react";
 import { BaybayaniLogo, CartIcon, SearchIcon, MessageIcon } from "./icons";
 import { useState } from "react";
+import { item } from "@/data/items";
+
 export const AcmeLogo = () => {
 	return (
 		<svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -27,70 +29,21 @@ export const AcmeLogo = () => {
 		</svg>
 	);
 };
-export const animals = [
-	{
-		label: "Cat",
-		key: "cat",
-		description: "The second most popular pet in the world",
-	},
-	{
-		label: "Dog",
-		key: "dog",
-		description: "The most popular pet in the world",
-	},
-	{
-		label: "Elephant",
-		key: "elephant",
-		description: "The largest land animal",
-	},
-	{ label: "Lion", key: "lion", description: "The king of the jungle" },
-	{ label: "Tiger", key: "tiger", description: "The largest cat species" },
-	{
-		label: "Giraffe",
-		key: "giraffe",
-		description: "The tallest land animal",
-	},
-	{
-		label: "Dolphin",
-		key: "dolphin",
-		description:
-			"A widely distributed and diverse group of aquatic mammals",
-	},
-	{
-		label: "Penguin",
-		key: "penguin",
-		description: "A group of aquatic flightless birds",
-	},
-	{
-		label: "Zebra",
-		key: "zebra",
-		description: "A several species of African equids",
-	},
-	{
-		label: "Shark",
-		key: "shark",
-		description:
-			"A group of elasmobranch fish characterized by a cartilaginous skeleton",
-	},
-	{
-		label: "Whale",
-		key: "whale",
-		description: "Diverse group of fully aquatic placental marine mammals",
-	},
-	{
-		label: "Otter",
-		key: "otter",
-		description: "A carnivorous mammal in the subfamily Lutrinae",
-	},
-	{
-		label: "Crocodile",
-		key: "crocodile",
-		description: "A large semiaquatic reptile",
-	},
-];
 
-export function Navbar() {
+const searchItems = item.map((i, index) => ({
+	label: i.title,
+	key: `${i.title}-${index}`,
+	description: i.category,
+}));
+
+export function Navbar({
+	setSearchTerm,
+}: {
+	setSearchTerm: (val: string) => void;
+}) {
 	const [active, setActive] = useState("");
+	const [searchValue, setSearchValue] = useState("");
+
 	return (
 		<HeroNavBar>
 			{/* Brand */}
@@ -117,15 +70,31 @@ export function Navbar() {
 					size="sm"
 					fullWidth
 					className="w-full opacity-90"
-					defaultItems={animals}
+					defaultItems={searchItems}
 					placeholder="Search products..."
 					startContent={
 						<SearchIcon className="size-5 text-default-500" />
 					}
 					variant="flat"
+					value={searchValue}
+					onValueChange={(val) => setSearchValue(val)}
+					allowsCustomValue
+					onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+						if (e.key === "Enter") {
+							console.log("Search for:", searchValue);
+							setSearchTerm(searchValue); // trigger your search
+							e.currentTarget.blur(); // hide keyboard
+						}
+					}}
 				>
 					{(item) => (
-						<AutocompleteItem key={item.key}>
+						<AutocompleteItem
+							key={item.key}
+							onClick={() => {
+								setSearchValue(item.label); // update input value
+								setSearchTerm(item.label); // trigger search
+							}}
+						>
 							{item.label}
 						</AutocompleteItem>
 					)}
