@@ -52,7 +52,7 @@ export function Navbar({
 					className="flex items-center gap-2"
 					onClick={() => setActive("")}
 				>
-					<BaybayaniLogo />
+					<BaybayaniLogo className="size-10" />
 					<p className="font-bold hidden sm:block sm:text-lg">
 						<span className="text-[#146A38]">BAYBAY</span>
 						<span className="text-[#F9C424]">ANI</span>

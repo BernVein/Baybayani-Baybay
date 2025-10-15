@@ -30,7 +30,7 @@ export function NavbarMobile() {
 					color={active === "Shop" ? "success" : "foreground"}
 				>
 					<div className="w-8 h-8 flex items-center justify-center">
-						<BaybayaniLogo />
+						<BaybayaniLogo className="size-7" />
 					</div>
 					<span className="text-sm font-light mt-1">Shop</span>
 				</Link>
