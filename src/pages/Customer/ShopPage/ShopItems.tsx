@@ -16,6 +16,11 @@ export default function ShopItems({ activeCategory }: ShopItemsProps) {
 		setCurrentPage(1);
 	}, [activeCategory]);
 
+	// Go up when the the page changes
+	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	}, [currentPage]);
+
 	// filter items by active category
 	const filteredItems = activeCategory
 		? item.filter((i) => i.category === activeCategory)
