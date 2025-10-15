@@ -16,7 +16,6 @@ export default function ShopItems({
 	const itemsPerPage = 8;
 
 	// Reset to page 1 whenever category changes
-
 	useEffect(() => setCurrentPage(1), [activeCategory, searchTerm]);
 	useEffect(
 		() => window.scrollTo({ top: 0, behavior: "smooth" }),
@@ -63,7 +62,7 @@ export default function ShopItems({
 			{filteredItems.length > 0 && (
 				<div className="flex justify-center mt-4">
 					<Pagination
-						initialPage={currentPage}
+						page={currentPage}
 						total={totalPages}
 						onChange={(page) => setCurrentPage(page)}
 						color="success"
