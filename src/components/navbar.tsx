@@ -98,7 +98,7 @@ export function Navbar({
 									const inputEl =
 										document.activeElement as HTMLInputElement;
 									inputEl?.blur();
-								}, 100); // 50ms usually works
+								}, 100); // 50ms usually works, 100 ms for lower end phones
 							}}
 						>
 							{item.label}
