@@ -81,9 +81,8 @@ export function Navbar({
 					allowsCustomValue
 					onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 						if (e.key === "Enter") {
-							console.log("Search for:", searchValue);
-							setSearchTerm(searchValue); // trigger your search
-							e.currentTarget.blur(); // hide keyboard
+							setSearchTerm(searchValue);
+							(e.target as HTMLInputElement).blur();
 						}
 					}}
 				>
@@ -91,8 +90,15 @@ export function Navbar({
 						<AutocompleteItem
 							key={item.key}
 							onClick={() => {
-								setSearchValue(item.label); // update input value
-								setSearchTerm(item.label); // trigger search
+								setSearchValue(item.label);
+								setSearchTerm(item.label);
+
+								// delay blur to let mobile finish the tap
+								setTimeout(() => {
+									const inputEl =
+										document.activeElement as HTMLInputElement;
+									inputEl?.blur();
+								}, 100); // 50ms usually works
 							}}
 						>
 							{item.label}
