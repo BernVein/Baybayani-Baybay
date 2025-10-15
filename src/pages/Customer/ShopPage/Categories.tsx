@@ -25,12 +25,12 @@ export default function Categories() {
 	const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
 	return (
-		<div className="w-full">
+		<div className="w-full px-4">
 			<p className="text-left md:text-center">Filter Products</p>
 
 			<ScrollShadow
 				orientation="horizontal"
-				className="w-full scroll-smooth p-4"
+				className="w-full scroll-smooth p-2"
 			>
 				<div className="flex justify-center items-center gap-5 sm:gap-10 min-w-max mx-auto snap-x snap-mandatory">
 					{cat.map((item) => (
