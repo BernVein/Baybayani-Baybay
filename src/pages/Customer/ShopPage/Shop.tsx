@@ -15,6 +15,7 @@ export default function Shop({ searchTerm }: { searchTerm: string | null }) {
 			<ShopItems
 				activeCategory={activeCategory}
 				searchTerm={searchTerm}
+				setActiveCategory={setActiveCategory}
 			/>
 		</div>
 	);
