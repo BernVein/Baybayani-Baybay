@@ -7,7 +7,6 @@ export default function Shop() {
 		<div className="p-5 sm:p-10 flex flex-col gap-7 md:w-3/4 mx-auto items-center">
 			<ImageHeader />
 			<Categories />
-
 			<ShopItems />
 		</div>
 	);
