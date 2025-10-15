@@ -157,7 +157,7 @@ export function Navbar() {
 								<MessageIcon className="size-6" />
 							</Badge>
 							<span className="hidden sm:inline font-normal">
-								Messages
+								Chat
 							</span>
 						</div>
 					</Link>

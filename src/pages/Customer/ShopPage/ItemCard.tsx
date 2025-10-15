@@ -52,7 +52,7 @@ export default function ItemCard({
 			<CardFooter className="text-small">
 				<div className="flex flex-col w-full ">
 					<b className="font-extralight text-center md:text-left text-xs md:text-sm">
-						{item.title}, sold by <strong>{item.soldBy}</strong>
+						{item.title}
 					</b>
 					<b className="text-center md:text-left text-lg md:text-xl">
 						{item.title}
@@ -63,7 +63,7 @@ export default function ItemCard({
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
-									₱3.00
+									₱3.00 / {item.soldBy}
 								</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
@@ -75,7 +75,7 @@ export default function ItemCard({
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
-									₱2.00
+									₱2.00 / {item.soldBy}
 								</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
