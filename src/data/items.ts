@@ -1,6 +1,6 @@
 export const item = [
 	{
-		category: "Vegetables",
+		category: "Vegetable",
 		title: "Carrot",
 		img: "https://picsum.photos/300/300?random=1",
 		price: 2.5,
@@ -20,7 +20,7 @@ export const item = [
 		tag: "Restocked",
 	},
 	{
-		category: "Spices",
+		category: "Spice",
 		title: "Black Pepper",
 		img: "https://picsum.photos/300/300?random=3",
 		price: 15.0,
@@ -30,7 +30,7 @@ export const item = [
 		tag: "Price Drop",
 	},
 	{
-		category: "Fruits",
+		category: "Fruit",
 		title: "Mango",
 		img: "https://picsum.photos/300/300?random=4",
 		price: 6.0,
@@ -40,7 +40,7 @@ export const item = [
 		tag: "New",
 	},
 	{
-		category: "Grains",
+		category: "Grain",
 		title: "White Rice",
 		img: "https://picsum.photos/300/300?random=5",
 		price: 55.0,
@@ -50,7 +50,7 @@ export const item = [
 		tag: "Restocked",
 	},
 	{
-		category: "Spices",
+		category: "Spice",
 		title: "Turmeric Powder",
 		img: "https://picsum.photos/300/300?random=6",
 		price: 12.0,
@@ -60,7 +60,7 @@ export const item = [
 		tag: null,
 	},
 	{
-		category: "Vegetables",
+		category: "Vegetable",
 		title: "Tomato",
 		img: "https://picsum.photos/300/300?random=7",
 		price: 3.5,
@@ -70,7 +70,7 @@ export const item = [
 		tag: null,
 	},
 	{
-		category: "Grains",
+		category: "Grain",
 		title: "Corn",
 		img: "https://picsum.photos/300/300?random=8",
 		price: 25.0,
@@ -90,7 +90,7 @@ export const item = [
 		tag: "Price Drop",
 	},
 	{
-		category: "Fruits",
+		category: "Fruit",
 		title: "Pineapple",
 		img: "https://picsum.photos/300/300?random=10",
 		price: 45.0,
@@ -100,7 +100,7 @@ export const item = [
 		tag: "New",
 	},
 	{
-		category: "Vegetables",
+		category: "Vegetable",
 		title: "Spinach",
 		img: "https://picsum.photos/300/300?random=11",
 		price: 4.0,
@@ -110,7 +110,7 @@ export const item = [
 		tag: "Restocked",
 	},
 	{
-		category: "Grains",
+		category: "Grain",
 		title: "Oats",
 		img: "https://picsum.photos/300/300?random=12",
 		price: 120.0,
@@ -130,7 +130,7 @@ export const item = [
 		tag: "New",
 	},
 	{
-		category: "Fruits",
+		category: "Fruit",
 		title: "Banana",
 		img: "https://picsum.photos/300/300?random=14",
 		price: 2.0,
@@ -140,7 +140,7 @@ export const item = [
 		tag: "Restocked",
 	},
 	{
-		category: "Spices",
+		category: "Spice",
 		title: "Garlic",
 		img: "https://picsum.photos/300/300?random=15",
 		price: 10.0,

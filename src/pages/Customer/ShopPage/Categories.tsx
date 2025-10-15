@@ -6,7 +6,6 @@ import {
 	Chili,
 } from "@/components/icons";
 import { ScrollShadow, Button } from "@heroui/react";
-import { useState } from "react";
 
 interface Category {
 	name: string;
@@ -14,19 +13,27 @@ interface Category {
 }
 
 const cat: Category[] = [
-	{ name: "Vegetables", icon: <VegetablesOutline /> },
-	{ name: "Grains", icon: <FoodGrains24Regular /> },
-	{ name: "Fruits", icon: <FruitsOutline /> },
+	{ name: "Vegetable", icon: <VegetablesOutline /> },
+	{ name: "Grain", icon: <FoodGrains24Regular /> },
+	{ name: "Fruit", icon: <FruitsOutline /> },
 	{ name: "Poultry", icon: <PoultryLeg /> },
-	{ name: "Spices", icon: <Chili /> },
+	{ name: "Spice", icon: <Chili /> },
 ];
 
-export default function Categories() {
-	const [activeCategory, setActiveCategory] = useState<string | null>(null);
+interface CategoriesProps {
+	activeCategory: string | null;
+	setActiveCategory: (category: string | null) => void;
+}
 
+export default function Categories({
+	activeCategory,
+	setActiveCategory,
+}: CategoriesProps) {
 	return (
 		<div className="w-full px-4">
-			<p className="text-left md:text-center">Filter Products</p>
+			<p className="text-left md:text-center mb-2 font-semibold">
+				Filter Products
+			</p>
 
 			<ScrollShadow
 				orientation="horizontal"
@@ -49,8 +56,8 @@ export default function Categories() {
 											: "default"
 									}
 									onPress={() =>
-										setActiveCategory((prev) =>
-											prev === item.name
+										setActiveCategory(
+											activeCategory === item.name
 												? null
 												: item.name
 										)
