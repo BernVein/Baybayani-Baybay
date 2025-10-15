@@ -81,10 +81,11 @@ export function Navbar({
 						setSearchValue(val);
 
 						if (val.trim() === "") {
-							setSearchTerm(""); // reset search
-							setShowSuggestions(false); // hide suggestions
+							// reset search filter
+							setSearchTerm("");
+							setShowSuggestions(false);
 						} else {
-							setShowSuggestions(true); // show suggestions
+							setShowSuggestions(true);
 						}
 					}}
 					allowsCustomValue
@@ -93,6 +94,12 @@ export function Navbar({
 							setSearchTerm(searchValue);
 							(e.target as HTMLInputElement).blur();
 						}
+					}}
+					onClear={() => {
+						// <-- this handles the X button if your component exposes this
+						setSearchValue("");
+						setSearchTerm("");
+						setShowSuggestions(false);
 					}}
 				>
 					{showSuggestions
