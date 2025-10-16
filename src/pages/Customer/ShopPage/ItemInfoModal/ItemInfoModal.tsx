@@ -92,7 +92,7 @@ export default function ItemInfoModal({
 												Retail Price:
 											</span>
 											<span>
-												₱{item.priceRetail.toFixed(2)} /
+												₱{item.priceRetail.toFixed(2)} /{" "}
 												{item.soldBy}
 											</span>
 										</div>
@@ -115,8 +115,8 @@ export default function ItemInfoModal({
 										</span>
 										<NumberInput
 											defaultValue={1}
-											min={1}
-											max={50}
+											placeholder={`Enter quantity in ${item.soldBy}`}
+											labelPlacement="outside"
 										/>
 									</div>
 								</div>
