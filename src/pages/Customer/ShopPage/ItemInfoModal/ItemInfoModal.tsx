@@ -14,6 +14,7 @@ import {
 	cn,
 } from "@heroui/react";
 import { Item } from "@/model/Item";
+import { CartIcon } from "@/components/icons";
 export const CustomRadio = (props: any) => {
 	const { children, ...otherProps } = props;
 
@@ -65,48 +66,45 @@ export default function ItemInfoModal({
 						<ModalBody>
 							<div className="flex flex-col md:flex-row gap-6">
 								{/* Left: Carousel */}
-								<div className="flex flex-col items-center md:items-start gap-2">
+								<div className="flex flex-col items-center md:items-start gap-2 w-full">
 									<Image
 										alt={item.title || "Sample Item"}
 										src={item.img}
 										isZoomed
-										width={230}
-										height={230}
 									/>
-									<div className="flex gap-2 mt-2">
+									<div className="flex gap-2 mt-2 w-1/2">
 										<Image
 											alt="Thumbnail 1"
 											src="https://picsum.photos/300/300?random=3"
-											width={70}
-											height={70}
 											isZoomed
 										/>
 										<Image
 											alt="Thumbnail 2"
 											src="https://picsum.photos/300/300?random=2"
-											width={70}
-											height={70}
 											isZoomed
 										/>
 										<Image
 											alt="Thumbnail 3"
 											src="https://picsum.photos/300/300?random=11"
-											width={70}
-											height={70}
 											isZoomed
 										/>
 									</div>
 								</div>
 
 								{/* Right: Info */}
-								<div className="flex flex-col gap-4 justify-center sm:justify-start">
-									<p className="text-default-500 text-sm">
+								<div className="flex flex-col gap-4 justify-start w-full">
+									<p className="text-xs font-light text-default-400 text-center mt-3">
+										Price last updated at: Oct 10, 2025
+									</p>
+									<Divider />
+
+									<p className="text-sm">
 										{item.description}
 									</p>
 
 									<Divider />
 									<RadioGroup
-										description="Price is cheaper when purchased in wholesale"
+										description={`Stocks remaining: ${item.stocks} ${item.soldBy}s`}
 										label="Price Variants"
 										color="success"
 										size="sm"
@@ -125,35 +123,85 @@ export default function ItemInfoModal({
 												<span>Wholesale</span>
 												<span className="text-xs text-default-400">
 													– {item.wholesaleItem}{" "}
-													{item.soldBy} per item
+													{item.soldBy}s per item
 												</span>
 											</div>
 										</CustomRadio>
 									</RadioGroup>
-									{/* Quantity Stepper */}
-									<div className="flex items-center gap-4 mt-2">
-										<span className="font-semibold">
-											Quantity:
-										</span>
-										<NumberInput
-											defaultValue={1}
-											placeholder={`Enter quantity in ${item.soldBy}`}
-											labelPlacement="outside"
-										/>
+									<Divider />
+
+									{/* Quantity Section */}
+									<div className="flex flex-col gap-2">
+										<div className="flex flex-row items-center gap-2 mb-4">
+											<NumberInput
+												defaultValue={1}
+												minValue={0.1}
+												placeholder={`Enter quantity in`}
+												labelPlacement="outside"
+												radius="sm"
+												variant="faded"
+												endContent={
+													<div className="text-sm text-default-500 mr-2">
+														{item.soldBy}
+													</div>
+												}
+												className="w-3/4"
+												label={`Quantity (${item.soldBy})`}
+												validate={(value) => {
+													const num = Number(value);
+													if (num > item.stocks) {
+														return `Quantity must be less than ${item.stocks}`;
+													}
+
+													if (
+														num %
+															item.wholesaleItem !==
+														0
+													) {
+														return `Wholesale requirement: divisible by ${item.wholesaleItem}`;
+													}
+
+													return null;
+												}}
+											/>
+										</div>
 									</div>
 								</div>
 							</div>
 						</ModalBody>
 
-						<ModalFooter className="flex">
-							<Button
-								color="danger"
-								variant="light"
-								onPress={onClose}
-							>
-								Close
-							</Button>
-							<Button color="primary">Add to Cart</Button>
+						<ModalFooter className="flex justify-between items-center">
+							<div className="flex flex-col gap-2 items-start">
+								<span className="text-sm text-default-500">
+									Subtotal (Retail):
+								</span>
+								<div className="flex flex-row gap-2 items-center">
+									<span className="text-base font-semibold">
+										₱{item.priceRetail.toFixed(2)}
+									</span>
+									<span className="text-sm text-default-500">
+										{" "}
+										1 {item.soldBy}
+									</span>
+								</div>
+							</div>
+							<div className="flex gap-2">
+								<Button
+									color="danger"
+									variant="light"
+									onPress={onClose}
+								>
+									Close
+								</Button>
+								<Button
+									color="success"
+									startContent={
+										<CartIcon className="size-5" />
+									}
+								>
+									Add to Cart
+								</Button>
+							</div>
 						</ModalFooter>
 					</>
 				)}
