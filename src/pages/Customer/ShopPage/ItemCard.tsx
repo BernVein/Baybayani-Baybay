@@ -40,7 +40,7 @@ export default function ItemCard({
 						isZoomed
 						alt={item.title}
 						className="w-full object-cover h-[140px] rounded-lg shadow-sm"
-						src={item.img}
+						src={item.img[0]}
 						width="100%"
 					/>
 					{item.tag && (

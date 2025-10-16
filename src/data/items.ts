@@ -2,7 +2,11 @@ export const item = [
 	{
 		category: "Vegetable",
 		title: "Carrot",
-		img: "https://picsum.photos/300/300?random=1",
+		img: [
+			"https://picsum.photos/300/300?random=1",
+			"https://picsum.photos/300/300?random=21",
+			"https://picsum.photos/300/300?random=31",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
@@ -14,11 +18,14 @@ export const item = [
 	{
 		category: "Poultry",
 		title: "Chicken Breast",
-		img: "https://picsum.photos/300/300?random=2",
+		img: [
+			"https://picsum.photos/300/300?random=2",
+			"https://picsum.photos/300/300?random=22",
+			"https://picsum.photos/300/300?random=32",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 540,
 		soldBy: "Kilo",
 		description: "Lean chicken breast meat, ideal for healthy meals.",
@@ -27,11 +34,14 @@ export const item = [
 	{
 		category: "Spice",
 		title: "Black Pepper",
-		img: "https://picsum.photos/300/300?random=3",
+		img: [
+			"https://picsum.photos/300/300?random=3",
+			"https://picsum.photos/300/300?random=23",
+			"https://picsum.photos/300/300?random=33",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 400,
 		soldBy: "Pack",
 		description: "Whole black peppercorns for rich flavor.",
@@ -40,7 +50,11 @@ export const item = [
 	{
 		category: "Fruit",
 		title: "Mango",
-		img: "https://picsum.photos/300/300?random=4",
+		img: [
+			"https://picsum.photos/300/300?random=4",
+			"https://picsum.photos/300/300?random=24",
+			"https://picsum.photos/300/300?random=34",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
@@ -52,7 +66,11 @@ export const item = [
 	{
 		category: "Grain",
 		title: "White Rice",
-		img: "https://picsum.photos/300/300?random=5",
+		img: [
+			"https://picsum.photos/300/300?random=5",
+			"https://picsum.photos/300/300?random=25",
+			"https://picsum.photos/300/300?random=35",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
@@ -64,11 +82,14 @@ export const item = [
 	{
 		category: "Spice",
 		title: "Turmeric Powder",
-		img: "https://picsum.photos/300/300?random=6",
+		img: [
+			"https://picsum.photos/300/300?random=6",
+			"https://picsum.photos/300/300?random=26",
+			"https://picsum.photos/300/300?random=36",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 500,
 		soldBy: "Pack",
 		description: "Vibrant turmeric powder for cooking and health.",
@@ -77,11 +98,14 @@ export const item = [
 	{
 		category: "Vegetable",
 		title: "Tomato",
-		img: "https://picsum.photos/300/300?random=7",
+		img: [
+			"https://picsum.photos/300/300?random=7",
+			"https://picsum.photos/300/300?random=27",
+			"https://picsum.photos/300/300?random=37",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 260,
 		soldBy: "Kilo",
 		description: "Juicy red tomatoes perfect for sauces or salads.",
@@ -90,11 +114,14 @@ export const item = [
 	{
 		category: "Grain",
 		title: "Corn",
-		img: "https://picsum.photos/300/300?random=8",
+		img: [
+			"https://picsum.photos/300/300?random=8",
+			"https://picsum.photos/300/300?random=28",
+			"https://picsum.photos/300/300?random=38",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 150,
 		soldBy: "Dozen",
 		description: "Fresh yellow corn, perfect for roasting or boiling.",
@@ -103,11 +130,14 @@ export const item = [
 	{
 		category: "Poultry",
 		title: "Duck Egg",
-		img: "https://picsum.photos/300/300?random=9",
+		img: [
+			"https://picsum.photos/300/300?random=9",
+			"https://picsum.photos/300/300?random=29",
+			"https://picsum.photos/300/300?random=39",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 500,
 		soldBy: "Piece",
 		description: "Rich duck eggs great for balut or salted egg dishes.",
@@ -116,11 +146,14 @@ export const item = [
 	{
 		category: "Fruit",
 		title: "Pineapple",
-		img: "https://picsum.photos/300/300?random=10",
+		img: [
+			"https://picsum.photos/300/300?random=10",
+			"https://picsum.photos/300/300?random=30",
+			"https://picsum.photos/300/300?random=40",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 75,
 		soldBy: "Piece",
 		description: "Sweet and tangy pineapple with tropical freshness.",
@@ -129,11 +162,14 @@ export const item = [
 	{
 		category: "Vegetable",
 		title: "Spinach",
-		img: "https://picsum.photos/300/300?random=11",
+		img: [
+			"https://picsum.photos/300/300?random=11",
+			"https://picsum.photos/300/300?random=41",
+			"https://picsum.photos/300/300?random=51",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 180,
 		soldBy: "Bundle",
 		description: "Fresh spinach leaves packed with iron and vitamins.",
@@ -142,11 +178,14 @@ export const item = [
 	{
 		category: "Grain",
 		title: "Oats",
-		img: "https://picsum.photos/300/300?random=12",
+		img: [
+			"https://picsum.photos/300/300?random=12",
+			"https://picsum.photos/300/300?random=42",
+			"https://picsum.photos/300/300?random=52",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 300,
 		soldBy: "Bag",
 		description: "Whole grain oats for a healthy breakfast option.",
@@ -155,11 +194,14 @@ export const item = [
 	{
 		category: "Poultry",
 		title: "Whole Chicken",
-		img: "https://picsum.photos/300/300?random=13",
+		img: [
+			"https://picsum.photos/300/300?random=13",
+			"https://picsum.photos/300/300?random=43",
+			"https://picsum.photos/300/300?random=53",
+		],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
-
 		stocks: 60,
 		soldBy: "Kilo",
 		description: "Farm-raised chicken for roasting or stewing.",

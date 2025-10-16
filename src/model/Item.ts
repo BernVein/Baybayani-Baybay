@@ -1,7 +1,7 @@
 export interface Item {
 	category: string;
 	title: string;
-	img: string;
+	img: string[];
 	priceRetail: number;
 	priceWholesale: number;
 	wholesaleItem: number;
