@@ -105,7 +105,7 @@ export function NavbarMobile() {
 									as="button"
 									color="success"
 									size="sm"
-									src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+									src="https://picsum.photos/300/300?random=42"
 								/>
 							</div>
 							<span className="text-sm font-light mt-1">
