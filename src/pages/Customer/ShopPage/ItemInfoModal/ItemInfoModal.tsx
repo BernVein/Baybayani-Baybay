@@ -49,35 +49,15 @@ export default function ItemInfoModal({
 	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
 	const isMobile = useIsMobile();
 	const [selectedPriceVariant, setSelectedPriceVariant] = useState("Retail");
-	const [quantity, setQuantity] = useState(1);
-	const [quantityErrors, setQuantityErrors] = useState<string[]>([]);
-	const validateQuantity = (qty: number) => {
-		const errors: string[] = [];
-		if (!item) return errors;
-
-		if (qty > item.stocks) {
-			errors.push(`Quantity must be less than ${item.stocks}`);
-		}
-
-		if (
-			selectedPriceVariant === "Wholesale" &&
-			qty % item.wholesaleItem !== 0
-		) {
-			errors.push(`Wholesale: Multiples of ${item.wholesaleItem}`);
-		}
-
-		return errors;
-	};
-
-	useEffect(() => {
-		const errors = validateQuantity(quantity);
-		setQuantityErrors(errors);
-	}, [quantity, selectedPriceVariant, item]);
-
+	const [rawQuantity, setRawQuantity] = useState(1); // quantity entered by user
+	const actualQuantity =
+		selectedPriceVariant === "Wholesale"
+			? rawQuantity * item.wholesaleItem
+			: rawQuantity;
 	useEffect(() => {
 		if (isOpen && item) {
 			setSelectedPriceVariant("Retail");
-			setQuantity(1);
+			setRawQuantity(1);
 		}
 	}, [isOpen, item]);
 
@@ -289,38 +269,36 @@ export default function ItemInfoModal({
 									{/* Quantity Section */}
 									<div className="flex flex-row items-center gap-2 mb-4">
 										<NumberInput
-											key={`${selectedPriceVariant}-${item.stocks}-${quantity}`}
+											key={`${selectedPriceVariant}-${item.stocks}-${rawQuantity}`}
 											defaultValue={1}
 											minValue={0.1}
-											maxValue={item.stocks}
-											value={quantity}
-											onValueChange={setQuantity}
+											maxValue={
+												selectedPriceVariant ===
+												"Wholesale"
+													? item.stocks /
+														item.wholesaleItem
+													: item.stocks
+											}
+											value={rawQuantity}
+											onValueChange={(val) =>
+												setRawQuantity(val)
+											}
 											description={
-												quantityErrors.length > 0
-													? quantityErrors[0]
-													: `Quantity: ${quantity} ${item.soldBy}`
+												selectedPriceVariant ===
+												"Wholesale"
+													? `Quantity: ${actualQuantity} ${item.soldBy}s`
+													: `Quantity: ${rawQuantity} ${item.soldBy}`
 											}
-											isInvalid={
-												quantityErrors.length > 0
-											}
-											errorMessage={() => (
-												<ul>
-													{quantityErrors.map(
-														(err, i) => (
-															<li key={i}>
-																{err}
-															</li>
-														)
-													)}
-												</ul>
-											)}
 											placeholder={`Enter quantity in`}
 											labelPlacement="outside"
 											radius="sm"
 											variant="faded"
 											endContent={
 												<div className="text-sm text-default-500 mr-2">
-													{item.soldBy}
+													{selectedPriceVariant ===
+													"Wholesale"
+														? "Item"
+														: item.soldBy}
 												</div>
 											}
 											className="w-3/4"
@@ -339,15 +317,7 @@ export default function ItemInfoModal({
 										<Button
 											color="success"
 											onPress={() => {
-												const errors =
-													validateQuantity(quantity);
-												setQuantityErrors(errors);
-												if (errors.length === 0) {
-													console.log(
-														"Confirmed quantity:",
-														quantity
-													);
-												}
+												setRawQuantity(rawQuantity);
 											}}
 										>
 											Confirm
@@ -365,14 +335,11 @@ export default function ItemInfoModal({
 								<div className="flex flex-row gap-2 items-center">
 									<span className="text-base font-semibold">
 										₱
-										{selectedPriceVariant === "Retail"
-											? (
-													item.priceRetail * quantity
-												).toFixed(2)
-											: (
-													item.priceWholesale *
-													quantity
-												).toFixed(2)}
+										{(selectedPriceVariant === "Wholesale"
+											? item.priceWholesale *
+												actualQuantity
+											: item.priceRetail * rawQuantity
+										).toFixed(2)}
 									</span>
 								</div>
 							</div>
