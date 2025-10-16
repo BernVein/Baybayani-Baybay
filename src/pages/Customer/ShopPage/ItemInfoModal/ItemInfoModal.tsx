@@ -300,7 +300,7 @@ export default function ItemInfoModal({
 													? `Quantity: ${rawQuantity ? rawQuantity * item.wholesaleItem : "Enter above"} ${item.soldBy}s`
 													: `Quantity: ${rawQuantity || "Enter above"}`
 											}
-											placeholder={`Enter quantity in`}
+											placeholder="Enter quantity"
 											labelPlacement="outside"
 											radius="sm"
 											variant="faded"
@@ -345,12 +345,15 @@ export default function ItemInfoModal({
 								</span>
 								<div className="flex flex-row gap-2 items-center">
 									<span className="text-base font-semibold">
-										₱
-										{(selectedPriceVariant === "Wholesale"
-											? item.priceWholesale *
-												actualQuantity
-											: item.priceRetail * rawQuantity
-										).toFixed(2)}
+										{rawQuantity
+											? `₱${(selectedPriceVariant ===
+												"Wholesale"
+													? item.priceWholesale *
+														actualQuantity
+													: item.priceRetail *
+														rawQuantity
+												).toFixed(2)}`
+											: "Enter quantity"}
 									</span>
 								</div>
 							</div>
