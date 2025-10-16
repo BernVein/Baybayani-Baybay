@@ -190,7 +190,7 @@ export function Navbar({
 							color="success"
 							name="Bern Vein Balermo"
 							size="sm"
-							src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+							src="https://picsum.photos/300/300?random=45"
 						/>
 					</DropdownTrigger>
 					<DropdownMenu aria-label="Profile Actions" variant="flat">
