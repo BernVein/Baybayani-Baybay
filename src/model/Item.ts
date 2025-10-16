@@ -6,12 +6,12 @@ export interface Item {
 	priceWholesale: number;
 	wholesaleItem: number;
 	stocks: number;
-	lastUpdatedStock?: Date;
+	lastUpdatedStock?: string;
 	soldBy: string;
 	description: string;
 	tag: string | null;
 	previousPriceWholesale?: number;
-	lastUpdatedPriceWholesale?: Date;
+	lastUpdatedPriceWholesale?: string;
 	previousPriceRetail?: number;
-	lastUpdatedPriceRetail?: Date;
+	lastUpdatedPriceRetail?: string;
 }
