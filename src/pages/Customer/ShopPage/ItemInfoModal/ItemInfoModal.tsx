@@ -354,7 +354,10 @@ export default function ItemInfoModal({
 														actualQuantity
 													: item.priceRetail *
 														rawQuantity
-												).toFixed(2)}`
+												).toLocaleString(undefined, {
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2,
+												})}`
 											: "Enter quantity"}
 									</span>
 								</div>
