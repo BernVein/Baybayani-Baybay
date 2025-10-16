@@ -63,7 +63,7 @@ export default function ItemInfoModal({
 			selectedPriceVariant === "Wholesale" &&
 			qty % item.wholesaleItem !== 0
 		) {
-			errors.push(`Wholesale: multiples of ${item.wholesaleItem}`);
+			errors.push(`Wholesale: Multiples of ${item.wholesaleItem}`);
 		}
 
 		return errors;
