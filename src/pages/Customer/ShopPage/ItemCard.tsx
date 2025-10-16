@@ -69,7 +69,8 @@ export default function ItemCard({
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
-									₱{item.price.toFixed(2)} / {item.soldBy}
+									₱{item.priceRetail.toFixed(2)} /{" "}
+									{item.soldBy}
 								</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
@@ -81,7 +82,8 @@ export default function ItemCard({
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
-									₱{item.price.toFixed(2)} / {item.soldBy}
+									₱{item.priceWholesale.toFixed(2)} /{" "}
+									{item.soldBy}
 								</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
