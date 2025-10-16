@@ -48,6 +48,39 @@ export default function ItemInfoModal({
 }) {
 	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
 	const isMobile = useIsMobile();
+	const [selectedPriceVariant, setSelectedPriceVariant] = useState("Retail");
+	const [quantity, setQuantity] = useState(1);
+	const [quantityErrors, setQuantityErrors] = useState<string[]>([]);
+	const validateQuantity = (qty: number) => {
+		const errors: string[] = [];
+		if (!item) return errors;
+
+		if (qty > item.stocks) {
+			errors.push(`Quantity must be less than ${item.stocks}`);
+		}
+
+		if (
+			selectedPriceVariant === "Wholesale" &&
+			qty % item.wholesaleItem !== 0
+		) {
+			errors.push(`Wholesale: multiples of ${item.wholesaleItem}`);
+		}
+
+		return errors;
+	};
+
+	useEffect(() => {
+		const errors = validateQuantity(quantity);
+		setQuantityErrors(errors);
+	}, [quantity, selectedPriceVariant, item]);
+
+	useEffect(() => {
+		if (isOpen && item) {
+			setSelectedPriceVariant("Retail");
+			setQuantity(1);
+		}
+	}, [isOpen, item]);
+
 	useEffect(() => {
 		if (item?.img?.[0]) {
 			setMainImg(item.img[0]);
@@ -82,6 +115,7 @@ export default function ItemInfoModal({
 											alt={item.title || "Sample Item"}
 											src={mainImg}
 											isZoomed={!isMobile}
+											width={300}
 										/>
 										{item.tag && (
 											<Chip
@@ -221,19 +255,28 @@ export default function ItemInfoModal({
 										label="Price Variants"
 										color="success"
 										size="sm"
+										value={selectedPriceVariant}
+										onValueChange={setSelectedPriceVariant}
 									>
 										<CustomRadio
-											description={`₱${item.priceRetail.toFixed(2)} per ${item.soldBy}`}
-											value="retail"
+											description="Retail price"
+											value="Retail"
 										>
-											Retail
+											₱{item.priceRetail.toFixed(2)} per{" "}
+											{item.soldBy}
 										</CustomRadio>
 										<CustomRadio
-											description={`₱${item.priceWholesale.toFixed(2)} per ${item.soldBy}`}
-											value="wholesale"
+											description="Wholesale"
+											value="Wholesale"
 										>
 											<div className="flex items-center gap-2">
-												<span>Wholesale</span>
+												<span>
+													₱
+													{item.priceWholesale.toFixed(
+														2
+													)}{" "}
+													per {item.soldBy}
+												</span>
 												<span className="text-xs text-default-400">
 													– {item.wholesaleItem}{" "}
 													{item.soldBy}s per item
@@ -244,40 +287,71 @@ export default function ItemInfoModal({
 									<Divider />
 
 									{/* Quantity Section */}
-									<div className="flex flex-col gap-2">
-										<div className="flex flex-row items-center gap-2 mb-4">
-											<NumberInput
-												defaultValue={1}
-												minValue={0.1}
-												placeholder={`Enter quantity in`}
-												labelPlacement="outside"
-												radius="sm"
-												variant="faded"
-												endContent={
-													<div className="text-sm text-default-500 mr-2">
-														{item.soldBy}
-													</div>
+									<div className="flex flex-row items-center gap-2 mb-4">
+										<NumberInput
+											key={`${selectedPriceVariant}-${item.stocks}-${quantity}`}
+											defaultValue={1}
+											minValue={0.1}
+											maxValue={item.stocks}
+											value={quantity}
+											onValueChange={setQuantity}
+											description={
+												quantityErrors.length > 0
+													? quantityErrors[0]
+													: `Quantity: ${quantity} ${item.soldBy}`
+											}
+											isInvalid={
+												quantityErrors.length > 0
+											}
+											errorMessage={() => (
+												<ul>
+													{quantityErrors.map(
+														(err, i) => (
+															<li key={i}>
+																{err}
+															</li>
+														)
+													)}
+												</ul>
+											)}
+											placeholder={`Enter quantity in`}
+											labelPlacement="outside"
+											radius="sm"
+											variant="faded"
+											endContent={
+												<div className="text-sm text-default-500 mr-2">
+													{item.soldBy}
+												</div>
+											}
+											className="w-3/4"
+											label={`Quantity (${selectedPriceVariant})`}
+											onKeyDown={(e) => {
+												if (e.key === "Enter") {
+													setTimeout(() => {
+														(
+															e.currentTarget as HTMLInputElement
+														).blur();
+														window.scrollTo(0, 0);
+													}, 150);
 												}
-												className="w-3/4"
-												label={`Quantity (${item.soldBy})`}
-												validate={(value) => {
-													const num = Number(value);
-													if (num > item.stocks) {
-														return `Quantity must be less than ${item.stocks}`;
-													}
-
-													if (
-														num %
-															item.wholesaleItem !==
-														0
-													) {
-														return `Wholesale requirement: divisible by ${item.wholesaleItem}`;
-													}
-
-													return null;
-												}}
-											/>
-										</div>
+											}}
+										/>
+										<Button
+											color="success"
+											onPress={() => {
+												const errors =
+													validateQuantity(quantity);
+												setQuantityErrors(errors);
+												if (errors.length === 0) {
+													console.log(
+														"Confirmed quantity:",
+														quantity
+													);
+												}
+											}}
+										>
+											Confirm
+										</Button>
 									</div>
 								</div>
 							</div>
@@ -286,15 +360,19 @@ export default function ItemInfoModal({
 						<ModalFooter className="flex justify-between items-center">
 							<div className="flex flex-col gap-2 items-start">
 								<span className="text-sm text-default-500">
-									Subtotal (Retail):
+									Subtotal ({selectedPriceVariant}):
 								</span>
 								<div className="flex flex-row gap-2 items-center">
 									<span className="text-base font-semibold">
-										₱{item.priceRetail.toFixed(2)}
-									</span>
-									<span className="text-sm text-default-500">
-										{" "}
-										1 {item.soldBy}
+										₱
+										{selectedPriceVariant === "Retail"
+											? (
+													item.priceRetail * quantity
+												).toFixed(2)
+											: (
+													item.priceWholesale *
+													quantity
+												).toFixed(2)}
 									</span>
 								</div>
 							</div>
