@@ -74,31 +74,38 @@ export default function ShopItems({
 							.includes(searchTerm.toLowerCase())
 				);
 
-			if (filteredItems.length === 0) return; // <-- skip updating if empty
+			if (filteredItems.length === 0) return;
 
 			if (
 				window.innerHeight + window.scrollY >=
 				document.documentElement.scrollHeight - 100
 			) {
-				setVisibleItems((prev) =>
-					Math.min(prev + itemsPerLoad, filteredItems.length)
-				);
-				setCurrentItems(
-					filteredItems.slice(0, visibleItems + itemsPerLoad)
-				);
+				setVisibleItems((prev) => {
+					const nextVisible = Math.min(
+						prev + itemsPerLoad,
+						filteredItems.length
+					);
+					setCurrentItems(filteredItems.slice(0, nextVisible));
+					return nextVisible;
+				});
 			}
 		};
 
 		window.addEventListener("scroll", handleScroll);
 		return () => window.removeEventListener("scroll", handleScroll);
-	}, [activeCategory, searchTerm, visibleItems]);
+	}, [activeCategory, searchTerm]);
 
 	return (
 		<div className="flex flex-col w-full">
 			{currentItems.length > 0 && (
 				<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
 					{currentItems.map((data, index) => (
-						<ItemCard item={data} index={index} key={index} />
+						<ItemCard
+							item={data}
+							index={index}
+							key={index}
+							onPress={() => console.log("item pressed")}
+						/>
 					))}
 				</div>
 			)}
