@@ -9,8 +9,29 @@ import {
 	// Chip,
 	Divider,
 	NumberInput,
+	RadioGroup,
+	Radio,
+	cn,
 } from "@heroui/react";
 import { Item } from "@/model/Item";
+export const CustomRadio = (props: any) => {
+	const { children, ...otherProps } = props;
+
+	return (
+		<Radio
+			{...otherProps}
+			classNames={{
+				base: cn(
+					"inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between",
+					"flex-row-reverse max-w-full cursor-pointer rounded-lg gap-4 p-2 border-2 border-transparent",
+					"data-[selected=true]:border-success"
+				),
+			}}
+		>
+			{children}
+		</Radio>
+	);
+};
 
 export default function ItemInfoModal({
 	isOpen,
@@ -84,30 +105,31 @@ export default function ItemInfoModal({
 									</p>
 
 									<Divider />
-
-									{/* Prices */}
-									<div className="flex flex-col gap-2">
-										<div className="flex justify-between items-center">
-											<span className="font-semibold">
-												Retail Price:
-											</span>
-											<span>
-												₱{item.priceRetail.toFixed(2)} /{" "}
-												{item.soldBy}
-											</span>
-										</div>
-										<div className="flex justify-between items-center">
-											<span className="font-semibold">
-												Wholesale Price:
-											</span>
-											<span>
-												₱
-												{item.priceWholesale.toFixed(2)}{" "}
-												/ {item.soldBy}
-											</span>
-										</div>
-									</div>
-
+									<RadioGroup
+										description="Price is cheaper when purchased in wholesale"
+										label="Price Variants"
+										color="success"
+										size="sm"
+									>
+										<CustomRadio
+											description={`₱${item.priceRetail.toFixed(2)} per ${item.soldBy}`}
+											value="retail"
+										>
+											Retail
+										</CustomRadio>
+										<CustomRadio
+											description={`₱${item.priceWholesale.toFixed(2)} per ${item.soldBy}`}
+											value="wholesale"
+										>
+											<div className="flex items-center gap-2">
+												<span>Wholesale</span>
+												<span className="text-xs text-default-400">
+													– {item.wholesaleItem}{" "}
+													{item.soldBy} per item
+												</span>
+											</div>
+										</CustomRadio>
+									</RadioGroup>
 									{/* Quantity Stepper */}
 									<div className="flex items-center gap-4 mt-2">
 										<span className="font-semibold">
