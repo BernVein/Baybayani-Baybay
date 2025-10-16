@@ -295,10 +295,12 @@ export default function ItemInfoModal({
 												setRawQuantity(val)
 											}
 											description={
-												selectedPriceVariant ===
-												"Wholesale"
-													? `Quantity: ${rawQuantity ? rawQuantity * item.wholesaleItem : "Enter above"} ${item.soldBy}s`
-													: `Quantity: ${rawQuantity || "Enter above"}`
+												!rawQuantity
+													? "Enter quantity above"
+													: selectedPriceVariant ===
+														  "Wholesale"
+														? `Quantity: ${rawQuantity * item.wholesaleItem} ${item.soldBy}s`
+														: `Quantity: ${rawQuantity} ${item.soldBy}`
 											}
 											placeholder="Enter quantity"
 											labelPlacement="outside"
