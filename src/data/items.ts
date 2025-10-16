@@ -146,11 +146,7 @@ export const item = [
 	{
 		category: "Fruit",
 		title: "Pineapple",
-		img: [
-			"https://picsum.photos/300/300?random=10",
-			"https://picsum.photos/300/300?random=30",
-			"https://picsum.photos/300/300?random=40",
-		],
+		img: ["https://picsum.photos/300/300?random=10"],
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
 		wholesaleItem: 10,
@@ -164,7 +160,6 @@ export const item = [
 		title: "Spinach",
 		img: [
 			"https://picsum.photos/300/300?random=11",
-			"https://picsum.photos/300/300?random=41",
 			"https://picsum.photos/300/300?random=51",
 		],
 		priceRetail: 2.5,
