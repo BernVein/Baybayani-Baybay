@@ -6,15 +6,18 @@ import {
 	ModalFooter,
 	Button,
 	Image,
-	// Chip,
+	Chip,
 	Divider,
 	NumberInput,
 	RadioGroup,
 	Radio,
 	cn,
 } from "@heroui/react";
+import { useState, useEffect } from "react";
 import { Item } from "@/model/Item";
 import { CartIcon } from "@/components/icons";
+import { tagColors, TagType } from "@/model/tagtype";
+
 export const CustomRadio = (props: any) => {
 	const { children, ...otherProps } = props;
 
@@ -43,6 +46,12 @@ export default function ItemInfoModal({
 	onOpenChange: (isOpen: boolean) => void;
 	item: Item;
 }) {
+	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
+	useEffect(() => {
+		if (item?.img?.[0]) {
+			setMainImg(item.img[0]);
+		}
+	}, [item]);
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -67,35 +76,62 @@ export default function ItemInfoModal({
 							<div className="flex flex-col md:flex-row gap-6">
 								{/* Left: Carousel */}
 								<div className="flex flex-col items-center md:items-start gap-2 w-full">
-									<Image
-										alt={item.title || "Sample Item"}
-										src={item.img}
-										isZoomed
-									/>
-									<div className="flex gap-2 mt-2 w-1/2">
+									<div className="relative">
 										<Image
-											alt="Thumbnail 1"
-											src="https://picsum.photos/300/300?random=3"
+											alt={item.title || "Sample Item"}
+											src={mainImg}
 											isZoomed
 										/>
-										<Image
-											alt="Thumbnail 2"
-											src="https://picsum.photos/300/300?random=2"
-											isZoomed
-										/>
-										<Image
-											alt="Thumbnail 3"
-											src="https://picsum.photos/300/300?random=11"
-											isZoomed
-										/>
+										{item.tag && (
+											<Chip
+												className="absolute top-2 left-2 z-10"
+												color={
+													tagColors[
+														item.tag as TagType
+													] || "default"
+												}
+												size="sm"
+											>
+												{item.tag}
+											</Chip>
+										)}
+									</div>
+									<div className="flex gap-2 mt-2">
+										{item.img.map((url, index) => (
+											<Image
+												key={index}
+												alt={
+													item.title || "Sample Item"
+												}
+												src={url}
+												isZoomed
+												onClick={() => setMainImg(url)}
+												width={70}
+											/>
+										))}
 									</div>
 								</div>
 
 								{/* Right: Info */}
 								<div className="flex flex-col gap-4 justify-start w-full">
-									<p className="text-xs font-light text-default-400 text-center mt-3">
-										Price last updated at: Oct 10, 2025
-									</p>
+									<div className="flex justify-between mt-3">
+										<p className="text-xs font-light text-default-400 text-left">
+											Previous price:
+										</p>
+										<p className="text-xs font-light text-default-600 text-left">
+											₱{item.priceRetail.toFixed(2)} 4
+											days ago
+										</p>
+									</div>
+									<div className="flex justify-between">
+										<p className="text-xs font-light text-default-400 text-left">
+											Stock last updated:
+										</p>
+										<p className="text-xs font-light text-default-600 text-left">
+											4 days ago
+										</p>
+									</div>
+
 									<Divider />
 
 									<p className="text-sm">
