@@ -12,9 +12,11 @@ import { tagColors, TagType } from "@/model/tagtype";
 export default function ItemCard({
 	item,
 	index,
+	onPress,
 }: {
 	item: Item;
 	index: number;
+	onPress: () => void;
 }) {
 	const determinePluralText = (stock: number, soldBy: string) => {
 		if (stock > 1) {
@@ -29,7 +31,7 @@ export default function ItemCard({
 			isPressable
 			key={index}
 			shadow="sm"
-			onPress={() => console.log("item pressed")}
+			onPress={onPress}
 			className="transform transition-transform duration-300 hover:scale-105 cursor-pointer"
 		>
 			<CardBody className="overflow-visible p-0">
