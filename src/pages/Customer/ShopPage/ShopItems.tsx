@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import ItemCard from "@/pages/Customer/ShopPage/ItemCard";
 import { item } from "@/data/items";
-import { addToast } from "@heroui/react";
-
+import { addToast, useDisclosure } from "@heroui/react";
+import ItemInfoModal from "./ItemInfoModal/ItemInfoModal";
+import { Item } from "@/model/Item";
 interface ShopItemsProps {
 	activeCategory: string | null;
 	searchTerm: string | null;
@@ -15,7 +16,10 @@ export default function ShopItems({
 	setActiveCategory,
 }: ShopItemsProps) {
 	const itemsPerLoad = 8;
-	const [visibleItems, setVisibleItems] = useState(itemsPerLoad);
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const [, setVisibleItems] = useState(itemsPerLoad);
+	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+
 	const [currentItems, setCurrentItems] = useState(
 		item.slice(0, itemsPerLoad)
 	);
@@ -96,19 +100,29 @@ export default function ShopItems({
 	}, [activeCategory, searchTerm]);
 
 	return (
-		<div className="flex flex-col w-full">
-			{currentItems.length > 0 && (
-				<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
-					{currentItems.map((data, index) => (
-						<ItemCard
-							item={data}
-							index={index}
-							key={index}
-							onPress={() => console.log("item pressed")}
-						/>
-					))}
-				</div>
-			)}
-		</div>
+		<>
+			<div className="flex flex-col w-full">
+				{currentItems.length > 0 && (
+					<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
+						{currentItems.map((data, index) => (
+							<ItemCard
+								item={data}
+								index={index}
+								key={index}
+								onPress={() => {
+									setSelectedItem(data); // store clicked item
+									onOpen(); // open modal
+								}}
+							/>
+						))}
+					</div>
+				)}
+			</div>
+			<ItemInfoModal
+				isOpen={isOpen}
+				onOpenChange={onOpenChange}
+				item={selectedItem as Item}
+			/>
+		</>
 	);
 }
