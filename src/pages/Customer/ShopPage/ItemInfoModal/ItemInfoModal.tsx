@@ -271,7 +271,18 @@ export default function ItemInfoModal({
 										<NumberInput
 											key={`${selectedPriceVariant}-${item.stocks}-${rawQuantity}`}
 											defaultValue={1}
-											minValue={0.1}
+											minValue={
+												selectedPriceVariant ===
+												"Wholesale"
+													? 1
+													: 0.25
+											}
+											step={
+												selectedPriceVariant ===
+												"Wholesale"
+													? 1
+													: 0.25
+											}
 											maxValue={
 												selectedPriceVariant ===
 												"Wholesale"
