@@ -17,7 +17,7 @@ import { useState, useEffect } from "react";
 import { Item } from "@/model/Item";
 import { CartIcon } from "@/components/icons";
 import { tagColors, TagType } from "@/model/tagtype";
-
+import useIsMobile from "@/lib/isMobile";
 export const CustomRadio = (props: any) => {
 	const { children, ...otherProps } = props;
 
@@ -47,6 +47,7 @@ export default function ItemInfoModal({
 	item: Item;
 }) {
 	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
+	const isMobile = useIsMobile();
 	useEffect(() => {
 		if (item?.img?.[0]) {
 			setMainImg(item.img[0]);
@@ -80,7 +81,7 @@ export default function ItemInfoModal({
 										<Image
 											alt={item.title || "Sample Item"}
 											src={mainImg}
-											isZoomed
+											isZoomed={!isMobile}
 										/>
 										{item.tag && (
 											<Chip
@@ -96,31 +97,91 @@ export default function ItemInfoModal({
 											</Chip>
 										)}
 									</div>
-									<div className="flex gap-2 mt-2">
-										{item.img.map((url, index) => (
-											<Image
-												key={index}
-												alt={
-													item.title || "Sample Item"
-												}
-												src={url}
-												isZoomed
-												onClick={() => setMainImg(url)}
-												width={70}
-											/>
-										))}
-									</div>
+									{item.img.length > 1 && (
+										<div className="flex gap-2 mt-2">
+											{item.img.map((url, index) => (
+												<Image
+													key={index}
+													alt={
+														item.title ||
+														"Sample Item"
+													}
+													src={url}
+													onClick={() =>
+														setMainImg(url)
+													}
+													width={70}
+													isZoomed={!isMobile}
+												/>
+											))}
+										</div>
+									)}
 								</div>
 
 								{/* Right: Info */}
 								<div className="flex flex-col gap-4 justify-start w-full">
 									<div className="flex justify-between mt-3">
 										<p className="text-xs font-light text-default-400 text-left">
-											Previous price:
+											Previous price for retail:
 										</p>
 										<p className="text-xs font-light text-default-600 text-left">
-											₱{item.priceRetail.toFixed(2)} 4
-											days ago
+											{item.previousPriceRetail ? (
+												<>
+													₱
+													{item.previousPriceRetail.toFixed(
+														2
+													)}{" "}
+													{item.lastUpdatedPriceRetail && (
+														<span>
+															{Math.floor(
+																(Date.now() -
+																	new Date(
+																		item.lastUpdatedPriceRetail
+																	).getTime()) /
+																	(1000 *
+																		60 *
+																		60 *
+																		24)
+															)}{" "}
+															days ago
+														</span>
+													)}
+												</>
+											) : (
+												"No change since"
+											)}
+										</p>
+									</div>
+									<div className="flex justify-between">
+										<p className="text-xs font-light text-default-400 text-left">
+											Previous wholesale price:
+										</p>
+										<p className="text-xs font-light text-default-600 text-left">
+											{item.previousPriceWholesale ? (
+												<>
+													₱
+													{item.previousPriceWholesale.toFixed(
+														2
+													)}{" "}
+													{item.lastUpdatedPriceWholesale && (
+														<span>
+															{Math.floor(
+																(Date.now() -
+																	new Date(
+																		item.lastUpdatedPriceWholesale
+																	).getTime()) /
+																	(1000 *
+																		60 *
+																		60 *
+																		24)
+															)}{" "}
+															days ago
+														</span>
+													)}
+												</>
+											) : (
+												"No change since"
+											)}
 										</p>
 									</div>
 									<div className="flex justify-between">
@@ -128,7 +189,23 @@ export default function ItemInfoModal({
 											Stock last updated:
 										</p>
 										<p className="text-xs font-light text-default-600 text-left">
-											4 days ago
+											{item.lastUpdatedStock ? (
+												<>
+													{Math.floor(
+														(Date.now() -
+															new Date(
+																item.lastUpdatedStock
+															).getTime()) /
+															(1000 *
+																60 *
+																60 *
+																24)
+													)}{" "}
+													days ago
+												</>
+											) : (
+												"No recent update"
+											)}
 										</p>
 									</div>
 
