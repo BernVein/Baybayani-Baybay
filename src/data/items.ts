@@ -5,6 +5,7 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=1",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
 		stocks: 540,
 		soldBy: "Kilo",
 		description: "Fresh orange carrots packed with nutrients.",
@@ -16,6 +17,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=2",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 540,
 		soldBy: "Kilo",
 		description: "Lean chicken breast meat, ideal for healthy meals.",
@@ -27,6 +30,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=3",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 400,
 		soldBy: "Pack",
 		description: "Whole black peppercorns for rich flavor.",
@@ -38,6 +43,7 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=4",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
 		stocks: 350,
 		soldBy: "Piece",
 		description: "Sweet ripe mangoes sourced locally.",
@@ -49,6 +55,7 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=5",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
 		stocks: 800,
 		soldBy: "Kilo",
 		description: "Premium local white rice with soft texture.",
@@ -60,6 +67,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=6",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 500,
 		soldBy: "Pack",
 		description: "Vibrant turmeric powder for cooking and health.",
@@ -71,6 +80,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=7",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 260,
 		soldBy: "Kilo",
 		description: "Juicy red tomatoes perfect for sauces or salads.",
@@ -82,6 +93,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=8",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 150,
 		soldBy: "Dozen",
 		description: "Fresh yellow corn, perfect for roasting or boiling.",
@@ -93,6 +106,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=9",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 500,
 		soldBy: "Piece",
 		description: "Rich duck eggs great for balut or salted egg dishes.",
@@ -104,6 +119,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=10",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 75,
 		soldBy: "Piece",
 		description: "Sweet and tangy pineapple with tropical freshness.",
@@ -115,6 +132,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=11",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 180,
 		soldBy: "Bundle",
 		description: "Fresh spinach leaves packed with iron and vitamins.",
@@ -126,6 +145,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=12",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 300,
 		soldBy: "Bag",
 		description: "Whole grain oats for a healthy breakfast option.",
@@ -137,6 +158,8 @@ export const item = [
 		img: "https://picsum.photos/300/300?random=13",
 		priceRetail: 2.5,
 		priceWholesale: 2.0,
+		wholesaleItem: 10,
+
 		stocks: 60,
 		soldBy: "Kilo",
 		description: "Farm-raised chicken for roasting or stewing.",

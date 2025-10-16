@@ -4,6 +4,7 @@ export interface Item {
 	img: string;
 	priceRetail: number;
 	priceWholesale: number;
+	wholesaleItem: number;
 	stocks: number;
 	soldBy: string;
 	description: string;
