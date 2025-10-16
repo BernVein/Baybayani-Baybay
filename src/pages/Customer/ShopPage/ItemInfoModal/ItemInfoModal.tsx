@@ -124,7 +124,11 @@ export default function ItemInfoModal({
 													onClick={() =>
 														setMainImg(url)
 													}
-													width={70}
+													width={
+														url === mainImg
+															? 65
+															: 70
+													} // smaller width if selected
 													isZoomed={!isMobile}
 												/>
 											))}
