@@ -66,6 +66,12 @@ export default function ItemInfoModal({
 			setMainImg(item.img[0]);
 		}
 	}, [item]);
+	const computedDescription = !rawQuantity
+		? "Enter quantity above"
+		: selectedPriceVariant === "Wholesale"
+			? `Quantity: ${Math.min(rawQuantity * item.wholesaleItem, item.stocks)} ${item.soldBy}s`
+			: `Quantity: ${Math.min(rawQuantity, item.stocks)} ${item.soldBy}`;
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -273,7 +279,7 @@ export default function ItemInfoModal({
 									{/* Quantity Section */}
 									<div className="flex flex-row items-center gap-2 mb-4">
 										<NumberInput
-											key={`${selectedPriceVariant}-${item.stocks}-${rawQuantity}`}
+											key={`${selectedPriceVariant}-${item.stocks}-${rawQuantity}-${item.wholesaleItem}`}
 											defaultValue={1}
 											minValue={
 												selectedPriceVariant ===
@@ -298,14 +304,7 @@ export default function ItemInfoModal({
 											onValueChange={(val) =>
 												setRawQuantity(val)
 											}
-											description={
-												!rawQuantity
-													? "Enter quantity above"
-													: selectedPriceVariant ===
-														  "Wholesale"
-														? `Quantity: ${rawQuantity * item.wholesaleItem} ${item.soldBy}s`
-														: `Quantity: ${rawQuantity} ${item.soldBy}`
-											}
+											description={computedDescription}
 											placeholder="Enter quantity"
 											labelPlacement="outside"
 											radius="sm"
