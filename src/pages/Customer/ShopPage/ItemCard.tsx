@@ -25,7 +25,7 @@ export default function ItemCard({
 			return `${stock} ${soldBy} left`;
 		}
 	};
-
+	const firstVariant = item.variants?.[0];
 	return (
 		<Card
 			isPressable
@@ -69,8 +69,8 @@ export default function ItemCard({
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
-									₱{item.priceRetail.toFixed(2)} /{" "}
-									{item.soldBy}
+									₱{firstVariant?.price_retail.toFixed(2)} /{" "}
+									{item.sold_by}
 								</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
@@ -82,8 +82,8 @@ export default function ItemCard({
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
-									₱{item.priceWholesale.toFixed(2)} /{" "}
-									{item.soldBy}
+									₱{firstVariant?.price_wholesale?.toFixed(2)}{" "}
+									/ {item.sold_by}
 								</span>
 							</p>
 							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
@@ -117,8 +117,8 @@ export default function ItemCard({
 					<div className="flex justify-between w-full flex-col sm:flex-row sm:items-center">
 						<span className="text-xs font-light">
 							{determinePluralText(
-								Number(item.stocks),
-								item.soldBy
+								Number(firstVariant?.stocks || 0),
+								item.sold_by
 							)}
 						</span>
 					</div>

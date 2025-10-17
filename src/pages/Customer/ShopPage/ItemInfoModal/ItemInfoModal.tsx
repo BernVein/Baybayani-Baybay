@@ -15,6 +15,7 @@ import {
 } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { Item } from "@/model/Item";
+import { ItemVariant } from "@/model/itemVariant";
 import { CartIcon } from "@/components/icons";
 import { tagColors, TagType } from "@/model/tagtype";
 import useIsMobile from "@/lib/isMobile";
@@ -44,16 +45,23 @@ export default function ItemInfoModal({
 }: {
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
-	item: Item;
+	item: Item | null;
 }) {
+	const [selectedItemVariant, setSelectedItemVariant] =
+		useState<ItemVariant | null>(null);
+	console.log(item);
+	console.log(
+		`Selected Variant: ${selectedItemVariant?.item_variant_name} End`
+	);
 	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
 	const isMobile = useIsMobile();
 	const [selectedPriceVariant, setSelectedPriceVariant] = useState("Retail");
-	const [rawQuantity, setRawQuantity] = useState(1); // quantity entered by user
+	const [rawQuantity, setRawQuantity] = useState(1);
 	const actualQuantity =
 		selectedPriceVariant === "Wholesale"
-			? rawQuantity * item.wholesaleItem
+			? rawQuantity * (selectedItemVariant?.wholesale_item ?? 1)
 			: rawQuantity;
+
 	useEffect(() => {
 		if (isOpen && item) {
 			setSelectedPriceVariant("Retail");
@@ -65,12 +73,17 @@ export default function ItemInfoModal({
 		if (item?.img?.[0]) {
 			setMainImg(item.img[0]);
 		}
+		if (item?.variants?.length) {
+			setSelectedItemVariant(item.variants[0]);
+		}
 	}, [item]);
+	if (!item) return null;
+
 	const computedDescription = !rawQuantity
 		? "Enter quantity above"
 		: selectedPriceVariant === "Wholesale"
-			? `Quantity: ${Math.min(rawQuantity * item.wholesaleItem, item.stocks)} ${item.soldBy}s`
-			: `Quantity: ${Math.min(rawQuantity, item.stocks)} ${item.soldBy}`;
+			? `Quantity: ${Math.min(rawQuantity * (selectedItemVariant?.wholesale_item ?? 1), selectedItemVariant?.stocks ?? 0)} ${item.sold_by}s`
+			: `Quantity: ${Math.min(rawQuantity, selectedItemVariant?.stocks ?? 0)} ${item.sold_by}`;
 
 	return (
 		<Modal
@@ -149,18 +162,18 @@ export default function ItemInfoModal({
 											Previous price for retail:
 										</p>
 										<p className="text-xs font-light text-default-600 text-left">
-											{item.previousPriceRetail ? (
+											{selectedItemVariant?.last_price_retail ? (
 												<>
 													₱
-													{item.previousPriceRetail.toFixed(
+													{selectedItemVariant.last_price_retail.toFixed(
 														2
 													)}{" "}
-													{item.lastUpdatedPriceRetail && (
+													{selectedItemVariant.last_updated_price_retail && (
 														<span>
 															{Math.floor(
 																(Date.now() -
 																	new Date(
-																		item.lastUpdatedPriceRetail
+																		selectedItemVariant.last_updated_price_retail
 																	).getTime()) /
 																	(1000 *
 																		60 *
@@ -181,18 +194,18 @@ export default function ItemInfoModal({
 											Previous wholesale price:
 										</p>
 										<p className="text-xs font-light text-default-600 text-left">
-											{item.previousPriceWholesale ? (
+											{selectedItemVariant?.last_price_wholesale ? (
 												<>
 													₱
-													{item.previousPriceWholesale.toFixed(
+													{selectedItemVariant.last_price_wholesale.toFixed(
 														2
 													)}{" "}
-													{item.lastUpdatedPriceWholesale && (
+													{selectedItemVariant.last_updated_price_wholesale && (
 														<span>
 															{Math.floor(
 																(Date.now() -
 																	new Date(
-																		item.lastUpdatedPriceWholesale
+																		selectedItemVariant.last_updated_price_wholesale
 																	).getTime()) /
 																	(1000 *
 																		60 *
@@ -213,12 +226,12 @@ export default function ItemInfoModal({
 											Stock last updated:
 										</p>
 										<p className="text-xs font-light text-default-600 text-left">
-											{item.lastUpdatedStock ? (
+											{selectedItemVariant?.last_updated_stock ? (
 												<>
 													{Math.floor(
 														(Date.now() -
 															new Date(
-																item.lastUpdatedStock
+																selectedItemVariant.last_updated_stock
 															).getTime()) /
 															(1000 *
 																60 *
@@ -241,7 +254,7 @@ export default function ItemInfoModal({
 
 									<Divider />
 									<RadioGroup
-										description={`Stocks remaining: ${item.stocks} ${item.soldBy}s`}
+										description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
 										label="Price Variants"
 										color="success"
 										size="sm"
@@ -252,8 +265,11 @@ export default function ItemInfoModal({
 											description="Retail price"
 											value="Retail"
 										>
-											₱{item.priceRetail.toFixed(2)} per{" "}
-											{item.soldBy}
+											₱
+											{selectedItemVariant?.price_retail?.toFixed(
+												2
+											) ?? 0}{" "}
+											per {item.sold_by}
 										</CustomRadio>
 										<CustomRadio
 											description="Wholesale"
@@ -262,14 +278,16 @@ export default function ItemInfoModal({
 											<div className="flex items-center gap-2">
 												<span>
 													₱
-													{item.priceWholesale.toFixed(
+													{selectedItemVariant?.price_wholesale?.toFixed(
 														2
-													)}{" "}
-													per {item.soldBy}
+													) ?? 0}{" "}
+													per {item.sold_by}
 												</span>
 												<span className="text-xs text-default-400">
-													– {item.wholesaleItem}{" "}
-													{item.soldBy}s per item
+													–{" "}
+													{selectedItemVariant?.wholesale_item ??
+														0}{" "}
+													{item.sold_by}s per item
 												</span>
 											</div>
 										</CustomRadio>
@@ -279,7 +297,7 @@ export default function ItemInfoModal({
 									{/* Quantity Section */}
 									<div className="flex flex-row items-center gap-2 mb-4">
 										<NumberInput
-											key={`${selectedPriceVariant}-${item.stocks}-${rawQuantity}-${item.wholesaleItem}`}
+											key={`${selectedPriceVariant}-${selectedItemVariant?.stocks ?? 0}-${rawQuantity}-${selectedItemVariant?.wholesale_item ?? 0}`}
 											defaultValue={1}
 											minValue={
 												selectedPriceVariant ===
@@ -296,9 +314,12 @@ export default function ItemInfoModal({
 											maxValue={
 												selectedPriceVariant ===
 												"Wholesale"
-													? item.stocks /
-														item.wholesaleItem
-													: item.stocks
+													? (selectedItemVariant?.stocks ??
+															0) /
+														(selectedItemVariant?.wholesale_item ??
+															1)
+													: (selectedItemVariant?.stocks ??
+														0)
 											}
 											value={rawQuantity}
 											onValueChange={(val) =>
@@ -314,7 +335,7 @@ export default function ItemInfoModal({
 													{selectedPriceVariant ===
 													"Wholesale"
 														? "Item"
-														: item.soldBy}
+														: item.sold_by}
 												</div>
 											}
 											className="w-3/4"
@@ -353,10 +374,10 @@ export default function ItemInfoModal({
 										{rawQuantity
 											? `₱${(selectedPriceVariant ===
 												"Wholesale"
-													? item.priceWholesale *
-														actualQuantity
-													: item.priceRetail *
-														rawQuantity
+													? (selectedItemVariant?.price_wholesale ??
+															1) * actualQuantity
+													: (selectedItemVariant?.price_retail ??
+															0) * rawQuantity
 												).toLocaleString(undefined, {
 													minimumFractionDigits: 2,
 													maximumFractionDigits: 2,
