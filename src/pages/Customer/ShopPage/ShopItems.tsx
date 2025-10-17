@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ItemCard from "@/pages/Customer/ShopPage/ItemCard";
-import { item } from "@/data/items";
+import { items } from "@/data/items";
 import { addToast, useDisclosure } from "@heroui/react";
 import ItemInfoModal from "./ItemInfoModal/ItemInfoModal";
 import { Item } from "@/model/Item";
@@ -21,12 +21,12 @@ export default function ShopItems({
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
 	const [currentItems, setCurrentItems] = useState(
-		item.slice(0, itemsPerLoad)
+		items.slice(0, itemsPerLoad)
 	);
 
 	// Update visible items only if filteredItems exist
 	useEffect(() => {
-		const filteredItems = item
+		const filteredItems = items
 			.filter((i) => !activeCategory || i.category === activeCategory)
 			.filter(
 				(i) =>
@@ -65,7 +65,7 @@ export default function ShopItems({
 	// Infinite scroll
 	useEffect(() => {
 		const handleScroll = () => {
-			const filteredItems = item
+			const filteredItems = items
 				.filter((i) => !activeCategory || i.category === activeCategory)
 				.filter(
 					(i) =>

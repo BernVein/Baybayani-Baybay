@@ -1,17 +1,14 @@
+import { ItemVariant } from "@/model/itemVariant";
 export interface Item {
+	item_id: string;
 	category: string;
 	title: string;
 	img: string[];
-	priceRetail: number;
-	priceWholesale: number;
-	wholesaleItem: number;
-	stocks: number;
-	lastUpdatedStock?: string;
-	soldBy: string;
+	sold_by: string;
 	description: string;
-	tag: string | null;
-	previousPriceWholesale?: number;
-	lastUpdatedPriceWholesale?: string;
-	previousPriceRetail?: number;
-	lastUpdatedPriceRetail?: string;
+	tag?: string | null;
+	is_soft_deleted: boolean;
+	last_updated: string;
+	created_at?: string;
+	variants: ItemVariant[];
 }

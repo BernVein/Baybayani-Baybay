@@ -15,7 +15,7 @@ import {
 } from "@heroui/react";
 import { BaybayaniLogo, CartIcon, SearchIcon, MessageIcon } from "./icons";
 import { useState } from "react";
-import { item } from "@/data/items";
+import { items } from "@/data/items";
 
 export const AcmeLogo = () => (
 	<svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -28,7 +28,7 @@ export const AcmeLogo = () => (
 	</svg>
 );
 
-const searchItems = item.map((i, index) => ({
+const searchItems = items.map((i, index) => ({
 	label: i.title,
 	key: `${i.title}-${index}`,
 	description: i.category,
