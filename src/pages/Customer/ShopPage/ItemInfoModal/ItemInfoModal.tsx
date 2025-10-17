@@ -251,25 +251,34 @@ export default function ItemInfoModal({
 									<p className="text-sm">
 										{item.description}
 									</p>
-									<Divider />
-									<RadioGroup
-										description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
-										label="Product Variants"
-										color="success"
-										size="sm"
-										value={selectedPriceVariant}
-									>
-										{item.variants.map((variant, index) => (
-											<CustomRadio
-												key={index}
-												value={
-													variant.item_variant_name
-												}
+									{item.variants.length > 1 && (
+										<>
+											<Divider />
+											<RadioGroup
+												description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
+												label="Product Variants"
+												color="success"
+												size="sm"
+												value={selectedPriceVariant}
 											>
-												{variant.item_variant_name}
-											</CustomRadio>
-										))}
-									</RadioGroup>
+												{item.variants.map(
+													(variant, index) => (
+														<CustomRadio
+															key={index}
+															value={
+																variant.item_variant_name
+															}
+														>
+															{
+																variant.item_variant_name
+															}
+														</CustomRadio>
+													)
+												)}
+											</RadioGroup>
+										</>
+									)}
+
 									<Divider />
 									<RadioGroup
 										description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
