@@ -108,7 +108,7 @@ export default function ItemInfoModal({
 						<ModalBody>
 							<div className="flex flex-col md:flex-row gap-6">
 								{/* Left: Carousel */}
-								<div className="flex flex-col items-center sticky md:items-start gap-2 top-4 w-full self-start">
+								<div className="flex flex-col items-center md:sticky md:items-start gap-2 top-4 w-full self-start">
 									<div className="relative">
 										<Image
 											alt={item.title || "Sample Item"}
@@ -298,19 +298,30 @@ export default function ItemInfoModal({
 											}
 										>
 											<div className="flex items-center gap-2">
-												<span>
-													₱
-													{selectedItemVariant?.price_wholesale?.toFixed(
-														2
-													) ?? 0}{" "}
-													per {item.sold_by}
-												</span>
-												<span className="text-xs text-default-400">
-													–{" "}
-													{selectedItemVariant?.wholesale_item ??
-														0}{" "}
-													{item.sold_by}s per item
-												</span>
+												{selectedItemVariant?.price_wholesale !=
+												null ? (
+													<>
+														<span>
+															₱
+															{selectedItemVariant.price_wholesale.toFixed(
+																2
+															)}{" "}
+															per {item.sold_by}
+														</span>
+														<span className="text-xs text-default-400">
+															–{" "}
+															{selectedItemVariant.wholesale_item ??
+																0}{" "}
+															{item.sold_by}s per
+															item
+														</span>
+													</>
+												) : (
+													<span className="text-xs text-default-400 italic">
+														No wholesale price
+														available
+													</span>
+												)}
 											</div>
 										</CustomRadio>
 									</RadioGroup>

@@ -55,31 +55,31 @@ export default function ItemCard({
 				</div>
 			</CardBody>
 
-			<CardFooter className="text-small">
-				<div className="flex flex-col w-full ">
-					<b className="font-extralight text-center md:text-left text-xs md:text-sm">
+			<CardFooter className="text-small items-start">
+				<div className="flex flex-col w-full items-start">
+					<b className="font-extralight text-center lg:text-left text-xs lg:text-sm">
 						{item.category}
 					</b>
-					<b className="text-center md:text-left text-lg md:text-xl">
+					<b className="text-center lg:text-left text-base lg:text-xl">
 						{item.title}
 					</b>
 
 					<div className="flex flex-col w-full text-default-500 space-y-2 mt-2">
 						{/* Retail */}
-						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+						<div className="flex flex-col lg:flex-row lg:items-center lg:justify-start">
 							<p>
 								<span className="mr-1 font-semibold text-base">
-									₱{firstVariant?.price_retail.toFixed(2)} /{" "}
-									{item.sold_by}
+									₱
+									{firstVariant?.price_retail.toFixed(2)}{" "}
 								</span>
 							</p>
-							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
+							<p className="text-xs lg:text-sm text-default-400 mt-0.5 lg:mt-0">
 								for <strong>Retail</strong>
 							</p>
 						</div>
 
 						{/* Wholesale */}
-						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+						<div className="flex flex-col lg:flex-row lg:items-center lg:justify-start">
 							{firstVariant?.price_wholesale != null ? (
 								<>
 									<p>
@@ -87,18 +87,24 @@ export default function ItemCard({
 											₱
 											{firstVariant.price_wholesale.toFixed(
 												2
-											)}{" "}
-											/ {item.sold_by}
+											)}
 										</span>
 									</p>
-									<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
+									<p className="text-xs lg:text-sm text-default-400 mt-0.5 lg:mt-0">
 										for <strong>Wholesale</strong>
 									</p>
 								</>
 							) : (
-								<p className="text-xs sm:text-sm text-default-400 italic">
-									No wholesale available
-								</p>
+								<div className="flex flex-col lg:flex-row lg:items-center lg:justify-start">
+									<p>
+										<span className="mr-1 text-default-400 text-base">
+											Wholesales
+										</span>
+									</p>
+									<p className="text-xs lg:text-base text-default-400 mt-0.5 lg:mt-0">
+										not available
+									</p>
+								</div>
 							)}
 						</div>
 					</div>
@@ -125,7 +131,7 @@ export default function ItemCard({
 
 					<Divider className="my-3" />
 
-					<div className="flex justify-between w-full flex-col sm:flex-row sm:items-center">
+					<div className="flex justify-between w-full flex-col lg:flex-row lg:items-center">
 						<span className="text-xs font-light">
 							{determinePluralText(
 								Number(firstVariant?.stocks || 0),
