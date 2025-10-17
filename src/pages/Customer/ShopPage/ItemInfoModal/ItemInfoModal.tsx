@@ -108,7 +108,7 @@ export default function ItemInfoModal({
 						<ModalBody>
 							<div className="flex flex-col md:flex-row gap-6">
 								{/* Left: Carousel */}
-								<div className="flex flex-col items-center md:items-start gap-2 w-full">
+								<div className="flex flex-col items-center sticky md:items-start gap-2 top-4 w-full self-start">
 									<div className="relative">
 										<Image
 											alt={item.title || "Sample Item"}
@@ -251,7 +251,25 @@ export default function ItemInfoModal({
 									<p className="text-sm">
 										{item.description}
 									</p>
-
+									<Divider />
+									<RadioGroup
+										description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
+										label="Product Variants"
+										color="success"
+										size="sm"
+										value={selectedPriceVariant}
+									>
+										{item.variants.map((variant, index) => (
+											<CustomRadio
+												key={index}
+												value={
+													variant.item_variant_name
+												}
+											>
+												{variant.item_variant_name}
+											</CustomRadio>
+										))}
+									</RadioGroup>
 									<Divider />
 									<RadioGroup
 										description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
@@ -274,6 +292,10 @@ export default function ItemInfoModal({
 										<CustomRadio
 											description="Wholesale"
 											value="Wholesale"
+											isDisabled={
+												selectedItemVariant?.price_wholesale ==
+												null
+											}
 										>
 											<div className="flex items-center gap-2">
 												<span>

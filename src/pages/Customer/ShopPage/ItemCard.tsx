@@ -80,15 +80,26 @@ export default function ItemCard({
 
 						{/* Wholesale */}
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-start">
-							<p>
-								<span className="mr-1 font-semibold text-base">
-									₱{firstVariant?.price_wholesale?.toFixed(2)}{" "}
-									/ {item.sold_by}
-								</span>
-							</p>
-							<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
-								for <strong>Wholesale</strong>
-							</p>
+							{firstVariant?.price_wholesale != null ? (
+								<>
+									<p>
+										<span className="mr-1 font-semibold text-base">
+											₱
+											{firstVariant.price_wholesale.toFixed(
+												2
+											)}{" "}
+											/ {item.sold_by}
+										</span>
+									</p>
+									<p className="text-xs sm:text-sm text-default-400 mt-0.5 sm:mt-0">
+										for <strong>Wholesale</strong>
+									</p>
+								</>
+							) : (
+								<p className="text-xs sm:text-sm text-default-400 italic">
+									No wholesale available
+								</p>
+							)}
 						</div>
 					</div>
 
