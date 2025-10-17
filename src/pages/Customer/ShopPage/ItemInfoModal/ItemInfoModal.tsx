@@ -49,10 +49,6 @@ export default function ItemInfoModal({
 }) {
 	const [selectedItemVariant, setSelectedItemVariant] =
 		useState<ItemVariant | null>(null);
-	console.log(item);
-	console.log(
-		`Selected Variant: ${selectedItemVariant?.item_variant_name} End`
-	);
 	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
 	const isMobile = useIsMobile();
 	const [selectedPriceVariant, setSelectedPriceVariant] = useState("Retail");
@@ -68,6 +64,14 @@ export default function ItemInfoModal({
 			setRawQuantity(1);
 		}
 	}, [isOpen, item]);
+
+	useEffect(() => {
+		if (!selectedItemVariant) return;
+
+		// Reset quantity and price type when variant changes
+		setRawQuantity(1);
+		setSelectedPriceVariant("Retail");
+	}, [selectedItemVariant]);
 
 	useEffect(() => {
 		if (item?.img?.[0]) {
@@ -156,118 +160,46 @@ export default function ItemInfoModal({
 								</div>
 
 								{/* Right: Info */}
-								<div className="flex flex-col gap-4 justify-start w-full">
-									<div className="flex justify-between mt-3">
-										<p className="text-xs font-light text-default-400 text-left">
-											Previous price for retail:
-										</p>
-										<p className="text-xs font-light text-default-600 text-left">
-											{selectedItemVariant?.last_price_retail ? (
-												<>
-													₱
-													{selectedItemVariant.last_price_retail.toFixed(
-														2
-													)}{" "}
-													{selectedItemVariant.last_updated_price_retail && (
-														<span>
-															{Math.floor(
-																(Date.now() -
-																	new Date(
-																		selectedItemVariant.last_updated_price_retail
-																	).getTime()) /
-																	(1000 *
-																		60 *
-																		60 *
-																		24)
-															)}{" "}
-															days ago
-														</span>
-													)}
-												</>
-											) : (
-												"No change since"
-											)}
-										</p>
-									</div>
-									<div className="flex justify-between">
-										<p className="text-xs font-light text-default-400 text-left">
-											Previous wholesale price:
-										</p>
-										<p className="text-xs font-light text-default-600 text-left">
-											{selectedItemVariant?.last_price_wholesale ? (
-												<>
-													₱
-													{selectedItemVariant.last_price_wholesale.toFixed(
-														2
-													)}{" "}
-													{selectedItemVariant.last_updated_price_wholesale && (
-														<span>
-															{Math.floor(
-																(Date.now() -
-																	new Date(
-																		selectedItemVariant.last_updated_price_wholesale
-																	).getTime()) /
-																	(1000 *
-																		60 *
-																		60 *
-																		24)
-															)}{" "}
-															days ago
-														</span>
-													)}
-												</>
-											) : (
-												"No change since"
-											)}
-										</p>
-									</div>
-									<div className="flex justify-between">
-										<p className="text-xs font-light text-default-400 text-left">
-											Stock last updated:
-										</p>
-										<p className="text-xs font-light text-default-600 text-left">
-											{selectedItemVariant?.last_updated_stock ? (
-												<>
-													{Math.floor(
-														(Date.now() -
-															new Date(
-																selectedItemVariant.last_updated_stock
-															).getTime()) /
-															(1000 *
-																60 *
-																60 *
-																24)
-													)}{" "}
-													days ago
-												</>
-											) : (
-												"No recent update"
-											)}
-										</p>
-									</div>
-
-									<Divider />
-
+								<div className="flex flex-col gap-4 justify-start w-full mt-3">
 									<p className="text-sm">
 										{item.description}
 									</p>
-									{item.variants.length > 1 && (
+									{item.variants?.length > 1 && (
 										<>
 											<Divider />
 											<RadioGroup
-												description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
 												label="Product Variants"
 												color="success"
 												size="sm"
-												value={selectedPriceVariant}
+												value={
+													selectedItemVariant?.item_variant_id
+												}
+												onValueChange={(value) => {
+													const foundVariant =
+														item.variants.find(
+															(variant) =>
+																variant.item_variant_id ===
+																value
+														);
+													if (foundVariant) {
+														setSelectedItemVariant(
+															foundVariant
+														);
+														console.log(
+															"Selected variant:",
+															foundVariant
+														);
+													}
+												}}
 											>
 												{item.variants.map(
 													(variant, index) => (
 														<CustomRadio
 															key={index}
 															value={
-																variant.item_variant_name
+																variant.item_variant_id
 															}
+															description={`Stocks remaining: ${variant.stocks ?? 0} ${item.sold_by}s`}
 														>
 															{
 																variant.item_variant_name
@@ -281,7 +213,6 @@ export default function ItemInfoModal({
 
 									<Divider />
 									<RadioGroup
-										description={`Stocks remaining: ${selectedItemVariant?.stocks ?? 0} ${item.sold_by}s`}
 										label="Price Variants"
 										color="success"
 										size="sm"
