@@ -1,6 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ItemCard from "@/pages/Customer/ShopPage/ItemCard";
-import { addToast, useDisclosure, Skeleton } from "@heroui/react";
+import {
+	addToast,
+	useDisclosure,
+	Skeleton,
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	Button,
+} from "@heroui/react";
 import ItemInfoModal from "./ItemInfoModal/ItemInfoModal";
 import { Item } from "@/model/Item";
 import { useFetchItem } from "@/data/supabase/useFetchItem";
@@ -42,35 +52,49 @@ export default function ShopItems({
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, [hasMore, loadMore]);
 
+	const toastShown = useRef(false);
+
 	// Show toast if search yields no results (Supabase already filtered)
 	useEffect(() => {
-		console.log("itemList:", itemList);
+		if (loading) return; // wait for items to finish loading
 
-		if (!loading && itemList.length === 0) {
-			if (searchTerm) {
-				// User searched but no results
+		// If items exist, reset the toast tracker
+		if (itemList.length > 0) {
+			toastShown.current = false;
+			return;
+		}
+
+		// Only run if a toast hasn't been shown yet
+		if (!toastShown.current) {
+			if (searchTerm && itemList.length === 0) {
+				// Search term exists but no results
 				addToast({
 					title: "No results",
-					description: `No items found for "${searchTerm}".`,
+					description: `No items found for "${searchTerm}"${
+						activeCategory ? ` in ${activeCategory}` : ""
+					}. Showing all items instead.`,
 					severity: "warning",
 					shouldShowTimeoutProgress: true,
 				});
 
-				// Reset category and retry search
+				// Fallback: remove category filter but keep the search term
 				setActiveCategory(null);
 				setSearchTerm(searchTerm);
-			} else if (activeCategory) {
+			} else if (!searchTerm && activeCategory && itemList.length === 0) {
 				// Category has no items
 				addToast({
 					title: "No items in category",
-					description: `The selected category ${activeCategory} has no items. Showing all items.`,
+					description: `The selected category "${activeCategory}" has no items. Showing all items instead.`,
+					severity: "warning",
 					shouldShowTimeoutProgress: true,
 				});
 
+				// Reset category
 				setActiveCategory(null);
 			}
 
-			console.log("Done");
+			// Mark toast as shown to prevent repeats
+			toastShown.current = true;
 		}
 	}, [
 		loading,
@@ -83,12 +107,33 @@ export default function ShopItems({
 
 	if (fetchError) {
 		return (
-			<div className="text-red-500 text-center mt-10">
-				Error loading items: {fetchError}
-			</div>
+			<Modal
+				isOpen
+				onOpenChange={() => {
+					/* do nothing */
+				}}
+			>
+				<ModalContent className="max-w-sm">
+					<ModalHeader>No Internet Detected</ModalHeader>
+					<ModalBody>
+						<p className="text-sm text-default-500">
+							Unable to load items. Please check your internet
+							connection and try again later.
+						</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							onPress={() => {
+								window.location.reload();
+							}}
+						>
+							Retry
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		);
 	}
-
 	return (
 		<>
 			<div className="flex flex-col w-full">
