@@ -22,38 +22,45 @@ export default function ItemInfoModal({
 	onOpenChange: (isOpen: boolean) => void;
 	item: Item | null;
 }) {
+	// State for selected item variant
 	const [selectedItemVariant, setSelectedItemVariant] =
 		useState<ItemVariant | null>(null);
+	// State for selected image
 	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
+	// For mobile view, but its kinda useless
 	const isMobile = useIsMobile();
+	// State for selected price variant
 	const [selectedPriceVariant, setSelectedPriceVariant] = useState("Retail");
+	// State for quantity, raw quantity is the term
+	// cause in wholesale, its being multiplied by wholesale_item
 	const [rawQuantity, setRawQuantity] = useState(1);
+	// Calculate actual quantity based on selected price variant
 	const actualQuantity =
 		selectedPriceVariant === "Wholesale"
 			? rawQuantity * (selectedItemVariant?.wholesale_item ?? 1)
 			: rawQuantity;
 
+	// Set default values when modal opens
 	useEffect(() => {
 		if (isOpen && item) {
 			setSelectedPriceVariant("Retail");
 			setRawQuantity(1);
 		}
-	}, [isOpen, item]);
-
-	useEffect(() => {
-		if (!selectedItemVariant) return;
-		setRawQuantity(1);
-		setSelectedPriceVariant("Retail");
-	}, [selectedItemVariant]);
-
-	useEffect(() => {
 		if (item?.img?.[0]) {
 			setMainImg(item.img[0]);
 		}
 		if (item?.variants?.length) {
 			setSelectedItemVariant(item.variants[0]);
 		}
-	}, [item]);
+	}, [isOpen, item]);
+
+	// Set default values when selected price variant changes
+	useEffect(() => {
+		if (!selectedItemVariant) return;
+		setRawQuantity(1);
+		setSelectedPriceVariant("Retail");
+	}, [selectedItemVariant]);
+
 	if (!item) return null;
 
 	return (
