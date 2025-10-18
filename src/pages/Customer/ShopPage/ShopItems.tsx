@@ -72,7 +72,7 @@ export default function ShopItems({
 					title: "No results",
 					description: `No items found for "${searchTerm}"${
 						activeCategory ? ` in ${activeCategory}` : ""
-					}. Showing all items instead.`,
+					}.`,
 					severity: "warning",
 					shouldShowTimeoutProgress: true,
 				});
@@ -84,7 +84,7 @@ export default function ShopItems({
 				// Category has no items
 				addToast({
 					title: "No items in category",
-					description: `The selected category "${activeCategory}" has no items. Showing all items instead.`,
+					description: `${activeCategory} has no items. Showing all items instead.`,
 					severity: "warning",
 					shouldShowTimeoutProgress: true,
 				});
