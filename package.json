@@ -27,6 +27,7 @@
 		"@iconify/react": "^6.0.2",
 		"@react-aria/visually-hidden": "3.8.27",
 		"@react-types/shared": "3.32.0",
+		"@supabase/supabase-js": "^2.75.1",
 		"@tailwindcss/postcss": "4.1.11",
 		"@tailwindcss/vite": "4.1.11",
 		"clsx": "^2.1.1",
