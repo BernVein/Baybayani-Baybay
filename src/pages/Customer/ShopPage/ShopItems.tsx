@@ -58,7 +58,7 @@ export default function ShopItems({
 	useEffect(() => {
 		if (loading) return; // wait for items to finish loading
 
-		// If items exist, reset the toast tracker
+		// Reset toast if items exist
 		if (itemList.length > 0) {
 			toastShown.current = false;
 			return;
@@ -66,22 +66,34 @@ export default function ShopItems({
 
 		// Only run if a toast hasn't been shown yet
 		if (!toastShown.current) {
-			if (searchTerm && itemList.length === 0) {
-				// Search term exists but no results
+			// CASE 3: Search term exists but no items at all (any category)
+			if (searchTerm && itemList.length === 0 && !activeCategory) {
 				addToast({
-					title: "No results",
-					description: `No items found for "${searchTerm}"${
-						activeCategory ? ` in ${activeCategory}` : ""
-					}.`,
+					title: "No items found",
+					description: `No items found for "${searchTerm}" in any category. Showing all items instead.`,
 					severity: "warning",
 					shouldShowTimeoutProgress: true,
 				});
 
-				// Fallback: remove category filter but keep the search term
+				// Reset everything
+				setActiveCategory(null);
+				setSearchTerm(null);
+			}
+			// CASE 2: Search term exists but no items in current category
+			else if (searchTerm && itemList.length === 0 && activeCategory) {
+				addToast({
+					title: "No results",
+					description: `No items found for "${searchTerm}" in ${activeCategory}.`,
+					severity: "warning",
+					shouldShowTimeoutProgress: true,
+				});
+
+				// Remove category filter, keep search term
 				setActiveCategory(null);
 				setSearchTerm(searchTerm);
-			} else if (!searchTerm && activeCategory && itemList.length === 0) {
-				// Category has no items
+			}
+			// CASE 1: Category exists but has no items
+			else if (!searchTerm && activeCategory && itemList.length === 0) {
 				addToast({
 					title: "No items in category",
 					description: `${activeCategory} has no items. Showing all items instead.`,
@@ -93,8 +105,7 @@ export default function ShopItems({
 				setActiveCategory(null);
 			}
 
-			// Mark toast as shown to prevent repeats
-			toastShown.current = true;
+			toastShown.current = true; // mark toast as shown
 		}
 	}, [
 		loading,
