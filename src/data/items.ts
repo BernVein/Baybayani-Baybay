@@ -1,7 +1,7 @@
 import { Item } from "@/model/Item";
 export const items: Item[] = [
 	{
-		item_id: "6a2f4c71-3f90-45e7-9c89-6f2b96c9b123",
+		item_id: "0b1d7f08-8e2f-4bb0-b06f-20a282c51000",
 		item_category: "Vegetable",
 		item_title: "Carrot",
 		item_img: [
@@ -18,7 +18,7 @@ export const items: Item[] = [
 		item_variants: [
 			{
 				variant_id: "b3e9b8b1-21d4-48a8-bb21-c8d7b99cb441",
-				variant_name: "Regular Carrots",
+				variant_name: "Carrots",
 				variant_price_retail: 2.5,
 				variant_price_wholesale: null,
 				variant_wholesale_item: 10,
@@ -36,20 +36,44 @@ export const items: Item[] = [
 		],
 	},
 	{
-		item_id: "83b2c995-1c88-43de-b4f3-4c99d9ab5a32",
+		item_id: "2926b3f5-9e75-4df7-876b-41f3e0187814",
 		item_category: "Poultry",
 		item_title: "Chicken Breast",
 		item_img: [
 			"https://picsum.photos/seed/chicken1/300/300",
 			"https://picsum.photos/seed/chicken2/300/300",
 			"https://picsum.photos/seed/chicken3/300/300",
+			"https://picsum.photos/seed/chicken4/300/300",
+			"https://picsum.photos/seed/chicken5/300/300",
+			"https://picsum.photos/seed/chicken6/300/300",
+			"https://picsum.photos/seed/chicken7/300/300",
+			"https://picsum.photos/seed/chicken8/300/300",
+			"https://picsum.photos/seed/chicken9/300/300",
+			"https://picsum.photos/seed/chicken10/300/300",
+			"https://picsum.photos/seed/chicken11/300/300",
+			"https://picsum.photos/seed/chicken12/300/300",
+			"https://picsum.photos/seed/chicken13/300/300",
+			"https://picsum.photos/seed/chicken14/300/300",
+			"https://picsum.photos/seed/chicken15/300/300",
+			"https://picsum.photos/seed/chicken16/300/300",
+			"https://picsum.photos/seed/chicken17/300/300",
+			"https://picsum.photos/seed/chicken18/300/300",
+			"https://picsum.photos/seed/chicken19/300/300",
+			"https://picsum.photos/seed/chicken20/300/300",
+			"https://picsum.photos/seed/chicken21/300/300",
+			"https://picsum.photos/seed/chicken22/300/300",
+			"https://picsum.photos/seed/chicken23/300/300",
+			"https://picsum.photos/seed/chicken24/300/300",
+			"https://picsum.photos/seed/chicken25/300/300",
+			"https://picsum.photos/seed/chicken26/300/300",
+			"https://picsum.photos/seed/chicken27/300/300",
+			"https://picsum.photos/seed/chicken28/300/300",
 		],
 		item_sold_by: "Kilo",
 		item_description: "Lean chicken breast meat, ideal for healthy meals.",
 		item_tag: "Restocked",
 		is_soft_deleted: false,
 		last_updated: "2025-10-10T14:22:00+08:00",
-		created_at: "2025-09-28T10:00:00+08:00",
 		item_variants: [
 			{
 				variant_id: "f221cb18-b321-44c3-b9ab-7e4f97f9993e",
@@ -97,7 +121,7 @@ export const items: Item[] = [
 	},
 	// NEW ITEM 1: Single variant
 	{
-		item_id: "d1a2f4c1-1234-4567-8910-abcdef123456",
+		item_id: "5357c846-69ae-4e6d-91e6-f64e275d0c5d",
 		item_category: "Fruit",
 		item_title: "Mango",
 		item_img: ["https://picsum.photos/seed/mango1/300/300"],
@@ -128,7 +152,7 @@ export const items: Item[] = [
 	},
 	// NEW ITEM 2: Two variants
 	{
-		item_id: "e2b3c4d5-6789-0123-4567-abcdef987654",
+		item_id: "a46b1507-f0e8-407d-8add-da129f69fad6",
 		item_category: "Grain",
 		item_title: "Rice",
 		item_img: ["https://picsum.photos/seed/rice1/300/300"],
@@ -164,19 +188,5 @@ export const items: Item[] = [
 				created_at: "2025-09-29T11:00:00+08:00",
 			},
 		],
-	},
-	// NEW ITEM 3: No variants (edge case)
-	{
-		item_id: "f3c4d5e6-7890-1234-5678-abcdef654321",
-		item_category: "Spice",
-		item_title: "Pepper",
-		item_img: ["https://picsum.photos/seed/pepper1/300/300"],
-		item_sold_by: "Gram",
-		item_description: "Fresh ground black pepper.",
-		item_tag: "PriceDrop",
-		is_soft_deleted: false,
-		last_updated: "2025-10-15T12:00:00+08:00",
-		created_at: "2025-09-28T09:00:00+08:00",
-		item_variants: [], // edge case
 	},
 ];
