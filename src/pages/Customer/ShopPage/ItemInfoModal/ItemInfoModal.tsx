@@ -7,7 +7,7 @@ import {
 } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { Item } from "@/model/Item";
-import { ItemVariant } from "@/model/itemVariant";
+import { Variant } from "@/model/variant";
 import useIsMobile from "@/lib/isMobile";
 import ImageCarousel from "./ImageCarousel";
 import InformationSection from "./InformationSection";
@@ -24,9 +24,9 @@ export default function ItemInfoModal({
 }) {
 	// State for selected item variant
 	const [selectedItemVariant, setSelectedItemVariant] =
-		useState<ItemVariant | null>(null);
+		useState<Variant | null>(null);
 	// State for selected image
-	const [mainImg, setMainImg] = useState(item?.img?.[0] || "");
+	const [mainImg, setMainImg] = useState(item?.item_img?.[0] || "");
 	// For mobile view, but its kinda useless
 	const isMobile = useIsMobile();
 	// State for selected price variant
@@ -37,7 +37,7 @@ export default function ItemInfoModal({
 	// Calculate actual quantity based on selected price variant
 	const actualQuantity =
 		selectedPriceVariant === "Wholesale"
-			? rawQuantity * (selectedItemVariant?.wholesale_item ?? 1)
+			? rawQuantity * (selectedItemVariant?.variant_wholesale_item ?? 1)
 			: rawQuantity;
 
 	// Set default values when modal opens
@@ -46,11 +46,11 @@ export default function ItemInfoModal({
 			setSelectedPriceVariant("Retail");
 			setRawQuantity(1);
 		}
-		if (item?.img?.[0]) {
-			setMainImg(item.img[0]);
+		if (item?.item_img?.[0]) {
+			setMainImg(item.item_img[0]);
 		}
-		if (item?.variants?.length) {
-			setSelectedItemVariant(item.variants[0]);
+		if (item?.item_variants?.length) {
+			setSelectedItemVariant(item.item_variants[0]);
 		}
 	}, [isOpen, item]);
 
@@ -79,7 +79,7 @@ export default function ItemInfoModal({
 					<>
 						<ModalHeader className="flex flex-col gap-2">
 							<h2 className="text-lg font-semibold">
-								{item.title || "Sample Item"}
+								{item.item_title || "Sample Item"}
 							</h2>
 						</ModalHeader>
 

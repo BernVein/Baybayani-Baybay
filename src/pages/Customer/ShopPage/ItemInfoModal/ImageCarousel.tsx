@@ -17,27 +17,27 @@ export default function ImageCarousel({
 		<>
 			<div className="relative">
 				<Image
-					alt={item.title || "Sample Item"}
+					alt={item.item_title || "Sample Item"}
 					src={mainImg}
 					isZoomed={!isMobile}
 					width={300}
 				/>
-				{item.tag && (
+				{item.item_tag && (
 					<Chip
 						className="absolute top-2 left-2 z-10"
-						color={tagColors[item.tag as TagType] || "default"}
+						color={tagColors[item.item_tag as TagType] || "default"}
 						size="sm"
 					>
-						{item.tag}
+						{item.item_tag}
 					</Chip>
 				)}
 			</div>
-			{item.img.length > 1 && (
+			{item.item_img.length > 1 && (
 				<div className="flex gap-2 mt-2">
-					{item.img.map((url, index) => (
+					{item.item_img.map((url, index) => (
 						<Image
 							key={index}
-							alt={item.title || "Sample Item"}
+							alt={item.item_title || "Sample Item"}
 							src={url}
 							onClick={() => setMainImg(url)}
 							width={url === mainImg ? 65 : 70} // smaller width if selected

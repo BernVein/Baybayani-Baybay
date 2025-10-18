@@ -1,4 +1,4 @@
-import { ItemVariant } from "@/model/itemVariant";
+import { Variant } from "@/model/variant";
 import { Button } from "@heroui/react";
 import { CartIcon } from "@/components/icons";
 export default function Footer({
@@ -8,7 +8,7 @@ export default function Footer({
 	actualQuantity,
 	onClose,
 }: {
-	selectedItemVariant: ItemVariant | null;
+	selectedItemVariant: Variant | null;
 	selectedPriceVariant: string;
 	rawQuantity: number;
 	actualQuantity: number;
@@ -25,10 +25,10 @@ export default function Footer({
 					<span className="text-base font-semibold">
 						{rawQuantity
 							? `₱${(selectedPriceVariant === "Wholesale"
-									? (selectedItemVariant?.price_wholesale ??
+									? (selectedItemVariant?.variant_price_wholesale ??
 											1) * actualQuantity
-									: (selectedItemVariant?.price_retail ?? 0) *
-										rawQuantity
+									: (selectedItemVariant?.variant_price_retail ??
+											0) * rawQuantity
 								).toLocaleString(undefined, {
 									minimumFractionDigits: 2,
 									maximumFractionDigits: 2,
