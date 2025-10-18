@@ -58,7 +58,7 @@ export default function ItemCard({
 			</CardBody>
 
 			<CardFooter className="text-small items-start">
-				<div className="flex flex-col w-full items-start">
+				<div className="flex flex-col w-full items-center lg:items-start">
 					<b className="font-extralight text-center lg:text-left text-xs lg:text-sm">
 						{item.item_category}
 					</b>
@@ -102,7 +102,7 @@ export default function ItemCard({
 								<div className="flex flex-col lg:flex-row lg:items-center lg:justify-start">
 									<p>
 										<span className="mr-1 text-default-400 text-base">
-											Wholesales
+											Wholesale
 										</span>
 									</p>
 									<p className="text-xs lg:text-base text-default-400 mt-0.5 lg:mt-0">
