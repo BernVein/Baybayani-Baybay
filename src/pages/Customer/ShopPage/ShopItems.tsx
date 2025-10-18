@@ -27,12 +27,18 @@ export default function ShopItems({
 	// Update visible items only if filteredItems exist
 	useEffect(() => {
 		const filteredItems = items
-			.filter((i) => !activeCategory || i.category === activeCategory)
+			.filter(
+				(i) => !activeCategory || i.item_category === activeCategory
+			)
 			.filter(
 				(i) =>
 					!searchTerm ||
-					i.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					i.category.toLowerCase().includes(searchTerm.toLowerCase())
+					i.item_title
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase()) ||
+					i.item_category
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase())
 			);
 
 		if (filteredItems.length === 0) {
@@ -66,14 +72,16 @@ export default function ShopItems({
 	useEffect(() => {
 		const handleScroll = () => {
 			const filteredItems = items
-				.filter((i) => !activeCategory || i.category === activeCategory)
+				.filter(
+					(i) => !activeCategory || i.item_category === activeCategory
+				)
 				.filter(
 					(i) =>
 						!searchTerm ||
-						i.title
+						i.item_title
 							.toLowerCase()
 							.includes(searchTerm.toLowerCase()) ||
-						i.category
+						i.item_category
 							.toLowerCase()
 							.includes(searchTerm.toLowerCase())
 				);

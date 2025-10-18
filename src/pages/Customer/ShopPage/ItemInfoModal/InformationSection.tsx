@@ -1,5 +1,5 @@
 import { Item } from "@/model/Item";
-import { ItemVariant } from "@/model/itemVariant";
+import { Variant } from "@/model/variant";
 import {
 	Button,
 	Divider,
@@ -36,8 +36,8 @@ export default function InformationSection({
 	setRawQuantity,
 }: {
 	item: Item;
-	selectedItemVariant: ItemVariant | null;
-	setSelectedItemVariant: (variant: ItemVariant) => void;
+	selectedItemVariant: Variant | null;
+	setSelectedItemVariant: (variant: Variant) => void;
 	selectedPriceVariant: string;
 	setSelectedPriceVariant: (variant: string) => void;
 	rawQuantity: number;
@@ -46,22 +46,22 @@ export default function InformationSection({
 	const computedDescription = !rawQuantity
 		? "Enter quantity above"
 		: selectedPriceVariant === "Wholesale"
-			? `Quantity: ${Math.min(rawQuantity * (selectedItemVariant?.wholesale_item ?? 1), selectedItemVariant?.stocks ?? 0)} ${item.sold_by}s`
-			: `Quantity: ${Math.min(rawQuantity, selectedItemVariant?.stocks ?? 0)} ${item.sold_by}`;
+			? `Quantity: ${Math.min(rawQuantity * (selectedItemVariant?.variant_wholesale_item ?? 1), selectedItemVariant?.variant_stocks ?? 0)} ${item.item_sold_by}s`
+			: `Quantity: ${Math.min(rawQuantity, selectedItemVariant?.variant_stocks ?? 0)} ${item.item_sold_by}`;
 	return (
 		<>
-			<p className="text-sm">{item.description}</p>
-			{item.variants?.length > 1 && (
+			<p className="text-sm">{item.item_description}</p>
+			{item.item_variants?.length > 1 && (
 				<>
 					<Divider />
 					<RadioGroup
 						label="Product Variants"
 						color="success"
 						size="sm"
-						value={selectedItemVariant?.item_variant_id}
+						value={selectedItemVariant?.variant_id}
 						onValueChange={(value) => {
-							const foundVariant = item.variants.find(
-								(variant) => variant.item_variant_id === value
+							const foundVariant = item.item_variants.find(
+								(variant) => variant.variant_id === value
 							);
 							if (foundVariant) {
 								setSelectedItemVariant(foundVariant);
@@ -69,13 +69,13 @@ export default function InformationSection({
 							}
 						}}
 					>
-						{item.variants.map((variant, index) => (
+						{item.item_variants.map((variant, index) => (
 							<CustomRadio
 								key={index}
-								value={variant.item_variant_id}
-								description={`Stocks remaining: ${variant.stocks ?? 0} ${item.sold_by}s`}
+								value={variant.variant_id}
+								description={`Stocks remaining: ${variant.variant_stocks ?? 0} ${item.item_sold_by}s`}
 							>
-								{variant.item_variant_name}
+								{variant.variant_name}
 							</CustomRadio>
 						))}
 					</RadioGroup>
@@ -91,27 +91,33 @@ export default function InformationSection({
 				onValueChange={setSelectedPriceVariant}
 			>
 				<CustomRadio description="Retail price" value="Retail">
-					₱{selectedItemVariant?.price_retail?.toFixed(2) ?? 0} per{" "}
-					{item.sold_by}
+					₱
+					{selectedItemVariant?.variant_price_retail?.toFixed(2) ?? 0}{" "}
+					per {item.item_sold_by}
 				</CustomRadio>
 				<CustomRadio
 					description="Wholesale"
 					value="Wholesale"
-					isDisabled={selectedItemVariant?.price_wholesale == null}
+					isDisabled={
+						selectedItemVariant?.variant_price_wholesale == null
+					}
 				>
 					<div className="flex items-center gap-2">
-						{selectedItemVariant?.price_wholesale != null ? (
+						{selectedItemVariant?.variant_price_wholesale !=
+						null ? (
 							<>
 								<span>
 									₱
-									{selectedItemVariant.price_wholesale.toFixed(
+									{selectedItemVariant.variant_price_wholesale.toFixed(
 										2
 									)}{" "}
-									per {item.sold_by}
+									per {item.item_sold_by}
 								</span>
 								<span className="text-xs text-default-400">
-									– {selectedItemVariant.wholesale_item ?? 0}{" "}
-									{item.sold_by}s per item
+									–{" "}
+									{selectedItemVariant.variant_wholesale_item ??
+										0}{" "}
+									{item.item_sold_by}s per item
 								</span>
 							</>
 						) : (
@@ -127,15 +133,16 @@ export default function InformationSection({
 			{/* Quantity Section */}
 			<div className="flex flex-row items-center gap-2 mb-4">
 				<NumberInput
-					key={`${selectedPriceVariant}-${selectedItemVariant?.stocks ?? 0}-${rawQuantity}-${selectedItemVariant?.wholesale_item ?? 0}`}
+					key={`${selectedPriceVariant}-${selectedItemVariant?.variant_stocks ?? 0}-${rawQuantity}-${selectedItemVariant?.variant_wholesale_item ?? 0}`}
 					defaultValue={1}
 					minValue={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
 					step={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
 					maxValue={
 						selectedPriceVariant === "Wholesale"
-							? (selectedItemVariant?.stocks ?? 0) /
-								(selectedItemVariant?.wholesale_item ?? 1)
-							: (selectedItemVariant?.stocks ?? 0)
+							? (selectedItemVariant?.variant_stocks ?? 0) /
+								(selectedItemVariant?.variant_wholesale_item ??
+									1)
+							: (selectedItemVariant?.variant_stocks ?? 0)
 					}
 					value={rawQuantity}
 					onValueChange={(val) => setRawQuantity(val)}
@@ -148,7 +155,7 @@ export default function InformationSection({
 						<div className="text-sm text-default-500 mr-2">
 							{selectedPriceVariant === "Wholesale"
 								? "Item"
-								: item.sold_by}
+								: item.item_sold_by}
 						</div>
 					}
 					className="w-3/4"

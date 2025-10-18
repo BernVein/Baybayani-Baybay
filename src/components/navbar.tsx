@@ -29,9 +29,9 @@ export const AcmeLogo = () => (
 );
 
 const searchItems = items.map((i, index) => ({
-	label: i.title,
-	key: `${i.title}-${index}`,
-	description: i.category,
+	label: i.item_title,
+	key: `${i.item_title}-${index}`,
+	description: i.item_category,
 }));
 
 export function Navbar({
