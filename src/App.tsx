@@ -23,7 +23,12 @@ function App() {
 					<Route element={<Cart />} path="/cart" />
 					<Route element={<Orders />} path="/orders" />
 					<Route
-						element={<Shop searchTerm={searchTerm} />}
+						element={
+							<Shop
+								searchTerm={searchTerm}
+								setSearchTerm={setSearchTerm}
+							/>
+						}
 						path="/"
 					/>
 					<Route element={<Profile />} path="/profile" />
