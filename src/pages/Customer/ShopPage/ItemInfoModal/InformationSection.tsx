@@ -66,7 +66,6 @@ export default function InformationSection({
 							);
 							if (foundVariant) {
 								setSelectedItemVariant(foundVariant);
-								console.log("Selected variant:", foundVariant);
 							}
 						}}
 					>
