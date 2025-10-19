@@ -41,7 +41,6 @@ export const useFetchItem = (
 			}
 
 			const { data, error } = await query;
-
 			setLoading(false);
 
 			if (error) {
