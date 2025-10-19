@@ -6,7 +6,7 @@ import {
 	Chili,
 } from "@/components/icons";
 import { ScrollShadow, Button } from "@heroui/react";
-
+import { XIcon } from "@/components/icons";
 interface Category {
 	name: string;
 	icon: React.ReactElement;
@@ -48,6 +48,11 @@ export default function Categories({
 							<div className="flex flex-col items-center flex-shrink-0 snap-center">
 								<Button
 									startContent={item.icon}
+									endContent={
+										activeCategory === item.name ? (
+											<XIcon className="size-5" />
+										) : null
+									}
 									aria-label={item.name}
 									radius="full"
 									color={

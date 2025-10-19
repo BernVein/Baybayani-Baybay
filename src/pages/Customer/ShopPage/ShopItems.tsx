@@ -14,14 +14,13 @@ import {
 import ItemInfoModal from "./ItemInfoModal/ItemInfoModal";
 import { Item } from "@/model/Item";
 import { useFetchItem } from "@/data/supabase/useFetchItem";
-
 interface ShopItemsProps {
 	activeCategory: string | null;
 	searchTerm: string | null;
 	setActiveCategory: (category: string | null) => void;
 	setSearchTerm: (term: string | null) => void;
 }
-
+import { XIcon } from "@/components/icons";
 export default function ShopItems({
 	activeCategory,
 	searchTerm,
@@ -148,6 +147,30 @@ export default function ShopItems({
 	return (
 		<>
 			<div className="flex flex-col w-full">
+				{searchTerm && searchTerm.trim() !== "" && (
+					<>
+						<div className="flex flex-row mb-5 gap-3 items-center">
+							<div className="text-2xl">
+								Search Results for "{searchTerm}"
+								{activeCategory &&
+									activeCategory.trim() !== "" &&
+									` in ${activeCategory}`}
+							</div>
+							<Button
+								color="danger"
+								onPress={() => {
+									setActiveCategory(null);
+									setSearchTerm(null);
+								}}
+								startContent={<XIcon className="size-5" />}
+								size="sm"
+							>
+								Clear Search
+							</Button>
+						</div>
+					</>
+				)}
+
 				<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
 					{/* Real items */}
 					{itemList.map((item) => (
