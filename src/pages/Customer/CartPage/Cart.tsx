@@ -1,11 +1,4 @@
-import {
-	Button,
-	Card,
-	CardBody,
-	Divider,
-	Image,
-	NumberInput,
-} from "@heroui/react";
+import { Button, Card, CardBody, Image, NumberInput } from "@heroui/react";
 import useIsMobile from "@/lib/isMobile";
 export default function Cart() {
 	const dummyItems = Array.from({ length: 5 });
