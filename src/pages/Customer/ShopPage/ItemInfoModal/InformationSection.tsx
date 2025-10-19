@@ -89,23 +89,22 @@ export default function InformationSection({
 					{selectedItemVariant?.variant_name} Information:
 				</span>
 
-				{/* Only show if retail info exists */}
-				{selectedItemVariant?.variant_last_price_retail &&
-					selectedItemVariant?.variant_price_retail != null && (
-						<div className="gap-2 flex flex-row justify-between">
-							<span className="text-xs text-default-400">
-								Last Price Retail:
-							</span>
-							<span className="text-xs text-default-500">
+				{/* Retail info */}
+				<div className="gap-2 flex flex-row justify-between">
+					<span className="text-xs text-default-400">
+						Last Price Retail:
+					</span>
+					<span className="text-xs text-default-500">
+						{selectedItemVariant?.variant_last_updated_price_retail ? (
+							<>
 								₱
-								{selectedItemVariant.variant_last_price_retail.toFixed(
+								{selectedItemVariant.variant_last_price_retail?.toFixed(
 									2
 								)}{" "}
 								(
 								{(() => {
 									const updatedAt =
 										selectedItemVariant.variant_last_updated_price_retail;
-									if (!updatedAt) return "";
 									const now = new Date();
 									const updatedDate = new Date(updatedAt);
 									const diffTime =
@@ -118,27 +117,31 @@ export default function InformationSection({
 									return `${diffDays} days ago`;
 								})()}
 								)
+							</>
+						) : (
+							<span className="italic text-default-400">
+								No change
 							</span>
-						</div>
-					)}
+						)}
+					</span>
+				</div>
 
-				{/* Only show if wholesale info exists */}
-				{selectedItemVariant?.variant_last_price_wholesale &&
-					selectedItemVariant?.variant_price_wholesale != null && (
-						<div className="gap-2 flex flex-row justify-between">
-							<span className="text-xs text-default-400">
-								Last Price Wholesale:
-							</span>
-							<span className="text-xs text-default-500">
+				{/* Wholesale info */}
+				<div className="gap-2 flex flex-row justify-between">
+					<span className="text-xs text-default-400">
+						Last Price Wholesale:
+					</span>
+					<span className="text-xs text-default-500">
+						{selectedItemVariant?.variant_last_updated_price_wholesale ? (
+							<>
 								₱
-								{selectedItemVariant.variant_last_price_wholesale.toFixed(
+								{selectedItemVariant.variant_last_price_wholesale?.toFixed(
 									2
 								)}{" "}
 								(
 								{(() => {
 									const updatedAt =
 										selectedItemVariant.variant_last_updated_price_wholesale;
-									if (!updatedAt) return "";
 									const now = new Date();
 									const updatedDate = new Date(updatedAt);
 									const diffTime =
@@ -151,25 +154,26 @@ export default function InformationSection({
 									return `${diffDays} days ago`;
 								})()}
 								)
+							</>
+						) : (
+							<span className="italic text-default-400">
+								No change
 							</span>
-						</div>
-					)}
+						)}
+					</span>
+				</div>
 
-				{/* Show stock info only if the item has one variant */}
-				{item.item_variants.length === 1 && (
-					<div className="gap-2 flex flex-row justify-between">
-						<span className="text-xs text-default-400">
-							Stocks:
-						</span>
-						<span className="text-xs text-default-500">
-							{selectedItemVariant?.variant_stocks ?? 0}{" "}
-							{item.item_sold_by}
-							{(selectedItemVariant?.variant_stocks ?? 0) > 1 &&
-								"s"}{" "}
-							left
-						</span>
-					</div>
-				)}
+				{/* Stocks info */}
+				<div className="gap-2 flex flex-row justify-between">
+					<span className="text-xs text-default-400">Stocks:</span>
+					<span className="text-xs text-default-500">
+						{selectedItemVariant?.variant_stocks ?? 0}{" "}
+						{item.item_sold_by}
+						{(selectedItemVariant?.variant_stocks ?? 0) > 1 &&
+							"s"}{" "}
+						left
+					</span>
+				</div>
 			</div>
 
 			<Divider />
