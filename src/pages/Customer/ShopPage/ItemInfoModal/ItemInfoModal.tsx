@@ -61,6 +61,14 @@ export default function ItemInfoModal({
 		setSelectedPriceVariant("Retail");
 	}, [selectedItemVariant]);
 
+	useEffect(() => {
+		if (isOpen && item) {
+			document.title = `Baybayani | ${item.item_title}`;
+		} else {
+			document.title = "Baybayani"; // fallback when modal closes
+		}
+	}, [isOpen, item]);
+
 	if (!item) return null;
 
 	return (
