@@ -63,9 +63,9 @@ export default function ItemInfoModal({
 
 	useEffect(() => {
 		if (isOpen && item) {
-			document.title = `Baybayani | ${item.item_title}`;
+			document.title = `Baybayani | Shop | ${item.item_title}`;
 		} else {
-			document.title = "Baybayani"; // fallback when modal closes
+			document.title = "Baybayani | Shop"; // fallback when modal closes
 		}
 	}, [isOpen, item]);
 
