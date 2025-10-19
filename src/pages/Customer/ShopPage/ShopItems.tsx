@@ -164,9 +164,8 @@ export default function ShopItems({
 								}}
 								startContent={<XIcon className="size-5" />}
 								size="sm"
-							>
-								Clear Search
-							</Button>
+								isIconOnly
+							/>
 						</div>
 					</>
 				)}
