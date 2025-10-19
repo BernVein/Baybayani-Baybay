@@ -68,6 +68,15 @@ export default function ItemInfoModal({
 			document.title = "Baybayani | Shop"; // fallback when modal closes
 		}
 	}, [isOpen, item]);
+	// Reset quantity when price variant changes
+	useEffect(() => {
+		if (
+			selectedPriceVariant === "Wholesale" ||
+			selectedPriceVariant === "Retail"
+		) {
+			setRawQuantity(1);
+		}
+	}, [selectedPriceVariant]);
 
 	if (!item) return null;
 
