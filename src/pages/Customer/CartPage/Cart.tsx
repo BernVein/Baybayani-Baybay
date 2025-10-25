@@ -128,7 +128,7 @@ export default function Cart() {
       image: "https://i.pravatar.cc/300?u=a042581f4e29026707d",
     },
     {
-      id: "product1",
+      id: "product3",
       name: "Product Name",
       weight: "23 kilo / Item",
       priceVariant: "Wholesale",
@@ -138,7 +138,7 @@ export default function Cart() {
       image: "https://heroui.com/images/hero-card-complete.jpeg",
     },
     {
-      id: "product2",
+      id: "product4",
       name: "Premium Rice",
       weight: "50 kilo / Item",
       priceVariant: "Retail",
