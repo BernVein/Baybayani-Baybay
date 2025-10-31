@@ -5,7 +5,7 @@ import {
 	ModalBody,
 	ModalFooter,
 } from "@heroui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Item } from "@/model/Item";
 import { Variant } from "@/model/variant";
 import useIsMobile from "@/lib/isMobile";
@@ -13,59 +13,71 @@ import ImageCarousel from "./ImageCarousel";
 import InformationSection from "./InformationSection";
 import Footer from "./Footer";
 
-export default function ItemInfoModal({
+export default function EditDetailInfoModal({
 	isOpen,
 	onOpenChange,
 	item,
+	selectedItemVariantUser,
+	selectedPriceVariantUser,
+	selectedQuantityUser,
 }: {
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	item: Item | null;
+	selectedPriceVariantUser: string;
+	selectedItemVariantUser: Variant | null;
+	selectedQuantityUser: number;
 }) {
 	// State for selected item variant
 	const [selectedItemVariant, setSelectedItemVariant] =
-		useState<Variant | null>(null);
+		useState<Variant | null>(selectedItemVariantUser);
 	// State for selected image
 	const [mainImg, setMainImg] = useState(item?.item_img?.[0] || "");
 	// For mobile view, but its kinda useless
 	const isMobile = useIsMobile();
 	// State for selected price variant
-	const [selectedPriceVariant, setSelectedPriceVariant] = useState("Retail");
+	const [selectedPriceVariant, setSelectedPriceVariant] = useState(
+		selectedPriceVariantUser
+	);
+
 	// State for quantity, raw quantity is the term
 	// cause in wholesale, its being multiplied by wholesale_item
-	const [rawQuantity, setRawQuantity] = useState(1);
+	const [rawQuantity, setRawQuantity] = useState(selectedQuantityUser);
 	// Calculate actual quantity based on selected price variant
 	const actualQuantity =
 		selectedPriceVariant === "Wholesale"
 			? rawQuantity * (selectedItemVariant?.variant_wholesale_item ?? 1)
 			: rawQuantity;
 
-	// Set default values when modal opens
+	const hasMounted = useRef(false);
+
+	// When modal opens, initialize once
 	useEffect(() => {
 		if (isOpen && item) {
-			setSelectedPriceVariant("Retail");
-			setRawQuantity(1);
-		}
-		if (item?.item_img?.[0]) {
-			setMainImg(item.item_img[0]);
-		}
-		if (item?.item_variants?.length) {
-			setSelectedItemVariant(item.item_variants[0]);
+			setSelectedItemVariant(selectedItemVariantUser);
+			setSelectedPriceVariant(selectedPriceVariantUser);
+			setRawQuantity(selectedQuantityUser);
+			setMainImg(item.item_img?.[0] || "");
+			hasMounted.current = true; // ✅ mark initialized
 		}
 	}, [isOpen, item]);
 
-	// Set default values when selected price variant changes
+	// Only reset price when user changes variant (not on first open)
 	useEffect(() => {
 		if (!selectedItemVariant) return;
+
+		// skip the first run on modal open
+		if (!hasMounted.current) return;
+
 		setRawQuantity(1);
 		setSelectedPriceVariant("Retail");
 	}, [selectedItemVariant]);
 
 	useEffect(() => {
 		if (isOpen && item) {
-			document.title = `Baybayani | Shop | ${item.item_title}`;
+			document.title = `Baybayani | Cart | ${item.item_title}`;
 		} else {
-			document.title = "Baybayani | Shop"; // fallback when modal closes
+			document.title = "Baybayani | Cart"; // fallback when modal closes
 		}
 	}, [isOpen, item]);
 	// Reset quantity when price variant changes

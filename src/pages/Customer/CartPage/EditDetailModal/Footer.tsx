@@ -16,7 +16,6 @@ export default function Footer({
 }) {
 	return (
 		<>
-			{" "}
 			<div className="flex flex-col gap-2 items-start">
 				<span className="text-sm text-default-500">
 					Subtotal ({selectedPriceVariant}):
@@ -45,7 +44,7 @@ export default function Footer({
 					color="success"
 					startContent={<CartIcon className="size-5" />}
 				>
-					Add to Cart
+					Update Cart Item
 				</Button>
 			</div>
 		</>
