@@ -1,0 +1,96 @@
+import { CartItemUser } from "@/model/cartItemUser";
+import {
+	Card,
+	CardBody,
+	Checkbox,
+	cn,
+	Image,
+	Divider,
+	Link,
+} from "@heroui/react";
+
+export default function CartItem({
+	key,
+	cartItemUser,
+	value,
+}: {
+	key: string;
+	cartItemUser: CartItemUser;
+	value: string;
+}) {
+	return (
+		<Checkbox
+			aria-label={cartItemUser.item.item_title}
+			classNames={{
+				base: cn(
+					"inline-flex max-w-full w-full bg-content1 m-0",
+					"hover:bg-content2 items-center justify-start",
+					"cursor-pointer rounded-lg p-0 border-2 border-transparent"
+				),
+				label: "w-full",
+				wrapper: "flex flex-col ml-3",
+			}}
+			value={value}
+			color="success"
+		>
+			<Card className="w-full shadow-none border-none bg-transparent">
+				<CardBody className="flex flex-row gap-3 items-stretch">
+					{/* image column */}
+					<div className="relative w-[130px] shrink-0 self-stretch overflow-hidden rounded-sm">
+						<Image
+							alt={cartItemUser.item.item_title}
+							src={cartItemUser.item.item_img[0]}
+							removeWrapper
+							className="absolute inset-0 h-full w-full object-cover"
+						/>
+					</div>
+
+					{/* content column */}
+					<div className="flex flex-col justify-start items-start text-left flex-1">
+						<div className="w-full flex flex-row justify-between items-center">
+							<span className="text-sm sm:text-base text-default-700">
+								{cartItemUser.item.item_title}
+							</span>
+						</div>
+						<Divider className="my-2" />
+						<div className="w-full flex flex-row justify-between items-center">
+							<span className="text-xs text-default-500">
+								Price Variant
+							</span>
+							<span className="text-sm text-default-600">
+								{cartItemUser.price_variant}
+							</span>
+						</div>
+						<div className="w-full flex flex-row justify-between items-center">
+							<span className="text-xs text-default-500">
+								Quantity
+							</span>
+							<span className="text-sm text-default-600">
+								{cartItemUser.quantity}
+							</span>
+						</div>
+
+						<div className="w-full flex flex-row justify-between items-center">
+							<span className="text-xs text-default-500">
+								Subtotal
+							</span>
+							<span className="text-sm text-default-600">
+								{cartItemUser.subtotal.toLocaleString()}
+							</span>
+						</div>
+						<span className="block w-full text-end text-default-500 text-sm mt-3 z-10">
+							<Link
+								underline="hover"
+								href="https://www.facebook.com/"
+								size="sm"
+								color="success"
+							>
+								Edit Details &gt;
+							</Link>
+						</span>
+					</div>
+				</CardBody>
+			</Card>
+		</Checkbox>
+	);
+}
