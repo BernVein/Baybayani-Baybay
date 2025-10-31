@@ -10,11 +10,9 @@ import {
 } from "@heroui/react";
 
 export default function CartItem({
-	key,
 	cartItemUser,
 	value,
 }: {
-	key: string;
 	cartItemUser: CartItemUser;
 	value: string;
 }) {
