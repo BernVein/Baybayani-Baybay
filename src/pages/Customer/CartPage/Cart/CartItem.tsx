@@ -18,7 +18,7 @@ export default function CartItem({
 }) {
 	return (
 		<Checkbox
-			aria-label={cartItemUser.item.item_title}
+			aria-label={cartItemUser.variant_snapshot.variant_name}
 			classNames={{
 				base: cn(
 					"inline-flex max-w-full w-full bg-content1 m-0",
@@ -36,7 +36,7 @@ export default function CartItem({
 					{/* image column */}
 					<div className="relative w-[130px] shrink-0 self-stretch overflow-hidden rounded-sm">
 						<Image
-							alt={cartItemUser.item.item_title}
+							alt={cartItemUser.variant_snapshot.variant_name}
 							src={cartItemUser.item.item_img[0]}
 							removeWrapper
 							className="absolute inset-0 h-full w-full object-cover"
@@ -47,7 +47,7 @@ export default function CartItem({
 					<div className="flex flex-col justify-start items-start text-left flex-1">
 						<div className="w-full flex flex-row justify-between items-center">
 							<span className="text-sm sm:text-base text-default-700">
-								{cartItemUser.item.item_title}
+								{cartItemUser.variant_snapshot.variant_name}
 							</span>
 						</div>
 						<Divider className="my-2" />
@@ -83,7 +83,7 @@ export default function CartItem({
 								size="sm"
 								color="success"
 							>
-								Edit Details &gt;
+								Edit or View Details &gt;
 							</Link>
 						</span>
 					</div>
