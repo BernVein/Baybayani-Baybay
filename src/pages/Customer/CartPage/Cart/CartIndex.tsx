@@ -25,6 +25,7 @@ export default function Cart() {
 				>
 					{CartContent.items.map((cart_item) => (
 						<CartItem
+							key={cart_item.cart_item_id}
 							cartItemUser={cart_item}
 							value={cart_item.cart_item_id}
 						/>
