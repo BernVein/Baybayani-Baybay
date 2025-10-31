@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardBody, CheckboxGroup, Button } from "@heroui/react";
 import useIsMobile from "@/lib/isMobile";
 import { AddToCart } from "@/components/icons";
-import CartItem from "@/pages/Customer/CartPage/CartItem";
+import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 import { CartContent } from "@/data/cart";
 export default function Cart() {
 	const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
@@ -25,7 +25,6 @@ export default function Cart() {
 				>
 					{CartContent.items.map((cart_item) => (
 						<CartItem
-							key={cart_item.cart_item_id}
 							cartItemUser={cart_item}
 							value={cart_item.cart_item_id}
 						/>
