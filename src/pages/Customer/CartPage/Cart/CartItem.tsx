@@ -82,7 +82,7 @@ export default function CartItem({
 				<Card className="w-full shadow-none border-none bg-transparent">
 					<CardBody className="flex flex-row gap-3 items-stretch">
 						{/* Image column */}
-						<div className="relative w-[130px] shrink-0 self-stretch overflow-hidden rounded-sm">
+						<div className="relative w-[100px] sm:w-[150px] shrink-0 self-stretch overflow-hidden rounded-sm">
 							<Image
 								alt={variant?.variant_name}
 								src={item.item_img[0]}
@@ -93,9 +93,12 @@ export default function CartItem({
 
 						{/* Content column */}
 						<div className="flex flex-col justify-start items-start text-left flex-1">
-							<div className="w-full flex flex-row justify-between items-center">
+							<div className="w-full flex flex-col sm:flex-row sm:items-center sm:gap-2 text-left">
 								<span className="text-sm sm:text-base text-default-700">
 									{variant?.variant_name}
+								</span>
+								<span className="text-xs sm:text-sm text-default-500">
+									{item.item_title}
 								</span>
 							</div>
 
@@ -179,6 +182,7 @@ export default function CartItem({
 			<DeleteCartItemModalIndex
 				isOpen={isOpenDeleteModal}
 				onOpenChange={onOpenChangeDeleteModal}
+				variant_name_to_delete={variant?.variant_name || ""}
 			/>
 		</div>
 	);
