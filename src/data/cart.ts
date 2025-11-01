@@ -128,7 +128,7 @@ export const CartContent: Cart = {
 			},
 			variant_snapshot: {
 				variant_id: "variant_003",
-				variant_name: "Sugar Variant 2",
+				variant_name: "Sugar Variant 5",
 				variant_price_retail: 1500,
 				variant_price_wholesale: 1350,
 				variant_wholesale_item: 5,
@@ -142,7 +142,7 @@ export const CartContent: Cart = {
 				is_soft_deleted: false,
 				created_at: "2025-09-01T08:00:00Z",
 			},
-			quantity: 34,
+			quantity: 300,
 			price_variant: "Wholesale",
 			subtotal: 51000,
 			is_soft_deleted: false,
