@@ -39,20 +39,27 @@ export default function CartItem({
 	let isAvailable = true;
 	let unavailableReason = "";
 
+	// Check if the variant still exists
 	if (
 		!item?.item_variants?.some((v) => v.variant_id === variant?.variant_id)
 	) {
 		isAvailable = false;
 		unavailableReason = "This variant no longer exists for this item.";
-	} else if (!variant || variant.variant_stocks <= 0) {
-		isAvailable = false;
-		unavailableReason = "This variant is out of stock.";
-	} else if (cartItemUser.quantity > variant.variant_stocks) {
-		isAvailable = false;
-		unavailableReason = `Only ${variant.variant_stocks} ${item.item_sold_by} left in stock.`;
-	} else if (item.is_soft_deleted || variant.is_soft_deleted) {
+	}
+	// Check if item or variant is deleted
+	else if (item.is_soft_deleted || variant.is_soft_deleted) {
 		isAvailable = false;
 		unavailableReason = "This item or variant has been deleted.";
+	}
+	// Check stock levels
+	else if (!variant || variant.variant_stocks <= 0) {
+		isAvailable = false;
+		unavailableReason = "This variant is out of stock.";
+	}
+	// Check if requested quantity exceeds stock
+	else if (cartItemUser.quantity > variant.variant_stocks) {
+		isAvailable = false;
+		unavailableReason = `Only ${variant.variant_stocks} ${item.item_sold_by} left in stock.`;
 	}
 
 	// Example delete handler

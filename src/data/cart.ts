@@ -80,7 +80,7 @@ export const CartContent: Cart = {
 					"https://picsum.photos/seed/sugar1/300/300",
 					"https://picsum.photos/seed/sugar2/300/300",
 				],
-				item_sold_by: "pieces",
+				item_sold_by: "piece",
 				item_description:
 					"High-grade refined white sugar ideal for baking and beverages.",
 				item_tag: "Restocked",
