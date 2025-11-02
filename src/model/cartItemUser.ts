@@ -2,8 +2,7 @@ import { Item } from "@/model/Item.js";
 import { VariantSnapshot } from "./variantSnapshot";
 
 export interface CartItemUser {
-	cart_item_id: string;
-	cart_id: string;
+	cart_item_user_id: string;
 	item: Item;
 	variant_snapshot: VariantSnapshot; // snapshot of variant at time added
 	price_variant: string;

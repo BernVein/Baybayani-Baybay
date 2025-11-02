@@ -36,7 +36,7 @@ export default function CartItem({
 	const item = cartItemUser.item;
 	// Find the live variant from the item variants using the snapshot's variant_id
 	const liveVariant = item.item_variants.find(
-		(v) => v.variant_id === variant_snapshot.variant_id
+		(v) => v.variant_id === variant_snapshot.variant_snapshot_id
 	);
 	// Determine availability
 	let isAvailable = true;
@@ -45,7 +45,7 @@ export default function CartItem({
 	// Check if the variant still exists
 	if (
 		!item?.item_variants?.some(
-			(v) => v.variant_id === variant_snapshot?.variant_id
+			(v) => v.variant_id === variant_snapshot?.variant_snapshot_id
 		)
 	) {
 		isAvailable = false;
@@ -77,7 +77,7 @@ export default function CartItem({
 		<div className="relative w-full">
 			{/* Checkbox with product info */}
 			<Checkbox
-				aria-label={variant_snapshot?.variant_name}
+				aria-label={variant_snapshot?.variant_snapshot_name}
 				isDisabled={!isAvailable}
 				value={value}
 				color="success"
@@ -96,7 +96,7 @@ export default function CartItem({
 						{/* Image column */}
 						<div className="relative w-[100px] sm:w-[150px] shrink-0 self-stretch overflow-hidden rounded-sm">
 							<Image
-								alt={variant_snapshot?.variant_name}
+								alt={variant_snapshot?.variant_snapshot_name}
 								src={item.item_img[0]}
 								removeWrapper
 								className="absolute inset-0 h-full w-full object-cover"
@@ -107,7 +107,7 @@ export default function CartItem({
 						<div className="flex flex-col justify-start items-start text-left flex-1">
 							<div className="w-full flex flex-col sm:flex-row sm:items-center sm:gap-2 text-left">
 								<span className="text-sm sm:text-base text-default-700">
-									{variant_snapshot?.variant_name}
+									{variant_snapshot?.variant_snapshot_name}
 								</span>
 								<span className="text-xs sm:text-sm text-default-500">
 									{item.item_title}
@@ -174,7 +174,7 @@ export default function CartItem({
 				color="danger"
 				className="absolute top-2 right-3 z-20"
 				onPress={() => {
-					handleDelete(cartItemUser.cart_item_id);
+					handleDelete(cartItemUser.cart_item_user_id);
 					onOpenDeleteModal();
 				}}
 			>
