@@ -1,11 +1,11 @@
 import { Item } from "@/model/Item.js";
-import { Variant } from "@/model/variant.js";
+import { VariantSnapshot } from "./variantSnapshot";
 
 export interface CartItemUser {
 	cart_item_id: string;
 	cart_id: string;
 	item: Item;
-	variant_snapshot: Variant; // snapshot of variant at time added
+	variant_snapshot: VariantSnapshot; // snapshot of variant at time added
 	price_variant: string;
 	quantity: number;
 	subtotal: number;

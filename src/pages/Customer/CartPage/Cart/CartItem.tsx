@@ -13,7 +13,6 @@ import {
 import { TrashIcon } from "@/components/icons";
 import EditDetailInfoModal from "@/pages/Customer/CartPage/EditDetailModal/EditDetailModalIndex";
 import DeleteCartItemModalIndex from "../DeleteCartItemModal/DeleteCartItemModalIndex";
-
 export default function CartItem({
 	cartItemUser,
 	value,
@@ -32,34 +31,40 @@ export default function CartItem({
 		onOpen: onOpenDeleteModal,
 		onOpenChange: onOpenChangeDeleteModal,
 	} = useDisclosure();
-	const variant = cartItemUser.variant_snapshot;
+	// Frozen snapshot of the variant when added to cart
+	const variant_snapshot = cartItemUser.variant_snapshot;
 	const item = cartItemUser.item;
-
+	// Find the live variant from the item variants using the snapshot's variant_id
+	const liveVariant = item.item_variants.find(
+		(v) => v.variant_id === variant_snapshot.variant_id
+	);
 	// Determine availability
 	let isAvailable = true;
 	let unavailableReason = "";
 
 	// Check if the variant still exists
 	if (
-		!item?.item_variants?.some((v) => v.variant_id === variant?.variant_id)
+		!item?.item_variants?.some(
+			(v) => v.variant_id === variant_snapshot?.variant_id
+		)
 	) {
 		isAvailable = false;
 		unavailableReason = "This variant no longer exists for this item.";
 	}
 	// Check if item or variant is deleted
-	else if (item.is_soft_deleted || variant.is_soft_deleted) {
+	else if (item.is_soft_deleted || variant_snapshot.is_soft_deleted) {
 		isAvailable = false;
 		unavailableReason = "This item or variant has been deleted.";
 	}
 	// Check stock levels
-	else if (!variant || variant.variant_stocks <= 0) {
+	else if (!liveVariant || liveVariant.variant_stocks <= 0) {
 		isAvailable = false;
 		unavailableReason = "This variant is out of stock.";
 	}
 	// Check if requested quantity exceeds stock
-	else if (cartItemUser.quantity > variant.variant_stocks) {
+	else if (cartItemUser.quantity > liveVariant.variant_stocks) {
 		isAvailable = false;
-		unavailableReason = `Only ${variant.variant_stocks} ${item.item_sold_by} left in stock.`;
+		unavailableReason = `Only ${liveVariant.variant_stocks} ${item.item_sold_by} left in stock.`;
 	}
 
 	// Example delete handler
@@ -72,7 +77,7 @@ export default function CartItem({
 		<div className="relative w-full">
 			{/* Checkbox with product info */}
 			<Checkbox
-				aria-label={variant?.variant_name}
+				aria-label={variant_snapshot?.variant_name}
 				isDisabled={!isAvailable}
 				value={value}
 				color="success"
@@ -91,7 +96,7 @@ export default function CartItem({
 						{/* Image column */}
 						<div className="relative w-[100px] sm:w-[150px] shrink-0 self-stretch overflow-hidden rounded-sm">
 							<Image
-								alt={variant?.variant_name}
+								alt={variant_snapshot?.variant_name}
 								src={item.item_img[0]}
 								removeWrapper
 								className="absolute inset-0 h-full w-full object-cover"
@@ -102,7 +107,7 @@ export default function CartItem({
 						<div className="flex flex-col justify-start items-start text-left flex-1">
 							<div className="w-full flex flex-col sm:flex-row sm:items-center sm:gap-2 text-left">
 								<span className="text-sm sm:text-base text-default-700">
-									{variant?.variant_name}
+									{variant_snapshot?.variant_name}
 								</span>
 								<span className="text-xs sm:text-sm text-default-500">
 									{item.item_title}
@@ -134,7 +139,7 @@ export default function CartItem({
 									Subtotal
 								</span>
 								<span className="text-sm text-default-600">
-									{cartItemUser.subtotal.toLocaleString()}
+									₱{cartItemUser.subtotal.toLocaleString()}
 								</span>
 							</div>
 
@@ -181,7 +186,7 @@ export default function CartItem({
 				isOpen={isOpenEditModal}
 				onOpenChange={onOpenChangeEditModal}
 				item={cartItemUser.item}
-				selectedItemVariantUser={cartItemUser.variant_snapshot}
+				selectedItemVariantUser={liveVariant ?? null}
 				selectedPriceVariantUser={cartItemUser.price_variant}
 				selectedQuantityUser={cartItemUser.quantity}
 			/>
@@ -189,7 +194,7 @@ export default function CartItem({
 			<DeleteCartItemModalIndex
 				isOpen={isOpenDeleteModal}
 				onOpenChange={onOpenChangeDeleteModal}
-				variant_name_to_delete={variant?.variant_name || ""}
+				variant_name_to_delete={liveVariant?.variant_name || ""}
 			/>
 		</div>
 	);
