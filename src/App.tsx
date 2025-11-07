@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/navbar/navbarDesktop";
 import Cart from "@/pages/Customer/CartPage/Cart/CartIndex";
 import Orders from "@/pages/Customer/OrdersPage/Orders";
 import Shop from "@/pages/Customer/ShopPage/ShopIndex";
 import Profile from "@/pages/Customer/UserAccount/ProfilePage/Profile";
 import Settings from "@/pages/Customer/UserAccount/SettingsPage/Settings";
-import { NavbarMobile } from "./components/navbarMobile";
+import { NavbarMobile } from "./components/navbar/navbarMobile";
 import { useState } from "react";
 function App() {
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);

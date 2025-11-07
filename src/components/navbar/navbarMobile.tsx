@@ -10,9 +10,9 @@ import {
 	Badge,
 	Divider,
 } from "@heroui/react";
-import { BaybayaniLogo, CartIcon, MessageIcon } from "./icons";
+import { BaybayaniLogo, CartIcon, MessageIcon } from "../icons";
 import { useState } from "react";
-
+import ThemeSwitcher from "./themeSwitcher";
 export function NavbarMobile() {
 	const [active, setActive] = useState("");
 
@@ -124,6 +124,12 @@ export function NavbarMobile() {
 							<p className="font-semibold">
 								realbernvein@gmail.com
 							</p>
+						</DropdownItem>
+						<DropdownItem key="theme">
+							<div className="flex flex-row w-full justify-between">
+								<span className="font-semibold">Dark mode</span>
+								<ThemeSwitcher />
+							</div>
 						</DropdownItem>
 						<DropdownItem key="orders" href="/orders">
 							Orders
