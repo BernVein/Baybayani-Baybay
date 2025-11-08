@@ -43,8 +43,11 @@ export default function Cart() {
 			<div className="flex flex-col sm:flex-row gap-3 w-full md:w-3/4 md:mx-auto p-5">
 				{/* Left side: cart list or skeletons */}
 				<CheckboxGroup
+					key="cart-group"
 					value={selectedProducts}
-					onChange={setSelectedProducts}
+					onChange={(val) => {
+						if (Array.isArray(val)) setSelectedProducts(val);
+					}}
 					className="sm:w-3/4 mb-3"
 				>
 					{loading && !allCartItems.length ? (

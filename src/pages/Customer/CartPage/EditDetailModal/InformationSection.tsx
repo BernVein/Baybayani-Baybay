@@ -1,5 +1,6 @@
 import { Item } from "@/model/Item";
 import { Variant } from "@/model/variant";
+
 import {
 	Button,
 	Divider,
@@ -252,7 +253,9 @@ export default function InformationSection({
 							: (selectedItemVariant?.variant_stocks ?? 0)
 					}
 					value={rawQuantity}
-					onValueChange={(val) => setRawQuantity(val)}
+					onValueChange={(val) => {
+						setRawQuantity(val);
+					}}
 					description={computedDescription}
 					placeholder="Enter quantity"
 					labelPlacement="outside"
