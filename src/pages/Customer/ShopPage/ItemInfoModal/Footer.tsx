@@ -1,6 +1,7 @@
 import { Variant } from "@/model/variant";
 import { Button } from "@heroui/react";
 import { CartIcon } from "@/components/icons";
+import { VariantSnapshot } from "@/model/variantSnapshot";
 export default function Footer({
 	selectedItemVariant,
 	selectedPriceVariant,
@@ -14,9 +15,16 @@ export default function Footer({
 	actualQuantity: number;
 	onClose: () => void;
 }) {
+	function addToCart(
+		selectedItemVariant: Variant,
+		selectedPriceVariant: string,
+		quantity: number,
+		subtotal: number
+	) {
+		
+	}
 	return (
 		<>
-			{" "}
 			<div className="flex flex-col gap-2 items-start">
 				<span className="text-sm text-default-500">
 					Subtotal ({selectedPriceVariant}):
