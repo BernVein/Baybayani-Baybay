@@ -137,6 +137,7 @@ export default function ItemInfoModal({
 
 						<ModalFooter className="flex justify-between items-center">
 							<Footer
+								selectedItem={item}
 								selectedItemVariant={selectedItemVariant}
 								selectedPriceVariant={selectedPriceVariant}
 								rawQuantity={rawQuantity}

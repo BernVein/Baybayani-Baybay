@@ -1,28 +1,60 @@
 import { Variant } from "@/model/variant";
 import { Button } from "@heroui/react";
 import { CartIcon } from "@/components/icons";
-import { VariantSnapshot } from "@/model/variantSnapshot";
+import { addToCart } from "@/data/supabase/addToCart";
+import { Item } from "@/model/Item";
+import { useState } from "react";
 export default function Footer({
+	selectedItem,
 	selectedItemVariant,
 	selectedPriceVariant,
 	rawQuantity,
 	actualQuantity,
 	onClose,
 }: {
+	selectedItem: Item;
 	selectedItemVariant: Variant | null;
 	selectedPriceVariant: string;
 	rawQuantity: number;
 	actualQuantity: number;
 	onClose: () => void;
 }) {
-	function addToCart(
-		selectedItemVariant: Variant,
-		selectedPriceVariant: string,
-		quantity: number,
-		subtotal: number
-	) {
-		
+	const subtotal =
+		selectedPriceVariant === "Wholesale"
+			? (selectedItemVariant?.variant_price_wholesale ?? 0) *
+				actualQuantity
+			: (selectedItemVariant?.variant_price_retail ?? 0) * rawQuantity;
+	const [isLoading, setIsLoading] = useState(false);
+
+	async function addToCartHandler() {
+		setIsLoading(true);
+		const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
+
+		if (!selectedItemVariant) {
+			alert("Please select a variant first!");
+			return;
+		}
+		if (!rawQuantity || rawQuantity <= 0) {
+			alert("Please enter a quantity.");
+			return;
+		}
+
+		const result = await addToCart(
+			userId,
+			selectedItem,
+			selectedItemVariant,
+			selectedPriceVariant as "Retail" | "Wholesale",
+			rawQuantity,
+			subtotal
+		);
+		setIsLoading(false);
+		if (result.success) {
+			alert("Added to cart");
+		} else {
+			alert("Failed to add to cart: " + result.error);
+		}
 	}
+
 	return (
 		<>
 			<div className="flex flex-col gap-2 items-start">
@@ -51,7 +83,9 @@ export default function Footer({
 				</Button>
 				<Button
 					color="success"
-					startContent={<CartIcon className="size-5" />}
+					startContent={!isLoading && <CartIcon className="size-5" />}
+					onPress={addToCartHandler}
+					isLoading={isLoading}
 				>
 					Add to Cart
 				</Button>
