@@ -34,10 +34,6 @@ export default function Footer({
 			alert("Please select a variant first!");
 			return;
 		}
-		if (!rawQuantity || rawQuantity <= 0) {
-			alert("Please enter a quantity.");
-			return;
-		}
 
 		const result = await addToCart(
 			userId,
@@ -49,7 +45,7 @@ export default function Footer({
 		);
 		setIsLoading(false);
 		if (result.success) {
-			alert("Added to cart");
+			// alert("Added to cart");
 		} else {
 			alert("Failed to add to cart: " + result.error);
 		}

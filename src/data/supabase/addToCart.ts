@@ -36,6 +36,7 @@ export async function addToCart(
 		const { data: snapshot, error: snapErr } = await supabase
 			.from("VariantSnapshot")
 			.insert({
+				variant_snapshot_id: variant.variant_id,
 				variant_snapshot_name: variant.variant_name,
 				variant_snapshot_price_retail: variant.variant_price_retail,
 				variant_snapshot_price_wholesale:
