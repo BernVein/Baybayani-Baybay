@@ -30,7 +30,7 @@ export const useFetchCart = (userId: string) => {
 		}
 
 		if (!data) {
-			setCart({} as Cart);
+			setCart(null);
 			setLoading(false);
 			return;
 		}
