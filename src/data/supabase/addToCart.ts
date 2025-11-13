@@ -7,33 +7,43 @@ export async function addToCart(
 	item: Item,
 	variant: Variant,
 	priceType: "Retail" | "Wholesale",
-	quantity: number,
-	subtotal: number
+	rawQuantity: number
 ) {
 	try {
-		// Find or create a cart for the user
-		const { data: existingCart, error: findErr } = await supabase
+		// Find or create cart
+		const { data: existingCart } = await supabase
 			.from("Cart")
 			.select("*")
 			.eq("user_id", userId)
 			.eq("is_soft_deleted", false)
 			.maybeSingle();
 
-		if (findErr) throw findErr;
-
 		let cartId = existingCart?.cart_id;
 		if (!cartId) {
-			const { data: newCart, error: newErr } = await supabase
+			const { data: newCart } = await supabase
 				.from("Cart")
 				.insert({ user_id: userId })
 				.select()
 				.single();
-			if (newErr) throw newErr;
 			cartId = newCart.cart_id;
 		}
 
-		// Make a snapshot of the variant’s current prices
-		const { data: snapshot, error: snapErr } = await supabase
+		// Compute quantity
+		const realQuantity =
+			priceType === "Wholesale"
+				? rawQuantity * (variant.variant_wholesale_item ?? 1)
+				: rawQuantity;
+
+		// Compute subtotal
+		const unitPrice =
+			priceType === "Wholesale"
+				? (variant.variant_price_wholesale ?? 0)
+				: variant.variant_price_retail;
+
+		const computedSubtotal = unitPrice * realQuantity;
+
+		// Create snapshot
+		const { data: snapshot } = await supabase
 			.from("VariantSnapshot")
 			.insert({
 				variant_copy_snapshot_id: variant.variant_id,
@@ -45,25 +55,28 @@ export async function addToCart(
 			})
 			.select()
 			.single();
-		if (snapErr) throw snapErr;
 
-		// Check if same item already exists in this cart
-		const { data: existingItem } = await supabase
+		// Find duplicates via the original variant ID
+		const { data: potentialMatches } = await supabase
 			.from("CartItemUser")
-			.select("*")
+			.select("*, VariantSnapshot(variant_copy_snapshot_id)")
 			.eq("cart_id", cartId)
 			.eq("item_id", item.item_id)
 			.eq("price_variant", priceType)
-			.eq("variant_snapshot_id", snapshot.variant_snapshot_id)
-			.eq("is_soft_deleted", false)
-			.maybeSingle();
+			.eq("is_soft_deleted", false);
+
+		const existingItem = potentialMatches?.find(
+			(c) =>
+				c.VariantSnapshot?.variant_copy_snapshot_id ===
+				variant.variant_id
+		);
 
 		if (existingItem) {
 			await supabase
 				.from("CartItemUser")
 				.update({
-					quantity: existingItem.quantity + quantity,
-					subtotal: existingItem.subtotal + subtotal,
+					quantity: Number(existingItem.quantity) + realQuantity,
+					subtotal: Number(existingItem.subtotal) + computedSubtotal,
 				})
 				.eq("cart_item_user_id", existingItem.cart_item_user_id);
 		} else {
@@ -72,14 +85,13 @@ export async function addToCart(
 				item_id: item.item_id,
 				variant_snapshot_id: snapshot.variant_snapshot_id,
 				price_variant: priceType,
-				quantity,
-				subtotal,
+				quantity: realQuantity,
+				subtotal: computedSubtotal,
 			});
 		}
-		console.log("Item added to cart:", snapshot);
+
 		return { success: true };
 	} catch (err: any) {
-		console.error("Add-to-cart failed:", err.message);
 		return { success: false, error: err.message };
 	}
 }

@@ -19,11 +19,6 @@ export default function Footer({
 	actualQuantity: number;
 	onClose: () => void;
 }) {
-	const subtotal =
-		selectedPriceVariant === "Wholesale"
-			? (selectedItemVariant?.variant_price_wholesale ?? 0) *
-				actualQuantity
-			: (selectedItemVariant?.variant_price_retail ?? 0) * rawQuantity;
 	const [isLoading, setIsLoading] = useState(false);
 
 	async function addToCartHandler() {
@@ -34,14 +29,12 @@ export default function Footer({
 			alert("Please select a variant first!");
 			return;
 		}
-
 		const result = await addToCart(
 			userId,
 			selectedItem,
 			selectedItemVariant,
 			selectedPriceVariant as "Retail" | "Wholesale",
-			rawQuantity,
-			subtotal
+			rawQuantity
 		);
 		setIsLoading(false);
 		if (result.success) {
