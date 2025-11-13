@@ -1,5 +1,6 @@
 export interface VariantSnapshot {
 	variant_snapshot_id: string;
+	variant_copy_snapshot_id: string;
 	variant_snapshot_name: string;
 	variant_snapshot_price_retail: number;
 	variant_snapshot_price_wholesale?: number | null;
