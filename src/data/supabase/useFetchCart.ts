@@ -150,6 +150,7 @@ export const useFetchCart = (userId: string) => {
 						}
 					: {
 							variant_snapshot_id: "",
+							variant_copy_snapshot_id: "",
 							variant_snapshot_name: "",
 							variant_snapshot_price_retail: 0,
 							variant_snapshot_price_wholesale: null,
