@@ -4,8 +4,8 @@ import { Cart } from "@/model/cart";
 import { Item } from "@/model/Item";
 import { VariantSnapshot } from "@/model/variantSnapshot";
 import { Variant } from "@/model/variant";
-export const useFetchCart = () => {
-	const [cartList, setCartList] = useState<Cart[]>([]);
+export const useFetchCart = (userId: string) => {
+	const [cart, setCart] = useState<Cart | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -17,15 +17,27 @@ export const useFetchCart = () => {
 		const { data, error } = await supabase
 			.from("Cart")
 			.select(
-				`*, CartItemUser(*, Item(*, Item_Image ( item_image_url ), Variant(*)),  VariantSnapshot(variant_copy_snapshot_id, *))`
-			);
+				`*, CartItemUser(*, Item(*, Item_Image ( item_image_url ), Variant(*)), VariantSnapshot(variant_copy_snapshot_id, *))`
+			)
+			.eq("user_id", userId)
+			.eq("is_soft_deleted", false)
+			.single();
 
 		if (error) {
 			setErrorMsg(error.message);
 			setLoading(false);
 			return;
 		}
-		const mapped: Cart[] = (data || []).map((cart) => ({
+
+		if (!data) {
+			setCart({} as Cart);
+			setLoading(false);
+			return;
+		}
+
+		const cart = data;
+
+		const mapped: Cart = {
 			cart_id: cart.cart_id,
 			user_id: "",
 			is_soft_deleted: cart.is_soft_deleted,
@@ -153,15 +165,15 @@ export const useFetchCart = () => {
 				created_at: ciu.created_at ?? "",
 				updated_at: ciu.updated_at ?? "",
 			})),
-		}));
+		};
 		// Save mapped carts to state
-		setCartList(mapped);
+		setCart(mapped);
 		setLoading(false);
-	}, []);
+	}, [userId]);
 
 	useEffect(() => {
 		fetchCart();
 	}, [fetchCart]);
 
-	return { cartList, loading, errorMsg, refetch: fetchCart };
+	return { cart, loading, errorMsg, refetch: fetchCart };
 };

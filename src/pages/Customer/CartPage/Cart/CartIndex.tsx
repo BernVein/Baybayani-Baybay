@@ -15,8 +15,10 @@ import { useFetchCart } from "@/data/supabase/useFetchCart";
 export default function Cart() {
 	const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
 	const isMobile = useIsMobile();
-	const { cartList, loading } = useFetchCart();
-	const allCartItems = cartList[0]?.items ?? [];
+	const { cart, loading } = useFetchCart(
+		"cb20faec-72c0-4c22-b9d4-4c50bfb9e66f"
+	);
+	const allCartItems = cart?.items ?? [];
 
 	const totalSubtotal = allCartItems.reduce((sum, i) => sum + i.subtotal, 0);
 
