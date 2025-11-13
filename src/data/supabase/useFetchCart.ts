@@ -17,7 +17,7 @@ export const useFetchCart = () => {
 		const { data, error } = await supabase
 			.from("Cart")
 			.select(
-				`*, CartItemUser(*, Item(*, Item_Image ( item_image_url ), Variant(*)), VariantSnapshot(*))`
+				`*, CartItemUser(*, Item(*, Item_Image ( item_image_url ), Variant(*)),  VariantSnapshot(variant_copy_snapshot_id, *))`
 			);
 
 		if (error) {
@@ -99,6 +99,8 @@ export const useFetchCart = () => {
 					? {
 							variant_snapshot_id:
 								ciu.VariantSnapshot.variant_snapshot_id,
+							variant_copy_snapshot_id:
+								ciu.VariantSnapshot.variant_copy_snapshot_id,
 							variant_snapshot_name:
 								ciu.VariantSnapshot.variant_snapshot_name,
 							variant_snapshot_price_retail: Number(

@@ -62,14 +62,17 @@ export default function Cart() {
 							))}
 						</>
 					) : (
-						allCartItems.map((cart_item) => (
-							<CartItem
-								isLoading={false}
-								key={cart_item.cart_item_user_id}
-								cartItemUser={cart_item}
-								value={cart_item.cart_item_user_id}
-							/>
-						))
+						allCartItems.map((cart_item) => {
+							console.log("cart_item:", cart_item);
+							return (
+								<CartItem
+									isLoading={false}
+									key={cart_item.cart_item_user_id}
+									cartItemUser={cart_item}
+									value={cart_item.cart_item_user_id}
+								/>
+							);
+						})
 					)}
 				</CheckboxGroup>
 

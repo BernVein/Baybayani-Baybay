@@ -65,9 +65,11 @@ export default function CartItem({
 
 	// Find the live variant from the item variants using the snapshot's variant_id
 	const liveVariant = item.item_variants.find(
-		(v) => v.variant_id === variant_snapshot.variant_snapshot_id
+		(v) => v.variant_id === variant_snapshot.variant_copy_snapshot_id
 	);
-
+	// console.log(
+	// 	`Live Variant: ${liveVariant}, Snapshot Variant: ${variant_snapshot.variant_copy_snapshot_id}`
+	// );
 	// Determine availability
 	let isAvailable = true;
 	let unavailableReason = "";
@@ -75,7 +77,7 @@ export default function CartItem({
 	// Check if the variant still exists
 	if (
 		!item?.item_variants?.some(
-			(v) => v.variant_id === variant_snapshot?.variant_snapshot_id
+			(v) => v.variant_id === variant_snapshot?.variant_copy_snapshot_id
 		)
 	) {
 		isAvailable = false;
