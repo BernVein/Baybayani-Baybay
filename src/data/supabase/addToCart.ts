@@ -36,7 +36,7 @@ export async function addToCart(
 		const { data: snapshot, error: snapErr } = await supabase
 			.from("VariantSnapshot")
 			.insert({
-				variant_snapshot_id: variant.variant_id,
+				variant_copy_snapshot_id: variant.variant_id,
 				variant_snapshot_name: variant.variant_name,
 				variant_snapshot_price_retail: variant.variant_price_retail,
 				variant_snapshot_price_wholesale:
@@ -54,6 +54,7 @@ export async function addToCart(
 			.eq("cart_id", cartId)
 			.eq("item_id", item.item_id)
 			.eq("price_variant", priceType)
+			.eq("variant_snapshot_id", snapshot.variant_snapshot_id)
 			.eq("is_soft_deleted", false)
 			.maybeSingle();
 
@@ -75,7 +76,7 @@ export async function addToCart(
 				subtotal,
 			});
 		}
-
+		console.log("Item added to cart:", snapshot);
 		return { success: true };
 	} catch (err: any) {
 		console.error("Add-to-cart failed:", err.message);
