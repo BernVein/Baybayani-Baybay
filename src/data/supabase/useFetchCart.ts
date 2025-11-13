@@ -154,7 +154,6 @@ export const useFetchCart = () => {
 				updated_at: ciu.updated_at ?? "",
 			})),
 		}));
-		// console.log("Fetched Carts:", mapped);
 		// Save mapped carts to state
 		setCartList(mapped);
 		setLoading(false);
