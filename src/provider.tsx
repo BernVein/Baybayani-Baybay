@@ -22,7 +22,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
 					placement="bottom-center"
 					toastOffset={isMobile ? 80 : 0}
 					toastProps={{
-						timeout: 3000,
+						timeout: 4000,
 						classNames: {
 							closeButton:
 								"opacity-100 absolute right-4 top-1/2 -translate-y-1/2",

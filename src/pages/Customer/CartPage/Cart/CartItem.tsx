@@ -67,9 +67,7 @@ export default function CartItem({
 	const liveVariant = item.item_variants.find(
 		(v) => v.variant_id === variant_snapshot.variant_copy_snapshot_id
 	);
-	// console.log(
-	// 	`Live Variant: ${liveVariant}, Snapshot Variant: ${variant_snapshot.variant_copy_snapshot_id}`
-	// );
+
 	// Determine availability
 	let isAvailable = true;
 	let unavailableReason = "";
@@ -105,10 +103,10 @@ export default function CartItem({
 	}
 
 	// Example delete handler
-	const handleDelete = (id: string) => {
-		console.log("Deleting cart item:", id);
-		// TODO: call your delete API or mutation here
-	};
+	// const handleDelete = (id: string) => {
+	// 	console.log("Deleting cart item:", id);
+	// 	// TODO: call your delete API or mutation here
+	// };
 
 	return (
 		<div className="relative w-full">
@@ -211,7 +209,7 @@ export default function CartItem({
 				color="danger"
 				className="absolute top-2 right-3 z-20"
 				onPress={() => {
-					handleDelete(cartItemUser.cart_item_user_id);
+					// handleDelete(cartItemUser.cart_item_user_id);
 					onOpenDeleteModal();
 				}}
 			>

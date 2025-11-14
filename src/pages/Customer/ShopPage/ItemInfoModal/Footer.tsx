@@ -44,6 +44,18 @@ export default function Footer({
 			rawQuantity
 		);
 		setIsLoading(false);
+
+		if (!result.success && result.error === "OUT_OF_STOCK_EXCEEDED") {
+			addToast({
+				title: "Not enough stock",
+				description: result.message,
+				severity: "warning",
+				color: "warning",
+				shouldShowTimeoutProgress: true,
+			});
+			return;
+		}
+
 		if (result.success) {
 			addToast({
 				title: "Item added to cart",

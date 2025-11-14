@@ -71,6 +71,21 @@ export async function addToCart(
 				variant.variant_id
 		);
 
+		// TOTAL quantity that will exist after adding
+		const existingQuantity = existingItem
+			? Number(existingItem.quantity)
+			: 0;
+		const newTotalQuantity = existingQuantity + realQuantity;
+
+		// CHECK STOCK BEFORE ADDING
+		if (newTotalQuantity > variant.variant_stocks) {
+			return {
+				success: false,
+				error: "OUT_OF_STOCK_EXCEEDED",
+				message: `Already have ${existingQuantity} of this item. Adding ${realQuantity} exceeds ${variant.variant_stocks} stocks.`,
+			};
+		}
+
 		if (existingItem) {
 			await supabase
 				.from("CartItemUser")
