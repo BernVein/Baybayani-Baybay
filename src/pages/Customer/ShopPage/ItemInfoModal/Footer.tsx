@@ -52,6 +52,7 @@ export default function Footer({
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
+			onClose();
 		} else {
 			addToast({
 				title: "Error adding item to cart",
