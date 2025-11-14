@@ -36,7 +36,9 @@ export default function Cart() {
 				) : (
 					<>
 						<span className="text-default-500 text-sm">
-							{allCartItems.length} items in Cart
+							{allCartItems.length < 1
+								? "No items in Cart"
+								: `${allCartItems.length} ${allCartItems.length === 1 ? "item" : "items"} in Cart`}
 						</span>
 					</>
 				)}
