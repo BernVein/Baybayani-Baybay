@@ -99,6 +99,7 @@ export default function ShopItems({
 					title: "No items in category",
 					description: `${activeCategory} has no items. Showing all items instead.`,
 					severity: "warning",
+					color: "warning",
 					shouldShowTimeoutProgress: true,
 				});
 

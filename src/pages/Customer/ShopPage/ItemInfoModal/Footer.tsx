@@ -1,9 +1,10 @@
 import { Variant } from "@/model/variant";
-import { Button } from "@heroui/react";
+import { Button, addToast } from "@heroui/react";
 import { CartIcon } from "@/components/icons";
 import { addToCart } from "@/data/supabase/addToCart";
 import { Item } from "@/model/Item";
 import { useState } from "react";
+
 export default function Footer({
 	selectedItem,
 	selectedItemVariant,
@@ -38,9 +39,21 @@ export default function Footer({
 		);
 		setIsLoading(false);
 		if (result.success) {
-			// alert("Added to cart");
+			addToast({
+				title: "Item added to cart",
+				description: `${selectedItemVariant.variant_name} has been added to your cart.`,
+				severity: "success",
+				color: "success",
+				shouldShowTimeoutProgress: true,
+			});
 		} else {
-			alert("Failed to add to cart: " + result.error);
+			addToast({
+				title: "Error adding item to cart",
+				description: `Sorry, ${selectedItemVariant.variant_name} could not be added to your cart, Plase try again later.`,
+				severity: "danger",
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+			});
 		}
 	}
 
