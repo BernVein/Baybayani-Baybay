@@ -27,7 +27,13 @@ export default function Footer({
 		const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
 
 		if (!selectedItemVariant) {
-			alert("Please select a variant first!");
+			addToast({
+				title: "No variant selected",
+				description: `Please select a variant.`,
+				severity: "warning",
+				color: "warning",
+				shouldShowTimeoutProgress: true,
+			});
 			return;
 		}
 		const result = await addToCart(
