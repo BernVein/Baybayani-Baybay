@@ -58,7 +58,7 @@ export default function EditDetailInfoModal({
 			setSelectedPriceVariant(selectedPriceVariantUser);
 			setRawQuantity(selectedQuantityUser);
 			setMainImg(item.item_img?.[0] || "");
-			hasMounted.current = true; // ✅ mark initialized
+			hasMounted.current = true; // mark initialized
 		}
 	}, [isOpen, item]);
 
