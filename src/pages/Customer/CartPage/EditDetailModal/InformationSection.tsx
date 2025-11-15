@@ -61,7 +61,7 @@ export default function InformationSection({
 					<Divider />
 					<Popover showArrow>
 						<PopoverTrigger>
-							<div className="cursor-pointer active:opacity-70">
+							<div className="cursor-pointer active:opacity-70 transition-all duration-200 ease-in-out">
 								<RadioGroup
 									isDisabled
 									label="Product Variants"
@@ -209,7 +209,7 @@ export default function InformationSection({
 			<Divider />
 			<Popover showArrow>
 				<PopoverTrigger>
-					<div className="cursor-pointer active:opacity-70">
+					<div className="cursor-pointer active:opacity-70 transition-all duration-200 ease-in-out">
 						<RadioGroup
 							isDisabled
 							label="Price Variants"
