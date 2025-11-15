@@ -7,15 +7,19 @@ import {
 	Button,
 } from "@heroui/react";
 import { ExclamationCircle } from "@/components/icons";
+import { CartItemUser } from "@/model/cartItemUser";
 export default function DeleteCartItemModalIndex({
+	cartItemUser,
 	isOpen,
 	onOpenChange,
 	variant_name_to_delete,
 }: {
+	cartItemUser: CartItemUser;
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	variant_name_to_delete: string;
 }) {
+	console.log(cartItemUser);
 	return (
 		<Modal isOpen={isOpen} onOpenChange={onOpenChange} size="sm">
 			<ModalContent>

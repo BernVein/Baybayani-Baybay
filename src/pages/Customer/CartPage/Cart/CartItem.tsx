@@ -218,6 +218,7 @@ export default function CartItem({
 
 			{/* Edit Details Modal */}
 			<EditDetailInfoModal
+				cartItemUser={cartItemUser}
 				isOpen={isOpenEditModal}
 				onOpenChange={onOpenChangeEditModal}
 				item={cartItemUser.item}
@@ -227,6 +228,7 @@ export default function CartItem({
 			/>
 
 			<DeleteCartItemModalIndex
+				cartItemUser={cartItemUser}
 				isOpen={isOpenDeleteModal}
 				onOpenChange={onOpenChangeDeleteModal}
 				variant_name_to_delete={liveVariant?.variant_name || ""}

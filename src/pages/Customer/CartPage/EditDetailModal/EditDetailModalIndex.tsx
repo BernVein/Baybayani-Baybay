@@ -12,8 +12,10 @@ import useIsMobile from "@/lib/isMobile";
 import ImageCarousel from "./ImageCarousel";
 import InformationSection from "./InformationSection";
 import Footer from "./Footer";
+import { CartItemUser } from "@/model/cartItemUser";
 
 export default function EditDetailInfoModal({
+	cartItemUser,
 	isOpen,
 	onOpenChange,
 	item,
@@ -21,6 +23,7 @@ export default function EditDetailInfoModal({
 	selectedPriceVariantUser,
 	selectedQuantityUser,
 }: {
+	cartItemUser: CartItemUser;
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	item: Item | null;
@@ -149,6 +152,7 @@ export default function EditDetailInfoModal({
 
 						<ModalFooter className="flex justify-between items-center">
 							<Footer
+								cartItemUser={cartItemUser}
 								selectedItemVariant={selectedItemVariant}
 								selectedPriceVariant={selectedPriceVariant}
 								rawQuantity={rawQuantity}
