@@ -57,6 +57,7 @@ export default function InformationSection({
 				<>
 					<Divider />
 					<RadioGroup
+						isDisabled
 						label="Product Variants"
 						color="success"
 						size="sm"
@@ -182,6 +183,7 @@ export default function InformationSection({
 
 			<Divider />
 			<RadioGroup
+				isDisabled
 				label="Price Variants"
 				color="success"
 				size="sm"
@@ -193,18 +195,7 @@ export default function InformationSection({
 					{selectedItemVariant?.variant_price_retail?.toFixed(2) ?? 0}{" "}
 					/ {item.item_sold_by}
 				</CustomRadio>
-				<CustomRadio
-					description="Wholesale"
-					value="Wholesale"
-					isDisabled={
-						// Disable if:
-						// 1. No wholesale price, or
-						// 2. Not enough stocks for wholesale order
-						selectedItemVariant?.variant_price_wholesale == null ||
-						(selectedItemVariant?.variant_stocks ?? 0) <
-							(selectedItemVariant?.variant_wholesale_item ?? 0)
-					}
-				>
+				<CustomRadio description="Wholesale" value="Wholesale">
 					<div className="flex items-center gap-2">
 						{!selectedItemVariant ? (
 							<span className="text-xs text-default-400 italic">
