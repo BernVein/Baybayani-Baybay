@@ -2,7 +2,7 @@ import { Variant } from "@/model/variant";
 import { Button, addToast } from "@heroui/react";
 import { CartIcon } from "@/components/icons";
 import { useState } from "react";
-import { updateCartItemQuantity } from "@/data/supabase/editCartItem";
+import { updateCartItemQuantity } from "@/data/supabase/updateCartItemQuantity";
 import { CartItemUser } from "@/model/cartItemUser";
 export default function Footer({
 	cartItemUser,
@@ -40,6 +40,7 @@ export default function Footer({
 			rawQuantity: rawQuantity,
 		});
 		setIsLoading(false);
+
 		if (result.error === "OUT_OF_STOCK_EXCEEDED") {
 			addToast({
 				title: "Failed to update cart item",
@@ -59,14 +60,19 @@ export default function Footer({
 				shouldShowTimeoutProgress: true,
 			});
 			return;
-		} else {
+		} else if (result.success) {
 			addToast({
 				title: "Successfully updated cart item",
-				description: `Quantity updated to ${rawQuantity}.`,
+				description: `Quantity updated to ${result.realQuantity.toLocaleString()} ${
+					result.realQuantity > 1
+						? `${cartItemUser.item.item_sold_by}s`
+						: cartItemUser.item.item_sold_by
+				}.`,
 				severity: "success",
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
+
 			onClose();
 		}
 	}

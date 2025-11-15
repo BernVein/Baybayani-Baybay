@@ -22,7 +22,11 @@ export async function updateCartItemQuantity({
 			.single();
 
 		if (fetchError || !existingItem) {
-			return { success: false, error: "CART_ITEM_NOT_FOUND" };
+			return {
+				success: false,
+				error: "CART_ITEM_NOT_FOUND",
+				realQuantity: 0,
+			};
 		}
 
 		const priceType: "Retail" | "Wholesale" = existingItem.price_variant;
@@ -51,6 +55,7 @@ export async function updateCartItemQuantity({
 						? `${item.item_sold_by}s`
 						: item.item_sold_by
 				} exceeds available stocks (${variant.variant_stocks.toLocaleString()}).`,
+				realQuantity,
 			};
 		}
 
@@ -64,11 +69,11 @@ export async function updateCartItemQuantity({
 			.eq("cart_item_user_id", cartItemUserId);
 
 		if (updateError) {
-			return { success: false, error: updateError.message };
+			return { success: false, error: updateError.message, realQuantity };
 		}
 
-		return { success: true };
+		return { success: true, realQuantity };
 	} catch (err: any) {
-		return { success: false, error: err.message };
+		return { success: false, error: err.message, realQuantity: 0 };
 	}
 }
