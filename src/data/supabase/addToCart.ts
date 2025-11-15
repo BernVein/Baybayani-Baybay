@@ -82,7 +82,15 @@ export async function addToCart(
 			return {
 				success: false,
 				error: "OUT_OF_STOCK_EXCEEDED",
-				message: `Already have ${existingQuantity} of this item. Adding ${realQuantity} exceeds ${variant.variant_stocks} stocks.`,
+				message: `Already have ${existingQuantity.toLocaleString()} ${
+					existingQuantity > 1
+						? `${item.item_sold_by}s`
+						: item.item_sold_by
+				} on cart. Adding ${realQuantity.toLocaleString()} ${
+					realQuantity > 1
+						? `${item.item_sold_by}s`
+						: item.item_sold_by
+				} exceeds stocks.`,
 			};
 		}
 
