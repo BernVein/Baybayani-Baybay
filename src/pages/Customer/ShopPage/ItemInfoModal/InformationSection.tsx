@@ -73,7 +73,11 @@ export default function InformationSection({
 							<CustomRadio
 								key={index}
 								value={variant.variant_id}
-								description={`Stocks remaining: ${variant.variant_stocks ?? 0} ${item.item_sold_by}s`}
+								description={`Stocks remaining: ${(variant.variant_stocks ?? 0).toLocaleString()} ${
+									(variant.variant_stocks ?? 0) > 1
+										? `${item.item_sold_by}s`
+										: item.item_sold_by
+								}`}
 							>
 								{variant.variant_name}
 							</CustomRadio>
