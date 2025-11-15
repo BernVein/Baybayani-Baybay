@@ -8,6 +8,9 @@ import {
 	RadioGroup,
 	Radio,
 	cn,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
 } from "@heroui/react";
 export const CustomRadio = (props: any) => {
 	const { children, ...otherProps } = props;
@@ -56,35 +59,57 @@ export default function InformationSection({
 			{item.item_variants?.length > 1 && (
 				<>
 					<Divider />
-					<RadioGroup
-						isDisabled
-						label="Product Variants"
-						color="success"
-						size="sm"
-						value={selectedItemVariant?.variant_id}
-						onValueChange={(value) => {
-							const foundVariant = item.item_variants.find(
-								(variant) => variant.variant_id === value
-							);
-							if (foundVariant) {
-								setSelectedItemVariant(foundVariant);
-							}
-						}}
-					>
-						{item.item_variants.map((variant, index) => (
-							<CustomRadio
-								key={index}
-								value={variant.variant_id}
-								description={`Stocks remaining: ${(variant.variant_stocks ?? 0).toLocaleString()} ${
-									(variant.variant_stocks ?? 0) > 1
-										? `${item.item_sold_by}s`
-										: item.item_sold_by
-								}`}
-							>
-								{variant.variant_name}
-							</CustomRadio>
-						))}
-					</RadioGroup>
+					<Popover showArrow>
+						<PopoverTrigger>
+							<div className="cursor-pointer active:opacity-70">
+								<RadioGroup
+									isDisabled
+									label="Product Variants"
+									color="success"
+									size="sm"
+									value={selectedItemVariant?.variant_id}
+									onValueChange={(value) => {
+										const foundVariant =
+											item.item_variants.find(
+												(variant) =>
+													variant.variant_id === value
+											);
+										if (foundVariant) {
+											setSelectedItemVariant(
+												foundVariant
+											);
+										}
+									}}
+								>
+									{item.item_variants.map(
+										(variant, index) => (
+											<CustomRadio
+												key={index}
+												value={variant.variant_id}
+												description={`Stocks remaining: ${(variant.variant_stocks ?? 0).toLocaleString()} ${
+													(variant.variant_stocks ??
+														0) > 1
+														? `${item.item_sold_by}s`
+														: item.item_sold_by
+												}`}
+											>
+												{variant.variant_name}
+											</CustomRadio>
+										)
+									)}
+								</RadioGroup>
+							</div>
+						</PopoverTrigger>
+						<PopoverContent>
+							<div className="px-1 py-2">
+								<div className="text-small font-bold">
+									You've selected{" "}
+									{selectedItemVariant?.variant_name}
+								</div>
+								<div>You can only edit the quantity</div>
+							</div>
+						</PopoverContent>
+					</Popover>
 				</>
 			)}
 			<Divider />
@@ -182,55 +207,79 @@ export default function InformationSection({
 			</div>
 
 			<Divider />
-			<RadioGroup
-				isDisabled
-				label="Price Variants"
-				color="success"
-				size="sm"
-				value={selectedPriceVariant}
-				onValueChange={setSelectedPriceVariant}
-			>
-				<CustomRadio description="Retail price" value="Retail">
-					₱
-					{selectedItemVariant?.variant_price_retail?.toFixed(2) ?? 0}{" "}
-					/ {item.item_sold_by}
-				</CustomRadio>
-				<CustomRadio description="Wholesale" value="Wholesale">
-					<div className="flex items-center gap-2">
-						{!selectedItemVariant ? (
-							<span className="text-xs text-default-400 italic">
-								No variant selected
-							</span>
-						) : selectedItemVariant.variant_price_wholesale ==
-						  null ? (
-							<span className="text-xs text-default-400 italic">
-								No wholesale price available
-							</span>
-						) : (selectedItemVariant.variant_stocks ?? 0) <
-						  (selectedItemVariant.variant_wholesale_item ?? 0) ? (
-							<span className="text-xs text-default-400 italic">
-								Insufficient stocks for wholesale
-							</span>
-						) : (
-							<>
-								<span>
-									₱
-									{selectedItemVariant.variant_price_wholesale?.toFixed(
-										2
-									)}{" "}
-									/ {item.item_sold_by}
-								</span>
-								<span className="text-xs text-default-400">
-									–{" "}
-									{selectedItemVariant.variant_wholesale_item ??
-										0}{" "}
-									{item.item_sold_by}s / item
-								</span>
-							</>
-						)}
+			<Popover showArrow>
+				<PopoverTrigger>
+					<div className="cursor-pointer active:opacity-70">
+						<RadioGroup
+							isDisabled
+							label="Price Variants"
+							color="success"
+							size="sm"
+							value={selectedPriceVariant}
+							onValueChange={setSelectedPriceVariant}
+						>
+							<CustomRadio
+								description="Retail price"
+								value="Retail"
+							>
+								₱
+								{selectedItemVariant?.variant_price_retail?.toFixed(
+									2
+								) ?? 0}{" "}
+								/ {item.item_sold_by}
+							</CustomRadio>
+							<CustomRadio
+								description="Wholesale"
+								value="Wholesale"
+							>
+								<div className="flex items-center gap-2">
+									{!selectedItemVariant ? (
+										<span className="text-xs text-default-400 italic">
+											No variant selected
+										</span>
+									) : selectedItemVariant.variant_price_wholesale ==
+									  null ? (
+										<span className="text-xs text-default-400 italic">
+											No wholesale price available
+										</span>
+									) : (selectedItemVariant.variant_stocks ??
+											0) <
+									  (selectedItemVariant.variant_wholesale_item ??
+											0) ? (
+										<span className="text-xs text-default-400 italic">
+											Insufficient stocks for wholesale
+										</span>
+									) : (
+										<>
+											<span>
+												₱
+												{selectedItemVariant.variant_price_wholesale?.toFixed(
+													2
+												)}{" "}
+												/ {item.item_sold_by}
+											</span>
+											<span className="text-xs text-default-400">
+												–{" "}
+												{selectedItemVariant.variant_wholesale_item ??
+													0}{" "}
+												{item.item_sold_by}s / item
+											</span>
+										</>
+									)}
+								</div>
+							</CustomRadio>
+						</RadioGroup>
 					</div>
-				</CustomRadio>
-			</RadioGroup>
+				</PopoverTrigger>
+				<PopoverContent>
+					<div className="px-1 py-2">
+						<div className="text-small font-bold">
+							You've selected {selectedPriceVariant}
+						</div>
+						<div>You can only edit the quantity</div>
+					</div>
+				</PopoverContent>
+			</Popover>
 			<Divider />
 
 			{/* Quantity Section */}
