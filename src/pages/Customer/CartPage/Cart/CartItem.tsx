@@ -186,6 +186,7 @@ export default function CartItem({
 								) : (
 									<Link
 										underline="hover"
+										className="text-sm"
 										size="sm"
 										color="success"
 										onClick={(e) => {
@@ -193,7 +194,7 @@ export default function CartItem({
 											onOpenEditModal();
 										}}
 									>
-										Edit or View Details &gt;
+										Edit Quantity or View Details &gt;
 									</Link>
 								)}
 							</span>

@@ -102,7 +102,7 @@ export default function Footer({
 					isLoading={isLoading}
 					onPress={editUpdateCartItem}
 				>
-					Update Cart Item
+					Update Quantity
 				</Button>
 			</div>
 		</>

@@ -111,7 +111,14 @@ export default function EditDetailInfoModal({
 					<>
 						<ModalHeader className="flex flex-col gap-2">
 							<h2 className="text-lg font-semibold">
-								{item.item_title || "Sample Item"}
+								<span className="mr-1">
+									{selectedItemVariant?.variant_name ||
+										"Variant Error"}{" "}
+									Details
+								</span>
+								<span className="text-default-500 font-medium text-base">
+									- {item.item_title || "Name Error"}
+								</span>
 							</h2>
 						</ModalHeader>
 
