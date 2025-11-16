@@ -19,7 +19,7 @@ export default function DeleteCartItemModalIndex({
 	onOpenChange: (isOpen: boolean) => void;
 	variant_name_to_delete: string;
 }) {
-	console.log(cartItemUser);
+	console.log(`Cart item to be deleted: ${cartItemUser}`);
 	return (
 		<Modal isOpen={isOpen} onOpenChange={onOpenChange} size="sm">
 			<ModalContent>
