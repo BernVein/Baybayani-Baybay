@@ -9,26 +9,26 @@ import {
 import { ExclamationCircle } from "@/components/icons";
 import { CartItemUser } from "@/model/cartItemUser";
 import { deleteCartItem } from "@/data/supabase/deleteCartItem";
-import { useFetchCart } from "@/data/supabase/useFetchCart";
 import { useState } from "react";
 export default function DeleteCartItemModalIndex({
   cartItemUser,
   isOpen,
   onOpenChange,
   variant_name_to_delete,
+  onDeleted,
 }: {
   cartItemUser: CartItemUser;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   variant_name_to_delete: string;
+  onDeleted?: () => Promise<void> | void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const { refetch } = useFetchCart("cb20faec-72c0-4c22-b9d4-4c50bfb9e66f");
   async function handleDelete(id: string, onClose: () => void) {
     setIsLoading(true);
     try {
       await deleteCartItem(id);
-      await refetch();
+      if (onDeleted) await onDeleted();
       onClose();
     } catch (err) {
       console.error(err);

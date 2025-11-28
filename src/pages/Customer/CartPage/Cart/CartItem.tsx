@@ -19,10 +19,12 @@ export default function CartItem({
   cartItemUser,
   value,
   isLoading,
+  onDeleted,
 }: {
   cartItemUser: CartItemUser;
   value: string;
   isLoading: boolean;
+  onDeleted?: () => Promise<void> | void;
 }) {
   if (isLoading) {
     return (
@@ -230,6 +232,7 @@ export default function CartItem({
         isOpen={isOpenDeleteModal}
         onOpenChange={onOpenChangeDeleteModal}
         variant_name_to_delete={liveVariant?.variant_name || ""}
+        onDeleted={onDeleted}
       />
     </div>
   );

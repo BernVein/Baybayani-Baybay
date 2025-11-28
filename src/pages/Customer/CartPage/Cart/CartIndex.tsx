@@ -15,7 +15,7 @@ import { useFetchCart } from "@/data/supabase/useFetchCart";
 export default function Cart() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const isMobile = useIsMobile();
-  const { cart, loading } = useFetchCart(
+  const { cart, loading, refetch } = useFetchCart(
     "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f"
   );
   const allCartItems = cart?.items ?? [];
@@ -90,6 +90,7 @@ export default function Cart() {
                   key={cart_item.cart_item_user_id}
                   cartItemUser={cart_item}
                   value={cart_item.cart_item_user_id}
+                  onDeleted={() => refetch()}
                 />
               ))
             )}
