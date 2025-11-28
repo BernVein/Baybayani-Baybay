@@ -208,7 +208,6 @@ export default function CartItem({
         color="danger"
         className="absolute top-2 right-3 z-20"
         onPress={() => {
-          // handleDelete(cartItemUser.cart_item_user_id);
           onOpenDeleteModal();
         }}
       >
