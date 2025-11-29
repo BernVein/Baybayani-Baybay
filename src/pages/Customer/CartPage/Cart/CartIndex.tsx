@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Card,
   CardBody,
@@ -20,7 +20,19 @@ export default function Cart() {
   );
   const allCartItems = cart?.items ?? [];
 
-  const totalSubtotal = allCartItems.reduce((sum, i) => sum + i.subtotal, 0);
+  const selectedSubtotal = useMemo(
+    () =>
+      allCartItems
+        .filter((i) => selectedProducts.includes(i.cart_item_user_id))
+        .reduce((sum, i) => sum + i.subtotal, 0),
+    [selectedProducts, allCartItems]
+  );
+
+  useEffect(() => {
+    setSelectedProducts((prev) =>
+      prev.filter((id) => allCartItems.some((i) => i.cart_item_user_id === id))
+    );
+  }, [allCartItems]);
 
   return (
     <>
@@ -117,7 +129,7 @@ export default function Cart() {
                   <div className="w-full flex flex-row mb-2 justify-between items-center">
                     <span className="text-xs text-default-500">Subtotal</span>
                     <span className="text-sm text-default-600">
-                      ₱{totalSubtotal.toLocaleString()}
+                      ₱{selectedSubtotal.toLocaleString()}
                     </span>
                   </div>
                   <Button
