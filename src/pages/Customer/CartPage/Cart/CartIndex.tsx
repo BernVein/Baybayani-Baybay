@@ -133,7 +133,7 @@ export default function Cart() {
                   <span className="mb-2">Order Summary</span>
                   <div className="w-full flex flex-row mb-2 justify-between items-center">
                     <span className="text-xs text-default-500">Subtotal</span>
-                    <span className="text-sm text-default-600">
+                    <span className="text-default-600 font-bold">
                       ₱{selectedSubtotal.toLocaleString()}
                     </span>
                   </div>
