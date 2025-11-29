@@ -29,9 +29,14 @@ export default function Cart() {
   );
 
   useEffect(() => {
-    setSelectedProducts((prev) =>
-      prev.filter((id) => allCartItems.some((i) => i.cart_item_user_id === id))
-    );
+    setSelectedProducts((prev) => {
+      const validIds = new Set(
+        allCartItems.map((i) => i.cart_item_user_id)
+      );
+      const next = prev.filter((id) => validIds.has(id));
+      if (next.length === prev.length) return prev;
+      return next;
+    });
   }, [allCartItems]);
 
   return (
