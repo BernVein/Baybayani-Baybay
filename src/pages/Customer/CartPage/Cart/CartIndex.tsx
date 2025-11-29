@@ -116,7 +116,7 @@ export default function Cart() {
 
           {/* Right side: Order summary skeleton */}
           <Card
-            className="w-full sm:w-1/4 self-start sticky top-30 bottom-23 z-10"
+            className="w-full sm:w-1/4 self-start sticky top-30 bottom-23 z-20"
             isBlurred={isMobile}
           >
             <CardBody className="gap-1">
