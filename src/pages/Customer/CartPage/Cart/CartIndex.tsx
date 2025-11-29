@@ -91,6 +91,7 @@ export default function Cart() {
                   cartItemUser={cart_item}
                   value={cart_item.cart_item_user_id}
                   onDeleted={() => refetch()}
+                  onUpdated={() => refetch()}
                 />
               ))
             )}

@@ -20,11 +20,13 @@ export default function CartItem({
   value,
   isLoading,
   onDeleted,
+  onUpdated,
 }: {
   cartItemUser: CartItemUser;
   value: string;
   isLoading: boolean;
   onDeleted?: () => Promise<void> | void;
+  onUpdated?: () => Promise<void> | void;
 }) {
   if (isLoading) {
     return (
@@ -225,6 +227,7 @@ export default function CartItem({
         selectedItemVariantUser={liveVariant ?? null}
         selectedPriceVariantUser={cartItemUser.price_variant}
         selectedQuantityUser={cartItemUser.quantity}
+        onUpdated={onUpdated}
       />
 
       <DeleteCartItemModalIndex

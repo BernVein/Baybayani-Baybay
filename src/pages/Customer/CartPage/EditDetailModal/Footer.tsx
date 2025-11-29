@@ -11,6 +11,7 @@ export default function Footer({
 	rawQuantity,
 	actualQuantity,
 	onClose,
+	onUpdated,
 }: {
 	cartItemUser: CartItemUser;
 	selectedItemVariant: Variant | null;
@@ -18,6 +19,7 @@ export default function Footer({
 	rawQuantity: number;
 	actualQuantity: number;
 	onClose: () => void;
+	onUpdated?: () => Promise<void> | void;
 }) {
 	const [isLoading, setIsLoading] = useState(false);
 	async function editUpdateCartItem() {
@@ -73,6 +75,9 @@ export default function Footer({
 				shouldShowTimeoutProgress: true,
 			});
 
+			if (onUpdated) {
+				await onUpdated();
+			}
 			onClose();
 		}
 	}

@@ -22,6 +22,7 @@ export default function EditDetailInfoModal({
 	selectedItemVariantUser,
 	selectedPriceVariantUser,
 	selectedQuantityUser,
+	onUpdated,
 }: {
 	cartItemUser: CartItemUser;
 	isOpen: boolean;
@@ -30,6 +31,7 @@ export default function EditDetailInfoModal({
 	selectedPriceVariantUser: string;
 	selectedItemVariantUser: Variant | null;
 	selectedQuantityUser: number;
+	onUpdated?: () => Promise<void> | void;
 }) {
 	// State for selected item variant
 	const [selectedItemVariant, setSelectedItemVariant] =
@@ -158,14 +160,15 @@ export default function EditDetailInfoModal({
 						</ModalBody>
 
 						<ModalFooter className="flex justify-between items-center">
-							<Footer
-								cartItemUser={cartItemUser}
-								selectedItemVariant={selectedItemVariant}
-								selectedPriceVariant={selectedPriceVariant}
-								rawQuantity={rawQuantity}
-								actualQuantity={actualQuantity}
-								onClose={onClose}
-							/>
+					<Footer
+						cartItemUser={cartItemUser}
+						selectedItemVariant={selectedItemVariant}
+						selectedPriceVariant={selectedPriceVariant}
+						rawQuantity={rawQuantity}
+						actualQuantity={actualQuantity}
+						onClose={onClose}
+						onUpdated={onUpdated}
+					/>
 						</ModalFooter>
 					</>
 				)}
