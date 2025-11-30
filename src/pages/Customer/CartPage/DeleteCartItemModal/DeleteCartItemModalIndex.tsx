@@ -5,6 +5,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  addToast,
 } from "@heroui/react";
 import { ExclamationCircle } from "@/components/icons";
 import { CartItemUser } from "@/model/cartItemUser";
@@ -29,6 +30,13 @@ export default function DeleteCartItemModalIndex({
     try {
       await deleteCartItem(id);
       if (onDeleted) await onDeleted();
+      addToast({
+        title: "Item removed from cart",
+        description: `${variant_name_to_delete} has been removed from your cart.`,
+        color: "success",
+        severity: "success",
+        shouldShowTimeoutProgress: true,
+      });
       onClose();
     } catch (err) {
       console.error(err);
