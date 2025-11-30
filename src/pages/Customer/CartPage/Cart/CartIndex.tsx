@@ -162,6 +162,7 @@ export default function Cart() {
       )}
       <Modal
         isDismissable={false}
+        scrollBehavior="inside"
         isKeyboardDismissDisabled={true}
         isOpen={checkoutModalIsOpen}
         onOpenChange={checkoutModalOnOpenChange}
