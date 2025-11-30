@@ -7,6 +7,12 @@ import {
   Skeleton,
   Divider,
   Link,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@heroui/react";
 import useIsMobile from "@/lib/isMobile";
 import { AddToCart, CartIcon, BaybayaniLogo } from "@/components/icons";
@@ -14,6 +20,12 @@ import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 import { useFetchCart } from "@/data/supabase/useFetchCart";
 export default function Cart() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+  const {
+    isOpen: checkoutModalIsOpen,
+    onOpen: checkoutModalOnOpen,
+    onOpenChange: checkoutModalOnOpenChange,
+  } = useDisclosure();
+
   const isMobile = useIsMobile();
   const { cart, loading, refetch } = useFetchCart(
     "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f"
@@ -30,9 +42,7 @@ export default function Cart() {
 
   useEffect(() => {
     setSelectedProducts((prev) => {
-      const validIds = new Set(
-        allCartItems.map((i) => i.cart_item_user_id)
-      );
+      const validIds = new Set(allCartItems.map((i) => i.cart_item_user_id));
       const next = prev.filter((id) => validIds.has(id));
       if (next.length === prev.length) return prev;
       return next;
@@ -140,6 +150,7 @@ export default function Cart() {
                   <Button
                     color="success"
                     startContent={<AddToCart className="size-6" />}
+                    onPress={checkoutModalOnOpen}
                   >
                     Proceed to Checkout
                   </Button>
@@ -149,6 +160,50 @@ export default function Cart() {
           </Card>
         </div>
       )}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={checkoutModalIsOpen}
+        onOpenChange={checkoutModalOnOpenChange}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Modal Title
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+                <p>
+                  Magna exercitation reprehenderit magna aute tempor cupidatat
+                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
+                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
+                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
+                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
+                  eiusmod et. Culpa deserunt nostrud ad veniam.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Action
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }
