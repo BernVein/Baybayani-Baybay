@@ -171,7 +171,7 @@ export default function Cart() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                Checkout Summary
               </ModalHeader>
               <ModalBody>
                 <p>
