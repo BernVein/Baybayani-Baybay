@@ -49,6 +49,12 @@ export default function Cart() {
     });
   }, [allCartItems]);
 
+  const selectedItems = useMemo(() => {
+    return allCartItems.filter((i) =>
+      selectedProducts.includes(i.cart_item_user_id)
+    );
+  }, [selectedProducts, allCartItems]);
+
   return (
     <>
       {/* Header */}
@@ -161,9 +167,7 @@ export default function Cart() {
         </div>
       )}
       <Modal
-        isDismissable={false}
         scrollBehavior="inside"
-        isKeyboardDismissDisabled={true}
         isOpen={checkoutModalIsOpen}
         onOpenChange={checkoutModalOnOpenChange}
       >
@@ -174,25 +178,46 @@ export default function Cart() {
                 Checkout Summary
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                {selectedItems.length === 0 ? (
+                  <p className="text-default-500">No items selected.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {selectedItems.map((item) => (
+                      <div
+                        key={item.cart_item_user_id}
+                        className="flex items-start gap-3 border-b pb-3"
+                      >
+                        <img
+                          src={item.item.item_img[0]}
+                          alt={item.item.item_title}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+
+                        <div className="flex-1">
+                          <p className="font-semibold">
+                            {item.item.item_title}
+                          </p>
+                          <p className="text-xs text-default-500">
+                            {item.variant_snapshot.variant_snapshot_name}
+                          </p>
+
+                          <p className="text-sm">Qty: {item.quantity}</p>
+
+                          <p className="font-bold">
+                            ₱{item.subtotal.toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className="flex justify-between font-bold pt-2">
+                      <span>Total:</span>
+                      <span>₱{selectedSubtotal.toLocaleString()}</span>
+                    </div>
+                  </div>
+                )}
               </ModalBody>
+
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
