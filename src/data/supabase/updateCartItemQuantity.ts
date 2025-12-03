@@ -17,7 +17,7 @@ export async function updateCartItemQuantity({
 		// Get existing cart item to know the price_variant
 		const { data: existingItem, error: fetchError } = await supabase
 			.from("CartItemUser")
-			.select("price_variant")
+			.select("price_variant, cart_id")
 			.eq("cart_item_user_id", cartItemUserId)
 			.single();
 
@@ -72,7 +72,7 @@ export async function updateCartItemQuantity({
 		if (updateError) {
 			return { success: false, error: updateError.message, realQuantity };
 		}
-
+		window.dispatchEvent(new CustomEvent('baybayani:cart-updated'));
 		return { success: true, realQuantity };
 	} catch (err: any) {
 		return { success: false, error: err.message, realQuantity: 0 };

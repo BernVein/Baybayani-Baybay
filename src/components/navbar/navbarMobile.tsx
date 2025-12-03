@@ -13,8 +13,12 @@ import {
 import { BaybayaniLogo, CartIcon, MessageIcon } from "../icons";
 import { useState } from "react";
 import ThemeSwitcher from "./themeSwitcher";
+import { useFetchCart } from "@/data/supabase/useFetchCart";
 export function NavbarMobile() {
-	const [active, setActive] = useState("");
+  const [active, setActive] = useState("");
+  const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
+  const { cart } = useFetchCart(userId);
+  const cartCount = (cart?.items ?? []).length;
 
 	return (
 		<HeroNavBar className="justify-around py-2 shadow-md">
@@ -77,16 +81,16 @@ export function NavbarMobile() {
 					color={active === "Cart" ? "success" : "foreground"}
 				>
 					<div className="w-8 h-8 flex items-center justify-center relative">
-						<Badge
-							content="3"
-							color="success"
-							shape="circle"
-							showOutline={false}
-							className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-							size="sm"
-						>
-							<CartIcon className="w-6 h-6" />
-						</Badge>
+            <Badge
+              content={String(cartCount)}
+              color="success"
+              shape="circle"
+              showOutline={false}
+              className="absolute top-0 right-0 translate-x-1 -translate-y-1"
+              size="sm"
+            >
+              <CartIcon className="w-6 h-6" />
+            </Badge>
 					</div>
 					<span className="text-sm font-light mt-1">Cart</span>
 				</Link>

@@ -10,6 +10,6 @@ export async function deleteCartItem(cartItemUserId: string) {
     console.error("Delete cart item error:", error);
     throw error;
   }
-
+  window.dispatchEvent(new CustomEvent('baybayani:cart-updated'));
   return true;
 }

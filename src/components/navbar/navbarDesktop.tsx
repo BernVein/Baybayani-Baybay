@@ -18,6 +18,7 @@ import { useState } from "react";
 import { items } from "@/data/items";
 import { useNavigate, useLocation } from "react-router-dom";
 import ThemeSwitcher from "./themeSwitcher";
+import { useFetchCart } from "@/data/supabase/useFetchCart";
 
 const searchItems = items.map((i, index) => ({
 	label: i.item_title,
@@ -26,15 +27,18 @@ const searchItems = items.map((i, index) => ({
 }));
 
 export function Navbar({
-	setSearchTerm,
+  setSearchTerm,
 }: {
-	setSearchTerm: (val: string) => void;
+  setSearchTerm: (val: string) => void;
 }) {
-	const [active, setActive] = useState("");
-	const [searchValue, setSearchValue] = useState("");
-	const [showSuggestions, setShowSuggestions] = useState(true);
-	const navigate = useNavigate();
-	const location = useLocation();
+  const [active, setActive] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
+  const { cart } = useFetchCart(userId);
+  const cartCount = (cart?.items ?? []).length;
 
 	return (
 		<HeroNavBar>
@@ -166,14 +170,14 @@ export function Navbar({
 						onClick={() => setActive("Cart")}
 					>
 						<div className="flex items-center gap-2">
-							<Badge
-								content="3"
-								color="success"
-								shape="circle"
-								showOutline={false}
-							>
-								<CartIcon className="size-6" />
-							</Badge>
+              <Badge
+                content={String(cartCount)}
+                color="success"
+                shape="circle"
+                showOutline={false}
+              >
+                <CartIcon className="size-6" />
+              </Badge>
 							<span className="hidden sm:inline font-normal">
 								Cart
 							</span>

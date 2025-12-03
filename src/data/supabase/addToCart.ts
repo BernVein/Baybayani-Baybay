@@ -132,6 +132,7 @@ export async function addToCart(
 			if (updateError) {
 				return { success: false, error: updateError.message };
 			}
+			window.dispatchEvent(new CustomEvent('baybayani:cart-updated'));
 		} else {
 			const { error: insertError } = await supabase.from("CartItemUser").insert({
 				cart_id: cartId,
@@ -144,6 +145,7 @@ export async function addToCart(
 			if (insertError) {
 				return { success: false, error: insertError.message };
 			}
+			window.dispatchEvent(new CustomEvent('baybayani:cart-updated'));
 		}
 
 		return { success: true };

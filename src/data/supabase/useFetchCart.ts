@@ -21,7 +21,7 @@ export const useFetchCart = (userId: string) => {
       )
       .eq("user_id", userId)
       .eq("is_soft_deleted", false)
-      .single();
+      .maybeSingle();
 
     if (error) {
       setErrorMsg(error.message);
@@ -148,7 +148,52 @@ export const useFetchCart = (userId: string) => {
 
   useEffect(() => {
     fetchCart();
-    console.log("Refetched cart data");
+  }, [fetchCart]);
+
+  useEffect(() => {
+    const subs: any[] = [];
+    const cartChannel = supabase
+      .channel(`cart-${userId}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'Cart', filter: `user_id=eq.${userId}` },
+        () => {
+          fetchCart();
+        }
+      )
+      .subscribe();
+    subs.push(cartChannel);
+
+    const cid = cart?.cart_id;
+    if (cid) {
+      const itemsChannel = supabase
+        .channel(`cart-items-${cid}`)
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'CartItemUser', filter: `cart_id=eq.${cid}` },
+          () => {
+            fetchCart();
+          }
+        )
+        .subscribe();
+      subs.push(itemsChannel);
+    }
+
+    return () => {
+      subs.forEach((ch) => {
+        supabase.removeChannel(ch);
+      });
+    };
+  }, [userId, cart?.cart_id, fetchCart]);
+
+  useEffect(() => {
+    const handler = () => {
+      fetchCart();
+    };
+    window.addEventListener('baybayani:cart-updated', handler);
+    return () => {
+      window.removeEventListener('baybayani:cart-updated', handler);
+    };
   }, [fetchCart]);
 
   return { cart, loading, errorMsg, refetch: fetchCart };
