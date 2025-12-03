@@ -47,7 +47,11 @@ export function Navbar({
 				<Link
 					href="/"
 					className="flex items-center gap-2"
-					onClick={() => setActive("")}
+					onClick={(e) => {
+						e.preventDefault();
+						setActive("");
+						navigate("/");
+					}}
 				>
 					<BaybayaniLogo className="size-10" />
 					<p className="font-bold hidden sm:block sm:text-lg">
@@ -88,12 +92,10 @@ export function Navbar({
 					allowsCustomValue
 					onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 						if (e.key === "Enter") {
-							// if not on the shop page, go there
 							if (location.pathname !== "/") {
-								navigate("/shop");
+								navigate("/");
 							}
 							setSearchTerm(searchValue);
-
 							(e.target as HTMLInputElement).blur();
 						}
 					}}
@@ -142,7 +144,11 @@ export function Navbar({
 					<Link
 						href="/messages"
 						color={active === "Messages" ? "success" : "foreground"}
-						onClick={() => setActive("Messages")}
+						onClick={(e) => {
+							e.preventDefault();
+							setActive("Messages");
+							navigate("/messages");
+						}}
 					>
 						<div className="flex items-center gap-2">
 							<Badge
@@ -167,21 +173,25 @@ export function Navbar({
 					<Link
 						href="/cart"
 						color={active === "Cart" ? "success" : "foreground"}
-						onClick={() => setActive("Cart")}
+						onClick={(e) => {
+							e.preventDefault();
+							setActive("Cart");
+							navigate("/cart");
+						}}
 					>
 						<div className="flex items-center gap-2">
-            {cartCount > 0 ? (
-              <Badge
-                content={String(cartCount)}
-                color="success"
-                shape="circle"
-                showOutline={false}
-              >
-                <CartIcon className="size-6" />
-              </Badge>
-            ) : (
-              <CartIcon className="size-6" />
-            )}
+						{cartCount > 0 ? (
+							<Badge
+								content={String(cartCount)}
+								color="success"
+								shape="circle"
+								showOutline={false}
+							>
+								<CartIcon className="size-6" />
+							</Badge>
+						) : (
+							<CartIcon className="size-6" />
+						)}
 							<span className="hidden sm:inline font-normal">
 								Cart
 							</span>
@@ -204,8 +214,8 @@ export function Navbar({
 					<DropdownMenu aria-label="Profile Actions" variant="flat">
 						<DropdownItem
 							key="profile"
-							href="/profile"
 							className="h-14 gap-2"
+							onPress={() => navigate("/profile")}
 						>
 							<p className="font-semibold">Signed in as</p>
 							<p className="font-semibold">
@@ -218,19 +228,9 @@ export function Navbar({
 								<ThemeSwitcher />
 							</div>
 						</DropdownItem>
-						<DropdownItem key="orders" href="/orders">
-							Orders
-						</DropdownItem>
-						<DropdownItem key="settings" href="/settings">
-							Settings
-						</DropdownItem>
-						<DropdownItem
-							key="logout"
-							href="/logout"
-							color="danger"
-						>
-							Log Out
-						</DropdownItem>
+						<DropdownItem key="orders" onPress={() => navigate("/orders")}>Orders</DropdownItem>
+						<DropdownItem key="settings" onPress={() => navigate("/settings")}>Settings</DropdownItem>
+						<DropdownItem key="logout" color="danger" onPress={() => navigate("/logout")}>Log Out</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</NavbarContent>

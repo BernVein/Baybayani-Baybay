@@ -12,10 +12,12 @@ import {
 } from "@heroui/react";
 import { BaybayaniLogo, CartIcon, MessageIcon } from "../icons";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ThemeSwitcher from "./themeSwitcher";
 import { useFetchCart } from "@/data/supabase/useFetchCart";
 export function NavbarMobile() {
   const [active, setActive] = useState("");
+  const navigate = useNavigate();
   const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
   const { cart } = useFetchCart(userId);
   const cartCount = (cart?.items ?? []).length;
@@ -29,7 +31,11 @@ export function NavbarMobile() {
 			>
 				<Link
 					href="/"
-					onClick={() => setActive("Shop")}
+					onClick={(e) => {
+						e.preventDefault();
+						setActive("Shop");
+						navigate("/");
+					}}
 					className="flex flex-col items-center"
 					color={active === "Shop" ? "success" : "foreground"}
 				>
@@ -48,7 +54,11 @@ export function NavbarMobile() {
 			>
 				<Link
 					href="/messages"
-					onClick={() => setActive("Messages")}
+					onClick={(e) => {
+						e.preventDefault();
+						setActive("Messages");
+						navigate("/messages");
+					}}
 					className="flex flex-col items-center"
 					color={active === "Messages" ? "success" : "foreground"}
 				>
@@ -76,7 +86,11 @@ export function NavbarMobile() {
 			>
 				<Link
 					href="/cart"
-					onClick={() => setActive("Cart")}
+					onClick={(e) => {
+						e.preventDefault();
+						setActive("Cart");
+						navigate("/cart");
+					}}
 					className="flex flex-col items-center"
 					color={active === "Cart" ? "success" : "foreground"}
 				>
@@ -125,8 +139,8 @@ export function NavbarMobile() {
 					<DropdownMenu aria-label="Profile Actions" variant="flat">
 						<DropdownItem
 							key="profile"
-							href="/profile"
 							className="h-14 gap-2"
+							onPress={() => navigate("/profile")}
 						>
 							<p className="font-semibold">Signed in as</p>
 							<p className="font-semibold">
@@ -139,19 +153,9 @@ export function NavbarMobile() {
 								<ThemeSwitcher />
 							</div>
 						</DropdownItem>
-						<DropdownItem key="orders" href="/orders">
-							Orders
-						</DropdownItem>
-						<DropdownItem key="settings" href="/settings">
-							Settings
-						</DropdownItem>
-						<DropdownItem
-							key="logout"
-							href="/logout"
-							color="danger"
-						>
-							Log Out
-						</DropdownItem>
+						<DropdownItem key="orders" onPress={() => navigate("/orders")}>Orders</DropdownItem>
+						<DropdownItem key="settings" onPress={() => navigate("/settings")}>Settings</DropdownItem>
+						<DropdownItem key="logout" color="danger" onPress={() => navigate("/logout")}>Log Out</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</NavbarItem>
