@@ -15,27 +15,27 @@ import ItemInfoModal from "./ItemInfoModal/ItemInfoModalIndex";
 import { Item } from "@/model/Item";
 import { useFetchItem } from "@/data/supabase/useFetchItem";
 interface ShopItemsProps {
-	activeCategory: string | null;
-	searchTerm: string | null;
-	setActiveCategory: (category: string | null) => void;
-	setSearchTerm: (term: string | null) => void;
+    activeCategories: string[];
+    searchTerm: string | null;
+    setActiveCategories: (categories: string[]) => void;
+    setSearchTerm: (term: string | null) => void;
 }
 import { XIcon } from "@/components/icons";
 export default function ShopItems({
-	activeCategory,
-	searchTerm,
-	setActiveCategory,
-	setSearchTerm,
+    activeCategories,
+    searchTerm,
+    setActiveCategories,
+    setSearchTerm,
 }: ShopItemsProps) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 	const hasFetchedOnce = useRef(false);
 
 	// Use the hook to fetch items from Supabase
-	const { itemList, loadMore, hasMore, fetchError, loading } = useFetchItem(
-		activeCategory,
-		searchTerm
-	);
+    const { itemList, loadMore, hasMore, fetchError, loading } = useFetchItem(
+        activeCategories,
+        searchTerm
+    );
 
 	// Infinite scroll: call loadMore() when near bottom
 	useEffect(() => {
@@ -64,59 +64,59 @@ export default function ShopItems({
 			toastShown.current = false;
 			return;
 		}
-		if (!hasFetchedOnce.current) return;
+        if (!hasFetchedOnce.current) return;
 		// Only run if a toast hasn't been shown yet
 		if (!toastShown.current) {
 			// CASE 3: Search term exists but no items at all (any category)
-			if (searchTerm && itemList.length === 0 && !activeCategory) {
-				addToast({
-					title: "No items found",
-					description: `No items found for "${searchTerm}" in any category. Showing all items instead.`,
-					severity: "warning",
-					shouldShowTimeoutProgress: true,
-				});
+            if (searchTerm && itemList.length === 0 && activeCategories.length === 0) {
+                addToast({
+                    title: "No items found",
+                    description: `No items found for "${searchTerm}" in any category. Showing all items instead.`,
+                    severity: "warning",
+                    shouldShowTimeoutProgress: true,
+                });
 
-				// Reset everything
-				setActiveCategory(null);
-				setSearchTerm(null);
-			}
-			// CASE 2: Search term exists but no items in current category
-			else if (searchTerm && itemList.length === 0 && activeCategory) {
-				addToast({
-					title: "No results",
-					description: `No items found for "${searchTerm}" in ${activeCategory}.`,
-					severity: "warning",
-					shouldShowTimeoutProgress: true,
-				});
+                // Reset everything
+                setActiveCategories([]);
+                setSearchTerm(null);
+            }
+            // CASE 2: Search term exists but no items in current category
+            else if (searchTerm && itemList.length === 0 && activeCategories.length > 0) {
+                addToast({
+                    title: "No results",
+                    description: `No items found for "${searchTerm}" in selected categories.`,
+                    severity: "warning",
+                    shouldShowTimeoutProgress: true,
+                });
 
-				// Remove category filter, keep search term
-				setActiveCategory(null);
-				setSearchTerm(searchTerm);
-			}
-			// CASE 1: Category exists but has no items
-			else if (!searchTerm && activeCategory && itemList.length === 0) {
-				addToast({
-					title: "No items in category",
-					description: `${activeCategory} has no items. Showing all items instead.`,
-					severity: "warning",
-					color: "warning",
-					shouldShowTimeoutProgress: true,
-				});
+                // Remove category filter, keep search term
+                setActiveCategories([]);
+                setSearchTerm(searchTerm);
+            }
+            // CASE 1: Category exists but has no items
+            else if (!searchTerm && activeCategories.length > 0 && itemList.length === 0) {
+                addToast({
+                    title: "No items in category",
+                    description: `Selected categories have no items. Showing all items instead.`,
+                    severity: "warning",
+                    color: "warning",
+                    shouldShowTimeoutProgress: true,
+                });
 
-				// Reset category
-				setActiveCategory(null);
-			}
+                // Reset category
+                setActiveCategories([]);
+            }
 
 			toastShown.current = true; // mark toast as shown
 		}
-	}, [
-		loading,
-		itemList,
-		searchTerm,
-		activeCategory,
-		setActiveCategory,
-		setSearchTerm,
-	]);
+		}, [
+			loading,
+			itemList,
+			searchTerm,
+			activeCategories,
+			setActiveCategories,
+			setSearchTerm,
+		]);
 
 	if (fetchError) {
 		return (
@@ -150,28 +150,27 @@ export default function ShopItems({
 	return (
 		<>
 			<div className="flex flex-col w-full">
-				{searchTerm && searchTerm.trim() !== "" && (
-					<>
-						<div className="flex flex-row mb-5 gap-3 items-center">
-							<div className="text-2xl">
-								Search Results for "{searchTerm}"
-								{activeCategory &&
-									activeCategory.trim() !== "" &&
-									` in ${activeCategory}`}
-							</div>
-							<Button
-								color="danger"
-								onPress={() => {
-									setActiveCategory(null);
-									setSearchTerm(null);
-								}}
-								startContent={<XIcon className="size-5" />}
-								size="sm"
-								isIconOnly
-							/>
-						</div>
-					</>
-				)}
+                {searchTerm && searchTerm.trim() !== "" && (
+                    <>
+                        <div className="flex flex-row mb-5 gap-3 items-center">
+                            <div className="text-2xl">
+                                Search Results for "{searchTerm}"
+                                {activeCategories.length > 0 &&
+                                    ` in ${activeCategories.join(", ")}`}
+                            </div>
+                            <Button
+                                color="danger"
+                                onPress={() => {
+                                    setActiveCategories([]);
+                                    setSearchTerm(null);
+                                }}
+                                startContent={<XIcon className="size-5" />}
+                                size="sm"
+                                isIconOnly
+                            />
+                        </div>
+                    </>
+                )}
 
 				<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
 					{/* Real items */}

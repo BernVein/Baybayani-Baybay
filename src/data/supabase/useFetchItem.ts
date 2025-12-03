@@ -3,7 +3,7 @@ import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
 
 export const useFetchItem = (
-	activeCategory: string | null,
+	activeCategories: string[],
 	searchTerm: string | null,
 	itemsPerPage = 8
 ) => {
@@ -30,8 +30,8 @@ export const useFetchItem = (
 				.range(from, to); // pagination: range(offset, offset+limit-1)
 
 			// apply category filter if provided
-			if (activeCategory) {
-				query = query.eq("item_category", activeCategory);
+			if (activeCategories && activeCategories.length > 0) {
+				query = query.in("item_category", activeCategories);
 			}
 
 			// apply search filter if provided: use ilike for case-insensitive partial match
@@ -121,8 +121,7 @@ export const useFetchItem = (
 			} else {
 				setItemList((prev) => [...prev, ...mapped]);
 			}
-		},
-		[activeCategory, searchTerm, itemsPerPage]
+		}, [activeCategories, searchTerm, itemsPerPage]
 	);
 
 	// When activeCategory or searchTerm changes: reset page and fetch page 0
@@ -132,7 +131,7 @@ export const useFetchItem = (
 		setHasMore(true);
 		fetchItems(0, true);
 		// note: fetchItems is stable via useCallback dependencies above
-	}, [activeCategory, searchTerm, fetchItems]);
+	}, [activeCategories, searchTerm, fetchItems]);
 
 	// Function to load next page
 	const loadMore = async () => {

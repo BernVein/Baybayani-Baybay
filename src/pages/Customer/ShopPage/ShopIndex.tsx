@@ -4,13 +4,13 @@ import ImageHeader from "./ImageHeader";
 import Categories from "./Categories";
 
 export default function Shop({
-	searchTerm,
-	setSearchTerm,
+    searchTerm,
+    setSearchTerm,
 }: {
-	searchTerm: string | null;
-	setSearchTerm: (term: string | null) => void;
+    searchTerm: string | null;
+    setSearchTerm: (term: string | null) => void;
 }) {
-	const [activeCategory, setActiveCategory] = useState<string | null>("");
+    const [activeCategories, setActiveCategories] = useState<string[]>([]);
 
 	useEffect(() => {
 		document.title = "Baybayani | Shop";
@@ -18,16 +18,16 @@ export default function Shop({
 	return (
 		<div className="p-5 md:p-10 flex flex-col gap-4 md:w-3/4 mx-auto items-center">
 			<ImageHeader />
-			<Categories
-				activeCategory={activeCategory}
-				setActiveCategory={setActiveCategory}
-			/>
-			<ShopItems
-				activeCategory={activeCategory}
-				searchTerm={searchTerm}
-				setActiveCategory={setActiveCategory}
-				setSearchTerm={setSearchTerm}
-			/>
+            <Categories
+                activeCategories={activeCategories}
+                setActiveCategories={setActiveCategories}
+            />
+            <ShopItems
+                activeCategories={activeCategories}
+                searchTerm={searchTerm}
+                setActiveCategories={setActiveCategories}
+                setSearchTerm={setSearchTerm}
+            />
 		</div>
 	);
 }
