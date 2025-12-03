@@ -41,7 +41,7 @@ export default function Footer({
 			variant: selectedItemVariant,
 			rawQuantity: rawQuantity,
 		});
-		setIsLoading(false);
+		
 
 		if (result.error === "OUT_OF_STOCK_EXCEEDED") {
 			addToast({
@@ -51,6 +51,7 @@ export default function Footer({
 				color: "warning",
 				shouldShowTimeoutProgress: true,
 			});
+			setIsLoading(false);
 			return;
 		}
 		if (!result.success) {
@@ -61,6 +62,7 @@ export default function Footer({
 				color: "warning",
 				shouldShowTimeoutProgress: true,
 			});
+			setIsLoading(false);
 			return;
 		} else if (result.success) {
 			addToast({
@@ -79,6 +81,7 @@ export default function Footer({
 				await onUpdated();
 			}
 			onClose();
+			setIsLoading(false);
 		}
 	}
 	return (

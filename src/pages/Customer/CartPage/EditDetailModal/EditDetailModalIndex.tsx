@@ -71,12 +71,12 @@ export default function EditDetailInfoModal({
 	useEffect(() => {
 		if (!selectedItemVariant) return;
 
-		// skip the first run on modal open
-		if (!hasMounted.current) return;
-
-		setRawQuantity(1);
-		setSelectedPriceVariant("Retail");
-	}, [selectedItemVariant]);
+		// Only reset if the selected variant is different from the user's initial variant
+		if (selectedItemVariant.variant_id !== selectedItemVariantUser?.variant_id) {
+			setRawQuantity(1);
+			setSelectedPriceVariant("Retail");
+		}
+	}, [selectedItemVariant, selectedItemVariantUser]);
 
 	useEffect(() => {
 		if (isOpen && item) {
@@ -85,15 +85,6 @@ export default function EditDetailInfoModal({
 			document.title = "Baybayani | Cart"; // fallback when modal closes
 		}
 	}, [isOpen, item]);
-	// Reset quantity when price variant changes
-	useEffect(() => {
-		if (
-			selectedPriceVariant === "Wholesale" ||
-			selectedPriceVariant === "Retail"
-		) {
-			setRawQuantity(1);
-		}
-	}, [selectedPriceVariant]);
 
 	if (!item) return null;
 
