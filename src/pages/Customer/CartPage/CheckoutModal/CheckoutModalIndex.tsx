@@ -122,6 +122,7 @@ export default function CheckoutModalIndex({
                   <Button
                     color="success"
                     onPress={onClose}
+                    isDisabled={selectedItems.length === 0}
                     startContent={<AddToCart className="size-6" />}
                   >
                     Checkout
