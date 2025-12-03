@@ -44,8 +44,9 @@ export const useFetchCart = (userId: string) => {
       created_at: cart.created_at ?? "",
       updated_at: cart.updated_at ?? "",
 
-      items: (cart.CartItemUser || []).map((ciu: any) => ({
-        cart_item_user_id: ciu.cart_item_user_id,
+      items: (cart.CartItemUser || [])
+        .map((ciu: any) => ({
+          cart_item_user_id: ciu.cart_item_user_id,
         item: (ciu.Item
           ? {
               item_id: ciu.Item.item_id,
@@ -139,7 +140,13 @@ export const useFetchCart = (userId: string) => {
         is_soft_deleted: ciu.is_soft_deleted,
         created_at: ciu.created_at ?? "",
         updated_at: ciu.updated_at ?? "",
-      })),
+      }))
+        .sort((a: any, b: any) => {
+          const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
+          if (aTime !== bTime) return aTime - bTime;
+          return a.cart_item_user_id.localeCompare(b.cart_item_user_id);
+        }),
     };
     // Save mapped carts to state
     setCart(mapped);

@@ -285,15 +285,12 @@ export default function InformationSection({
 			{/* Quantity Section */}
 			<div className="flex flex-row items-center gap-2 mb-4">
 				<NumberInput
-					key={`${selectedPriceVariant}-${selectedItemVariant?.variant_stocks ?? 0}-${rawQuantity}-${selectedItemVariant?.variant_wholesale_item ?? 0}`}
-					defaultValue={1}
 					minValue={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
 					step={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
 					maxValue={
 						selectedPriceVariant === "Wholesale"
 							? (selectedItemVariant?.variant_stocks ?? 0) /
-								(selectedItemVariant?.variant_wholesale_item ??
-									1)
+								(selectedItemVariant?.variant_wholesale_item ?? 1)
 							: (selectedItemVariant?.variant_stocks ?? 0)
 					}
 					value={rawQuantity}
@@ -307,9 +304,7 @@ export default function InformationSection({
 					variant="faded"
 					endContent={
 						<div className="text-sm text-default-500 mr-2">
-							{selectedPriceVariant === "Wholesale"
-								? "Item"
-								: item.item_sold_by}
+							{selectedPriceVariant === "Wholesale" ? "Item" : item.item_sold_by}
 						</div>
 					}
 					className="w-3/4"
