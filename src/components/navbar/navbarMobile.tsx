@@ -80,18 +80,22 @@ export function NavbarMobile() {
 					className="flex flex-col items-center"
 					color={active === "Cart" ? "success" : "foreground"}
 				>
-					<div className="w-8 h-8 flex items-center justify-center relative">
-            <Badge
-              content={String(cartCount)}
-              color="success"
-              shape="circle"
-              showOutline={false}
-              className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-              size="sm"
-            >
+          <div className="w-8 h-8 flex items-center justify-center relative">
+            {cartCount > 0 ? (
+              <Badge
+                content={String(cartCount)}
+                color="success"
+                shape="circle"
+                showOutline={false}
+                className="absolute top-0 right-0 translate-x-1 -translate-y-1"
+                size="sm"
+              >
+                <CartIcon className="w-6 h-6" />
+              </Badge>
+            ) : (
               <CartIcon className="w-6 h-6" />
-            </Badge>
-					</div>
+            )}
+          </div>
 					<span className="text-sm font-light mt-1">Cart</span>
 				</Link>
 			</NavbarItem>

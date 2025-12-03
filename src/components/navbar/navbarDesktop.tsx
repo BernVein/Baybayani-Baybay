@@ -170,6 +170,7 @@ export function Navbar({
 						onClick={() => setActive("Cart")}
 					>
 						<div className="flex items-center gap-2">
+            {cartCount > 0 ? (
               <Badge
                 content={String(cartCount)}
                 color="success"
@@ -178,6 +179,9 @@ export function Navbar({
               >
                 <CartIcon className="size-6" />
               </Badge>
+            ) : (
+              <CartIcon className="size-6" />
+            )}
 							<span className="hidden sm:inline font-normal">
 								Cart
 							</span>
