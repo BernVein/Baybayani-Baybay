@@ -11,20 +11,30 @@ export async function addToCart(
 ) {
 	try {
 		// Find or create cart
-		const { data: existingCart } = await supabase
+		const { data: existingCart, error: cartFetchError } = await supabase
 			.from("Cart")
 			.select("*")
 			.eq("user_id", userId)
 			.eq("is_soft_deleted", false)
 			.maybeSingle();
 
+		if (cartFetchError) {
+			return { success: false, error: cartFetchError.message };
+		}
+
 		let cartId = existingCart?.cart_id;
 		if (!cartId) {
-			const { data: newCart } = await supabase
+			const { data: newCart, error: cartInsertError } = await supabase
 				.from("Cart")
 				.insert({ user_id: userId })
 				.select()
 				.single();
+			if (cartInsertError || !newCart) {
+				return {
+					success: false,
+					error: cartInsertError?.message ?? "CART_CREATE_FAILED",
+				};
+			}
 			cartId = newCart.cart_id;
 		}
 
@@ -43,7 +53,7 @@ export async function addToCart(
 		const computedSubtotal = unitPrice * realQuantity;
 
 		// Create snapshot
-		const { data: snapshot } = await supabase
+		const { data: snapshot, error: snapshotError } = await supabase
 			.from("VariantSnapshot")
 			.insert({
 				variant_copy_snapshot_id: variant.variant_id,
@@ -56,13 +66,24 @@ export async function addToCart(
 			.select()
 			.single();
 
+		if (snapshotError || !snapshot) {
+			return {
+				success: false,
+				error: snapshotError?.message ?? "SNAPSHOT_CREATE_FAILED",
+			};
+		}
+
 		// Find duplicates via the original variant ID
-		const { data: potentialMatches } = await supabase
+		const { data: potentialMatches, error: matchesError } = await supabase
 			.from("CartItemUser")
 			.select("*, VariantSnapshot(variant_copy_snapshot_id)")
 			.eq("cart_id", cartId)
 			.eq("item_id", item.item_id)
 			.eq("is_soft_deleted", false);
+
+		if (matchesError) {
+			return { success: false, error: matchesError.message };
+		}
 
 		const existingItemsForVariant =
 			potentialMatches?.filter(
@@ -100,7 +121,7 @@ export async function addToCart(
 		);
 
 		if (existingItemSamePrice) {
-			await supabase
+			const { error: updateError } = await supabase
 				.from("CartItemUser")
 				.update({
 					quantity: Number(existingItemSamePrice.quantity) + realQuantity,
@@ -108,8 +129,11 @@ export async function addToCart(
 						Number(existingItemSamePrice.subtotal) + computedSubtotal,
 				})
 				.eq("cart_item_user_id", existingItemSamePrice.cart_item_user_id);
+			if (updateError) {
+				return { success: false, error: updateError.message };
+			}
 		} else {
-			await supabase.from("CartItemUser").insert({
+			const { error: insertError } = await supabase.from("CartItemUser").insert({
 				cart_id: cartId,
 				item_id: item.item_id,
 				variant_snapshot_id: snapshot.variant_snapshot_id,
@@ -117,6 +141,9 @@ export async function addToCart(
 				quantity: realQuantity,
 				subtotal: computedSubtotal,
 			});
+			if (insertError) {
+				return { success: false, error: insertError.message };
+			}
 		}
 
 		return { success: true };

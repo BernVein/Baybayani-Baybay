@@ -68,7 +68,12 @@ export default function CheckoutModalIndex({
                             </span>
                             <span>
                               ₱
-                              {item.variant_snapshot.variant_snapshot_price_retail.toLocaleString()}
+                              {(item.price_variant === "Wholesale"
+                                ? (item.variant_snapshot
+                                    .variant_snapshot_price_wholesale ?? 0)
+                                : item.variant_snapshot
+                                    .variant_snapshot_price_retail
+                              ).toLocaleString()}
                             </span>
                           </div>
                           {/* price variant */}

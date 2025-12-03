@@ -84,17 +84,17 @@ export default function Footer({
 				</span>
 				<div className="flex flex-row gap-2 items-center">
 					<span className="text-base font-semibold">
-						{rawQuantity
-							? `₱${(selectedPriceVariant === "Wholesale"
-									? (selectedItemVariant?.variant_price_wholesale ??
-											1) * actualQuantity
-									: (selectedItemVariant?.variant_price_retail ??
-											0) * rawQuantity
-								).toLocaleString(undefined, {
-									minimumFractionDigits: 2,
-									maximumFractionDigits: 2,
-								})}`
-							: "Enter quantity"}
+				{rawQuantity
+					? `₱${(selectedPriceVariant === "Wholesale"
+							? (selectedItemVariant?.variant_price_wholesale ??
+									0) * actualQuantity
+							: (selectedItemVariant?.variant_price_retail ??
+									0) * rawQuantity
+						).toLocaleString(undefined, {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					})}`
+					: "Enter quantity"}
 					</span>
 				</div>
 			</div>

@@ -46,7 +46,8 @@ export async function updateCartItemQuantity({
 		const computedSubtotal = unitPrice * realQuantity;
 
 		// STOCK CHECK
-		if (realQuantity > variant.variant_stocks) {
+		const availableStocks = variant.variant_stocks ?? 0;
+		if (realQuantity > availableStocks) {
 			return {
 				success: false,
 				error: "OUT_OF_STOCK_EXCEEDED",
@@ -54,7 +55,7 @@ export async function updateCartItemQuantity({
 					realQuantity > 1
 						? `${item.item_sold_by}s`
 						: item.item_sold_by
-				} exceeds available stocks (${variant.variant_stocks.toLocaleString()}).`,
+				} exceeds available stocks (${availableStocks.toLocaleString()}).`,
 				realQuantity,
 			};
 		}

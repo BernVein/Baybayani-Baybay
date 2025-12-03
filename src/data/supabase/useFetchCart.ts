@@ -39,7 +39,7 @@ export const useFetchCart = (userId: string) => {
 
     const mapped: Cart = {
       cart_id: cart.cart_id,
-      user_id: "",
+      user_id: cart.user_id ?? "",
       is_soft_deleted: cart.is_soft_deleted,
       created_at: cart.created_at ?? "",
       updated_at: cart.updated_at ?? "",

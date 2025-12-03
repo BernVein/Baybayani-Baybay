@@ -113,8 +113,8 @@ export const useFetchItem = (
 				})
 				.filter(Boolean) as Item[]; // remove nulls (items with 0 stock variants)
 
-			// If fetched less than itemsPerPage, there's no more pages
-			setHasMore(mapped.length === itemsPerPage);
+            const originalCount = (data ?? []).length;
+            setHasMore(originalCount === itemsPerPage);
 
 			if (reset) {
 				setItemList(mapped);

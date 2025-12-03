@@ -23,7 +23,7 @@ export default function Cart() {
   } = useDisclosure();
 
   const isMobile = useIsMobile();
-  const { cart, loading, refetch } = useFetchCart(
+  const { cart, loading, errorMsg, refetch } = useFetchCart(
     "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f"
   );
   const allCartItems = cart?.items ?? [];
@@ -57,7 +57,9 @@ export default function Cart() {
       <div className="flex justify-between items-center w-full md:w-3/4 md:mx-auto px-5">
         <h2 className="text-3xl font-semibold">My Cart</h2>
 
-        {loading && !allCartItems.length ? (
+        {errorMsg ? (
+          <span className="text-danger text-sm">{errorMsg}</span>
+        ) : loading && !allCartItems.length ? (
           <>
             <Skeleton className="h-4 w-32 rounded-lg" />
           </>
