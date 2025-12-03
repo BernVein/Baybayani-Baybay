@@ -62,28 +62,29 @@ export async function addToCart(
 			.select("*, VariantSnapshot(variant_copy_snapshot_id)")
 			.eq("cart_id", cartId)
 			.eq("item_id", item.item_id)
-			.eq("price_variant", priceType)
 			.eq("is_soft_deleted", false);
 
-		const existingItem = potentialMatches?.find(
-			(c) =>
-				c.VariantSnapshot?.variant_copy_snapshot_id ===
-				variant.variant_id
+		const existingItemsForVariant =
+			potentialMatches?.filter(
+				(c) =>
+					c.VariantSnapshot?.variant_copy_snapshot_id ===
+					variant.variant_id
+				) ?? [];
+
+		const existingQuantitySum = existingItemsForVariant.reduce(
+			(sum, c) => sum + Number(c.quantity),
+			0
 		);
 
-		// TOTAL quantity that will exist after adding
-		const existingQuantity = existingItem
-			? Number(existingItem.quantity)
-			: 0;
-		const newTotalQuantity = existingQuantity + realQuantity;
+		const newTotalQuantity = existingQuantitySum + realQuantity;
 
 		// CHECK STOCK BEFORE ADDING
 		if (newTotalQuantity > variant.variant_stocks) {
 			return {
 				success: false,
 				error: "OUT_OF_STOCK_EXCEEDED",
-				message: `Already have ${existingQuantity.toLocaleString()} ${
-					existingQuantity > 1
+				message: `Already have ${existingQuantitySum.toLocaleString()} ${
+					existingQuantitySum > 1
 						? `${item.item_sold_by}s`
 						: item.item_sold_by
 				} on cart. Adding ${realQuantity.toLocaleString()} ${
@@ -94,14 +95,19 @@ export async function addToCart(
 			};
 		}
 
-		if (existingItem) {
+		const existingItemSamePrice = existingItemsForVariant.find(
+			(c) => c.price_variant === priceType
+		);
+
+		if (existingItemSamePrice) {
 			await supabase
 				.from("CartItemUser")
 				.update({
-					quantity: Number(existingItem.quantity) + realQuantity,
-					subtotal: Number(existingItem.subtotal) + computedSubtotal,
+					quantity: Number(existingItemSamePrice.quantity) + realQuantity,
+					subtotal:
+						Number(existingItemSamePrice.subtotal) + computedSubtotal,
 				})
-				.eq("cart_item_user_id", existingItem.cart_item_user_id);
+				.eq("cart_item_user_id", existingItemSamePrice.cart_item_user_id);
 		} else {
 			await supabase.from("CartItemUser").insert({
 				cart_id: cartId,
