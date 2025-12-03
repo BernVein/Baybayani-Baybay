@@ -41,7 +41,6 @@ export default function Footer({
 			variant: selectedItemVariant,
 			rawQuantity: rawQuantity,
 		});
-		
 
 		if (result.error === "OUT_OF_STOCK_EXCEEDED") {
 			addToast({
@@ -51,10 +50,7 @@ export default function Footer({
 				color: "warning",
 				shouldShowTimeoutProgress: true,
 			});
-			setIsLoading(false);
-			return;
-		}
-		if (!result.success) {
+		} else if (!result.success) {
 			addToast({
 				title: "Failed to update cart item",
 				description: `Please try again later`,
@@ -62,8 +58,6 @@ export default function Footer({
 				color: "warning",
 				shouldShowTimeoutProgress: true,
 			});
-			setIsLoading(false);
-			return;
 		} else if (result.success) {
 			addToast({
 				title: "Successfully updated cart item",
@@ -81,8 +75,8 @@ export default function Footer({
 				await onUpdated();
 			}
 			onClose();
-			setIsLoading(false);
 		}
+		setIsLoading(false);
 	}
 	return (
 		<>
