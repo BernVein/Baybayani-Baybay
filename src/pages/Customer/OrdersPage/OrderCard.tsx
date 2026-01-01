@@ -1,12 +1,5 @@
-import {
-	Card,
-	CardBody,
-	Chip,
-	Divider,
-	Image,
-	Button,
-} from "@heroui/react";
-import { Order } from "./types";
+import { Card, CardBody, Chip, Divider, Image, Button } from "@heroui/react";
+import { Order } from "@/model/order";
 
 interface OrderCardProps {
 	order: Order;
@@ -14,7 +7,10 @@ interface OrderCardProps {
 
 export default function OrderCard({ order }: OrderCardProps) {
 	// Status color mapping
-	const statusColorMap: Record<string, "default" | "primary" | "secondary" | "success" | "warning" | "danger"> = {
+	const statusColorMap: Record<
+		string,
+		"default" | "primary" | "secondary" | "success" | "warning" | "danger"
+	> = {
 		Pending: "warning",
 		Processing: "primary",
 		Shipped: "secondary",
@@ -59,11 +55,16 @@ export default function OrderCard({ order }: OrderCardProps) {
 									Order #{order.order_id}
 								</h3>
 								<p className="text-tiny text-default-500">
-									Placed on {new Date(order.created_at).toLocaleDateString()}
+									Placed on{" "}
+									{new Date(
+										order.created_at
+									).toLocaleDateString()}
 								</p>
 							</div>
 							<Chip
-								color={statusColorMap[order.status] || "default"}
+								color={
+									statusColorMap[order.status] || "default"
+								}
 								size="sm"
 								variant="flat"
 							>
@@ -76,12 +77,21 @@ export default function OrderCard({ order }: OrderCardProps) {
 						{/* Order Details */}
 						<div className="flex flex-col gap-1">
 							{order.items.map((item, index) => (
-								<div key={index} className="flex justify-between text-small">
+								<div
+									key={index}
+									className="flex justify-between text-small"
+								>
 									<span className="text-default-600 truncate max-w-[200px]">
-										{item.quantity}x {item.item_name} <span className="text-default-400">({item.variant_name})</span>
+										{item.quantity}x {item.item_name}{" "}
+										<span className="text-default-400">
+											({item.variant_name})
+										</span>
 									</span>
 									<span className="text-default-500">
-										₱{(item.price * item.quantity).toLocaleString()}
+										₱
+										{(
+											item.price * item.quantity
+										).toLocaleString()}
 									</span>
 								</div>
 							))}
@@ -94,7 +104,9 @@ export default function OrderCard({ order }: OrderCardProps) {
 						{/* Footer: Total and Actions */}
 						<div className="flex flex-row justify-between items-center mt-auto">
 							<div className="flex flex-col">
-								<span className="text-tiny text-default-500">Total Amount</span>
+								<span className="text-tiny text-default-500">
+									Total Amount
+								</span>
 								<span className="text-medium font-bold text-success-600">
 									₱{order.total_price.toLocaleString()}
 								</span>
