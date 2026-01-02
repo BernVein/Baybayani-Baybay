@@ -36,7 +36,7 @@ export default function OrderCard({ order }: OrderCardProps) {
 							/>
 						) : (
 							<div className="w-full h-full flex items-center justify-center text-default-400">
-								No Image
+								No Image to Display
 							</div>
 						)}
 						{otherItemsCount > 0 && (
