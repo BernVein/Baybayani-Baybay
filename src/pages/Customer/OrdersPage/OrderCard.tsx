@@ -32,7 +32,7 @@ export default function OrderCard({ order }: OrderCardProps) {
 								alt={mainItem.item_name}
 								src={mainItem.image_url}
 								removeWrapper
-								className="w-full h-full object-cover"
+								className="w-1/2 h-1/2 object-cover"
 							/>
 						) : (
 							<div className="w-full h-full flex items-center justify-center text-default-400">
