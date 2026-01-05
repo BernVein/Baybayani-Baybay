@@ -32,7 +32,7 @@ export default function ItemCard({
 			key={index}
 			shadow="sm"
 			onPress={onPress}
-			className="transform transition-transform duration-300 hover:scale-105 cursor-pointer"
+			className="transform transition-transform duration-300 hover:scale-105 cursor-pointer shadow-sm border border-default-200 rounded-2xl"
 		>
 			<CardBody className="overflow-visible p-0">
 				<div className="relative">
