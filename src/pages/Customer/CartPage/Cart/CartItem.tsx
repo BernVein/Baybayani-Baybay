@@ -30,7 +30,7 @@ export default function CartItem({
 }) {
 	if (isLoading) {
 		return (
-			<div className="relative w-full">
+			<div className="relative w-full shadow-sm border border-default-200 rounded-lg">
 				<Card className="w-full shadow-none border-none bg-transparent">
 					<CardBody className="flex flex-row gap-3 items-stretch">
 						{/* Image skeleton */}
@@ -111,7 +111,7 @@ export default function CartItem({
 	// const handleDelete = (id: string) => {
 
 	return (
-		<div className="relative w-full">
+		<div className="relative w-full shadow-sm border border-default-200 rounded-lg">
 			{/* Checkbox with product info */}
 			<Checkbox
 				aria-label={variant_snapshot?.variant_snapshot_name}
