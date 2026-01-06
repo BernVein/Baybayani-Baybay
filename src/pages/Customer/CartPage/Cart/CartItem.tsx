@@ -6,7 +6,6 @@ import {
 	cn,
 	Image,
 	Divider,
-	Link,
 	useDisclosure,
 	Button,
 	Skeleton,
@@ -192,18 +191,16 @@ export default function CartItem({
 										{unavailableReason}
 									</span>
 								) : (
-									<Link
-										underline="hover"
+									<Button
 										className="text-sm"
 										size="sm"
 										color="success"
-										onClick={(e) => {
-											e.preventDefault();
+										onPress={() => {
 											onOpenEditModal();
 										}}
 									>
-										Edit Quantity or View Details &gt;
-									</Link>
+										Edit or View Details
+									</Button>
 								)}
 							</span>
 						</div>
