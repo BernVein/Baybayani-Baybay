@@ -9,11 +9,7 @@ export default function Orders() {
 
 			<div className="flex flex-col gap-4">
 				{ordersMockData.map((order) => (
-					<OrderItem
-						value={order.order_item_user_id}
-						orderItemUser={order}
-						isLoading={false}
-					/>
+					<OrderItem orderItemUser={order} isLoading={false} />
 				))}
 
 				{ordersMockData.length === 0 && (
