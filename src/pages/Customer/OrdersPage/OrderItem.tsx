@@ -91,6 +91,7 @@ export default function OrderItem({
 			{/* Checkbox with product info */}
 
 			<Card
+				isPressable
 				classNames={{
 					base: cn(
 						"inline-flex max-w-full w-full bg-content1 m-0",
@@ -125,33 +126,26 @@ export default function OrderItem({
 								</span>
 							</div>
 
-							<div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-right">
-								<span className="text-sm sm:text-base text-default-700">
-									Ordered On
-								</span>
-								<span className="text-xs sm:text-sm text-default-500">
-									{new Date(
-										orderItemUser.created_at
-									).toLocaleString("en-US", {
-										year: "numeric",
-										month: "short",
-										day: "numeric",
-										hour: "numeric",
-										minute: "2-digit",
-										hour12: true,
-									})}
-								</span>
-							</div>
+							<Chip size="sm">{orderItemUser.status}</Chip>
 						</div>
 
 						<Divider className="my-3 sm:my-2" />
 
 						<div className="w-full flex flex-row justify-between items-center">
 							<span className="text-xs text-default-500">
-								Price Variant
+								Date Ordered
 							</span>
 							<span className="text-sm text-default-600">
-								{orderItemUser.price_variant}
+								{new Date(
+									orderItemUser.created_at
+								).toLocaleString("en-US", {
+									year: "numeric",
+									month: "short",
+									day: "numeric",
+									hour: "numeric",
+									minute: "2-digit",
+									hour12: true,
+								})}
 							</span>
 						</div>
 
@@ -170,6 +164,12 @@ export default function OrderItem({
 							</span>
 							<span className="text-sm text-default-600">
 								₱{orderItemUser.subtotal.toLocaleString()}
+							</span>
+						</div>
+
+						<div className="flex w-full justify-end">
+							<span className="text-sm italic text-default-500">
+								Select to view product
 							</span>
 						</div>
 					</div>
