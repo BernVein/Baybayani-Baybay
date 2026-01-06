@@ -69,7 +69,13 @@ export default function Cart() {
 		<>
 			{/* Header */}
 			<div className="flex justify-between items-center w-full md:w-3/4 md:mx-auto px-5">
-				<h2 className="text-3xl font-semibold">My Cart</h2>
+				<div className="flex items-center gap-2">
+					<BaybayaniLogo className="size-7" />
+					<h2 className="text-xl sm:text-3xl font-semibold">
+						Baybayani <span className="text-default-400">|</span>{" "}
+						Cart
+					</h2>
+				</div>
 
 				{errorMsg ? (
 					<span className="text-danger text-sm">{errorMsg}</span>

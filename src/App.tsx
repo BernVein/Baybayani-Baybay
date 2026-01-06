@@ -5,10 +5,14 @@ import { useState, lazy, Suspense } from "react";
 import { Skeleton } from "@heroui/react";
 
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
-const Orders = lazy(() => import("@/pages/Customer/OrdersPage/Orders"));
+const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
 const Shop = lazy(() => import("@/pages/Customer/ShopPage/ShopIndex"));
-const Profile = lazy(() => import("@/pages/Customer/UserAccount/ProfilePage/Profile"));
-const Settings = lazy(() => import("@/pages/Customer/UserAccount/SettingsPage/Settings"));
+const Profile = lazy(
+	() => import("@/pages/Customer/UserAccount/ProfilePage/Profile")
+);
+const Settings = lazy(
+	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings")
+);
 function App() {
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
@@ -27,7 +31,10 @@ function App() {
 							<Skeleton className="h-6 w-1/3 rounded" />
 							<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
 								{Array.from({ length: 8 }).map((_, i) => (
-									<div key={i} className="flex flex-col gap-2">
+									<div
+										key={i}
+										className="flex flex-col gap-2"
+									>
 										<Skeleton className="h-[140px] w-full rounded-lg" />
 										<Skeleton className="h-4 w-1/2 rounded" />
 										<Skeleton className="h-5 w-full rounded" />

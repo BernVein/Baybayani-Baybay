@@ -2,12 +2,18 @@ import OrderItem from "./OrderItem";
 import { Button, Link } from "@heroui/react";
 import { BaybayaniLogo, CartIcon } from "@/components/icons";
 import { ordersMockData } from "@/data/ordersMockData";
-export default function Orders() {
+export default function OrderIndex() {
 	return (
 		<div className="w-full sm:w-3/4 mx-auto px-5">
-			<h1 className="text-3xl font-semibold mb-6 text-default-900">
+			{/* <h1 className="text-3xl font-semibold mb-6 text-default-900">
 				My Orders
-			</h1>
+			</h1> */}
+			<div className="flex items-center gap-2 mb-5">
+				<BaybayaniLogo className="size-7" />
+				<h2 className="text-xl sm:text-3xl font-semibold">
+					Baybayani <span className="text-default-400">|</span> Orders
+				</h2>
+			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{ordersMockData.map((order) => (
