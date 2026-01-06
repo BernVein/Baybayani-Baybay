@@ -1,5 +1,13 @@
 import { OrderItemUser } from "@/model/orderItemUser";
-import { Card, CardBody, Image, Divider, Skeleton, Chip } from "@heroui/react";
+import {
+	Card,
+	CardBody,
+	Image,
+	Divider,
+	Skeleton,
+	Chip,
+	cn,
+} from "@heroui/react";
 export default function OrderItem({
 	orderItemUser,
 	isLoading,
@@ -82,7 +90,15 @@ export default function OrderItem({
 		<div className="relative w-full shadow-sm border border-default-200 rounded-lg">
 			{/* Checkbox with product info */}
 
-			<Card className="w-full shadow-none border-none bg-transparent">
+			<Card
+				classNames={{
+					base: cn(
+						"inline-flex max-w-full w-full bg-content1 m-0",
+						"hover:bg-content2 items-center justify-start",
+						"cursor-pointer rounded-lg p-0 border-2 border-transparent"
+					),
+				}}
+			>
 				<CardBody className="flex flex-row gap-3 items-stretch">
 					{/* Image column */}
 					<div className="relative w-[100px] sm:w-[150px] shrink-0 self-stretch overflow-hidden rounded-sm">
@@ -99,13 +115,33 @@ export default function OrderItem({
 
 					{/* Content column */}
 					<div className="flex flex-col justify-start items-start text-left flex-1">
-						<div className="w-full flex flex-col sm:flex-row sm:items-center sm:gap-2 text-left">
-							<span className="text-sm sm:text-base text-default-700">
-								{variant_snapshot?.variant_snapshot_name}
-							</span>
-							<span className="text-xs sm:text-sm text-default-500">
-								{item.item_title}
-							</span>
+						<div className="w-full flex justify-between items-start">
+							<div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-left">
+								<span className="text-sm sm:text-base text-default-700">
+									{variant_snapshot?.variant_snapshot_name}
+								</span>
+								<span className="text-xs sm:text-sm text-default-500">
+									{item.item_title}
+								</span>
+							</div>
+
+							<div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-right">
+								<span className="text-sm sm:text-base text-default-700">
+									Ordered On
+								</span>
+								<span className="text-xs sm:text-sm text-default-500">
+									{new Date(
+										orderItemUser.created_at
+									).toLocaleString("en-US", {
+										year: "numeric",
+										month: "short",
+										day: "numeric",
+										hour: "numeric",
+										minute: "2-digit",
+										hour12: true,
+									})}
+								</span>
+							</div>
 						</div>
 
 						<Divider className="my-3 sm:my-2" />
