@@ -61,7 +61,20 @@ export default function EditDetailInfoModal({
 		if (isOpen && item) {
 			setSelectedItemVariant(selectedItemVariantUser);
 			setSelectedPriceVariant(selectedPriceVariantUser);
-			setRawQuantity(selectedQuantityUser);
+			
+			// If wholesale, the saved quantity is the total (e.g. 10kg), but the input expects "packs" (e.g. 2 packs of 5kg)
+			if (
+				selectedPriceVariantUser === "Wholesale" &&
+				selectedItemVariantUser?.variant_wholesale_item
+			) {
+				setRawQuantity(
+					selectedQuantityUser /
+						selectedItemVariantUser.variant_wholesale_item
+				);
+			} else {
+				setRawQuantity(selectedQuantityUser);
+			}
+
 			setMainImg(item.item_img?.[0] || "");
 			hasMounted.current = true; // mark initialized
 		}
