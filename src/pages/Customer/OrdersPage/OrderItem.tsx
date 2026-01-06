@@ -1,13 +1,5 @@
 import { OrderItemUser } from "@/model/orderItemUser";
-import {
-	Card,
-	CardBody,
-	Image,
-	Divider,
-	Skeleton,
-	Chip,
-	cn,
-} from "@heroui/react";
+import { Card, CardBody, Image, Divider, Skeleton, Chip } from "@heroui/react";
 export default function OrderItem({
 	orderItemUser,
 	isLoading,
