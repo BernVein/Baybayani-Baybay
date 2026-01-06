@@ -72,9 +72,10 @@ export default function Footer({
 			});
 
 			if (onUpdated) {
-				await onUpdated();
+				onUpdated();
 			}
 			onClose();
+			return;
 		}
 		setIsLoading(false);
 	}
