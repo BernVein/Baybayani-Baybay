@@ -8,6 +8,7 @@ import {
 	Divider,
 	Link,
 	useDisclosure,
+	Checkbox,
 } from "@heroui/react";
 import useIsMobile from "@/lib/isMobile";
 import { AddToCart, CartIcon, BaybayaniLogo } from "@/components/icons";
@@ -52,6 +53,17 @@ export default function Cart() {
 			selectedProducts.includes(i.cart_item_user_id)
 		);
 	}, [selectedProducts, allCartItems]);
+
+	const allIds = useMemo(
+		() => allCartItems.map((i) => i.cart_item_user_id),
+		[allCartItems]
+	);
+
+	const isAllSelected =
+		allIds.length > 0 && selectedProducts.length === allIds.length;
+
+	const isIndeterminate =
+		selectedProducts.length > 0 && selectedProducts.length < allIds.length;
 
 	return (
 		<>
@@ -98,43 +110,58 @@ export default function Cart() {
 				</div>
 			) : (
 				<div className="flex flex-col sm:flex-row gap-3 w-full md:w-3/4 md:mx-auto p-5">
-					{/* Left side: cart list or skeletons */}
-					<CheckboxGroup
-						key="cart-group"
-						value={selectedProducts}
-						onChange={(val) => {
-							if (Array.isArray(val)) setSelectedProducts(val);
-						}}
-						className="sm:w-3/4 mb-3"
-					>
-						{loading && !allCartItems.length ? (
-							<>
-								{[...Array(3)].map((_, i) => (
-									<CartItem
-										key={`skeleton-${i}`}
-										isLoading={true}
-										cartItemUser={{} as any}
-										value={`loading-${i}`}
-									/>
-								))}
-							</>
-						) : (
-							allCartItems.map((cart_item) => (
-								<CartItem
-									isLoading={false}
-									key={cart_item.cart_item_user_id}
-									cartItemUser={cart_item}
-									value={cart_item.cart_item_user_id}
-									onDeleted={() => refetch()}
-									onUpdated={() => refetch()}
-								/>
-							))
-						)}
-					</CheckboxGroup>
+					<div className="sm:w-3/4">
+						<Checkbox
+							isSelected={isAllSelected}
+							isIndeterminate={isIndeterminate}
+							onValueChange={(checked) => {
+								setSelectedProducts(checked ? allIds : []);
+							}}
+							isDisabled={allIds.length === 0}
+							className="mb-2"
+							color="success"
+						>
+							Select All
+						</Checkbox>
 
+						{/* Left side: cart list or skeletons */}
+						<CheckboxGroup
+							key="cart-group"
+							value={selectedProducts}
+							onChange={(val) => {
+								if (Array.isArray(val))
+									setSelectedProducts(val);
+							}}
+							className="mb-3"
+						>
+							{loading && !allCartItems.length ? (
+								<>
+									{[...Array(3)].map((_, i) => (
+										<CartItem
+											key={`skeleton-${i}`}
+											isLoading={true}
+											cartItemUser={{} as any}
+											value={`loading-${i}`}
+										/>
+									))}
+								</>
+							) : (
+								allCartItems.map((cart_item) => (
+									<CartItem
+										isLoading={false}
+										key={cart_item.cart_item_user_id}
+										cartItemUser={cart_item}
+										value={cart_item.cart_item_user_id}
+										onDeleted={() => refetch()}
+										onUpdated={() => refetch()}
+									/>
+								))
+							)}
+						</CheckboxGroup>
+					</div>
 					{/* Right side: Order summary skeleton */}
 					<Card
-						className="w-full sm:w-1/4 self-start sticky top-30 bottom-23 z-20 shadow-sm border border-default-200 rounded-lg"
+						className="w-full sm:w-1/4 self-start sticky top-40 bottom-23 z-20 shadow-sm border border-default-200 rounded-lg"
 						isBlurred={isMobile}
 					>
 						<CardBody className="gap-1">
