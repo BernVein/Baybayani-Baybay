@@ -1,4 +1,4 @@
-import OrderCard from "./OrderCard";
+import OrderItem from "./OrderItem";
 import { ordersMockData } from "@/data/ordersMockData";
 export default function Orders() {
 	return (
@@ -9,7 +9,11 @@ export default function Orders() {
 
 			<div className="flex flex-col gap-4">
 				{ordersMockData.map((order) => (
-					<OrderCard key={order.order_id} order={order} />
+					<OrderItem
+						value={order.order_item_user_id}
+						orderItemUser={order}
+						isLoading={false}
+					/>
 				))}
 
 				{ordersMockData.length === 0 && (
