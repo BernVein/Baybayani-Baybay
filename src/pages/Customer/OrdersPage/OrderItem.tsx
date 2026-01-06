@@ -87,18 +87,12 @@ export default function OrderItem({
 	// const handleDelete = (id: string) => {
 
 	return (
-		<div className="relative w-full shadow-sm border border-default-200 rounded-lg">
+		<div className="relative w-full rounded-lg">
 			{/* Checkbox with product info */}
 
 			<Card
 				isPressable
-				classNames={{
-					base: cn(
-						"inline-flex max-w-full w-full bg-content1 m-0",
-						"hover:bg-content2 items-center justify-start",
-						"cursor-pointer rounded-lg p-0 border-2 border-transparent"
-					),
-				}}
+				className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start cursor-pointer rounded-lg p-0 border-2 border-transparent"
 			>
 				<CardBody className="flex flex-row gap-3 items-stretch">
 					{/* Image column */}
