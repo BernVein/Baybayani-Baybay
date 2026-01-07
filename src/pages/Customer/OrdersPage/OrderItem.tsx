@@ -3,9 +3,11 @@ import { Card, CardBody, Image, Divider, Skeleton, Chip } from "@heroui/react";
 export default function OrderItem({
 	orderItemUser,
 	isLoading,
+	onPress,
 }: {
 	orderItemUser: OrderItemUser;
 	isLoading: boolean;
+	onPress: () => void;
 }) {
 	if (isLoading) {
 		return (
@@ -84,6 +86,7 @@ export default function OrderItem({
 
 			<Card
 				isPressable
+				onPress={onPress}
 				className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start cursor-pointer rounded-lg p-0 border-2 border-transparent"
 			>
 				<CardBody className="flex flex-row gap-3 items-stretch">
