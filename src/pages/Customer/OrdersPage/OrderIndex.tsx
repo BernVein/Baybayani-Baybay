@@ -2,12 +2,16 @@ import OrderItem from "./OrderItem";
 import { Button, Link, useDisclosure } from "@heroui/react";
 import { BaybayaniLogo, CartIcon } from "@/components/icons";
 import { ordersMockData } from "@/data/ordersMockData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Item } from "@/model/Item";
 import ItemInfoModalOrder from "./ItemInfoModalOrder/ItemInfoModalOrderIndex";
 export default function OrderIndex() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+
+	useEffect(() => {
+		document.title = "Baybayani | Orders";
+	}, []);
 	return (
 		<>
 			<div className="w-full sm:w-3/4 mx-auto px-5">
@@ -22,6 +26,7 @@ export default function OrderIndex() {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{ordersMockData.map((order) => (
 						<OrderItem
+							key={order.order_item_user_id}
 							orderItemUser={order}
 							isLoading={false}
 							onPress={() => {

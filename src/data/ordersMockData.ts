@@ -54,7 +54,7 @@ export const ordersMockData: OrderItemUser[] = [
 		updated_at: "2026-01-05T08:15:00Z",
 	},
 	{
-		order_item_user_id: "order-001",
+		order_item_user_id: "order-002",
 		item: {
 			item_id: "item-001",
 			item_category: "Vegetable",
@@ -106,7 +106,7 @@ export const ordersMockData: OrderItemUser[] = [
 		updated_at: "2026-01-05T08:15:00Z",
 	},
 	{
-		order_item_user_id: "order-001",
+		order_item_user_id: "order-003",
 		item: {
 			item_id: "item-001",
 			item_category: "Vegetable",
