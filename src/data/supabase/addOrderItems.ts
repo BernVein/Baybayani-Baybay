@@ -5,6 +5,7 @@ export async function addOrderItems(
 	cart_items: CartItemUser[]
 ) {
 	const orderItems = cart_items.map((cartItemUser: CartItemUser) => ({
+		status: "Processing",
 		item_id: cartItemUser.item.item_id,
 		user_id: user_id,
 		variant_snapshot_id: cartItemUser.variant_snapshot.variant_snapshot_id,

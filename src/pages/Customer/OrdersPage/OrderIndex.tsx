@@ -1,7 +1,6 @@
 import OrderItem from "./OrderItem";
 import { Button, Link, useDisclosure } from "@heroui/react";
 import { BaybayaniLogo, CartIcon } from "@/components/icons";
-import { ordersMockData } from "@/data/ordersMockData";
 import { useState, useEffect } from "react";
 import { Item } from "@/model/Item";
 import ItemInfoModalOrder from "./ItemInfoModalOrder/ItemInfoModalOrderIndex";
@@ -9,10 +8,11 @@ import { useFetchOrderItems } from "@/data/supabase/useFetchOrderItems";
 export default function OrderIndex() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-	const { data, error } = useFetchOrderItems(
+	const { data: orderItems, error } = useFetchOrderItems(
 		"cb20faec-72c0-4c22-b9d4-4c50bfb9e66f"
 	);
-	console.log(data);
+	console.log("orderItems:", orderItems);
+	console.log(error);
 	useEffect(() => {
 		document.title = "Baybayani | Orders";
 	}, []);
@@ -28,7 +28,7 @@ export default function OrderIndex() {
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-					{ordersMockData.map((order) => (
+					{orderItems.map((order) => (
 						<OrderItem
 							key={order.order_item_user_id}
 							orderItemUser={order}
@@ -40,7 +40,7 @@ export default function OrderIndex() {
 						/>
 					))}
 
-					{ordersMockData.length === 0 && (
+					{orderItems.length === 0 && (
 						<div className="col-span-full flex flex-col items-center justify-center w-full md:w-3/4 md:mx-auto py-16 px-5 text-center">
 							<CartIcon className="size-40" />
 
