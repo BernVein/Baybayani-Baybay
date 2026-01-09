@@ -5,10 +5,14 @@ import { ordersMockData } from "@/data/ordersMockData";
 import { useState, useEffect } from "react";
 import { Item } from "@/model/Item";
 import ItemInfoModalOrder from "./ItemInfoModalOrder/ItemInfoModalOrderIndex";
+import { useFetchOrderItems } from "@/data/supabase/useFetchOrderItems";
 export default function OrderIndex() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-
+	const { data, error } = useFetchOrderItems(
+		"cb20faec-72c0-4c22-b9d4-4c50bfb9e66f"
+	);
+	console.log(data);
 	useEffect(() => {
 		document.title = "Baybayani | Orders";
 	}, []);
