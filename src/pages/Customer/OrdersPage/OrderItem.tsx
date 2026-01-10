@@ -85,7 +85,7 @@ export default function OrderItem({
 			{/* Checkbox with product info */}
 
 			<Card
-				isPressable
+				isPressable={isAvailable}
 				onPress={onPress}
 				className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start cursor-pointer rounded-lg p-0 border-2 border-transparent"
 			>
@@ -157,8 +157,16 @@ export default function OrderItem({
 						</div>
 
 						<div className="flex w-full justify-end">
-							<span className="text-sm italic text-default-500">
-								Select to view product
+							<span
+								className={`text-sm italic ${
+									isAvailable
+										? "text-success-500"
+										: "text-red-500"
+								}`}
+							>
+								{isAvailable
+									? "Select to view"
+									: unavailableReason}
 							</span>
 						</div>
 					</div>
