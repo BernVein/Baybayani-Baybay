@@ -63,9 +63,9 @@ export default function ItemInfoModalOrder({
 
 	useEffect(() => {
 		if (isOpen && item) {
-			document.title = `Baybayani | Shop | ${item.item_title}`;
+			document.title = `Baybayani | Order | ${item.item_title}`;
 		} else {
-			document.title = "Baybayani | Shop"; // fallback when modal closes
+			document.title = "Baybayani | Order"; // fallback when modal closes
 		}
 	}, [isOpen, item]);
 	// Reset quantity when price variant changes
