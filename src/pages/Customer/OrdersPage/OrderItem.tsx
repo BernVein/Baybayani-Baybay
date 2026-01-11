@@ -77,8 +77,6 @@ export default function OrderItem({
 		unavailableReason = `Only ${liveVariant.variant_stocks} ${item.item_sold_by} left in stock.`;
 	}
 	console.log({ isAvailable, unavailableReason });
-	// Example delete handler
-	// const handleDelete = (id: string) => {
 
 	return (
 		<div className="relative w-full rounded-lg">
