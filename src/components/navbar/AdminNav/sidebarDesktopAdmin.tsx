@@ -85,7 +85,7 @@ export function SidebarDesktopAdmin() {
 						</ListboxItem>
 						<ListboxItem
 							key="messages"
-							className=""
+							className="mb-3"
 							startContent={<MessageIcon className="size-6" />}
 							color="success"
 						>
