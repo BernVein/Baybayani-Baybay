@@ -129,7 +129,7 @@ export function SidebarDesktopAdmin() {
 							<DropdownItem
 								key="profile"
 								className="h-14 gap-2"
-								onPress={() => navigate("admin/profile")}
+								onPress={() => navigate("/admin/profile")}
 							>
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">
@@ -147,7 +147,7 @@ export function SidebarDesktopAdmin() {
 
 							<DropdownItem
 								key="settings"
-								onPress={() => navigate("admin/settings")}
+								onPress={() => navigate("/admin/settings")}
 							>
 								Settings
 							</DropdownItem>
