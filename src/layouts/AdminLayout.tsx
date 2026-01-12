@@ -8,12 +8,12 @@ export default function AdminLayout() {
 
 	return (
 		<div className="relative min-h-screen bg-background text-foreground">
-			<div className="fixed left-0 h-full z-40 hidden sm:block">
+			<div className="fixed left-0 w-full h-full z-40 hidden sm:block">
 				<SidebarDesktopAdmin />
 			</div>
 
 			{/* Page content */}
-			<main className="pt-8 pb-[64px] sm:pl-[250px]">
+			<main className="pt-8 pb-[64px] sm:pl-[330px]">
 				<Outlet context={{ searchTerm, setSearchTerm }} />
 			</main>
 

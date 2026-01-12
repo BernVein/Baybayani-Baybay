@@ -28,7 +28,7 @@ import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 export function SidebarDesktopAdmin() {
 	const navigate = useNavigate();
 	return (
-		<Card className="max-w-[400px] h-full rounded-none">
+		<Card className="w-[300px] h-full rounded-none">
 			<CardHeader className="flex gap-3">
 				<BaybayaniLogo className="size-10" />
 				<div className="flex flex-col">
