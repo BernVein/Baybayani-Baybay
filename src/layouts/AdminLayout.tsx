@@ -10,7 +10,7 @@ export default function AdminLayout() {
 		<div className="relative min-h-screen bg-background text-foreground">
 			{/* Top Navbar */}
 			<div className="fixed top-0 left-0 w-full z-50">
-				<Navbar setSearchTerm={setSearchTerm} />
+				<Navbar />
 			</div>
 
 			{/* Page content */}
