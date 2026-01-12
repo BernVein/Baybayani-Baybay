@@ -13,7 +13,7 @@ export default function AdminLayout() {
 			</div>
 
 			{/* Page content */}
-			<main className="pt-8 pb-[64px] sm:pl-[330px]">
+			<main className="pt-8 pb-8 pr-8 sm:pl-[330px]">
 				<Outlet context={{ searchTerm, setSearchTerm }} />
 			</main>
 
