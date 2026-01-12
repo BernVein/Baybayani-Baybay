@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "@/components/navbar/CustomerNav/navbarDesktop";
-import { NavbarMobile } from "@/components/navbar/CustomerNav/navbarMobile";
+import { Navbar } from "@/components/navbar/AdminNav/navbarDesktopAdmin";
+import { NavbarMobile } from "@/components/navbar/AdminNav/navbarMobileAdmin";
 import { useState } from "react";
 
 export default function AdminLayout() {
