@@ -15,6 +15,10 @@ const Settings = lazy(
 	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings")
 );
 const Dashboard = lazy(() => import("@/pages/Admin/Dashboard"));
+const AdminOrders = lazy(() => import("@/pages/Admin/Orders"));
+const AdminProducts = lazy(() => import("@/pages/Admin/Products"));
+const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
+const AdminMessages = lazy(() => import("@/pages/Admin/Messages"));
 
 function App() {
 	return (
@@ -38,6 +42,10 @@ function App() {
 				{/* ADMIN ROUTES */}
 				<Route path="/admin" element={<AdminLayout />}>
 					<Route path="dashboard" element={<Dashboard />} />
+					<Route path="orders" element={<AdminOrders />} />
+					<Route path="products" element={<AdminProducts />} />
+					<Route path="users" element={<AdminUsers />} />
+					<Route path="messages" element={<AdminMessages />} />
 				</Route>
 			</Routes>
 		</Suspense>

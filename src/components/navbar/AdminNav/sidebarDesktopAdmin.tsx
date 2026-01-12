@@ -46,7 +46,7 @@ export function SidebarDesktopAdmin() {
 				<Listbox
 					aria-label="Actions"
 					className="top-10"
-					onAction={(key) => alert(key)}
+					// onAction={(key) =(key)}
 				>
 					<ListboxSection showDivider title="Overview">
 						<ListboxItem
@@ -54,6 +54,7 @@ export function SidebarDesktopAdmin() {
 							className="mb-3"
 							startContent={<DashboardIcon className="size-6" />}
 							color="success"
+							href="/admin/dashboard"
 						>
 							Dashboard
 						</ListboxItem>
@@ -64,6 +65,7 @@ export function SidebarDesktopAdmin() {
 							className="mb-3"
 							startContent={<CartIcon className="size-6" />}
 							color="success"
+							href="/admin/orders"
 						>
 							Orders
 						</ListboxItem>
@@ -72,6 +74,7 @@ export function SidebarDesktopAdmin() {
 							className="mb-3"
 							startContent={<ProductIcon className="size-6" />}
 							color="success"
+							href="/admin/products"
 						>
 							Products
 						</ListboxItem>
@@ -80,6 +83,7 @@ export function SidebarDesktopAdmin() {
 							className="mb-3"
 							startContent={<UserIcon className="size-6" />}
 							color="success"
+							href="/admin/users"
 						>
 							Users
 						</ListboxItem>
@@ -88,6 +92,7 @@ export function SidebarDesktopAdmin() {
 							className="mb-3"
 							startContent={<MessageIcon className="size-6" />}
 							color="success"
+							href="/admin/messages"
 						>
 							Messages
 						</ListboxItem>
