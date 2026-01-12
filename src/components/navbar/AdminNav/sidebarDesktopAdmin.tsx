@@ -58,7 +58,7 @@ export function SidebarDesktopAdmin() {
 							Dashboard
 						</ListboxItem>
 					</ListboxSection>
-					<ListboxSection title="Manage">
+					<ListboxSection showDivider title="Manage">
 						<ListboxItem
 							key="orders"
 							className="mb-3"
