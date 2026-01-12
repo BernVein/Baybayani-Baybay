@@ -13,11 +13,16 @@ import {
 	AutocompleteItem,
 	Badge,
 } from "@heroui/react";
-import { BaybayaniLogo, CartIcon, SearchIcon, MessageIcon } from "../icons";
+import {
+	BaybayaniLogo,
+	CartIcon,
+	SearchIcon,
+	MessageIcon,
+} from "@/components/icons";
 import { useState } from "react";
 import { items } from "@/data/items";
 import { useNavigate, useLocation } from "react-router-dom";
-import ThemeSwitcher from "./themeSwitcher";
+import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useFetchCart } from "@/data/supabase/useFetchCart";
 
 const searchItems = items.map((i, index) => ({
@@ -27,18 +32,18 @@ const searchItems = items.map((i, index) => ({
 }));
 
 export function Navbar({
-  setSearchTerm,
+	setSearchTerm,
 }: {
-  setSearchTerm: (val: string) => void;
+	setSearchTerm: (val: string) => void;
 }) {
-  const [active, setActive] = useState("");
-  const [searchValue, setSearchValue] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(true);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
-  const { cart } = useFetchCart(userId);
-  const cartCount = (cart?.items ?? []).length;
+	const [active, setActive] = useState("");
+	const [searchValue, setSearchValue] = useState("");
+	const [showSuggestions, setShowSuggestions] = useState(true);
+	const navigate = useNavigate();
+	const location = useLocation();
+	const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
+	const { cart } = useFetchCart(userId);
+	const cartCount = (cart?.items ?? []).length;
 
 	return (
 		<HeroNavBar>
@@ -180,18 +185,18 @@ export function Navbar({
 						}}
 					>
 						<div className="flex items-center gap-2">
-						{cartCount > 0 ? (
-							<Badge
-								content={String(cartCount)}
-								color="success"
-								shape="circle"
-								showOutline={false}
-							>
+							{cartCount > 0 ? (
+								<Badge
+									content={String(cartCount)}
+									color="success"
+									shape="circle"
+									showOutline={false}
+								>
+									<CartIcon className="size-6" />
+								</Badge>
+							) : (
 								<CartIcon className="size-6" />
-							</Badge>
-						) : (
-							<CartIcon className="size-6" />
-						)}
+							)}
 							<span className="hidden sm:inline font-normal">
 								Cart
 							</span>
@@ -228,9 +233,25 @@ export function Navbar({
 								<ThemeSwitcher />
 							</div>
 						</DropdownItem>
-						<DropdownItem key="orders" onPress={() => navigate("/orders")}>Orders</DropdownItem>
-						<DropdownItem key="settings" onPress={() => navigate("/settings")}>Settings</DropdownItem>
-						<DropdownItem key="logout" color="danger" onPress={() => navigate("/logout")}>Log Out</DropdownItem>
+						<DropdownItem
+							key="orders"
+							onPress={() => navigate("/orders")}
+						>
+							Orders
+						</DropdownItem>
+						<DropdownItem
+							key="settings"
+							onPress={() => navigate("/settings")}
+						>
+							Settings
+						</DropdownItem>
+						<DropdownItem
+							key="logout"
+							color="danger"
+							onPress={() => navigate("/logout")}
+						>
+							Log Out
+						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</NavbarContent>

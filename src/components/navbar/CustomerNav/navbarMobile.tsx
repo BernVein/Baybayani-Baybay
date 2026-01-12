@@ -10,17 +10,17 @@ import {
 	Badge,
 	Divider,
 } from "@heroui/react";
-import { BaybayaniLogo, CartIcon, MessageIcon } from "../icons";
+import { BaybayaniLogo, CartIcon, MessageIcon } from "@/components/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ThemeSwitcher from "./themeSwitcher";
+import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useFetchCart } from "@/data/supabase/useFetchCart";
 export function NavbarMobile() {
-  const [active, setActive] = useState("");
-  const navigate = useNavigate();
-  const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
-  const { cart } = useFetchCart(userId);
-  const cartCount = (cart?.items ?? []).length;
+	const [active, setActive] = useState("");
+	const navigate = useNavigate();
+	const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
+	const { cart } = useFetchCart(userId);
+	const cartCount = (cart?.items ?? []).length;
 
 	return (
 		<HeroNavBar className="justify-around py-2 shadow-md">
@@ -94,22 +94,22 @@ export function NavbarMobile() {
 					className="flex flex-col items-center"
 					color={active === "Cart" ? "success" : "foreground"}
 				>
-          <div className="w-8 h-8 flex items-center justify-center relative">
-            {cartCount > 0 ? (
-              <Badge
-                content={String(cartCount)}
-                color="success"
-                shape="circle"
-                showOutline={false}
-                className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-                size="sm"
-              >
-                <CartIcon className="w-6 h-6" />
-              </Badge>
-            ) : (
-              <CartIcon className="w-6 h-6" />
-            )}
-          </div>
+					<div className="w-8 h-8 flex items-center justify-center relative">
+						{cartCount > 0 ? (
+							<Badge
+								content={String(cartCount)}
+								color="success"
+								shape="circle"
+								showOutline={false}
+								className="absolute top-0 right-0 translate-x-1 -translate-y-1"
+								size="sm"
+							>
+								<CartIcon className="w-6 h-6" />
+							</Badge>
+						) : (
+							<CartIcon className="w-6 h-6" />
+						)}
+					</div>
 					<span className="text-sm font-light mt-1">Cart</span>
 				</Link>
 			</NavbarItem>
@@ -153,9 +153,25 @@ export function NavbarMobile() {
 								<ThemeSwitcher />
 							</div>
 						</DropdownItem>
-						<DropdownItem key="orders" onPress={() => navigate("/orders")}>Orders</DropdownItem>
-						<DropdownItem key="settings" onPress={() => navigate("/settings")}>Settings</DropdownItem>
-						<DropdownItem key="logout" color="danger" onPress={() => navigate("/logout")}>Log Out</DropdownItem>
+						<DropdownItem
+							key="orders"
+							onPress={() => navigate("/orders")}
+						>
+							Orders
+						</DropdownItem>
+						<DropdownItem
+							key="settings"
+							onPress={() => navigate("/settings")}
+						>
+							Settings
+						</DropdownItem>
+						<DropdownItem
+							key="logout"
+							color="danger"
+							onPress={() => navigate("/logout")}
+						>
+							Log Out
+						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</NavbarItem>

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "@/components/navbar/navbarDesktop";
-import { NavbarMobile } from "@/components/navbar/navbarMobile";
+import { Navbar } from "@/components/navbar/CustomerNav/navbarDesktop";
+import { NavbarMobile } from "@/components/navbar/CustomerNav/navbarMobile";
 import { useState } from "react";
 
 export default function CustomerLayout() {
