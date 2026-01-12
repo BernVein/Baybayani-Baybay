@@ -487,6 +487,78 @@ export const MessageIcon = (props: IconSvgProps, className: string) => (
 	</svg>
 );
 
+export const DashboardIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		strokeWidth="1.5"
+		stroke="currentColor"
+		className={className}
+		{...props}
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z"
+		/>
+	</svg>
+);
+
+export const UserIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		strokeWidth="1.5"
+		stroke="currentColor"
+		className={className}
+		{...props}
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+		/>
+	</svg>
+);
+
+export const ProductIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		strokeWidth="1.5"
+		stroke="currentColor"
+		className={className}
+		{...props}
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
+		/>
+	</svg>
+);
+
+export const LogoutIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		strokeWidth="1.5"
+		stroke="currentColor"
+		className={className}
+		{...props}
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+		/>
+	</svg>
+);
+
 export const BaybayaniLogo = (props: IconSvgProps, className: string) => (
 	<svg
 		version="1.1"

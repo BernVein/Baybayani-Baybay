@@ -5,15 +5,9 @@ import {
 	NavbarContent,
 	NavbarItem,
 	Link,
-	Dropdown,
-	DropdownTrigger,
-	DropdownMenu,
-	DropdownItem,
-	Avatar,
 } from "@heroui/react";
 import { BaybayaniLogo } from "@/components/icons";
 import { useNavigate } from "react-router-dom";
-import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 
 export function Navbar() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(true);
@@ -22,7 +16,7 @@ export function Navbar() {
 	return (
 		<HeroNavbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
 			<NavbarContent>
-				<NavbarBrand className="flex-shrink-0 hidden sm:flex">
+				<NavbarBrand className="flex-shrink-0">
 					<Link
 						href="/"
 						className="flex items-center gap-2"
@@ -32,7 +26,7 @@ export function Navbar() {
 						}}
 					>
 						<BaybayaniLogo className="size-10" />
-						<p className="font-bold hidden sm:block sm:text-lg">
+						<p className="font-bold block sm:text-lg">
 							<span className="text-[#146A38]">BAYBAY</span>
 							<span className="text-[#F9C424]">ANI</span>
 						</p>
@@ -41,7 +35,7 @@ export function Navbar() {
 			</NavbarContent>
 
 			<NavbarContent justify="end">
-				<NavbarItem className="hidden lg:flex">
+				<NavbarItem className="flex">
 					<div className="flex flex-row items-center w-full gap-1">
 						<span className="text-sm">Closing time:</span>
 						<span>5:00 pm</span>
