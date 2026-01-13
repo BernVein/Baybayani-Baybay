@@ -8,7 +8,7 @@ import {
 	Avatar,
 } from "@heroui/react";
 
-export function DashboardTableLowStock() {
+export function DashboardTable() {
 	return (
 		<>
 			<Table isHeaderSticky removeWrapper className="overflow-y-auto">

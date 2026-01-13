@@ -1,7 +1,7 @@
 import { DashboardSummary } from "@/pages/Admin/DashboardComponents/DashboardSummary";
 import { Card, CardBody } from "@heroui/react";
 import { BasicLineChart } from "@/pages/Admin/DashboardComponents/BasicLineChart";
-import { DashboardTableLowStock } from "@/pages/Admin/DashboardComponents/DashboardTableLowStock";
+import { DashboardTable } from "@/pages/Admin/DashboardComponents/DashboardTable";
 import { GroupedBarChart } from "@/pages/Admin/DashboardComponents/GroupedBarChart";
 export default function Dashboard() {
 	return (
@@ -29,14 +29,24 @@ export default function Dashboard() {
 						<span className="text-default-500">
 							LOW STOCK ITEMS
 						</span>
-						<DashboardTableLowStock />
+						<DashboardTable />
 					</CardBody>
 				</Card>
 			</div>
 			<div className="flex flex-row gap-3 items-stretch h-[380px]">
 				<Card className="w-3/4 p-4">
-					<span className="text-default-500">ORDER TREND</span>
+					<span className="text-default-500 pt-4 pl-4">
+						ORDER TREND
+					</span>
 					<GroupedBarChart />
+				</Card>
+				<Card className="w-1/4 p-4">
+					<CardBody className="gap-2 overflow-hidden">
+						<span className="text-default-500">
+							TOP ORDERED ITEMS
+						</span>
+						<DashboardTable />
+					</CardBody>
 				</Card>
 			</div>
 		</div>
