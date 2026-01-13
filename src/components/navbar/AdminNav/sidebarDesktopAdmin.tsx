@@ -21,6 +21,7 @@ import {
 	ProductIcon,
 	MessageIcon,
 	LogoutIcon,
+	ClockIcon,
 } from "@/components/icons";
 import { useNavigate } from "react-router-dom";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
@@ -62,9 +63,11 @@ export function SidebarDesktopAdmin() {
 			</CardHeader>
 			<Divider />
 			<CardBody>
-				<div className="flex flex-row items-center gap-1 mb-3 pl-2">
+				<div className="flex flex-row items-center gap-2 mb-3 pl-3">
+					<ClockIcon className="w-6" />
+
 					<span className="text-sm text-default-500">
-						Current time:
+						Current Time:
 					</span>
 					<span>
 						{new Date().toLocaleString("en-PH", {
