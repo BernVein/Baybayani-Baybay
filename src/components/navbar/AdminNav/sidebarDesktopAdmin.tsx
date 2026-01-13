@@ -24,9 +24,28 @@ import {
 } from "@/components/icons";
 import { useNavigate } from "react-router-dom";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
+import { useEffect, useState } from "react";
 
 export function SidebarDesktopAdmin() {
 	const navigate = useNavigate();
+	const [, setTick] = useState(0);
+	useEffect(() => {
+		const tick = () => setTick((n) => n + 1);
+
+		const now = new Date();
+		const msToNextMinute =
+			(60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+
+		const timeout = setTimeout(() => {
+			tick();
+			const interval = setInterval(tick, 60_000);
+
+			return () => clearInterval(interval);
+		}, msToNextMinute);
+
+		return () => clearTimeout(timeout);
+	}, []);
+
 	return (
 		<Card className="w-[300px] h-full rounded-none">
 			<CardHeader className="flex gap-3">
@@ -43,9 +62,22 @@ export function SidebarDesktopAdmin() {
 			</CardHeader>
 			<Divider />
 			<CardBody>
+				<div className="flex flex-row items-center gap-1 mb-3 pl-2">
+					<span className="text-sm text-default-500">
+						Current time:
+					</span>
+					<span>
+						{new Date().toLocaleString("en-PH", {
+							timeZone: "Asia/Manila",
+							hour: "2-digit",
+							minute: "2-digit",
+							hour12: true,
+						})}
+					</span>
+				</div>
+
 				<Listbox
 					aria-label="Actions"
-					className="top-10"
 					// onAction={(key) =(key)}
 				>
 					<ListboxSection showDivider title="Overview">
