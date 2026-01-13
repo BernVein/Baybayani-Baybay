@@ -373,6 +373,26 @@ export function FruitsOutline(props: IconSvgProps) {
 	);
 }
 
+export function SoloUserIcon(props: IconSvgProps, className: string) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			strokeWidth={1.5}
+			stroke="currentColor"
+			className={className}
+			{...props}
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+			/>
+		</svg>
+	);
+}
+
 export function ExclamationCircle(props: IconSvgProps, className: string) {
 	return (
 		<svg
@@ -510,7 +530,7 @@ export const UserIcon = (props: IconSvgProps, className: string) => (
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
 		viewBox="0 0 24 24"
-		strokeWidth="1.5"
+		strokeWidth={1.5}
 		stroke="currentColor"
 		className={className}
 		{...props}
@@ -518,7 +538,7 @@ export const UserIcon = (props: IconSvgProps, className: string) => (
 		<path
 			strokeLinecap="round"
 			strokeLinejoin="round"
-			d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+			d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
 		/>
 	</svg>
 );
@@ -555,6 +575,75 @@ export const LogoutIcon = (props: IconSvgProps, className: string) => (
 			strokeLinecap="round"
 			strokeLinejoin="round"
 			d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+		/>
+	</svg>
+);
+
+export const PesoIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 119.43 122.88"
+		className={className}
+		{...props}
+	>
+		<title>philippine-peso</title>
+		<path
+			fill="currentColor"
+			d="M118.45,51l1,1-.74,9.11H99A40.52,40.52,0,0,1,81.88,78.43q-11.44,6.28-27.71,7h-15l.5,37.43H21.42l.74-36.94-.24-24.87H1L0,59.84.74,51H21.92l-.25-15.26H1l-1-1,.74-9.11H21.67L21.42.25,63.29,0Q78.8,0,88.65,6.53T102,25.61h16.5l1,1.23-.74,8.87h-15v3.94A53.17,53.17,0,0,1,102.44,51ZM39.65,25.61H81.26Q74.85,14,58.61,13.3L39.89,14l-.24,11.57ZM39.4,51H83.23a39.51,39.51,0,0,0,1.23-9.6,46.17,46.17,0,0,0-.24-5.66H39.65L39.4,51ZM58.61,71.91q12.56-2.72,19.21-10.84H39.4l-.25,10.1,19.46.74Z"
+		/>
+	</svg>
+);
+
+export const CheckIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		strokeWidth="1.5"
+		stroke="currentColor"
+		className={className}
+		{...props}
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="m4.5 12.75 6 6 9-13.5"
+		/>
+	</svg>
+);
+
+export const ClockIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		strokeWidth="1.5"
+		stroke="currentColor"
+		className={className}
+		{...props}
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+		/>
+	</svg>
+);
+
+export const TotalOrdersIcon = (props: IconSvgProps, className: string) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 24 24"
+		strokeWidth={1.5}
+		stroke="currentColor"
+		className={className}
+		{...props}
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
 		/>
 	</svg>
 );
