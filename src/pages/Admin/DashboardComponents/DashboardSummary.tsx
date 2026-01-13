@@ -5,8 +5,9 @@ import {
 	ClockIcon,
 	TotalOrdersIcon,
 	UserIcon,
-	ExclamationCircle,
 	SoloUserIcon,
+	PencilIcon,
+	PendingIcon,
 } from "@/components/icons";
 
 export function DashboardSummary() {
@@ -24,7 +25,7 @@ export function DashboardSummary() {
 								</span>
 							</div>
 
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-500/50">
+							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-500/70">
 								<PesoIcon className="w-4 h-4 text-white" />
 							</div>
 						</div>
@@ -33,7 +34,7 @@ export function DashboardSummary() {
 						</span>
 					</div>
 				</CardBody>
-				<div className="absolute bottom-0 left-0 w-full h-1 bg-green-500/30 rounded-t-md"></div>
+				<div className="absolute bottom-0 left-0 w-full h-1 bg-green-500/70 rounded-t-md"></div>
 			</Card>
 			<Card className="w-1/4">
 				<CardBody className="gap-y-3">
@@ -43,7 +44,7 @@ export function DashboardSummary() {
 							<div className="flex flex-row items-center gap-2">
 								<span className="text-3xl font-bold">32</span>
 								<div className="text-default-500 flex flex-row items-center gap-1 ml-3">
-									<ClockIcon className="w-5" />
+									<PendingIcon className="w-5" />
 									<span className="text-default-500">20</span>
 									<Divider
 										orientation="vertical"
@@ -54,7 +55,7 @@ export function DashboardSummary() {
 								</div>
 							</div>
 
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-500/50">
+							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-500/70">
 								<TotalOrdersIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
@@ -63,7 +64,7 @@ export function DashboardSummary() {
 						</span>
 					</div>
 				</CardBody>
-				<div className="absolute bottom-0 left-0 w-full h-1 bg-blue-500/30 rounded-t-md"></div>
+				<div className="absolute bottom-0 left-0 w-full h-1 bg-blue-500/70 rounded-t-md"></div>
 			</Card>
 			<Card className="w-1/4">
 				<CardBody className="gap-y-3">
@@ -83,7 +84,7 @@ export function DashboardSummary() {
 									<span>4</span>
 								</div>
 							</div>
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/50">
+							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/70">
 								<UserIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
@@ -92,28 +93,31 @@ export function DashboardSummary() {
 						</span>
 					</div>
 				</CardBody>
-				<div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500/30 rounded-t-md"></div>
+				<div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500/70 rounded-t-md"></div>
 			</Card>
 			<Card className="w-1/4">
 				<CardBody className="gap-y-3">
-					<span className="text-default-500">LOW STOCK</span>
+					<span className="text-default-500">CLOSING TIME</span>
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
 							<div className="flex flex-row items-center gap-2">
-								<span className="text-3xl font-bold">5</span>
-								<span>items </span>
+								<span className="text-3xl font-bold">5:00</span>
+								<span>PM</span>
 							</div>
 
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/50">
-								<ExclamationCircle className="w-6 h-6 text-white" />
+							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
+								<ClockIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
-						<span className="text-default-500 italic">
-							View low stock items here
-						</span>
+						<div className="flex flex-row items-center gap-1">
+							<PencilIcon className="w-5 text-default-500" />
+							<span className="text-default-500 italic cursor-pointer">
+								Edit closing time
+							</span>
+						</div>
 					</div>
 				</CardBody>
-				<div className="absolute bottom-0 left-0 w-full h-1 bg-red-500/30 rounded-t-md"></div>
+				<div className="absolute bottom-0 left-0 w-full h-1 bg-red-500/70 rounded-t-md"></div>
 			</Card>
 		</div>
 	);

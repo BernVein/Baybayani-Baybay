@@ -393,6 +393,46 @@ export function SoloUserIcon(props: IconSvgProps, className: string) {
 	);
 }
 
+export function PencilIcon(props: IconSvgProps, className: string) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			strokeWidth="1.5"
+			stroke="currentColor"
+			className={className}
+			{...props}
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+			/>
+		</svg>
+	);
+}
+
+export function PendingIcon(props: IconSvgProps, className: string) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			strokeWidth="1.5"
+			stroke="currentColor"
+			className={className}
+			{...props}
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z"
+			/>
+		</svg>
+	);
+}
+
 export function ExclamationCircle(props: IconSvgProps, className: string) {
 	return (
 		<svg

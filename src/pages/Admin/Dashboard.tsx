@@ -15,15 +15,17 @@ export default function Dashboard() {
 			</div>
 			<DashboardSummary />
 			<div className="flex flex-row items-center gap-2">
-				<Card className="w-1/2">
+				<Card className="w-3/4 p-4">
 					<CardBody>
 						<span className="text-default-500">REVENUE TREND</span>
 						<BasicLineChart />
 					</CardBody>
 				</Card>
-				<Card className="w-1/2">
+				<Card className="w-1/4">
 					<CardBody>
-						<span className="text-default-500">ORDER TREND</span>
+						<span className="text-default-500">
+							LOW STOCK ITEMS
+						</span>
 					</CardBody>
 				</Card>
 			</div>
