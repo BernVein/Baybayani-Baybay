@@ -1,5 +1,6 @@
 import { DashboardSummary } from "@/pages/Admin/DashboardComponents/DashboardSummary";
 import { Card, CardBody } from "@heroui/react";
+import { BasicLineChart } from "./DashboardComponents/BasicLineChart";
 export default function Dashboard() {
 	return (
 		<div className="flex flex-col gap-8">
@@ -17,6 +18,7 @@ export default function Dashboard() {
 				<Card className="w-1/2">
 					<CardBody>
 						<span className="text-default-500">REVENUE TREND</span>
+						<BasicLineChart />
 					</CardBody>
 				</Card>
 				<Card className="w-1/2">
