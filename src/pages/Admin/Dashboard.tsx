@@ -2,6 +2,7 @@ import { DashboardSummary } from "@/pages/Admin/DashboardComponents/DashboardSum
 import { Card, CardBody } from "@heroui/react";
 import { BasicLineChart } from "@/pages/Admin/DashboardComponents/BasicLineChart";
 import { DashboardTableLowStock } from "@/pages/Admin/DashboardComponents/DashboardTableLowStock";
+import { GroupedBarChart } from "@/pages/Admin/DashboardComponents/GroupedBarChart";
 export default function Dashboard() {
 	return (
 		<div className="flex flex-col gap-8">
@@ -30,6 +31,12 @@ export default function Dashboard() {
 						</span>
 						<DashboardTableLowStock />
 					</CardBody>
+				</Card>
+			</div>
+			<div className="flex flex-row gap-3 items-stretch h-[380px]">
+				<Card className="w-3/4 p-4">
+					<span className="text-default-500">ORDER TREND</span>
+					<GroupedBarChart />
 				</Card>
 			</div>
 		</div>
