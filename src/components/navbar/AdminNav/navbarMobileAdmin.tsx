@@ -6,61 +6,65 @@ import {
 	DropdownTrigger,
 	Dropdown,
 	DropdownMenu,
+	DropdownSection,
 	Avatar,
 	Badge,
 	Divider,
 } from "@heroui/react";
-import { BaybayaniLogo, CartIcon, MessageIcon } from "@/components/icons";
+import {
+	DashboardIcon,
+	MessageIcon,
+	MoreIcon,
+	OrdersIcon,
+	ProductIcon,
+	UserIcon,
+} from "@/components/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
-import { useFetchCart } from "@/data/supabase/useFetchCart";
 export function NavbarMobileAdmin() {
 	const [active, setActive] = useState("");
 	const navigate = useNavigate();
-	const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
-	const { cart } = useFetchCart(userId);
-	const cartCount = (cart?.items ?? []).length;
 
 	return (
 		<HeroNavBar className="justify-around py-2 shadow-md">
 			{/* Shop / Logo */}
 			<NavbarItem
-				isActive={active === "Shop"}
+				isActive={active === "Dashboard"}
 				className="flex flex-col items-center"
 			>
 				<Link
-					href="/"
+					href="/admin/dashboard"
 					onClick={(e) => {
 						e.preventDefault();
-						setActive("Shop");
-						navigate("/");
+						setActive("Dashboard");
+						navigate("/admin/dashboard");
 					}}
 					className="flex flex-col items-center"
-					color={active === "Shop" ? "success" : "foreground"}
+					color={active === "Dashboard" ? "success" : "foreground"}
 				>
 					<div className="w-8 h-8 flex items-center justify-center">
-						<BaybayaniLogo className="size-7" />
+						<DashboardIcon className="size-7" />
 					</div>
-					<span className="text-sm font-light mt-1">Shop</span>
+					<span className="text-sm font-light mt-1">Dashboard</span>
 				</Link>
 			</NavbarItem>
 
 			<Divider orientation="vertical" className="h-8 bg-gray-300" />
 
 			<NavbarItem
-				isActive={active === "Messages"}
+				isActive={active === "Orders"}
 				className="flex flex-col items-center"
 			>
 				<Link
-					href="/messages"
+					href="/admin/orders"
 					onClick={(e) => {
 						e.preventDefault();
-						setActive("Messages");
-						navigate("/messages");
+						setActive("Orders");
+						navigate("/admin/orders");
 					}}
 					className="flex flex-col items-center"
-					color={active === "Messages" ? "success" : "foreground"}
+					color={active === "Orders" ? "success" : "foreground"}
 				>
 					<div className="w-8 h-8 flex items-center justify-center relative">
 						<Badge
@@ -71,47 +75,56 @@ export function NavbarMobileAdmin() {
 							className="absolute top-0 right-0 translate-x-1 -translate-y-1"
 							size="sm"
 						>
-							<MessageIcon className="w-6 h-6" />
+							<OrdersIcon className="w-6 h-6" />
 						</Badge>
 					</div>
-					<span className="text-sm font-light mt-1">Chat</span>
+					<span className="text-sm font-light mt-1">Orders</span>
 				</Link>
 			</NavbarItem>
 			<Divider orientation="vertical" className="h-8 bg-gray-300" />
 
 			{/* Cart */}
 			<NavbarItem
-				isActive={active === "Cart"}
+				isActive={active === "More"}
 				className="flex flex-col items-center"
 			>
-				<Link
-					href="/cart"
-					onClick={(e) => {
-						e.preventDefault();
-						setActive("Cart");
-						navigate("/cart");
-					}}
-					className="flex flex-col items-center"
-					color={active === "Cart" ? "success" : "foreground"}
-				>
-					<div className="w-8 h-8 flex items-center justify-center relative">
-						{cartCount > 0 ? (
-							<Badge
-								content={String(cartCount)}
-								color="success"
-								shape="circle"
-								showOutline={false}
-								className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-								size="sm"
+				<Dropdown>
+					<DropdownTrigger>
+						<div className="flex flex-col items-center">
+							<div className="w-8 h-8 flex items-center justify-center relative">
+								<MoreIcon className="w-6 h-6" />
+							</div>
+							<span className="text-sm font-light mt-1">
+								More
+							</span>
+						</div>
+					</DropdownTrigger>
+					<DropdownMenu>
+						<DropdownSection title="Manage">
+							<DropdownItem
+								href="/admin/products"
+								key="products"
+								startContent={<ProductIcon className="w-5" />}
 							>
-								<CartIcon className="w-6 h-6" />
-							</Badge>
-						) : (
-							<CartIcon className="w-6 h-6" />
-						)}
-					</div>
-					<span className="text-sm font-light mt-1">Cart</span>
-				</Link>
+								Products
+							</DropdownItem>
+							<DropdownItem
+								href="/admin/users"
+								key="users"
+								startContent={<UserIcon className="w-5" />}
+							>
+								Users
+							</DropdownItem>
+							<DropdownItem
+								href="/admin/messages"
+								key="messages"
+								startContent={<MessageIcon className="w-5" />}
+							>
+								Messages
+							</DropdownItem>
+						</DropdownSection>
+					</DropdownMenu>
+				</Dropdown>
 			</NavbarItem>
 
 			<Divider orientation="vertical" className="h-8 bg-gray-300" />
