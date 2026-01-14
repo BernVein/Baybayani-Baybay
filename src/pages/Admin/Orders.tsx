@@ -1,4 +1,9 @@
-import { CartIcon, MoreIconVertical, SearchIcon } from "@/components/icons";
+import {
+	CartIcon,
+	MoreIconVertical,
+	SearchIcon,
+	FilterIcon,
+} from "@/components/icons";
 import {
 	Table,
 	TableHeader,
@@ -38,9 +43,48 @@ export default function Orders() {
 				{/* Search Row */}
 				<Input
 					placeholder="Search user / item"
-					className="w-1/2"
+					className="w-1/2 sm:w-1/4"
 					startContent={<SearchIcon />}
 				/>
+				<Dropdown>
+					<DropdownTrigger>
+						<Button
+							className="capitalize"
+							startContent={<FilterIcon className="w-5" />}
+						>
+							Filter
+						</Button>
+					</DropdownTrigger>
+					<DropdownMenu
+						closeOnSelect={false}
+						selectionMode="multiple"
+					>
+						<DropdownItem key="pending">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-yellow-400" />
+								<span>Pending</span>
+							</div>
+						</DropdownItem>
+						<DropdownItem key="ready">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-blue-400" />
+								<span>Ready</span>
+							</div>
+						</DropdownItem>
+						<DropdownItem key="completed">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-green-400" />
+								<span>Completed</span>
+							</div>
+						</DropdownItem>
+						<DropdownItem key="cancel">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-red-300" />
+								<span className="text-danger">Cancel</span>
+							</div>
+						</DropdownItem>
+					</DropdownMenu>
+				</Dropdown>
 			</div>
 
 			{/* TABLE ROW */}
@@ -88,18 +132,6 @@ export default function Orders() {
 										</Button>
 									</DropdownTrigger>
 									<DropdownMenu aria-label="Static Actions">
-										<DropdownSection title="Order Date">
-											<DropdownItem
-												key="date"
-												className="pointer-events-none cursor-default"
-											>
-												<div className="flex items-center gap-2">
-													<span>
-														Jan 10, 2025 10:00 AM
-													</span>
-												</div>
-											</DropdownItem>
-										</DropdownSection>
 										<DropdownSection title="Set Status">
 											<DropdownItem key="pending">
 												<div className="flex items-center gap-2">

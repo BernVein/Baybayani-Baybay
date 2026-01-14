@@ -6,7 +6,9 @@ export function OrderSummary() {
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
 			<Card className="w-full">
 				<CardBody className="gap-y-3">
-					<span className="text-default-500">TOTAL COMPLETED</span>
+					<span className="text-default-500">
+						TOTAL COMPLETED ORDERS
+					</span>
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
 							<div className="flex flex-row items-center">
