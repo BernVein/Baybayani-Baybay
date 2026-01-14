@@ -57,6 +57,7 @@ export default function Orders() {
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
+									<span className="w-2 h-2 rounded-full bg-green-400" />
 									<div className="flex flex-col gap-1 items-start">
 										<span>Item123123as{i + 1}</span>
 										<span className="text-default-500 italic">
@@ -76,6 +77,18 @@ export default function Orders() {
 										</Button>
 									</DropdownTrigger>
 									<DropdownMenu aria-label="Static Actions">
+										<DropdownSection title="Order Date">
+											<DropdownItem
+												key="date"
+												className="pointer-events-none cursor-default"
+											>
+												<div className="flex items-center gap-2">
+													<span>
+														Jan 10, 2025 10:00 AM
+													</span>
+												</div>
+											</DropdownItem>
+										</DropdownSection>
 										<DropdownSection title="Set Status">
 											<DropdownItem key="processing">
 												<div className="flex items-center gap-2">
@@ -103,18 +116,6 @@ export default function Orders() {
 													<span className="w-2 h-2 rounded-full bg-red-300" />
 													<span className="text-danger">
 														Cancel
-													</span>
-												</div>
-											</DropdownItem>
-										</DropdownSection>
-										<DropdownSection title="Order Date">
-											<DropdownItem
-												key="date"
-												className="pointer-events-none cursor-default"
-											>
-												<div className="flex items-center gap-2">
-													<span>
-														Jan 10, 2025 10:00 AM
 													</span>
 												</div>
 											</DropdownItem>
