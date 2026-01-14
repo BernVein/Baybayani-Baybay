@@ -50,21 +50,18 @@ export default function Orders() {
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
 									<Avatar size="md" />
-									<span className="text-base">
+									<span className="text-sm">
 										User {i + 1}
 									</span>
 								</div>
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									<Avatar
-										size="md"
-										color="success"
-										isBordered
-										src={`https://i.pravatar.cc/150?u=a042581f4e49026024${i + 1}`}
-									/>
 									<div className="flex flex-col gap-1 items-start">
-										<span>Item {i + 1}</span>
+										<span>Item123123as{i + 1}</span>
+										<span className="text-default-500 italic">
+											Banana
+										</span>
 										<span className="text-default-500 italic">
 											5 kg
 										</span>
