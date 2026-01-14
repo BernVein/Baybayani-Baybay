@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@heroui/react";
-import { TotalOrdersIcon } from "@/components/icons";
+import { PendingIcon, CheckIcon, XIcon } from "@/components/icons";
 
 export function OrderSummary() {
 	return (
@@ -14,7 +14,7 @@ export function OrderSummary() {
 							</div>
 
 							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-500/70">
-								<TotalOrdersIcon className="w-6 h-6 text-white" />
+								<CheckIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
 						<span className="text-default-500">
@@ -36,7 +36,7 @@ export function OrderSummary() {
 							</div>
 
 							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/70">
-								<TotalOrdersIcon className="w-6 h-6 text-white" />
+								<PendingIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
 						<span className="text-default-500">
@@ -57,7 +57,7 @@ export function OrderSummary() {
 								<span className="text-3xl font-bold">14</span>
 							</div>
 							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
-								<TotalOrdersIcon className="w-6 h-6 text-white" />
+								<XIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
 						<span className="text-default-500">
