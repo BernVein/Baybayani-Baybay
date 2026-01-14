@@ -7,7 +7,7 @@ import {
 	UserIcon,
 	SoloUserIcon,
 	PencilIcon,
-	PendingIcon,
+	XIcon,
 } from "@/components/icons";
 
 export function DashboardSummary() {
@@ -44,13 +44,13 @@ export function DashboardSummary() {
 							<div className="flex flex-row items-center gap-2">
 								<span className="text-3xl font-bold">32</span>
 								<div className="text-default-500 flex flex-row items-center gap-1 ml-3">
-									<PendingIcon className="w-5" />
+									<CheckIcon className="w-5" />
 									<span className="text-default-500">20</span>
 									<Divider
 										orientation="vertical"
 										className="h-6 m-1"
 									/>
-									<CheckIcon className="w-5" />
+									<XIcon className="w-5" />
 									<span>12</span>
 								</div>
 							</div>
