@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Skeleton } from "@heroui/react";
-
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import CustomerLayout from "@/layouts/CustomerLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
@@ -21,6 +22,15 @@ const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
 const AdminMessages = lazy(() => import("@/pages/Admin/Messages"));
 
 function App() {
+	function ScrollToTop() {
+		const { pathname } = useLocation();
+
+		useEffect(() => {
+			window.scrollTo(0, 0);
+		}, [pathname]);
+
+		return null;
+	}
 	return (
 		<Suspense
 			fallback={
@@ -29,6 +39,7 @@ function App() {
 				</div>
 			}
 		>
+			<ScrollToTop />
 			<Routes>
 				{/* CUSTOMER ROUTES */}
 				<Route element={<CustomerLayout />}>
