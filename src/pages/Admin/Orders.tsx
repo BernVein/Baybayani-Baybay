@@ -94,7 +94,7 @@ export default function Orders() {
 			<Table
 				isHeaderSticky
 				selectionMode="single"
-				className="overflow-y-auto sm:h-[calc(100vh-350px)] h-[calc(100vh-280px)] w-full"
+				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
 					<TableColumn>USER</TableColumn>
