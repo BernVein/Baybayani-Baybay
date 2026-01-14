@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useFetchCart } from "@/data/supabase/useFetchCart";
-export function NavbarMobile() {
+export function NavbarMobileAdmin() {
 	const [active, setActive] = useState("");
 	const navigate = useNavigate();
 	const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";

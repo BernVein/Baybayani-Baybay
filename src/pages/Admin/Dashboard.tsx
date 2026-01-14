@@ -3,11 +3,16 @@ import { Card, CardBody } from "@heroui/react";
 import { BasicLineChart } from "@/pages/Admin/DashboardComponents/BasicLineChart";
 import { DashboardTable } from "@/pages/Admin/DashboardComponents/DashboardTable";
 import { GroupedBarChart } from "@/pages/Admin/DashboardComponents/GroupedBarChart";
+import { DashboardIcon } from "@/components/icons";
+
 export default function Dashboard() {
 	return (
 		<div className="flex flex-col gap-8 p-4">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-				<div className="text-3xl font-semibold">Dashboard</div>
+				<div className="flex flex-row items-center gap-2">
+					<DashboardIcon className="w-10" />
+					<div className="text-3xl font-semibold">Dashboard</div>
+				</div>
 				<div className="flex flex-row gap-1 items-center text-muted-foreground">
 					<div className="text-base text-default-500">
 						Logged in as{" "}
