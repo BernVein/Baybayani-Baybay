@@ -19,7 +19,7 @@ export function GroupedBarChart() {
 		},
 		grid: {
 			top: 40,
-			left: "3%",
+			left: "8%",
 			right: "4%",
 			bottom: "10%",
 			containLabel: true,

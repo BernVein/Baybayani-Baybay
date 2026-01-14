@@ -12,14 +12,14 @@ import {
 
 export function DashboardSummary() {
 	return (
-		<div className="flex flex-row gap-3 items-center">
-			<Card className="w-1/4">
+		<div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+			<Card className="w-full">
 				<CardBody className="gap-y-3">
 					<span className="text-default-500">TOTAL REVENUE</span>
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
 							<div className="flex flex-row items-center">
-								<span className="text-2xl">₱</span>
+								<span className="text-2xl sm:text-2xl">₱</span>
 								<span className="text-3xl font-bold">
 									428,590
 								</span>
@@ -36,7 +36,7 @@ export function DashboardSummary() {
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-green-500/70 rounded-t-md"></div>
 			</Card>
-			<Card className="w-1/4">
+			<Card className="w-full">
 				<CardBody className="gap-y-3">
 					<span className="text-default-500">TOTAL ORDERS</span>
 					<div className="flex flex-col item-center">
@@ -66,7 +66,7 @@ export function DashboardSummary() {
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-blue-500/70 rounded-t-md"></div>
 			</Card>
-			<Card className="w-1/4">
+			<Card className="w-full">
 				<CardBody className="gap-y-3">
 					<span className="text-default-500">TOTAL CUSTOMERS</span>
 					<div className="flex flex-col item-center">
@@ -95,7 +95,7 @@ export function DashboardSummary() {
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500/70 rounded-t-md"></div>
 			</Card>
-			<Card className="w-1/4">
+			<Card className="w-full">
 				<CardBody className="gap-y-3">
 					<span className="text-default-500">CLOSING TIME</span>
 					<div className="flex flex-col item-center">

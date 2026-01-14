@@ -72,6 +72,51 @@ export function DashboardTable() {
 						</TableCell>
 						<TableCell>5 kg</TableCell>
 					</TableRow>
+					<TableRow key="7">
+						<TableCell>
+							<div className="flex flex-row items-center gap-2">
+								<Avatar size="sm" />
+								<span>Item 6</span>
+							</div>
+						</TableCell>
+						<TableCell>5 kg</TableCell>
+					</TableRow>
+					<TableRow key="8">
+						<TableCell>
+							<div className="flex flex-row items-center gap-2">
+								<Avatar size="sm" />
+								<span>Item 6</span>
+							</div>
+						</TableCell>
+						<TableCell>5 kg</TableCell>
+					</TableRow>
+					<TableRow key="9">
+						<TableCell>
+							<div className="flex flex-row items-center gap-2">
+								<Avatar size="sm" />
+								<span>Item 6</span>
+							</div>
+						</TableCell>
+						<TableCell>5 kg</TableCell>
+					</TableRow>
+					<TableRow key="10">
+						<TableCell>
+							<div className="flex flex-row items-center gap-2">
+								<Avatar size="sm" />
+								<span>Item 6</span>
+							</div>
+						</TableCell>
+						<TableCell>5 kg</TableCell>
+					</TableRow>
+					<TableRow key="11">
+						<TableCell>
+							<div className="flex flex-row items-center gap-2">
+								<Avatar size="sm" />
+								<span>Item 6</span>
+							</div>
+						</TableCell>
+						<TableCell>5 kg</TableCell>
+					</TableRow>
 				</TableBody>
 			</Table>
 		</>
