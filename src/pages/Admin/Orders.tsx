@@ -38,7 +38,10 @@ export default function Orders() {
 					<div className="text-lg font-semibold">Admin Bern Vein</div>
 				</div>
 			</div>
-			<OrderSummary />
+			<div className="hidden sm:block">
+				<OrderSummary />
+			</div>
+
 			<div className="flex flex-row items-center justify-between">
 				{/* Search Row */}
 				<Input
