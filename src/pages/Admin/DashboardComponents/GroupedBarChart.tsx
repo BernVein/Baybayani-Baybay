@@ -3,7 +3,7 @@ import ReactECharts from "echarts-for-react";
 export function GroupedBarChart() {
 	const option = {
 		tooltip: {
-			trigger: "axis",
+			trigger: "item",
 			axisPointer: {
 				type: "shadow",
 			},

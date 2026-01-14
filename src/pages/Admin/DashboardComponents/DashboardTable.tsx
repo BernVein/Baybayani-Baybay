@@ -22,7 +22,7 @@ export function DashboardTable() {
 						<TableCell>
 							<div className="flex flex-row items-center gap-2">
 								<Avatar size="sm" />
-								<span>Tony Reichert</span>
+								<span>Item 1</span>
 							</div>
 						</TableCell>
 						<TableCell>5 kg</TableCell>
@@ -31,7 +31,7 @@ export function DashboardTable() {
 						<TableCell>
 							<div className="flex flex-row items-center gap-2">
 								<Avatar size="sm" />
-								<span>Tony Reichert</span>
+								<span>Item 2</span>
 							</div>
 						</TableCell>
 						<TableCell>5 kg</TableCell>
@@ -40,7 +40,7 @@ export function DashboardTable() {
 						<TableCell>
 							<div className="flex flex-row items-center gap-2">
 								<Avatar size="sm" />
-								<span>Tony Reichert</span>
+								<span>Item 3</span>
 							</div>
 						</TableCell>
 						<TableCell>5 kg</TableCell>
@@ -49,25 +49,25 @@ export function DashboardTable() {
 						<TableCell>
 							<div className="flex flex-row items-center gap-2">
 								<Avatar size="sm" />
-								<span>Tony Reichert</span>
+								<span>Item 4</span>
 							</div>
 						</TableCell>
 						<TableCell>5 kg</TableCell>
 					</TableRow>
-					<TableRow key="1">
+					<TableRow key="5">
 						<TableCell>
 							<div className="flex flex-row items-center gap-2">
 								<Avatar size="sm" />
-								<span>Tony Reichert</span>
+								<span>Item 5</span>
 							</div>
 						</TableCell>
 						<TableCell>5 kg</TableCell>
 					</TableRow>
-					<TableRow key="2">
+					<TableRow key="6">
 						<TableCell>
 							<div className="flex flex-row items-center gap-2">
 								<Avatar size="sm" />
-								<span>Tony Reichert</span>
+								<span>Item 6</span>
 							</div>
 						</TableCell>
 						<TableCell>5 kg</TableCell>
