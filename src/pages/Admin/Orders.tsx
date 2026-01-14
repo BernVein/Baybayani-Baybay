@@ -1,4 +1,4 @@
-import { CartIcon, MoreIconVertical } from "@/components/icons";
+import { CartIcon, MoreIconVertical, SearchIcon } from "@/components/icons";
 import {
 	Table,
 	TableHeader,
@@ -13,7 +13,9 @@ import {
 	DropdownItem,
 	Button,
 	DropdownSection,
+	Input,
 } from "@heroui/react";
+import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 
 export default function Orders() {
 	return (
@@ -30,6 +32,15 @@ export default function Orders() {
 					</div>
 					<div className="text-lg font-semibold">Admin Bern Vein</div>
 				</div>
+			</div>
+			<OrderSummary />
+			<div className="flex flex-row items-center justify-between">
+				{/* Search Row */}
+				<Input
+					placeholder="Search user / item"
+					className="w-1/2"
+					startContent={<SearchIcon />}
+				/>
 			</div>
 
 			{/* TABLE ROW */}
@@ -90,16 +101,16 @@ export default function Orders() {
 											</DropdownItem>
 										</DropdownSection>
 										<DropdownSection title="Set Status">
-											<DropdownItem key="processing">
+											<DropdownItem key="pending">
 												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-blue-400" />
-													<span>Processing</span>
+													<span className="w-2 h-2 rounded-full bg-yellow-400" />
+													<span>Pending</span>
 												</div>
 											</DropdownItem>
 
 											<DropdownItem key="ready">
 												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-yellow-400" />
+													<span className="w-2 h-2 rounded-full bg-blue-400" />
 													<span>Ready</span>
 												</div>
 											</DropdownItem>
