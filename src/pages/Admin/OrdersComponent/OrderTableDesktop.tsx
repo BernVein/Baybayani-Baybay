@@ -21,7 +21,6 @@ export function OrderTableDesktop() {
 		<div className="hidden sm:flex">
 			<Table
 				isHeaderSticky
-				selectionMode="single"
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
@@ -41,21 +40,21 @@ export function OrderTableDesktop() {
 								<div className="flex flex-row items-center gap-2">
 									<Avatar size="md" />
 									<div className="flex flex-col items-start">
-										<span className="text-sm">
+										<span className="text-base font-bold">
 											User {i + 1}
 										</span>
-										<span className="text-xs text-default-500 italic">
+										<span className="text-sm text-default-500 italic">
 											Cooperative
 										</span>
 									</div>
 								</div>
 							</TableCell>
 							<TableCell>
-								<div className="flex flex-col items-start gap-2">
-									<span className="text-sm">
+								<div className="flex flex-col items-start">
+									<span className="text-base font-bold">
 										Jan 12, 2025
 									</span>
-									<span className="text-xs text-default-500">
+									<span className="text-sm text-default-500">
 										10:12 AM
 									</span>
 								</div>
@@ -63,11 +62,11 @@ export function OrderTableDesktop() {
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
 									<Avatar />
-									<div className="flex flex-col gap-1 items-start">
-										<span className="text-sm">
+									<div className="flex flex-col items-start">
+										<span className="text-base font-bold">
 											Item123123as{i + 1}
 										</span>
-										<span className="text-default-500 text-xs italic">
+										<span className="text-sm text-default-500 italic">
 											Banana
 										</span>
 									</div>

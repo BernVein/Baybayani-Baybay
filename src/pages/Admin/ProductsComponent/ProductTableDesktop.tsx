@@ -1,4 +1,9 @@
-import { MoreIconVertical } from "@/components/icons";
+import {
+	TrashIcon,
+	EyeIcon,
+	// EyeSlashIcon,
+	PencilIcon,
+} from "@/components/icons";
 import {
 	Table,
 	TableHeader,
@@ -7,12 +12,7 @@ import {
 	TableRow,
 	TableCell,
 	Avatar,
-	Dropdown,
-	DropdownTrigger,
-	DropdownMenu,
-	DropdownItem,
 	Button,
-	DropdownSection,
 	Chip,
 } from "@heroui/react";
 
@@ -21,15 +21,13 @@ export function ProductTableDesktop() {
 		<div className="hidden sm:flex">
 			<Table
 				isHeaderSticky
-				selectionMode="single"
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
-					<TableColumn>CUSTOMER</TableColumn>
-					<TableColumn>DATE</TableColumn>
 					<TableColumn>ITEM</TableColumn>
-					<TableColumn>QUANTITY</TableColumn>
-					<TableColumn>SUBTOTAL</TableColumn>
+					<TableColumn>PRICE</TableColumn>
+					<TableColumn>TOTAL STOCK</TableColumn>
+					<TableColumn>LAST UPDATED</TableColumn>
 					<TableColumn>STATUS</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
@@ -41,101 +39,77 @@ export function ProductTableDesktop() {
 								<div className="flex flex-row items-center gap-2">
 									<Avatar size="md" />
 									<div className="flex flex-col items-start">
-										<span className="text-sm">
-											User {i + 1}
+										<span className="text-base font-bold">
+											Item {i + 1}
 										</span>
-										<span className="text-xs text-default-500 italic">
-											Cooperative
+										<span className="text-sm text-default-500 italic">
+											3 Variants
 										</span>
 									</div>
-								</div>
-							</TableCell>
-							<TableCell>
-								<div className="flex flex-col items-start gap-2">
-									<span className="text-sm">
-										Jan 12, 2025
-									</span>
-									<span className="text-xs text-default-500">
-										10:12 AM
-									</span>
 								</div>
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									<Avatar />
-									<div className="flex flex-col gap-1 items-start">
-										<span className="text-sm">
-											Item123123as{i + 1}
+									<div className="flex flex-col items-start">
+										<span className="text-base font-bold">
+											₱33.20 - ₱123.20
 										</span>
-										<span className="text-default-500 text-xs italic">
-											Banana
+										<span className="text-sm italic text-default-500">
+											per kg
 										</span>
 									</div>
 								</div>
 							</TableCell>
 							<TableCell>
-								<div className="flex flex-col gap-2 items-start">
+								<div className="flex flex-col items-start">
 									<span className="text-base font-bold">
-										5 kg
+										502 kg
+									</span>
+									<span className="text-sm italic text-default-500">
+										on 3 variants
 									</span>
 								</div>
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-col items-start">
 									<span className="text-base font-bold">
-										₱21,223.20
+										Jan 23, 2025
 									</span>
 									<span className="text-sm text-default-500 italic">
-										Wholesale
+										10:31 PM
 									</span>
 								</div>
 							</TableCell>
 							<TableCell>
 								<Chip color="success" variant="flat">
-									Completed
+									Visible
 								</Chip>
 							</TableCell>
+
 							<TableCell>
-								<Dropdown>
-									<DropdownTrigger>
-										<Button variant="light" size="sm">
-											<MoreIconVertical className="w-5" />
-										</Button>
-									</DropdownTrigger>
-									<DropdownMenu aria-label="Static Actions">
-										<DropdownSection title="Set Status">
-											<DropdownItem key="pending">
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-yellow-400" />
-													<span>Pending</span>
-												</div>
-											</DropdownItem>
-
-											<DropdownItem key="ready">
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-blue-400" />
-													<span>Ready</span>
-												</div>
-											</DropdownItem>
-
-											<DropdownItem key="completed">
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-green-400" />
-													<span>Completed</span>
-												</div>
-											</DropdownItem>
-
-											<DropdownItem key="cancel">
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-red-300" />
-													<span className="text-danger">
-														Cancel
-													</span>
-												</div>
-											</DropdownItem>
-										</DropdownSection>
-									</DropdownMenu>
-								</Dropdown>
+								<div className="flex flex-row items-center gap-1">
+									<Button
+										size="sm"
+										variant="light"
+										isIconOnly
+									>
+										<PencilIcon className="w-5" />
+									</Button>
+									<Button
+										size="sm"
+										variant="light"
+										isIconOnly
+									>
+										<EyeIcon className="w-5" />
+									</Button>
+									<Button
+										size="sm"
+										variant="light"
+										isIconOnly
+									>
+										<TrashIcon className="w-5 text-danger-300" />
+									</Button>
+								</div>
 							</TableCell>
 						</TableRow>
 					))}

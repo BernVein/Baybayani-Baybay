@@ -19,7 +19,6 @@ export function ProductTableMobile() {
 		<div className="sm:hidden">
 			<Table
 				isHeaderSticky
-				selectionMode="single"
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>

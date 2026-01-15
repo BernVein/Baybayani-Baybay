@@ -19,7 +19,6 @@ export function OrderTableMobile() {
 		<div className="sm:hidden">
 			<Table
 				isHeaderSticky
-				selectionMode="single"
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
@@ -34,7 +33,7 @@ export function OrderTableMobile() {
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
 									<div className="flex flex-col gap-1 items-start">
-										<span className="text-sm">
+										<span className="text-sm font-bold">
 											User {i + 1}
 										</span>
 										<span className="text-default-500 italic text-xs">
