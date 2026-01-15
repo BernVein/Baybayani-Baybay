@@ -33,11 +33,10 @@ export function OrderTableMobile() {
 						<TableRow key={i + 1}>
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
-									<div className="flex flex-col items-start">
+									<div className="flex flex-col gap-1 items-start">
 										<span className="text-sm">
 											User {i + 1}
 										</span>
-
 										<span className="text-default-500 italic text-xs">
 											Cooperative
 										</span>
@@ -47,13 +46,19 @@ export function OrderTableMobile() {
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
 									<span className="w-2 h-2 rounded-full bg-green-400" />
-									<div className="flex flex-col gap-1 items-start">
+									<div className="flex flex-col items-start">
 										<span>Item123123as{i + 1}</span>
-										<span className="text-default-500 italic">
-											5 kg
+										<span className="font-light italic text-xs text-default-500">
+											Banana
 										</span>
-										<span className="text-default-500 italic">
+										<span className="font-bold">
+											5 kg - ₱21,223.20
+										</span>
+										<span className="text-default-500 text-xs italic">
 											11/23/24 @ 10:23 AM
+										</span>
+										<span className="text-default-500 italic text-xs">
+											Wholesale
 										</span>
 									</div>
 								</div>

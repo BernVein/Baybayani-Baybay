@@ -29,6 +29,7 @@ export function OrderTableDesktop() {
 					<TableColumn>DATE</TableColumn>
 					<TableColumn>ITEM</TableColumn>
 					<TableColumn>QUANTITY</TableColumn>
+					<TableColumn>SUBTOTAL</TableColumn>
 					<TableColumn>STATUS</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
@@ -73,8 +74,20 @@ export function OrderTableDesktop() {
 								</div>
 							</TableCell>
 							<TableCell>
-								<div className="flex flex-row gap-2 items-center">
-									<span className="text-base">5 kg</span>
+								<div className="flex flex-col gap-2 items-start">
+									<span className="text-base font-bold">
+										5 kg
+									</span>
+								</div>
+							</TableCell>
+							<TableCell>
+								<div className="flex flex-col items-start">
+									<span className="text-base font-bold">
+										₱21,223.20
+									</span>
+									<span className="text-sm text-default-500 italic">
+										Wholesale
+									</span>
 								</div>
 							</TableCell>
 							<TableCell>
