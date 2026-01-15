@@ -1,24 +1,8 @@
-import {
-	ProductIcon,
-	SearchIcon,
-	FilterIcon,
-	VegetablesOutline,
-	FoodGrains24Regular,
-	FruitsOutline,
-	PoultryLeg,
-	Chili,
-} from "@/components/icons";
-import {
-	Dropdown,
-	DropdownTrigger,
-	DropdownMenu,
-	DropdownItem,
-	Button,
-	Input,
-} from "@heroui/react";
+import { ProductIcon } from "@/components/icons";
 import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
 import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableMobile";
 import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableDesktop";
+import { FilterSection } from "@/pages/Admin/ProductsComponent/FilterSection";
 export default function Products() {
 	return (
 		<div className="flex flex-col gap-8 p-4">
@@ -39,57 +23,7 @@ export default function Products() {
 			</div>
 
 			<div className="flex flex-row items-center justify-between">
-				{/* Search Row */}
-				<Input
-					placeholder="Search item / variant"
-					className="w-1/2 sm:w-1/4"
-					startContent={<SearchIcon />}
-				/>
-				<Dropdown>
-					<DropdownTrigger>
-						<Button
-							className="capitalize"
-							startContent={<FilterIcon className="w-5" />}
-						>
-							Filter Categories
-						</Button>
-					</DropdownTrigger>
-					<DropdownMenu
-						closeOnSelect={false}
-						selectionMode="multiple"
-					>
-						<DropdownItem key="pending">
-							<div className="flex items-center gap-2">
-								<VegetablesOutline />
-								<span>Vegetable</span>
-							</div>
-						</DropdownItem>
-						<DropdownItem key="ready">
-							<div className="flex items-center gap-2">
-								<FoodGrains24Regular />
-								<span>Grain</span>
-							</div>
-						</DropdownItem>
-						<DropdownItem key="completed">
-							<div className="flex items-center gap-2">
-								<FruitsOutline />
-								<span>Fruit</span>
-							</div>
-						</DropdownItem>
-						<DropdownItem key="cancel">
-							<div className="flex items-center gap-2">
-								<PoultryLeg />
-								<span>Poultry</span>
-							</div>
-						</DropdownItem>
-						<DropdownItem key="cancel">
-							<div className="flex items-center gap-2">
-								<Chili />
-								<span>Spice</span>
-							</div>
-						</DropdownItem>
-					</DropdownMenu>
-				</Dropdown>
+				<FilterSection />
 			</div>
 
 			{/* TABLE ROW */}
