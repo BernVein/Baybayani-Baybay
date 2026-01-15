@@ -1,5 +1,15 @@
-import { ProductIcon } from "@/components/icons";
-
+import { ProductIcon, SearchIcon, FilterIcon } from "@/components/icons";
+import {
+	Dropdown,
+	DropdownTrigger,
+	DropdownMenu,
+	DropdownItem,
+	Button,
+	Input,
+} from "@heroui/react";
+import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
+import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableMobile";
+import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableDesktop";
 export default function Products() {
 	return (
 		<div className="flex flex-col gap-8 p-4">
@@ -15,6 +25,61 @@ export default function Products() {
 					<div className="text-lg font-semibold">Admin Bern Vein</div>
 				</div>
 			</div>
+			<div className="hidden sm:block">
+				<ProductSummary />
+			</div>
+
+			<div className="flex flex-row items-center justify-between">
+				{/* Search Row */}
+				<Input
+					placeholder="Search user / item"
+					className="w-1/2 sm:w-1/4"
+					startContent={<SearchIcon />}
+				/>
+				<Dropdown>
+					<DropdownTrigger>
+						<Button
+							className="capitalize"
+							startContent={<FilterIcon className="w-5" />}
+						>
+							Filter
+						</Button>
+					</DropdownTrigger>
+					<DropdownMenu
+						closeOnSelect={false}
+						selectionMode="multiple"
+					>
+						<DropdownItem key="pending">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-yellow-400" />
+								<span>Pending</span>
+							</div>
+						</DropdownItem>
+						<DropdownItem key="ready">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-blue-400" />
+								<span>Ready</span>
+							</div>
+						</DropdownItem>
+						<DropdownItem key="completed">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-green-400" />
+								<span>Completed</span>
+							</div>
+						</DropdownItem>
+						<DropdownItem key="cancel">
+							<div className="flex items-center gap-2">
+								<span className="w-2 h-2 rounded-full bg-red-300" />
+								<span className="text-danger">Cancel</span>
+							</div>
+						</DropdownItem>
+					</DropdownMenu>
+				</Dropdown>
+			</div>
+
+			{/* TABLE ROW */}
+			<ProductTableMobile />
+			<ProductTableDesktop />
 		</div>
 	);
 }
