@@ -13,6 +13,7 @@ import {
 	DropdownItem,
 	Button,
 	DropdownSection,
+	Chip,
 } from "@heroui/react";
 
 export function OrderTableDesktop() {
@@ -25,7 +26,10 @@ export function OrderTableDesktop() {
 			>
 				<TableHeader>
 					<TableColumn>USER</TableColumn>
+					<TableColumn>DATE</TableColumn>
 					<TableColumn>ITEM</TableColumn>
+					<TableColumn>QUANTITY</TableColumn>
+					<TableColumn>STATUS</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
@@ -35,24 +39,41 @@ export function OrderTableDesktop() {
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
 									<Avatar size="md" />
-									<span className="text-sm">
+									<span className="text-base">
 										User {i + 1}
 									</span>
 								</div>
 							</TableCell>
 							<TableCell>
+								<div className="flex flex-col items-start gap-2">
+									<span className="text-sm">
+										Jan 12, 2025
+									</span>
+									<span className="text-xs text-default-500">
+										10:12 AM
+									</span>
+								</div>
+							</TableCell>
+							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									<span className="w-2 h-2 rounded-full bg-green-400" />
+									<Avatar />
 									<div className="flex flex-col gap-1 items-start">
 										<span>Item123123as{i + 1}</span>
 										<span className="text-default-500 italic">
 											Banana
 										</span>
-										<span className="text-default-500 italic">
-											5 kg
-										</span>
 									</div>
 								</div>
+							</TableCell>
+							<TableCell>
+								<div className="flex flex-row gap-2 items-center">
+									<span className="text-base">5 kg</span>
+								</div>
+							</TableCell>
+							<TableCell>
+								<Chip color="success" variant="flat">
+									Completed
+								</Chip>
 							</TableCell>
 							<TableCell>
 								<Dropdown>
