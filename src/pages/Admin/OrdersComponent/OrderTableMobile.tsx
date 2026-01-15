@@ -35,9 +35,14 @@ export function OrderTableMobile() {
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
 									<Avatar size="md" />
-									<span className="text-sm">
-										User {i + 1}
-									</span>
+									<div className="flex flex-col gap-1 items-start">
+										<span className="text-sm">
+											User {i + 1}
+										</span>
+										<span className="text-default-500 italic text-xs">
+											11/23/24
+										</span>
+									</div>
 								</div>
 							</TableCell>
 							<TableCell>
