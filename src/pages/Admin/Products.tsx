@@ -1,4 +1,13 @@
-import { ProductIcon, SearchIcon, FilterIcon } from "@/components/icons";
+import {
+	ProductIcon,
+	SearchIcon,
+	FilterIcon,
+	VegetablesOutline,
+	FoodGrains24Regular,
+	FruitsOutline,
+	PoultryLeg,
+	Chili,
+} from "@/components/icons";
 import {
 	Dropdown,
 	DropdownTrigger,
@@ -32,7 +41,7 @@ export default function Products() {
 			<div className="flex flex-row items-center justify-between">
 				{/* Search Row */}
 				<Input
-					placeholder="Search user / item"
+					placeholder="Search item / variant"
 					className="w-1/2 sm:w-1/4"
 					startContent={<SearchIcon />}
 				/>
@@ -42,7 +51,7 @@ export default function Products() {
 							className="capitalize"
 							startContent={<FilterIcon className="w-5" />}
 						>
-							Filter
+							Filter Categories
 						</Button>
 					</DropdownTrigger>
 					<DropdownMenu
@@ -51,26 +60,32 @@ export default function Products() {
 					>
 						<DropdownItem key="pending">
 							<div className="flex items-center gap-2">
-								<span className="w-2 h-2 rounded-full bg-yellow-400" />
-								<span>Pending</span>
+								<VegetablesOutline />
+								<span>Vegetable</span>
 							</div>
 						</DropdownItem>
 						<DropdownItem key="ready">
 							<div className="flex items-center gap-2">
-								<span className="w-2 h-2 rounded-full bg-blue-400" />
-								<span>Ready</span>
+								<FoodGrains24Regular />
+								<span>Grain</span>
 							</div>
 						</DropdownItem>
 						<DropdownItem key="completed">
 							<div className="flex items-center gap-2">
-								<span className="w-2 h-2 rounded-full bg-green-400" />
-								<span>Completed</span>
+								<FruitsOutline />
+								<span>Fruit</span>
 							</div>
 						</DropdownItem>
 						<DropdownItem key="cancel">
 							<div className="flex items-center gap-2">
-								<span className="w-2 h-2 rounded-full bg-red-300" />
-								<span className="text-danger">Cancel</span>
+								<PoultryLeg />
+								<span>Poultry</span>
+							</div>
+						</DropdownItem>
+						<DropdownItem key="cancel">
+							<div className="flex items-center gap-2">
+								<Chili />
+								<span>Spice</span>
 							</div>
 						</DropdownItem>
 					</DropdownMenu>

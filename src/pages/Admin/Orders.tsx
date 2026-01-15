@@ -44,7 +44,7 @@ export default function Orders() {
 							className="capitalize"
 							startContent={<FilterIcon className="w-5" />}
 						>
-							Filter
+							Filter Status
 						</Button>
 					</DropdownTrigger>
 					<DropdownMenu
