@@ -101,7 +101,7 @@ export function SidebarDesktopAdmin() {
 							// default styles
 							"data-[hover=true]:bg-success-100",
 							"data-[hover=true]:text-success-900",
-							// make selected look like hover
+							// selected
 							"data-[selected=true]:bg-success-100",
 							"data-[selected=true]:text-success-900",
 						].join(" "),
