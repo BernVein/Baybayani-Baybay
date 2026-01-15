@@ -23,12 +23,24 @@ import {
 	LogoutIcon,
 	ClockIcon,
 } from "@/components/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useEffect, useState } from "react";
 
 export function SidebarDesktopAdmin() {
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	// Map pathname to the Listbox key
+	const pathToKey: Record<string, string> = {
+		"/admin/dashboard": "dashboard",
+		"/admin/orders": "orders",
+		"/admin/products": "products",
+		"/admin/users": "users",
+		"/admin/messages": "messages",
+	};
+	const selectedKey = pathToKey[location.pathname];
+
 	const [, setTick] = useState(0);
 	useEffect(() => {
 		const tick = () => setTick((n) => n + 1);
@@ -81,7 +93,19 @@ export function SidebarDesktopAdmin() {
 
 				<Listbox
 					aria-label="Actions"
-					// onAction={(key) =(key)}
+					selectionMode="single"
+					selectedKeys={selectedKey ? [selectedKey] : []}
+					hideSelectedIcon
+					itemClasses={{
+						base: [
+							// default styles
+							"data-[hover=true]:bg-success-100",
+							"data-[hover=true]:text-success-900",
+							// make selected look like hover
+							"data-[selected=true]:bg-success-100",
+							"data-[selected=true]:text-success-900",
+						].join(" "),
+					}}
 				>
 					<ListboxSection showDivider title="Overview">
 						<ListboxItem
