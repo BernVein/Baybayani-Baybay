@@ -47,7 +47,9 @@ export function OrderTableMobile() {
 								<div className="flex flex-row gap-2 items-center">
 									<span className="w-2 h-2 rounded-full bg-green-400" />
 									<div className="flex flex-col items-start">
-										<span>Item123123as{i + 1}</span>
+										<span className="font-bold">
+											Item123123as{i + 1}
+										</span>
 										<span className="font-light italic text-xs text-default-500">
 											Banana
 										</span>
