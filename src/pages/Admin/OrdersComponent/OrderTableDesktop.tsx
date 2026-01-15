@@ -15,7 +15,7 @@ import {
 	DropdownSection,
 } from "@heroui/react";
 
-export function OrderTableAdmin() {
+export function OrderTableDesktop() {
 	return (
 		<div className="hidden sm:flex">
 			<Table

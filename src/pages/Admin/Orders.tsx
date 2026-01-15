@@ -9,7 +9,7 @@ import {
 } from "@heroui/react";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import { OrderTableMobile } from "./OrdersComponent/OrderTableMobile";
-import { OrderTableAdmin } from "./OrdersComponent/OrderTableAdmin";
+import { OrderTableDesktop } from "./OrdersComponent/OrderTableDesktop";
 
 export default function Orders() {
 	return (
@@ -81,7 +81,7 @@ export default function Orders() {
 
 			{/* TABLE ROW */}
 			<OrderTableMobile />
-			<OrderTableAdmin />
+			<OrderTableDesktop />
 		</div>
 	);
 }
