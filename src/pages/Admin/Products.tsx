@@ -3,7 +3,10 @@ import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
 import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableMobile";
 import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableDesktop";
 import { FilterSection } from "@/pages/Admin/ProductsComponent/FilterSection";
+import { useDisclosure } from "@heroui/react";
+
 export default function Products() {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	return (
 		<div className="flex flex-col gap-8 p-4">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -26,9 +29,12 @@ export default function Products() {
 				<FilterSection />
 			</div>
 
-			{/* TABLE ROW */}
 			<ProductTableMobile />
-			<ProductTableDesktop />
+			<ProductTableDesktop
+				isOpen={isOpen}
+				onOpen={onOpen}
+				onOpenChange={onOpenChange}
+			/>
 		</div>
 	);
 }
