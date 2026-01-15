@@ -24,7 +24,7 @@ export function OrderTableMobile() {
 			>
 				<TableHeader>
 					<TableColumn>CUSTOMER</TableColumn>
-					<TableColumn>ITEM</TableColumn>
+					<TableColumn>ORDER INFO</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
