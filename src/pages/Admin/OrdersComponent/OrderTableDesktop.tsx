@@ -25,7 +25,7 @@ export function OrderTableDesktop() {
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
-					<TableColumn>USER</TableColumn>
+					<TableColumn>CUSTOMER</TableColumn>
 					<TableColumn>DATE</TableColumn>
 					<TableColumn>ITEM</TableColumn>
 					<TableColumn>QUANTITY</TableColumn>
@@ -39,9 +39,14 @@ export function OrderTableDesktop() {
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
 									<Avatar size="md" />
-									<span className="text-base">
-										User {i + 1}
-									</span>
+									<div className="flex flex-col items-start">
+										<span className="text-sm">
+											User {i + 1}
+										</span>
+										<span className="text-xs text-default-500 italic">
+											Cooperative
+										</span>
+									</div>
 								</div>
 							</TableCell>
 							<TableCell>
@@ -58,8 +63,10 @@ export function OrderTableDesktop() {
 								<div className="flex flex-row gap-2 items-center">
 									<Avatar />
 									<div className="flex flex-col gap-1 items-start">
-										<span>Item123123as{i + 1}</span>
-										<span className="text-default-500 italic">
+										<span className="text-sm">
+											Item123123as{i + 1}
+										</span>
+										<span className="text-default-500 text-xs italic">
 											Banana
 										</span>
 									</div>

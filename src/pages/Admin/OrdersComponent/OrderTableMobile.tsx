@@ -6,7 +6,6 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
-	Avatar,
 	Dropdown,
 	DropdownTrigger,
 	DropdownMenu,
@@ -24,7 +23,7 @@ export function OrderTableMobile() {
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
-					<TableColumn>USER</TableColumn>
+					<TableColumn>CUSTOMER</TableColumn>
 					<TableColumn>ITEM</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
@@ -34,16 +33,13 @@ export function OrderTableMobile() {
 						<TableRow key={i + 1}>
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
-									<Avatar size="md" />
-									<div className="flex flex-col gap-1 items-start">
+									<div className="flex flex-col items-start">
 										<span className="text-sm">
 											User {i + 1}
 										</span>
+
 										<span className="text-default-500 italic text-xs">
-											11/23/24
-										</span>
-										<span className="text-default-500 italic text-xs">
-											10:12 AM
+											Cooperative
 										</span>
 									</div>
 								</div>
@@ -54,10 +50,10 @@ export function OrderTableMobile() {
 									<div className="flex flex-col gap-1 items-start">
 										<span>Item123123as{i + 1}</span>
 										<span className="text-default-500 italic">
-											Banana
+											5 kg
 										</span>
 										<span className="text-default-500 italic">
-											5 kg
+											11/23/24 @ 10:23 AM
 										</span>
 									</div>
 								</div>

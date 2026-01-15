@@ -42,7 +42,7 @@ export function OrderSummary() {
 							</div>
 						</div>
 						<span className="text-default-500">
-							5 users waiting
+							5 customers waiting
 						</span>
 					</div>
 				</CardBody>
