@@ -42,6 +42,9 @@ export function OrderTableMobile() {
 										<span className="text-default-500 italic text-xs">
 											11/23/24
 										</span>
+										<span className="text-default-500 italic text-xs">
+											10:12 AM
+										</span>
 									</div>
 								</div>
 							</TableCell>
