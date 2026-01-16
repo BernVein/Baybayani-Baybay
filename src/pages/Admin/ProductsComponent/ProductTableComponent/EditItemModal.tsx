@@ -7,7 +7,6 @@ import {
 	PhotoIcon,
 	TrashIcon,
 	PlusIcon,
-	ExclamationCircle,
 } from "@/components/icons";
 import {
 	Button,
@@ -22,6 +21,9 @@ import {
 	Divider,
 	useDisclosure,
 } from "@heroui/react";
+import { AddVariantModal } from "./EditItemModalComponent/AddVariantModal";
+import { DeleteVariantModal } from "./EditItemModalComponent/DeleteVariantModal";
+import { DeleteItemModal } from "./EditItemModalComponent/DeleteItemModal";
 export function EditItemModal({
 	isOpen,
 	onOpenChange,
@@ -244,155 +246,18 @@ export function EditItemModal({
 					)}
 				</ModalContent>
 			</Modal>
-			<Modal isOpen={isOpenAddVar} onOpenChange={onOpenChangeAddVar}>
-				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader className="flex flex-col gap-1">
-								Add Variant
-							</ModalHeader>
-							<ModalBody>
-								<div className="flex flex-row gap-2 items-center">
-									<Input
-										label="Variant Name"
-										labelPlacement="outside"
-										className="w-1/2"
-									/>
-									<Input
-										label="Retail Price"
-										labelPlacement="outside"
-										className="w-1/2"
-									/>
-								</div>
-
-								<div className="flex flex-row gap-2 items-center">
-									<Input
-										label="Wholesale Price"
-										labelPlacement="outside"
-										className="w-1/2"
-									/>
-									<Input
-										label="Wholesale Pack Size"
-										labelPlacement="outside"
-										className="w-1/2"
-									/>
-								</div>
-							</ModalBody>
-							<ModalFooter>
-								<Button
-									color="danger"
-									variant="light"
-									onPress={onClose}
-								>
-									Close
-								</Button>
-								<Button color="success" onPress={onClose}>
-									Add
-								</Button>
-							</ModalFooter>
-						</>
-					)}
-				</ModalContent>
-			</Modal>
-			<Modal
-				isOpen={isOpenDeleteVar}
-				onOpenChange={onOpenChangeDeleteVar}
-				size="sm"
-			>
-				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader className="flex flex-col items-center gap-2 text-center">
-								<div className="flex items-center justify-center h-12 w-12 rounded-full bg-danger/10 text-danger">
-									<ExclamationCircle className="w-6 h-6" />
-								</div>
-								<h2 className="text-lg font-semibold text-danger">
-									Delete variant
-								</h2>
-							</ModalHeader>
-
-							<ModalBody className="text-center text-default-600">
-								<p className="text-sm leading-relaxed">
-									Are you sure you want to remove{" "}
-									<span className="font-semibold text-default-800">
-										Variant 1
-									</span>{" "}
-									from this item?
-								</p>
-								<p className="text-xs text-default-500 mt-1">
-									This action cannot be undone.
-								</p>
-							</ModalBody>
-
-							<ModalFooter className="flex justify-center gap-3 pt-4">
-								<Button
-									variant="flat"
-									color="default"
-									className="px-6"
-									onPress={onClose}
-								>
-									Cancel
-								</Button>
-								<Button
-									color="danger"
-									className="px-6 font-semibold"
-								>
-									Delete
-								</Button>
-							</ModalFooter>
-						</>
-					)}
-				</ModalContent>
-			</Modal>
-			<Modal
-				isOpen={isOpenDeleteItem}
-				onOpenChange={onOpenChangeDeleteItem}
-				size="sm"
-			>
-				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader className="flex flex-col items-center gap-2 text-center">
-								<div className="flex items-center justify-center h-12 w-12 rounded-full bg-danger/10 text-danger">
-									<ExclamationCircle className="w-6 h-6" />
-								</div>
-								<h2 className="text-lg font-semibold text-danger">
-									Delete item
-								</h2>
-							</ModalHeader>
-
-							<ModalBody className="text-center text-default-600">
-								<p className="text-sm leading-relaxed">
-									Are you sure you want to remove{" "}
-									<span className="font-semibold text-default-800">
-										Item 1
-									</span>
-								</p>
-								<p className="text-xs text-default-500 mt-1">
-									This action cannot be undone.
-								</p>
-							</ModalBody>
-
-							<ModalFooter className="flex justify-center gap-3 pt-4">
-								<Button
-									variant="flat"
-									color="default"
-									className="px-6"
-									onPress={onClose}
-								>
-									Cancel
-								</Button>
-								<Button
-									color="danger"
-									className="px-6 font-semibold"
-								>
-									Delete
-								</Button>
-							</ModalFooter>
-						</>
-					)}
-				</ModalContent>
-			</Modal>
+			<AddVariantModal
+				isOpenAddVar={isOpenAddVar}
+				onOpenChangeAddVar={onOpenChangeAddVar}
+			/>
+			<DeleteVariantModal
+				isOpenDeleteVar={isOpenDeleteVar}
+				onOpenChangeDeleteVar={onOpenChangeDeleteVar}
+			/>
+			<DeleteItemModal
+				isOpenDeleteItem={isOpenDeleteItem}
+				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
+			/>
 		</>
 	);
 }
