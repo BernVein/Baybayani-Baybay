@@ -10,8 +10,9 @@ import {
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import { OrderTableMobile } from "./OrdersComponent/OrderTableMobile";
 import { OrderTableDesktop } from "./OrdersComponent/OrderTableDesktop";
-
+import useIsMobile from "@/lib/isMobile";
 export default function Orders() {
+	const isMobile = useIsMobile();
 	return (
 		<div className="flex flex-col gap-8 p-4">
 			{/* HEADER ROW */}
@@ -43,8 +44,9 @@ export default function Orders() {
 						<Button
 							className="capitalize"
 							startContent={<FilterIcon className="w-5" />}
+							isIconOnly={isMobile}
 						>
-							Filter Status
+							{isMobile ? "" : "Filter Status"}
 						</Button>
 					</DropdownTrigger>
 					<DropdownMenu
