@@ -22,7 +22,7 @@ export function ProductTableDesktop() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	return (
-		<div className="flex">
+		<div className="sm:flex hidden">
 			<Table
 				isHeaderSticky
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"

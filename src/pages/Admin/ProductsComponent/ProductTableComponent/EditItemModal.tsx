@@ -105,13 +105,16 @@ export function EditItemModal({
 									<SelectItem>Discounted</SelectItem>
 								</Select>
 							</div>
-							<Button
-								startContent={<PhotoIcon className="w-5" />}
-								color="success"
-								className="mt-2"
-							>
-								View Photos
-							</Button>
+							<div className="flex flex-row gap-2 items-center">
+								<Button
+									startContent={<PhotoIcon className="w-5" />}
+									color="success"
+									className="mt-2 w-full"
+								>
+									View Photos
+								</Button>
+							</div>
+
 							<div className="flex flex-row gap-2 justify-end">
 								<Button
 									startContent={<TrashIcon className="w-5" />}

@@ -22,8 +22,8 @@ export function ProductTableMobile() {
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
-					<TableColumn>CUSTOMER</TableColumn>
-					<TableColumn>ORDER INFO</TableColumn>
+					<TableColumn>ITEM</TableColumn>
+					<TableColumn>PRICE</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
@@ -32,12 +32,18 @@ export function ProductTableMobile() {
 						<TableRow key={i + 1}>
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
-									<div className="flex flex-col gap-1 items-start">
+									<div className="flex flex-col items-start">
 										<span className="text-sm">
-											User {i + 1}
+											Item {i + 1}
+										</span>
+										<span className="text-sm italic text-default-500">
+											3 variants
 										</span>
 										<span className="text-default-500 italic text-xs">
-											Cooperative
+											Vegetable
+										</span>
+										<span className="text-default-500 italic text-xs">
+											Fresh
 										</span>
 									</div>
 								</div>
