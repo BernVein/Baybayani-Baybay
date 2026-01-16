@@ -6,6 +6,7 @@ import {
 	Chili,
 	PhotoIcon,
 	TrashIcon,
+	PlusIcon,
 } from "@/components/icons";
 import {
 	Button,
@@ -54,27 +55,37 @@ export function EditItemModal({
 								<Select
 									labelPlacement="outside"
 									label="Item Category"
+									defaultSelectedKeys={"2"}
 									className="w-1/2"
 								>
 									<SelectItem
+										key="1"
 										startContent={<VegetablesOutline />}
 									>
 										Vegetable
 									</SelectItem>
 									<SelectItem
+										key="2"
 										startContent={<FruitsOutline />}
 									>
 										Fruit
 									</SelectItem>
 									<SelectItem
+										key="3"
 										startContent={<FoodGrains24Regular />}
 									>
 										Grain
 									</SelectItem>
-									<SelectItem startContent={<PoultryLeg />}>
+									<SelectItem
+										key="4"
+										startContent={<PoultryLeg />}
+									>
 										Poultry
 									</SelectItem>
-									<SelectItem startContent={<Chili />}>
+									<SelectItem
+										key="5"
+										startContent={<Chili />}
+									>
 										Spice
 									</SelectItem>
 								</Select>
@@ -83,7 +94,7 @@ export function EditItemModal({
 								key="2"
 								label="Item Short Description"
 								labelPlacement="outside"
-								defaultValue="Banana"
+								defaultValue="An optional description for banana"
 								className="w-full"
 								type="text"
 							/>
@@ -92,7 +103,7 @@ export function EditItemModal({
 									key="1"
 									label="Unit of Measure"
 									labelPlacement="outside"
-									defaultValue="Banana"
+									defaultValue="kg"
 									className="w-1/2"
 								/>
 								<Select
@@ -108,7 +119,6 @@ export function EditItemModal({
 							<div className="flex flex-row gap-2 items-center">
 								<Button
 									startContent={<PhotoIcon className="w-5" />}
-									color="success"
 									className="mt-2 w-full"
 								>
 									View Photos
@@ -123,13 +133,21 @@ export function EditItemModal({
 								>
 									Delete Item
 								</Button>
-								<Button className="mt-2">Update</Button>
+								<Button color="success" className="mt-2">
+									Update
+								</Button>
 							</div>
 							<Divider />
-
-							<span className="text-lg font-semibold">
-								Item Variants
-							</span>
+							<div className="flex flex-row justify-between">
+								<span className="text-lg font-semibold">
+									Item Variants
+								</span>
+								<Button
+									startContent={<PlusIcon className="w-5" />}
+								>
+									Add Variant
+								</Button>
+							</div>
 
 							{Array.from({ length: 5 }).map((_, index) => (
 								<div key={index} className="space-y-2">
@@ -143,7 +161,7 @@ export function EditItemModal({
 										<Input
 											label="Retail Price"
 											labelPlacement="outside"
-											defaultValue=""
+											defaultValue="₱12.00"
 											className="w-1/2"
 										/>
 									</div>
@@ -152,13 +170,13 @@ export function EditItemModal({
 										<Input
 											label="Wholesale Price"
 											labelPlacement="outside"
-											defaultValue=""
+											defaultValue="₱12.00"
 											className="w-1/2"
 										/>
 										<Input
 											label="Wholesale Pack Size"
 											labelPlacement="outside"
-											defaultValue=""
+											defaultValue="5"
 											className="w-1/2"
 										/>
 									</div>
@@ -173,7 +191,12 @@ export function EditItemModal({
 										>
 											Delete Variant
 										</Button>
-										<Button className="mt-2">Update</Button>
+										<Button
+											className="mt-2"
+											color="success"
+										>
+											Update
+										</Button>
 									</div>
 								</div>
 							))}
