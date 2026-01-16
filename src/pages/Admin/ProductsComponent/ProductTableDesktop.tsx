@@ -20,7 +20,11 @@ import { EditItemModal } from "./ProductTableComponent/EditItemModal";
 
 export function ProductTableDesktop() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+	const {
+		isOpen: isOpenDeleteItem,
+		onOpen: onOpenDeleteItem,
+		onOpenChange: onOpenChangeDeleteItem,
+	} = useDisclosure();
 	return (
 		<div className="sm:flex hidden">
 			<Table
@@ -108,6 +112,7 @@ export function ProductTableDesktop() {
 										size="sm"
 										variant="light"
 										isIconOnly
+										onPress={onOpenDeleteItem}
 									>
 										<TrashIcon className="w-5 text-danger-300" />
 									</Button>
@@ -117,7 +122,13 @@ export function ProductTableDesktop() {
 					))}
 				</TableBody>
 			</Table>
-			<EditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
+			<EditItemModal
+				isOpen={isOpen}
+				onOpenChange={onOpenChange}
+				isOpenDeleteItem={isOpenDeleteItem}
+				onOpenDeleteItem={onOpenDeleteItem}
+				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
+			/>
 		</div>
 	);
 }
