@@ -1,4 +1,9 @@
-import { MoreIconVertical } from "@/components/icons";
+import {
+	MoreIconVertical,
+	PencilIcon,
+	EyeIcon,
+	TrashIcon,
+} from "@/components/icons";
 import {
 	Table,
 	TableHeader,
@@ -12,9 +17,12 @@ import {
 	DropdownItem,
 	Button,
 	DropdownSection,
+	useDisclosure,
 } from "@heroui/react";
+import { EditItemModal } from "./ProductTableComponent/EditItemModal";
 
 export function ProductTableMobile() {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	return (
 		<div className="sm:hidden">
 			<Table
@@ -23,7 +31,7 @@ export function ProductTableMobile() {
 			>
 				<TableHeader>
 					<TableColumn>ITEM</TableColumn>
-					<TableColumn>PRICE</TableColumn>
+					<TableColumn>PRICE & STOCK</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
@@ -33,7 +41,7 @@ export function ProductTableMobile() {
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
 									<div className="flex flex-col items-start">
-										<span className="text-sm">
+										<span className="text-sm font-bold">
 											Item {i + 1}
 										</span>
 										<span className="text-sm italic text-default-500">
@@ -50,22 +58,16 @@ export function ProductTableMobile() {
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									<span className="w-2 h-2 rounded-full bg-green-400" />
 									<div className="flex flex-col items-start">
 										<span className="font-bold">
-											Item123123as{i + 1}
+											₱213.20 - ₱220.00
 										</span>
 										<span className="font-light italic text-xs text-default-500">
-											Banana
+											per kg
 										</span>
-										<span className="font-bold">
-											5 kg - ₱21,223.20
-										</span>
+
 										<span className="text-default-500 text-xs italic">
-											11/23/24 @ 10:23 AM
-										</span>
-										<span className="text-default-500 italic text-xs">
-											Wholesale
+											523 kg left
 										</span>
 									</div>
 								</div>
@@ -78,33 +80,38 @@ export function ProductTableMobile() {
 										</Button>
 									</DropdownTrigger>
 									<DropdownMenu aria-label="Static Actions">
-										<DropdownSection title="Set Status">
-											<DropdownItem key="pending">
+										<DropdownSection title="Manage Item">
+											<DropdownItem
+												key="pending"
+												startContent={
+													<PencilIcon className="w-5" />
+												}
+												onClick={onOpen}
+											>
 												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-yellow-400" />
-													<span>Pending</span>
+													<span>Edit</span>
 												</div>
 											</DropdownItem>
 
-											<DropdownItem key="ready">
+											<DropdownItem
+												key="ready"
+												startContent={
+													<EyeIcon className="w-5" />
+												}
+											>
 												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-blue-400" />
-													<span>Ready</span>
+													<span>Hide</span>
 												</div>
 											</DropdownItem>
-
-											<DropdownItem key="completed">
+											<DropdownItem
+												key="cancel"
+												startContent={
+													<TrashIcon className="w-5 text-danger-300" />
+												}
+											>
 												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-green-400" />
-													<span>Completed</span>
-												</div>
-											</DropdownItem>
-
-											<DropdownItem key="cancel">
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-red-300" />
 													<span className="text-danger">
-														Cancel
+														Delete
 													</span>
 												</div>
 											</DropdownItem>
@@ -116,6 +123,7 @@ export function ProductTableMobile() {
 					))}
 				</TableBody>
 			</Table>
+			<EditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
 		</div>
 	);
 }
