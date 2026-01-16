@@ -4,6 +4,8 @@ import {
 	FruitsOutline,
 	PoultryLeg,
 	Chili,
+	PhotoIcon,
+	TrashIcon,
 } from "@/components/icons";
 import {
 	Button,
@@ -15,6 +17,7 @@ import {
 	Input,
 	Select,
 	SelectItem,
+	Divider,
 } from "@heroui/react";
 export function EditItemModal({
 	isOpen,
@@ -24,14 +27,22 @@ export function EditItemModal({
 	onOpenChange: (open: boolean) => void;
 }) {
 	return (
-		<Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
+		<Modal
+			isOpen={isOpen}
+			onOpenChange={onOpenChange}
+			size="xl"
+			scrollBehavior="inside"
+		>
 			<ModalContent>
 				{(onClose) => (
 					<>
 						<ModalHeader className="flex flex-col gap-1">
-							Manage Item
+							Edit Details
 						</ModalHeader>
 						<ModalBody>
+							<span className="text-lg font-semibold">
+								Manage Item
+							</span>
 							<div className="flex flex-row gap-2 items-center">
 								<Input
 									key="1"
@@ -94,6 +105,75 @@ export function EditItemModal({
 									<SelectItem>Discounted</SelectItem>
 								</Select>
 							</div>
+							<Button
+								startContent={<PhotoIcon className="w-5" />}
+								color="success"
+								className="mt-2"
+							>
+								View Photos
+							</Button>
+							<div className="flex flex-row gap-2 justify-end">
+								<Button
+									startContent={<TrashIcon className="w-5" />}
+									color="danger"
+									className="mt-2"
+								>
+									Delete Item
+								</Button>
+								<Button className="mt-2">Update</Button>
+							</div>
+							<Divider />
+
+							<span className="text-lg font-semibold">
+								Item Variants
+							</span>
+
+							{Array.from({ length: 5 }).map((_, index) => (
+								<div key={index} className="space-y-2">
+									<div className="flex flex-row gap-2 items-center">
+										<Input
+											label="Variant Name"
+											labelPlacement="outside"
+											defaultValue={`Variant ${index + 1}`}
+											className="w-1/2"
+										/>
+										<Input
+											label="Retail Price"
+											labelPlacement="outside"
+											defaultValue=""
+											className="w-1/2"
+										/>
+									</div>
+
+									<div className="flex flex-row gap-2 items-center">
+										<Input
+											label="Wholesale Price"
+											labelPlacement="outside"
+											defaultValue=""
+											className="w-1/2"
+										/>
+										<Input
+											label="Wholesale Pack Size"
+											labelPlacement="outside"
+											defaultValue=""
+											className="w-1/2"
+										/>
+									</div>
+
+									<div className="flex flex-row gap-2 justify-end">
+										<Button
+											startContent={
+												<TrashIcon className="w-5" />
+											}
+											color="danger"
+											className="mt-2"
+										>
+											Delete Variant
+										</Button>
+										<Button className="mt-2">Update</Button>
+									</div>
+								</div>
+							))}
 						</ModalBody>
 						<ModalFooter>
 							<Button
@@ -102,9 +182,6 @@ export function EditItemModal({
 								onPress={onClose}
 							>
 								Close
-							</Button>
-							<Button color="primary" onPress={onClose}>
-								Action
 							</Button>
 						</ModalFooter>
 					</>

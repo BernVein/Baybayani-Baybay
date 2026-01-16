@@ -22,7 +22,7 @@ export function ProductTableDesktop() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	return (
-		<div className="hidden sm:flex">
+		<div className="flex">
 			<Table
 				isHeaderSticky
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
@@ -31,8 +31,8 @@ export function ProductTableDesktop() {
 					<TableColumn>ITEM</TableColumn>
 					<TableColumn>PRICE</TableColumn>
 					<TableColumn>TOTAL STOCK</TableColumn>
-					<TableColumn>LAST UPDATED</TableColumn>
-					<TableColumn>STATUS</TableColumn>
+					<TableColumn>CATEGORY</TableColumn>
+					<TableColumn>TAG</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
@@ -77,16 +77,13 @@ export function ProductTableDesktop() {
 							<TableCell>
 								<div className="flex flex-col items-start">
 									<span className="text-base font-bold">
-										Jan 23, 2025
-									</span>
-									<span className="text-sm text-default-500 italic">
-										10:31 PM
+										Vegetable
 									</span>
 								</div>
 							</TableCell>
 							<TableCell>
 								<Chip color="success" variant="flat">
-									Visible
+									Fresh
 								</Chip>
 							</TableCell>
 
