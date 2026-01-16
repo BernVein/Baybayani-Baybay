@@ -147,7 +147,7 @@ export function EditItemModal({
 										Delete Item
 									</Button>
 									<Button color="success" className="mt-2">
-										Update
+										Update Item
 									</Button>
 								</div>
 								<Divider />
@@ -165,7 +165,7 @@ export function EditItemModal({
 									</Button>
 								</div>
 
-								{Array.from({ length: 5 }).map((_, index) => (
+								{Array.from({ length: 2 }).map((_, index) => (
 									<div key={index} className="space-y-2">
 										<div className="flex flex-row gap-2 items-center">
 											<Input
@@ -211,7 +211,7 @@ export function EditItemModal({
 												className="mt-2"
 												color="success"
 											>
-												Update
+												Update Variant
 											</Button>
 										</div>
 									</div>
