@@ -249,7 +249,7 @@ export function AddItemModal({
 									Close
 								</Button>
 								<Button color="success" onPress={onClose}>
-									Add
+									Add Variant
 								</Button>
 							</ModalFooter>
 						</>
