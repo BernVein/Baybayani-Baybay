@@ -16,7 +16,8 @@ import {
 	Chip,
 	useDisclosure,
 } from "@heroui/react";
-import { EditItemModal } from "./ProductTableComponent/EditItemModal";
+import { EditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModal";
+import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModalComponent/DeleteItemModal";
 
 export function ProductTableDesktop() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -122,11 +123,9 @@ export function ProductTableDesktop() {
 					))}
 				</TableBody>
 			</Table>
-			<EditItemModal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
+			<EditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
+			<DeleteItemModal
 				isOpenDeleteItem={isOpenDeleteItem}
-				onOpenDeleteItem={onOpenDeleteItem}
 				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
 			/>
 		</div>

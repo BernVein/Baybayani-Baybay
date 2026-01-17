@@ -21,21 +21,14 @@ import {
 	Divider,
 	useDisclosure,
 } from "@heroui/react";
-import { AddVariantModal } from "./EditItemModalComponent/AddVariantModal";
-import { DeleteVariantModal } from "./EditItemModalComponent/DeleteVariantModal";
-import { DeleteItemModal } from "./EditItemModalComponent/DeleteItemModal";
+import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModalComponent/AddVariantModal";
+import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModalComponent/DeleteVariantModal";
 export function EditItemModal({
 	isOpen,
 	onOpenChange,
-	isOpenDeleteItem,
-	onOpenDeleteItem,
-	onOpenChangeDeleteItem,
 }: {
 	isOpen: boolean;
-	onOpenChange: (open: boolean) => void;
-	isOpenDeleteItem: boolean;
-	onOpenDeleteItem: () => void;
-	onOpenChangeDeleteItem: () => void;
+	onOpenChange: () => void;
 }) {
 	const {
 		isOpen: isOpenAddVar,
@@ -151,16 +144,6 @@ export function EditItemModal({
 								</div>
 
 								<div className="flex flex-row gap-2 justify-end">
-									<Button
-										startContent={
-											<TrashIcon className="w-5" />
-										}
-										color="danger"
-										className="mt-2"
-										onPress={onOpenDeleteItem}
-									>
-										Delete Item
-									</Button>
 									<Button color="success" className="mt-2">
 										Update Item
 									</Button>
@@ -253,10 +236,6 @@ export function EditItemModal({
 			<DeleteVariantModal
 				isOpenDeleteVar={isOpenDeleteVar}
 				onOpenChangeDeleteVar={onOpenChangeDeleteVar}
-			/>
-			<DeleteItemModal
-				isOpenDeleteItem={isOpenDeleteItem}
-				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
 			/>
 		</>
 	);

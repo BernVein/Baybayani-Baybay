@@ -14,12 +14,12 @@ import {
 	Avatar,
 	Button,
 	Chip,
-	// useDisclosure,
+	useDisclosure,
 } from "@heroui/react";
-// import { EditItemModal } from "./ProductTableComponent/EditItemModal";
+import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
 
 export function UsersTableDesktop() {
-	// const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	// const {
 	// 	isOpen: isOpenDeleteItem,
 	// 	onOpen: onOpenDeleteItem,
@@ -32,11 +32,10 @@ export function UsersTableDesktop() {
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
-					<TableColumn>ITEM</TableColumn>
-					<TableColumn>PRICE</TableColumn>
-					<TableColumn>TOTAL STOCK</TableColumn>
-					<TableColumn>CATEGORY</TableColumn>
-					<TableColumn>TAG</TableColumn>
+					<TableColumn>USER</TableColumn>
+					<TableColumn>ROLE</TableColumn>
+					<TableColumn>STATUS</TableColumn>
+					<TableColumn>PURCHASE SUMMARY</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
@@ -48,56 +47,43 @@ export function UsersTableDesktop() {
 									<Avatar size="md" />
 									<div className="flex flex-col items-start">
 										<span className="text-base font-bold">
-											Item {i + 1}
+											Baybayani User
 										</span>
 										<span className="text-sm text-default-500 italic">
-											3 Variants
+											user_username
 										</span>
 									</div>
 								</div>
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									<div className="flex flex-col items-start">
-										<span className="text-base font-bold">
-											₱33.20 - ₱123.20
-										</span>
-										<span className="text-sm italic text-default-500">
-											per kg
-										</span>
-									</div>
-								</div>
-							</TableCell>
-							<TableCell>
-								<div className="flex flex-col items-start">
-									<span className="text-base font-bold">
-										502 kg
-									</span>
-									<span className="text-sm italic text-default-500">
-										on 3 variants
-									</span>
-								</div>
-							</TableCell>
-							<TableCell>
-								<div className="flex flex-col items-start">
-									<span className="text-base font-bold">
-										Vegetable
-									</span>
+									<Chip color="success" variant="flat">
+										Cooperative
+									</Chip>
 								</div>
 							</TableCell>
 							<TableCell>
 								<Chip color="success" variant="flat">
-									Fresh
+									Active
 								</Chip>
 							</TableCell>
-
+							<TableCell>
+								<div className="flex flex-col items-start">
+									<span className="text-base font-bold">
+										₱12,000.00
+									</span>
+									<span className="text-sm italic text-default-500">
+										15 completed orders
+									</span>
+								</div>
+							</TableCell>
 							<TableCell>
 								<div className="flex flex-row items-center gap-1">
 									<Button
 										size="sm"
 										variant="light"
 										isIconOnly
-										// onPress={onOpen}
+										onPress={onOpen}
 									>
 										<PencilIcon className="w-5" />
 									</Button>
@@ -122,13 +108,7 @@ export function UsersTableDesktop() {
 					))}
 				</TableBody>
 			</Table>
-			{/* <EditItemModal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
-				isOpenDeleteItem={isOpenDeleteItem}
-				onOpenDeleteItem={onOpenDeleteItem}
-				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
-			/> */}
+			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
 		</div>
 	);
 }
