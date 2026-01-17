@@ -35,7 +35,7 @@ export function ProductTableMobile() {
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
-				<TableBody emptyContent={"No low stock item."}>
+				<TableBody emptyContent={"No items found."}>
 					{Array.from({ length: 20 }).map((_, i) => (
 						<TableRow key={i + 1}>
 							<TableCell>

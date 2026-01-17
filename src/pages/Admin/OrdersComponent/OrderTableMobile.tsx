@@ -27,7 +27,7 @@ export function OrderTableMobile() {
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
-				<TableBody emptyContent={"No low stock item."}>
+				<TableBody emptyContent={"No orders found."}>
 					{Array.from({ length: 20 }).map((_, i) => (
 						<TableRow key={i + 1}>
 							<TableCell>
