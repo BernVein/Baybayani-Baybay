@@ -101,7 +101,7 @@ export function AddUserModal({
 										}
 										className="mt-2 w-full"
 									>
-										View Profile
+										Add Profile
 									</Button>
 									<Button
 										startContent={
@@ -109,7 +109,7 @@ export function AddUserModal({
 										}
 										className="mt-2 w-full"
 									>
-										View ID
+										Add Valid ID
 									</Button>
 								</div>
 							</ModalBody>
