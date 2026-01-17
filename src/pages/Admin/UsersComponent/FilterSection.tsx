@@ -16,7 +16,7 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import useIsMobile from "@/lib/isMobile";
-import { AddItemModal } from "@/pages/Admin/ProductsComponent/AddItemModal";
+import { AddUserModal } from "@/pages/Admin/UsersComponent/AddUserModal";
 
 export function FilterSection() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -71,7 +71,7 @@ export function FilterSection() {
 					</DropdownMenu>
 				</Dropdown>
 			</div>
-			<AddItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
+			<AddUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
 		</div>
 	);
 }
