@@ -512,6 +512,26 @@ export function MoreIcon(props: IconSvgProps, className: string) {
 	);
 }
 
+export function KeyIcon(props: IconSvgProps, className: string) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			strokeWidth="1.5"
+			stroke="currentColor"
+			className={className}
+			{...props}
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z"
+			/>
+		</svg>
+	);
+}
+
 export function PlusIcon(props: IconSvgProps, className: string) {
 	return (
 		<svg
@@ -554,7 +574,7 @@ export function PhotoIcon(props: IconSvgProps, className: string) {
 
 export function ProductIconWithArrowDown(
 	props: IconSvgProps,
-	className: string
+	className: string,
 ) {
 	return (
 		<svg
@@ -692,6 +712,26 @@ export function FoodGrains24Regular(props: IconSvgProps) {
 				fill="currentColor"
 				d="M11.39 2.287A7.23 7.23 0 0 0 9.02 9.07c-1.522-.876-3.2-1.14-5.128-.98a.96.96 0 0 0-.874 1.04c.157 1.726.952 3.438 2.06 4.776a9 9 0 0 0-1.249.077a.94.94 0 0 0-.813 1.004A7.596 7.596 0 0 0 10.589 22h2.821a7.596 7.596 0 0 0 7.574-7.013a.94.94 0 0 0-.814-1.004a9 9 0 0 0-1.234-.077c1.108-1.339 1.903-3.05 2.06-4.776a.96.96 0 0 0-.875-1.04c-1.928-.16-3.615.104-5.142.98a7.23 7.23 0 0 0-2.369-6.783a.93.93 0 0 0-1.22 0m.61 9.44a5.74 5.74 0 0 1 0-7.953a5.74 5.74 0 0 1 0 7.952m0 5.607a9 9 0 0 0-4.234-2.978a1 1 0 0 0-.103-.085c-1.47-1-2.72-2.844-3.073-4.72c1.869-.062 3.336.387 4.675 1.521c1.025.869 1.48 1.928 1.817 2.715c.088.204.167.39.247.548a.75.75 0 0 0 1.341 0q.118-.24.247-.548c.338-.787.792-1.847 1.817-2.715c1.339-1.133 2.817-1.583 4.69-1.521c-.354 1.876-1.603 3.72-3.073 4.72a1 1 0 0 0-.096.077A9 9 0 0 0 12 17.334m.643 1.706c1.393-2.33 4.002-3.78 6.779-3.623A6.096 6.096 0 0 1 13.41 20.5h-2.82c-3 0-5.524-2.176-6.011-5.082c2.776-.158 5.385 1.291 6.778 3.622a.75.75 0 0 0 1.287 0"
 			></path>
+		</svg>
+	);
+}
+
+export function GroupUserIcon(props: IconSvgProps, className: string) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			strokeWidth="1.5"
+			stroke="currentColor"
+			className={className}
+			{...props}
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+			/>
 		</svg>
 	);
 }

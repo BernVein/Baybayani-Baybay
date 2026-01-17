@@ -1,4 +1,8 @@
 import { UserIcon } from "@/components/icons";
+import { UsersSummary } from "@/pages/Admin/UsersComponent/UsersSummary";
+import { UsersTableMobile } from "@/pages/Admin/UsersComponent/UsersTableMobile";
+import { UsersTableDesktop } from "@/pages/Admin/UsersComponent/UsersTableDesktop";
+import { FilterSection } from "@/pages/Admin/UsersComponent/FilterSection";
 
 export default function Users() {
 	return (
@@ -15,6 +19,16 @@ export default function Users() {
 					<div className="text-lg font-semibold">Admin Bern Vein</div>
 				</div>
 			</div>
+			<div className="hidden sm:block">
+				<UsersSummary />
+			</div>
+
+			<div className="flex flex-row items-center justify-between">
+				<FilterSection />
+			</div>
+
+			<UsersTableMobile />
+			<UsersTableDesktop />
 		</div>
 	);
 }
