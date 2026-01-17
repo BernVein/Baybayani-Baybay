@@ -23,11 +23,6 @@ import { EditItemModal } from "./ProductTableComponent/EditItemModal";
 
 export function ProductTableMobile() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const {
-		isOpen: isOpenDeleteItem,
-		onOpen: onOpenDeleteItem,
-		onOpenChange: onOpenChangeDeleteItem,
-	} = useDisclosure();
 	return (
 		<div className="sm:hidden">
 			<Table
@@ -128,13 +123,7 @@ export function ProductTableMobile() {
 					))}
 				</TableBody>
 			</Table>
-			<EditItemModal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
-				isOpenDeleteItem={isOpenDeleteItem}
-				onOpenDeleteItem={onOpenDeleteItem}
-				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
-			/>
+			<EditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
 		</div>
 	);
 }

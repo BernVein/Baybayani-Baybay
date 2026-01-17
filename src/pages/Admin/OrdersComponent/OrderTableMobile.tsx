@@ -44,7 +44,6 @@ export function OrderTableMobile() {
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									<span className="w-2 h-2 rounded-full bg-green-400" />
 									<div className="flex flex-col items-start">
 										<span className="font-bold">
 											Item123123as{i + 1}
@@ -61,6 +60,12 @@ export function OrderTableMobile() {
 										<span className="text-default-500 italic text-xs">
 											Wholesale
 										</span>
+										<div className="flex flex-row items-center gap-1">
+											<span className="w-2 h-2 rounded-full bg-green-400" />
+											<span className="text-default-500 italic text-xs">
+												Completed
+											</span>
+										</div>
 									</div>
 								</div>
 							</TableCell>

@@ -1,9 +1,4 @@
-import {
-	MoreIconVertical,
-	PencilIcon,
-	EyeIcon,
-	TrashIcon,
-} from "@/components/icons";
+import { MoreIconVertical, PencilIcon, TrashIcon } from "@/components/icons";
 import {
 	Table,
 	TableHeader,
@@ -17,17 +12,17 @@ import {
 	DropdownItem,
 	Button,
 	DropdownSection,
-	// useDisclosure,
+	useDisclosure,
 } from "@heroui/react";
-// import { EditItemModal } from "./ProductTableComponent/EditItemModal";
-
+import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
+import { DeleteUserModal } from "@/pages/Admin/UsersComponent/DeleteUserModal";
 export function UsersTableMobile() {
-	// const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	// const {
-	// 	isOpen: isOpenDeleteItem,
-	// 	onOpen: onOpenDeleteItem,
-	// 	onOpenChange: onOpenChangeDeleteItem,
-	// } = useDisclosure();
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const {
+		isOpen: isOpenDeleteUser,
+		onOpen: onOpenDeleteUser,
+		onOpenChange: onOpenChangeDeleteUser,
+	} = useDisclosure();
 	return (
 		<div className="sm:hidden">
 			<Table
@@ -35,8 +30,8 @@ export function UsersTableMobile() {
 				className="overflow-y-auto h-[calc(100vh-350px)] w-full"
 			>
 				<TableHeader>
-					<TableColumn>ITEM</TableColumn>
-					<TableColumn>PRICE & STOCK</TableColumn>
+					<TableColumn>USER</TableColumn>
+					<TableColumn>PURCHASES</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
 
@@ -47,32 +42,29 @@ export function UsersTableMobile() {
 								<div className="flex flex-row items-center gap-2">
 									<div className="flex flex-col items-start">
 										<span className="text-sm font-bold">
-											Item {i + 1}
+											Baybayani User
 										</span>
 										<span className="text-sm italic text-default-500">
-											3 variants
+											Cooperative
 										</span>
-										<span className="text-default-500 italic text-xs">
-											Vegetable
-										</span>
-										<span className="text-default-500 italic text-xs">
-											Fresh
-										</span>
+										<div className="flex flex-row items-center gap-1">
+											<span className="w-2 h-2 rounded-full bg-green-400" />
+											<span className="text-default-500 italic text-xs">
+												Active
+											</span>
+										</div>
 									</div>
 								</div>
 							</TableCell>
+
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
 									<div className="flex flex-col items-start">
 										<span className="font-bold">
-											₱213.20 - ₱220.00
+											₱12,000.00
 										</span>
 										<span className="font-light italic text-xs text-default-500">
-											per kg
-										</span>
-
-										<span className="text-default-500 text-xs italic">
-											523 kg left
+											15 completed orders
 										</span>
 									</div>
 								</div>
@@ -85,13 +77,13 @@ export function UsersTableMobile() {
 										</Button>
 									</DropdownTrigger>
 									<DropdownMenu aria-label="Static Actions">
-										<DropdownSection title="Manage Item">
+										<DropdownSection title="Manage User">
 											<DropdownItem
 												key="pending"
 												startContent={
 													<PencilIcon className="w-5" />
 												}
-												// onClick={onOpen}
+												onClick={onOpen}
 											>
 												<div className="flex items-center gap-2">
 													<span>Edit</span>
@@ -99,20 +91,11 @@ export function UsersTableMobile() {
 											</DropdownItem>
 
 											<DropdownItem
-												key="ready"
-												startContent={
-													<EyeIcon className="w-5" />
-												}
-											>
-												<div className="flex items-center gap-2">
-													<span>Hide</span>
-												</div>
-											</DropdownItem>
-											<DropdownItem
 												key="cancel"
 												startContent={
 													<TrashIcon className="w-5 text-danger-300" />
 												}
+												onClick={onOpenDeleteUser}
 											>
 												<div className="flex items-center gap-2">
 													<span className="text-danger">
@@ -128,13 +111,11 @@ export function UsersTableMobile() {
 					))}
 				</TableBody>
 			</Table>
-			{/* <EditItemModal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
-				isOpenDeleteItem={isOpenDeleteItem}
-				onOpenDeleteItem={onOpenDeleteItem}
-				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
-			/> */}
+			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
+			<DeleteUserModal
+				isOpenDeleteUser={isOpenDeleteUser}
+				onOpenChangeDeleteUser={onOpenChangeDeleteUser}
+			/>
 		</div>
 	);
 }
