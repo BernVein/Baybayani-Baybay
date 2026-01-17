@@ -1,9 +1,4 @@
-import {
-	TrashIcon,
-	EyeIcon,
-	// EyeSlashIcon,
-	PencilIcon,
-} from "@/components/icons";
+import { TrashIcon, PencilIcon } from "@/components/icons";
 import {
 	Table,
 	TableHeader,
@@ -17,14 +12,15 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
+import { DeleteUserModal } from "./DeleteUserModal";
 
 export function UsersTableDesktop() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	// const {
-	// 	isOpen: isOpenDeleteItem,
-	// 	onOpen: onOpenDeleteItem,
-	// 	onOpenChange: onOpenChangeDeleteItem,
-	// } = useDisclosure();
+	const {
+		isOpen: isOpenDeleteUser,
+		onOpen: onOpenDeleteUser,
+		onOpenChange: onOpenChangeDeleteUser,
+	} = useDisclosure();
 	return (
 		<div className="sm:flex hidden">
 			<Table
@@ -87,18 +83,12 @@ export function UsersTableDesktop() {
 									>
 										<PencilIcon className="w-5" />
 									</Button>
+
 									<Button
 										size="sm"
 										variant="light"
 										isIconOnly
-									>
-										<EyeIcon className="w-5" />
-									</Button>
-									<Button
-										size="sm"
-										variant="light"
-										isIconOnly
-										// onPress={onOpenDeleteItem}
+										onPress={onOpenDeleteUser}
 									>
 										<TrashIcon className="w-5 text-danger-300" />
 									</Button>
@@ -109,6 +99,10 @@ export function UsersTableDesktop() {
 				</TableBody>
 			</Table>
 			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
+			<DeleteUserModal
+				isOpenDeleteUser={isOpenDeleteUser}
+				onOpenChangeDeleteUser={onOpenChangeDeleteUser}
+			/>
 		</div>
 	);
 }

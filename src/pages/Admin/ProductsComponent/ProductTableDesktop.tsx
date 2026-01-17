@@ -17,7 +17,7 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import { EditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModal";
-import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModalComponent/DeleteItemModal";
+import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
 
 export function ProductTableDesktop() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
