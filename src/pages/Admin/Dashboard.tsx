@@ -1,8 +1,8 @@
-import { DashboardSummary } from "@/pages/Admin/DashboardComponents/DashboardSummary";
+import { DashboardSummary } from "@/pages/Admin/DashboardComponent/DashboardSummary";
 import { Card, CardBody } from "@heroui/react";
-import { BasicLineChart } from "@/pages/Admin/DashboardComponents/BasicLineChart";
-import { DashboardTable } from "@/pages/Admin/DashboardComponents/DashboardTable";
-import { GroupedBarChart } from "@/pages/Admin/DashboardComponents/GroupedBarChart";
+import { BasicLineChart } from "@/pages/Admin/DashboardComponent/BasicLineChart";
+import { DashboardTable } from "@/pages/Admin/DashboardComponent/DashboardTable";
+import { GroupedBarChart } from "@/pages/Admin/DashboardComponent/GroupedBarChart";
 import { DashboardIcon } from "@/components/icons";
 
 export default function Dashboard() {
