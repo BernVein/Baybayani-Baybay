@@ -1,13 +1,20 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { NavbarMobileAdmin } from "@/components/navbar/AdminNav/navbarMobileAdmin";
 import { useState } from "react";
 import { SidebarDesktopAdmin } from "@/components/navbar/AdminNav/sidebarDesktopAdmin";
 
 export default function AdminLayout() {
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);
+	const { pathname } = useLocation();
+
+	const isDashboard = pathname.includes("/dashboard");
 
 	return (
-		<div className="relative min-h-screen bg-background text-foreground">
+		<div
+			className={`relative bg-background text-foreground ${
+				isDashboard ? "min-h-screen" : "fixed inset-0 overflow-hidden"
+			}`}
+		>
 			<div className="fixed left-0 w-full h-full hidden sm:block">
 				<SidebarDesktopAdmin />
 			</div>
