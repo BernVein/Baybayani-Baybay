@@ -9,9 +9,15 @@ import {
 	Avatar,
 } from "@heroui/react";
 import { SearchIcon, SoloUserIcon, GroupUserIcon } from "@/components/icons";
-export function MessageList() {
+export function MessageList({
+	onSelect,
+	className,
+}: {
+	onSelect?: () => void;
+	className?: string;
+}) {
 	return (
-		<Card className="sm:w-1/3 w-full h-[68vh] sm:h-[88vh]">
+		<Card className={`w-full h-[68vh] sm:h-[88vh] ${className || ""}`}>
 			<CardHeader className="flex gap-3">
 				<div className="flex flex-col gap-2 items-center w-full">
 					<Input
@@ -38,7 +44,11 @@ export function MessageList() {
 			<CardBody>
 				<Listbox aria-label="Actions">
 					{Array.from({ length: 20 }).map((_, i) => (
-						<ListboxItem key={i} className="w-full mb-2">
+						<ListboxItem
+							key={i}
+							className="w-full mb-2"
+							onPress={onSelect}
+						>
 							<div className="flex flex-row gap-2 items-center w-full">
 								<Avatar className="shrink-0" />
 								<div className="flex flex-col items-start w-full">

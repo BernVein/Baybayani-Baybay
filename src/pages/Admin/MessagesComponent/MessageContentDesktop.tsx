@@ -9,11 +9,42 @@ import {
 	Button,
 } from "@heroui/react";
 
-export function MessageContentDesktop({ onOpen }: { onOpen: () => void }) {
+export function MessageContentDesktop({
+	onOpen,
+	className,
+	onBack,
+}: {
+	onOpen: () => void;
+	className?: string;
+	onBack?: () => void;
+}) {
 	return (
-		<Card className="hidden sm:flex sm:w-2/3 h-[88vh]">
+		<Card className={`h-[68vh] ${className || "hidden sm:flex sm:w-2/3"}`}>
 			<CardHeader className="flex gap-3">
 				<div className="flex flex-row gap-2 items-center w-full">
+					{onBack && (
+						<Button
+							isIconOnly
+							variant="light"
+							onPress={onBack}
+							className="sm:hidden"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								strokeWidth={1.5}
+								stroke="currentColor"
+								className="w-6 h-6"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+								/>
+							</svg>
+						</Button>
+					)}
 					<div className="flex flex-row justify-between w-full">
 						<div className="flex flex-row gap-2 items-center">
 							<Avatar />

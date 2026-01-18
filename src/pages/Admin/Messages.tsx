@@ -3,8 +3,14 @@ import { MessageList } from "@/pages/Admin/MessagesComponent/MessageList";
 import { useDisclosure } from "@heroui/react";
 import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
 import { MessageContentDesktop } from "@/pages/Admin/MessagesComponent/MessageContentDesktop";
+import { useState } from "react";
+
 export default function Messages() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const [selectedMessageId, setSelectedMessageId] = useState<string | null>(
+		null,
+	);
+
 	return (
 		<>
 			<div className="flex flex-col gap-8 p-4">
@@ -23,8 +29,23 @@ export default function Messages() {
 					</div>
 				</div>
 				<div className="flex flex-row gap-2 h-[88vh]">
-					<MessageList />
-					<MessageContentDesktop onOpen={onOpen} />
+					<MessageList
+						onSelect={() => setSelectedMessageId("selected")}
+						className={
+							selectedMessageId
+								? "hidden sm:flex sm:w-1/3"
+								: "flex w-full sm:w-1/3"
+						}
+					/>
+					<MessageContentDesktop
+						onOpen={onOpen}
+						onBack={() => setSelectedMessageId(null)}
+						className={
+							selectedMessageId
+								? "flex w-full"
+								: "hidden sm:flex sm:w-2/3"
+						}
+					/>
 				</div>
 			</div>
 			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
