@@ -19,7 +19,9 @@ export function MessageContentDesktop({
 	onBack?: () => void;
 }) {
 	return (
-		<Card className={`h-[68vh] ${className || "hidden sm:flex sm:w-2/3"}`}>
+		<Card
+			className={`h-[68vh] sm:h-[88vh] ${className || "hidden sm:flex sm:w-2/3"}`}
+		>
 			<CardHeader className="flex gap-3">
 				<div className="flex flex-row gap-2 items-center w-full">
 					{onBack && (
