@@ -9,9 +9,9 @@ import {
 	Avatar,
 } from "@heroui/react";
 import { SearchIcon, SoloUserIcon, GroupUserIcon } from "@/components/icons";
-export function MessageListDesktop() {
+export function MessageList() {
 	return (
-		<Card className="w-1/3 h-[88vh]">
+		<Card className="sm:w-1/3 w-full h-[68vh] sm:h-[88vh]">
 			<CardHeader className="flex gap-3">
 				<div className="flex flex-col gap-2 items-center w-full">
 					<Input
