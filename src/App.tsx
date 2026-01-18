@@ -9,11 +9,12 @@ import AdminLayout from "@/layouts/AdminLayout";
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
 const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
 const Shop = lazy(() => import("@/pages/Customer/ShopPage/ShopIndex"));
+const Message = lazy(() => import("@/pages/Customer/MessagePage/MessageIndex"));
 const Profile = lazy(
-	() => import("@/pages/Customer/UserAccount/ProfilePage/Profile")
+	() => import("@/pages/Customer/UserAccount/ProfilePage/Profile"),
 );
 const Settings = lazy(
-	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings")
+	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings"),
 );
 const Dashboard = lazy(() => import("@/pages/Admin/Dashboard"));
 const AdminOrders = lazy(() => import("@/pages/Admin/Orders"));
@@ -48,6 +49,7 @@ function App() {
 					<Route path="/orders" element={<Orders />} />
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/settings" element={<Settings />} />
+					<Route path="/messages" element={<Message />} />
 				</Route>
 
 				{/* ADMIN ROUTES */}

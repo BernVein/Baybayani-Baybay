@@ -14,7 +14,7 @@ import useIsMobile from "@/lib/isMobile";
 import { AddToCart, CartIcon, BaybayaniLogo } from "@/components/icons";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 import { useFetchCart } from "@/data/supabase/useFetchCart";
-import CheckoutModalIndex from "../CheckoutModal/CheckoutModalIndex";
+import CheckoutModalIndex from "@/pages/Customer/CartPage/CheckoutModal/CheckoutModalIndex";
 export default function Cart() {
 	const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
 	const {
@@ -25,7 +25,7 @@ export default function Cart() {
 
 	const isMobile = useIsMobile();
 	const { cart, loading, errorMsg, refetch } = useFetchCart(
-		"cb20faec-72c0-4c22-b9d4-4c50bfb9e66f"
+		"cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
 	);
 	const allCartItems = cart?.items ?? [];
 
@@ -34,13 +34,13 @@ export default function Cart() {
 			allCartItems
 				.filter((i) => selectedProducts.includes(i.cart_item_user_id))
 				.reduce((sum, i) => sum + i.subtotal, 0),
-		[selectedProducts, allCartItems]
+		[selectedProducts, allCartItems],
 	);
 
 	useEffect(() => {
 		setSelectedProducts((prev) => {
 			const validIds = new Set(
-				allCartItems.map((i) => i.cart_item_user_id)
+				allCartItems.map((i) => i.cart_item_user_id),
 			);
 			const next = prev.filter((id) => validIds.has(id));
 			if (next.length === prev.length) return prev;
@@ -50,13 +50,13 @@ export default function Cart() {
 
 	const selectedItems = useMemo(() => {
 		return allCartItems.filter((i) =>
-			selectedProducts.includes(i.cart_item_user_id)
+			selectedProducts.includes(i.cart_item_user_id),
 		);
 	}, [selectedProducts, allCartItems]);
 
 	const allIds = useMemo(
 		() => allCartItems.map((i) => i.cart_item_user_id),
-		[allCartItems]
+		[allCartItems],
 	);
 
 	const isAllSelected =
