@@ -11,8 +11,10 @@ import {
 } from "@heroui/react";
 
 export default function MessageIndex() {
+	document.body.style.overflow = "hidden";
+
 	return (
-		<div className="h-screen overflow-hidden">
+		<>
 			{/* Header */}
 			<div className="flex justify-between items-center w-full md:w-3/4 md:mx-auto px-5">
 				<div className="flex items-center gap-2">
@@ -108,6 +110,6 @@ export default function MessageIndex() {
 					</CardFooter>
 				</Card>
 			</div>
-		</div>
+		</>
 	);
 }
