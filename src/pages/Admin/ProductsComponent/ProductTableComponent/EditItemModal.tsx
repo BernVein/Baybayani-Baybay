@@ -47,6 +47,7 @@ export function EditItemModal({
 				onOpenChange={onOpenChange}
 				size="xl"
 				scrollBehavior="inside"
+				isDismissable={false}
 			>
 				<ModalContent>
 					{(onClose) => (
@@ -60,7 +61,6 @@ export function EditItemModal({
 								</span>
 								<div className="flex flex-row gap-2 items-center">
 									<Input
-										key="1"
 										label="Item Name"
 										labelPlacement="outside"
 										defaultValue="Banana"
@@ -69,7 +69,7 @@ export function EditItemModal({
 									<ModalAwareSelect
 										labelPlacement="outside"
 										label="Item Category"
-										defaultSelectedKeys={"2"}
+  										defaultSelectedKeys={"2"}
 										className="w-1/2"
 									>
 										<SelectItem
@@ -107,7 +107,6 @@ export function EditItemModal({
 									</ModalAwareSelect>
 								</div>
 								<Input
-									key="2"
 									label="Item Short Description"
 									labelPlacement="outside"
 									defaultValue="An optional description for banana"
@@ -116,7 +115,6 @@ export function EditItemModal({
 								/>
 								<div className="flex flex-row gap-2 items-center">
 									<Input
-										key="1"
 										label="Unit of Measure"
 										labelPlacement="outside"
 										defaultValue="kg"
@@ -126,10 +124,12 @@ export function EditItemModal({
 										labelPlacement="outside"
 										label="Item Tag"
 										className="w-1/2"
+										defaultSelectedKeys={"2"}
+
 									>
-										<SelectItem>Restocked</SelectItem>
-										<SelectItem>Fresh</SelectItem>
-										<SelectItem>Discounted</SelectItem>
+										<SelectItem key="1">Restocked</SelectItem>
+										<SelectItem key="2">Fresh</SelectItem>
+										<SelectItem key="3">Discounted</SelectItem>
 									</ModalAwareSelect>
 								</div>
 								<div className="flex flex-row gap-2 items-center">

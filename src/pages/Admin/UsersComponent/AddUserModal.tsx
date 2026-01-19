@@ -25,6 +25,7 @@ export function AddUserModal({
 				onOpenChange={onOpenChange}
 				size="xl"
 				scrollBehavior="inside"
+				isDismissable={false}
 			>
 				<ModalContent>
 					{(onClose) => (
