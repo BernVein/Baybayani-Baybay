@@ -33,7 +33,7 @@ export default function Messages() {
 						onSelect={() => setSelectedMessageId("selected")}
 						className={
 							selectedMessageId
-								? "hidden sm:flex sm:w-1/3"
+								? "hidden sm:flex sm:w-2/3"
 								: "flex w-full sm:w-1/3"
 						}
 					/>
