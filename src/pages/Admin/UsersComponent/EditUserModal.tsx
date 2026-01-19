@@ -7,9 +7,9 @@ import {
 	ModalBody,
 	ModalFooter,
 	Input,
-	Select,
 	SelectItem,
 } from "@heroui/react";
+import ModalAwareSelect from "@/lib/ModalAwareSelect";
 
 export function EditUserModal({
 	isOpen,
@@ -55,7 +55,7 @@ export function EditUserModal({
 								</div>
 
 								<div className="flex flex-row gap-2 items-center">
-									<Select
+									<ModalAwareSelect
 										labelPlacement="outside"
 										label="Role"
 										className="w-1/2"
@@ -85,8 +85,8 @@ export function EditUserModal({
 										>
 											Admin
 										</SelectItem>
-									</Select>
-									<Select
+									</ModalAwareSelect>
+									<ModalAwareSelect
 										labelPlacement="outside"
 										label="Status"
 										className="w-1/2"
@@ -97,7 +97,7 @@ export function EditUserModal({
 											Suspended
 										</SelectItem>
 										<SelectItem key="3">Pending</SelectItem>
-									</Select>
+									</ModalAwareSelect>
 								</div>
 								<div className="flex flex-row gap-2 items-center">
 									<Button
