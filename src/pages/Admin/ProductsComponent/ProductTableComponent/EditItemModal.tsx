@@ -200,7 +200,6 @@ export function EditItemModal({
                                                         className="w-1/2"
                                                     />
                                                 </div>
-
                                                 <div className="flex flex-row gap-2 items-center">
                                                     <Input
                                                         label="Retail Price"
@@ -217,18 +216,6 @@ export function EditItemModal({
                                                         labelPlacement="outside"
                                                         className="w-1/3"
                                                     />
-                                                </div>
-
-                                                <div className="flex flex-row gap-2 justify-end">
-                                                    <Button
-                                                        startContent={
-                                                            <TrashIcon className="w-5" />
-                                                        }
-                                                        color="danger"
-                                                        className="mt-2"
-                                                    >
-                                                        Remove Variant
-                                                    </Button>
                                                 </div>
                                             </div>
                                         </div>
