@@ -16,11 +16,11 @@ import {
 	ModalBody,
 	ModalFooter,
 	Input,
-	Select,
 	SelectItem,
 	Divider,
 	useDisclosure,
 } from "@heroui/react";
+import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModalComponent/AddVariantModal";
 import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModalComponent/DeleteVariantModal";
 export function EditItemModal({
@@ -66,7 +66,7 @@ export function EditItemModal({
 										defaultValue="Banana"
 										className="w-1/2"
 									/>
-									<Select
+									<ModalAwareSelect
 										labelPlacement="outside"
 										label="Item Category"
 										defaultSelectedKeys={"2"}
@@ -104,7 +104,7 @@ export function EditItemModal({
 										>
 											Spice
 										</SelectItem>
-									</Select>
+									</ModalAwareSelect>
 								</div>
 								<Input
 									key="2"
@@ -122,7 +122,7 @@ export function EditItemModal({
 										defaultValue="kg"
 										className="w-1/2"
 									/>
-									<Select
+									<ModalAwareSelect
 										labelPlacement="outside"
 										label="Item Tag"
 										className="w-1/2"
@@ -130,7 +130,7 @@ export function EditItemModal({
 										<SelectItem>Restocked</SelectItem>
 										<SelectItem>Fresh</SelectItem>
 										<SelectItem>Discounted</SelectItem>
-									</Select>
+									</ModalAwareSelect>
 								</div>
 								<div className="flex flex-row gap-2 items-center">
 									<Button
