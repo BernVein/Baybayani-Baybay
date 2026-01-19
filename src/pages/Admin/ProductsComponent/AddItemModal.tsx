@@ -16,11 +16,11 @@ import {
 	ModalBody,
 	ModalFooter,
 	Input,
-	Select,
 	SelectItem,
 	Divider,
 	useDisclosure,
 } from "@heroui/react";
+import ModalAwareSelect from "@/lib/ModalAwareSelect";
 
 export function AddItemModal({
 	isOpen,
@@ -60,7 +60,7 @@ export function AddItemModal({
 										labelPlacement="outside"
 										className="w-1/2"
 									/>
-									<Select
+									<ModalAwareSelect
 										labelPlacement="outside"
 										label="Item Category"
 										className="w-1/2"
@@ -97,7 +97,7 @@ export function AddItemModal({
 										>
 											Spice
 										</SelectItem>
-									</Select>
+									</ModalAwareSelect>
 								</div>
 								<Input
 									key="2"
@@ -113,7 +113,7 @@ export function AddItemModal({
 										labelPlacement="outside"
 										className="w-1/2"
 									/>
-									<Select
+									<ModalAwareSelect
 										labelPlacement="outside"
 										label="Item Tag"
 										className="w-1/2"
@@ -121,7 +121,7 @@ export function AddItemModal({
 										<SelectItem>Restocked</SelectItem>
 										<SelectItem>Fresh</SelectItem>
 										<SelectItem>Discounted</SelectItem>
-									</Select>
+									</ModalAwareSelect>
 								</div>
 								<div className="flex flex-row gap-2 items-center">
 									<Button
