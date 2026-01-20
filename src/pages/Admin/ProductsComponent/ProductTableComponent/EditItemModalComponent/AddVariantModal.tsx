@@ -28,30 +28,30 @@ export function AddVariantModal({
                                 <Input
                                     label="Variant Name"
                                     labelPlacement="outside"
-                                    className="w-1/2"
+                                    className="w-1/3"
                                 />
                                 <Input
                                     label="Stocks"
                                     labelPlacement="outside"
-                                    className="w-1/2"
+                                    className="w-1/3"
                                 />
-                            </div>
-
-                            <div className="flex flex-row gap-2 items-center">
                                 <Input
                                     label="Retail Price"
                                     labelPlacement="outside"
                                     className="w-1/3"
                                 />
+                            </div>
+
+                            <div className="flex flex-row gap-2 items-center">
                                 <Input
                                     label="Wholesale Price"
                                     labelPlacement="outside"
-                                    className="w-1/3"
+                                    className="w-1/2"
                                 />
                                 <Input
-                                    label="Pack Size"
+                                    label="Wholesale Min Qty"
                                     labelPlacement="outside"
-                                    className="w-1/3"
+                                    className="w-1/2"
                                 />
                             </div>
                         </ModalBody>

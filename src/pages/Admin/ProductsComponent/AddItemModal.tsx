@@ -23,9 +23,11 @@ import {
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 
 export function AddItemModal({
+    selectedItemAddOption,
     isOpen,
     onOpenChange,
 }: {
+    selectedItemAddOption: string | null;
     isOpen: boolean;
     onOpenChange: () => void;
 }) {
@@ -123,6 +125,36 @@ export function AddItemModal({
                                         <SelectItem>Discounted</SelectItem>
                                     </ModalAwareSelect>
                                 </div>
+                                {selectedItemAddOption === "no-variant" && (
+                                    <>
+                                        <div className="flex flex-row gap-2 items-center">
+                                            <Input
+                                                label="Stocks"
+                                                labelPlacement="outside"
+                                                className="w-1/2"
+                                            />
+                                            <Input
+                                                label="Retail Price"
+                                                labelPlacement="outside"
+                                                className="w-1/2"
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-row gap-2 items-center">
+                                            <Input
+                                                label="Wholesale Price"
+                                                labelPlacement="outside"
+                                                className="w-1/2"
+                                            />
+                                            <Input
+                                                label="Wholesale Min Qty"
+                                                labelPlacement="outside"
+                                                className="w-1/2"
+                                            />
+                                        </div>
+                                    </>
+                                )}
+
                                 <div className="flex flex-row gap-2 items-center">
                                     <Button
                                         startContent={
@@ -133,67 +165,75 @@ export function AddItemModal({
                                         View Photos
                                     </Button>
                                 </div>
-
-                                <Divider />
-                                <div className="flex flex-row justify-between">
-                                    <span className="text-lg font-semibold">
-                                        Item Variants
-                                    </span>
-                                    <Button
-                                        startContent={
-                                            <PlusIcon className="w-5" />
-                                        }
-                                        onPress={onOpenAddVar}
-                                    >
-                                        Add Variant
-                                    </Button>
-                                </div>
-
-                                {Array.from({ length: 1 }).map((_, index) => (
-                                    <div key={index} className="space-y-2">
-                                        <div className="flex flex-row gap-2 items-center">
-                                            <Input
-                                                label="Variant Name"
-                                                labelPlacement="outside"
-                                                className="w-1/2"
-                                            />
-                                            <Input
-                                                label="Stocks"
-                                                labelPlacement="outside"
-                                                className="w-1/2"
-                                            />
-                                        </div>
-
-                                        <div className="flex flex-row gap-2 items-center">
-                                            <Input
-                                                label="Retail Price"
-                                                labelPlacement="outside"
-                                                className="w-1/3"
-                                            />
-                                            <Input
-                                                label="Wholesale Price"
-                                                labelPlacement="outside"
-                                                className="w-1/3"
-                                            />
-                                            <Input
-                                                label="Pack Size"
-                                                labelPlacement="outside"
-                                                className="w-1/3"
-                                            />
-                                        </div>
-                                        <div className="flex flex-row gap-2 justify-end">
+                                {selectedItemAddOption === "with-variant" && (
+                                    <>
+                                        <Divider />
+                                        <div className="flex flex-row justify-between">
+                                            <span className="text-lg font-semibold">
+                                                Item Variants
+                                            </span>
                                             <Button
                                                 startContent={
-                                                    <TrashIcon className="w-5" />
+                                                    <PlusIcon className="w-5" />
                                                 }
-                                                color="danger"
-                                                className="mt-2"
+                                                onPress={onOpenAddVar}
                                             >
-                                                Remove Variant
+                                                Add Variant
                                             </Button>
                                         </div>
-                                    </div>
-                                ))}
+
+                                        {Array.from({ length: 1 }).map(
+                                            (_, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="space-y-2"
+                                                >
+                                                    <div className="flex flex-row gap-2 items-center">
+                                                        <Input
+                                                            label="Variant Name"
+                                                            labelPlacement="outside"
+                                                            className="w-1/3"
+                                                        />
+                                                        <Input
+                                                            label="Stocks"
+                                                            labelPlacement="outside"
+                                                            className="w-1/3"
+                                                        />
+                                                        <Input
+                                                            label="Retail Price"
+                                                            labelPlacement="outside"
+                                                            className="w-1/3"
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-row gap-2 items-center">
+                                                        <Input
+                                                            label="Wholesale Price"
+                                                            labelPlacement="outside"
+                                                            className="w-1/2"
+                                                        />
+                                                        <Input
+                                                            label="Wholesale Min Qty"
+                                                            labelPlacement="outside"
+                                                            className="w-1/2"
+                                                        />
+                                                    </div>
+                                                    <div className="flex flex-row gap-2 justify-end">
+                                                        <Button
+                                                            startContent={
+                                                                <TrashIcon className="w-5" />
+                                                            }
+                                                            color="danger"
+                                                            className="mt-2"
+                                                        >
+                                                            Remove Variant
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            ),
+                                        )}
+                                    </>
+                                )}
                             </ModalBody>
                             <ModalFooter>
                                 <Button
@@ -223,30 +263,30 @@ export function AddItemModal({
                                     <Input
                                         label="Variant Name"
                                         labelPlacement="outside"
-                                        className="w-1/2"
+                                        className="w-1/3"
                                     />
                                     <Input
                                         label="Stocks"
                                         labelPlacement="outside"
-                                        className="w-1/2"
+                                        className="w-1/3"
                                     />
-                                </div>
-
-                                <div className="flex flex-row gap-2 items-center">
                                     <Input
                                         label="Retail Price"
                                         labelPlacement="outside"
                                         className="w-1/3"
                                     />
+                                </div>
+
+                                <div className="flex flex-row gap-2 items-center">
                                     <Input
                                         label="Wholesale Price"
                                         labelPlacement="outside"
-                                        className="w-1/3"
+                                        className="w-1/2"
                                     />
                                     <Input
-                                        label="Pack Size"
+                                        label="Wholesale Min Qty"
                                         labelPlacement="outside"
-                                        className="w-1/3"
+                                        className="w-1/2"
                                     />
                                 </div>
                             </ModalBody>
