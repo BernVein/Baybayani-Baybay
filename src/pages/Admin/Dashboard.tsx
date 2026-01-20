@@ -22,7 +22,11 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className="flex flex-row items-center justify-between">
-                <DateRangePicker className="max-w-xs" label="Set Date Range" />
+                <DateRangePicker
+                    className="max-w-xs"
+                    label="Set Date Range"
+                    showMonthAndYearPickers
+                />
                 <Button
                     startContent={<ExcelIcon className="w-5" />}
                     isIconOnly={isMobile}
