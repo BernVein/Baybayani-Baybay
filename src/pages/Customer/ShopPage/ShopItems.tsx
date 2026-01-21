@@ -220,12 +220,6 @@ export default function ShopItems({
                                 {/* Title */}
                                 <Skeleton className="h-4 w-3/4 rounded" />{" "}
                                 {/* Price Retail */}
-                                <Skeleton className="h-4 w-1/2 rounded" />{" "}
-                                {/* Price Wholesale */}
-                                <Skeleton className="h-12 w-full rounded" />{" "}
-                                {/* Description */}
-                                <Skeleton className="h-4 w-1/3 rounded" />{" "}
-                                {/* Stock */}
                             </div>
                         ))}
                 </div>

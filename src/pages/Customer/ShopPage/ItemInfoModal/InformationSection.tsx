@@ -282,51 +282,6 @@ export default function InformationSection({
                         }}
                         onValueChange={(val) => setQuantity(Math.max(0, val))}
                         value={quantity}
-                        // description={
-                        //     <div>
-                        //         Minimum purchase of{" "}
-                        //         <strong>
-                        //             {selectedItemVariant?.variant_wholesale_item ??
-                        //                 0}
-                        //         </strong>{" "}
-                        //         <strong>{item.item_sold_by}s</strong> to avail
-                        //         wholesale price
-                        //     </div>
-                        // }
-                        // key={`${selectedPriceVariant}-${selectedItemVariant?.variant_stocks ?? 0}-${rawQuantity}-${selectedItemVariant?.variant_wholesale_item ?? 0}`}
-                        // defaultValue={1}
-                        // minValue={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
-                        // step={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
-                        // maxValue={
-                        //     selectedPriceVariant === "Wholesale"
-                        //         ? (selectedItemVariant?.variant_stocks ?? 0) /
-                        //           (selectedItemVariant?.variant_wholesale_item ?? 1)
-                        //         : (selectedItemVariant?.variant_stocks ?? 0)
-                        // }
-                        // value={rawQuantity}
-                        // onValueChange={(val) => setRawQuantity(val)}
-                        // description={computedDescription}
-                        // placeholder="Enter quantity"
-                        // labelPlacement="outside"
-                        // radius="sm"
-                        // variant="faded"
-                        // endContent={
-                        //     <div className="text-sm text-default-500 mr-2">
-                        //         {selectedPriceVariant === "Wholesale"
-                        //             ? "Item"
-                        //             : item.item_sold_by}
-                        //     </div>
-                        // }
-                        // className="w-3/4"
-                        // label={`Quantity (${selectedPriceVariant})`}
-                        // onKeyDown={(e) => {
-                        //     if (e.key === "Enter") {
-                        //         setTimeout(() => {
-                        //             (e.currentTarget as HTMLInputElement).blur();
-                        //             window.scrollTo(0, 0);
-                        //         }, 150);
-                        //     }
-                        // }}
                     />
                     <Button
                         color="success"
