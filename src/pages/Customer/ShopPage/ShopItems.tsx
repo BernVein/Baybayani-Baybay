@@ -11,8 +11,9 @@ import {
     ModalFooter,
     Button,
 } from "@heroui/react";
-import ItemInfoModal from "./ItemInfoModal/ItemInfoModalIndex";
-import { useFetchItem } from "@/data/supabase/useFetchItem";
+import ItemInfoModal from "@/pages/Customer/ShopPage/ItemInfoModal/ItemInfoModalIndex";
+import { useFetchItemCardItems } from "@/data/supabase/useFetchItemCardItems";
+
 interface ShopItemsProps {
     activeCategories: string[];
     searchTerm: string | null;
@@ -31,7 +32,7 @@ export default function ShopItems({
     const hasFetchedOnce = useRef(false);
 
     // Use the hook to fetch items from Supabase
-    const { itemList, loadMore, hasMore, fetchError, loading } = useFetchItem(
+    const { items, loadMore, hasMore, error, loading } = useFetchItemCardItems(
         activeCategories,
         searchTerm,
     );
@@ -58,7 +59,7 @@ export default function ShopItems({
         if (loading) return; // wait for items to finish loading
 
         // Reset toast if items exist
-        if (itemList.length > 0) {
+        if (items.length > 0) {
             hasFetchedOnce.current = true;
             toastShown.current = false;
             return;
@@ -69,7 +70,7 @@ export default function ShopItems({
             // CASE 3: Search term exists but no items at all (any category)
             if (
                 searchTerm &&
-                itemList.length === 0 &&
+                items.length === 0 &&
                 activeCategories.length === 0
             ) {
                 addToast({
@@ -86,7 +87,7 @@ export default function ShopItems({
             // CASE 2: Search term exists but no items in current category
             else if (
                 searchTerm &&
-                itemList.length === 0 &&
+                items.length === 0 &&
                 activeCategories.length > 0
             ) {
                 addToast({
@@ -104,7 +105,7 @@ export default function ShopItems({
             else if (
                 !searchTerm &&
                 activeCategories.length > 0 &&
-                itemList.length === 0
+                items.length === 0
             ) {
                 addToast({
                     title: "No items in category",
@@ -122,14 +123,14 @@ export default function ShopItems({
         }
     }, [
         loading,
-        itemList,
+        items,
         searchTerm,
         activeCategories,
         setActiveCategories,
         setSearchTerm,
     ]);
 
-    if (fetchError) {
+    if (error) {
         return (
             <Modal
                 isOpen
@@ -185,10 +186,17 @@ export default function ShopItems({
 
                 <div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
                     {/* Real items */}
-                    {itemList.map((item) => (
+                    {items.map((item) => (
                         <ItemCard
+                            item_category={item.item_category}
+                            item_tag={item.item_tag ?? null}
+                            item_title={item.item_title}
+                            item_first_img={item.item_first_img}
+                            item_first_variant_retail_price={
+                                item.item_first_variant_retail_price
+                            }
+                            item_sold_by={item.item_sold_by}
                             key={item.item_id}
-                            item={item}
                             index={0}
                             onPress={() => {
                                 setSelectedItemId(item.item_id);
