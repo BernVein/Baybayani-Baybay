@@ -1,13 +1,4 @@
-import {
-    VegetablesOutline,
-    FoodGrains24Regular,
-    FruitsOutline,
-    PoultryLeg,
-    Chili,
-    PhotoIcon,
-    TrashIcon,
-    PlusIcon,
-} from "@/components/icons";
+import { PhotoIcon, TrashIcon, PlusIcon } from "@/components/icons";
 import {
     Button,
     Modal,
@@ -72,38 +63,13 @@ export function EditItemModal({
                                         defaultSelectedKeys={"2"}
                                         className="w-1/2"
                                     >
-                                        <SelectItem
-                                            key="1"
-                                            startContent={<VegetablesOutline />}
-                                        >
+                                        <SelectItem key="1">
                                             Vegetable
                                         </SelectItem>
-                                        <SelectItem
-                                            key="2"
-                                            startContent={<FruitsOutline />}
-                                        >
-                                            Fruit
-                                        </SelectItem>
-                                        <SelectItem
-                                            key="3"
-                                            startContent={
-                                                <FoodGrains24Regular />
-                                            }
-                                        >
-                                            Grain
-                                        </SelectItem>
-                                        <SelectItem
-                                            key="4"
-                                            startContent={<PoultryLeg />}
-                                        >
-                                            Poultry
-                                        </SelectItem>
-                                        <SelectItem
-                                            key="5"
-                                            startContent={<Chili />}
-                                        >
-                                            Spice
-                                        </SelectItem>
+                                        <SelectItem key="2">Fruit</SelectItem>
+                                        <SelectItem key="3">Grain</SelectItem>
+                                        <SelectItem key="4">Poultry</SelectItem>
+                                        <SelectItem key="5">Spice</SelectItem>
                                     </ModalAwareSelect>
                                 </div>
                                 <Input
