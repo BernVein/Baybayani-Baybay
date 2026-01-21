@@ -1,14 +1,17 @@
 import { Image, Chip, ScrollShadow } from "@heroui/react";
-import { Item } from "@/model/Item";
 
 export default function ImageCarousel({
-    item,
+    item_title,
+    item_tag,
     mainImg,
+    allImg,
     setMainImg,
     isMobile,
 }: {
-    item: Item;
+    item_title: string;
+    item_tag: string | null;
     mainImg: string;
+    allImg: string[];
     setMainImg: (url: string) => void;
     isMobile: boolean;
 }) {
@@ -16,15 +19,15 @@ export default function ImageCarousel({
         <>
             <div className="relative">
                 <Image
-                    alt={item.item_title || "Sample Item"}
+                    alt={item_title || "Sample Item"}
                     src={mainImg}
                     isZoomed={!isMobile}
                     width={isMobile ? 250 : 300}
                     className="rounded-xl"
                 />
-                {item.item_tag && (
+                {item_tag && (
                     <Chip className="absolute top-2 left-2 z-10" size="sm">
-                        {item.item_tag}
+                        {item_tag}
                     </Chip>
                 )}
             </div>
@@ -32,7 +35,7 @@ export default function ImageCarousel({
                 orientation="horizontal"
                 className="w-3/4 lg:w-full scrollbar-hide"
             >
-                {item.item_img.length > 1 && (
+                {allImg.length > 1 && (
                     <div
                         className="
 							flex gap-2 mt-3
@@ -42,7 +45,7 @@ export default function ImageCarousel({
                             scrollSnapType: "x mandatory",
                         }}
                     >
-                        {item.item_img.map((url, index) => (
+                        {allImg.map((url, index) => (
                             <div
                                 key={index}
                                 className="flex-shrink-0 scroll-snap-align-start"
@@ -51,7 +54,7 @@ export default function ImageCarousel({
                                 }}
                             >
                                 <Image
-                                    alt={item.item_title || "Sample Item"}
+                                    alt={item_title || "Sample Item"}
                                     src={url}
                                     onClick={() => setMainImg(url)}
                                     width={url === mainImg ? 65 : 70}

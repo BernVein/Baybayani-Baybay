@@ -2,17 +2,18 @@ import { Variant } from "@/model/variant";
 import { Button, addToast } from "@heroui/react";
 import { CartIcon } from "@/components/icons";
 import { addToCart } from "@/data/supabase/addToCart";
-import { Item } from "@/model/Item";
 import { useState } from "react";
 
 export default function Footer({
-    selectedItem,
+    item_id,
+    item_sold_by,
     selectedItemVariant,
     quantity,
     priceVariant,
     onClose,
 }: {
-    selectedItem: Item;
+    item_id: string;
+    item_sold_by: string;
     selectedItemVariant: Variant | null;
     quantity: number | null;
     priceVariant: string;
@@ -48,9 +49,9 @@ export default function Footer({
         }
         const result = await addToCart(
             userId,
-            selectedItem,
+            item_id,
+            item_sold_by,
             selectedItemVariant,
-            priceVariant as "Retail" | "Wholesale",
             quantity,
         );
         setIsLoading(false);

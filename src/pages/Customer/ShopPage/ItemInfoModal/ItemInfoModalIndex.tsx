@@ -9,9 +9,9 @@ import {
 import { useState, useEffect } from "react";
 import { Variant } from "@/model/variant";
 import useIsMobile from "@/lib/isMobile";
-import ImageCarousel from "./ImageCarousel";
-import InformationSection from "./InformationSection";
-import Footer from "./Footer";
+import ImageCarousel from "@/pages/Customer/ShopPage/ItemInfoModal/ImageCarousel";
+import InformationSection from "@/pages/Customer/ShopPage/ItemInfoModal/InformationSection";
+import Footer from "@/pages/Customer/ShopPage/ItemInfoModal/Footer";
 import { useFetchItemById } from "@/data/supabase/useFetchSingleItem";
 
 export default function ItemInfoModal({
@@ -73,7 +73,7 @@ export default function ItemInfoModal({
         if (isOpen && item) {
             document.title = `Baybayani | Shop | ${item.item_title}`;
         } else {
-            document.title = "Baybayani | Shop"; // fallback when modal closes
+            document.title = "Baybayani | Shop";
         }
     }, [isOpen, item]);
 
@@ -131,7 +131,9 @@ export default function ItemInfoModal({
                                     <div className="flex flex-col items-center md:sticky md:items-start gap-2 top-4 w-full self-start">
                                         {/* Left: Carousel */}
                                         <ImageCarousel
-                                            item={item}
+                                            item_title={item.item_title}
+                                            item_tag={item.item_tag ?? null}
+                                            allImg={item.item_img}
                                             mainImg={mainImg}
                                             setMainImg={setMainImg}
                                             isMobile={isMobile}
@@ -158,7 +160,8 @@ export default function ItemInfoModal({
 
                         <ModalFooter className="flex justify-between items-center">
                             <Footer
-                                selectedItem={item}
+                                item_id={item.item_id}
+                                item_sold_by={item.item_sold_by}
                                 selectedItemVariant={selectedItemVariant}
                                 quantity={quantity || null}
                                 priceVariant={priceVariant}
