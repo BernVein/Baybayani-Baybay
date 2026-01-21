@@ -30,24 +30,21 @@ export default function InformationSection({
     item,
     selectedItemVariant,
     setSelectedItemVariant,
-    selectedPriceVariant,
-    setSelectedPriceVariant,
-    rawQuantity,
-    setRawQuantity,
+    setQuantity,
+    quantity,
 }: {
     item: Item;
     selectedItemVariant: Variant | null;
     setSelectedItemVariant: (variant: Variant) => void;
-    selectedPriceVariant: string;
-    setSelectedPriceVariant: (variant: string) => void;
-    rawQuantity: number;
-    setRawQuantity: (quantity: number) => void;
+    setQuantity: (quantity: number) => void;
+    quantity: number;
 }) {
-    const computedDescription = !rawQuantity
-        ? "Enter quantity above"
-        : selectedPriceVariant === "Wholesale"
-          ? `Quantity: ${Math.min(rawQuantity * (selectedItemVariant?.variant_wholesale_item ?? 1), selectedItemVariant?.variant_stocks ?? 0)} ${item.item_sold_by}s`
-          : `Quantity: ${Math.min(rawQuantity, selectedItemVariant?.variant_stocks ?? 0)} ${item.item_sold_by}`;
+    const canShowWholesale =
+        selectedItemVariant?.variant_price_wholesale != null &&
+        selectedItemVariant?.variant_wholesale_item != null &&
+        selectedItemVariant?.variant_stocks != null &&
+        selectedItemVariant.variant_wholesale_item <=
+            selectedItemVariant.variant_stocks;
 
     return (
         <>
@@ -94,6 +91,43 @@ export default function InformationSection({
                     <span className="text-sm text-default-700">
                         {selectedItemVariant?.variant_name} Information:
                     </span>
+                </div>
+
+                {/* Current Retail Price */}
+                <div className="gap-2 flex flex-row justify-between">
+                    <span className="text-base text-default-500">
+                        Retail Price:
+                    </span>
+                    <span className="text-base text-default-700 font-bold">
+                        ₱
+                        {selectedItemVariant?.variant_price_retail?.toFixed(
+                            2,
+                        ) ?? "0.00"}{" "}
+                        per {item.item_sold_by}
+                    </span>
+                </div>
+                <div className="gap-2 flex flex-row justify-between">
+                    <span className="text-base text-default-500">
+                        Wholesale Price:
+                    </span>
+
+                    {selectedItemVariant?.variant_price_wholesale != null ? (
+                        <span className="text-base text-default-700 font-bold">
+                            ₱
+                            {selectedItemVariant.variant_price_wholesale.toLocaleString(
+                                "en-PH",
+                                {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                },
+                            )}{" "}
+                            per {item.item_sold_by}
+                        </span>
+                    ) : (
+                        <span className="text-default-400 text-sm italic">
+                            No wholesale price available
+                        </span>
+                    )}
                 </div>
 
                 {/* Retail info */}
@@ -169,15 +203,7 @@ export default function InformationSection({
                         )}
                     </span>
                 </div>
-                <div className="gap-2 flex flex-row justify-between">
-                    <span className="text-xs text-default-400">
-                        Min purchase for wholesale:
-                    </span>
-                    <span className="text-xs text-default-500">
-                        {selectedItemVariant?.variant_wholesale_item ?? 0}{" "}
-                        {item.item_sold_by}
-                    </span>
-                </div>
+
                 {/* Stocks info */}
                 <div className="gap-2 flex flex-row justify-between">
                     <span className="text-xs text-default-400">Stocks:</span>
@@ -192,113 +218,125 @@ export default function InformationSection({
             </div>
 
             <Divider />
-            <RadioGroup
-                label="Price Variants"
-                color="success"
-                size="sm"
-                value={selectedPriceVariant}
-                onValueChange={setSelectedPriceVariant}
-            >
-                <CustomRadio description="Retail price" value="Retail">
-                    ₱
-                    {selectedItemVariant?.variant_price_retail?.toFixed(2) ?? 0}{" "}
-                    / {item.item_sold_by}
-                </CustomRadio>
-                <CustomRadio
-                    description="Wholesale"
-                    value="Wholesale"
-                    isDisabled={
-                        // Disable if:
-                        // 1. No wholesale price, or
-                        // 2. Not enough stocks for wholesale order
-                        selectedItemVariant?.variant_price_wholesale == null ||
-                        (selectedItemVariant?.variant_stocks ?? 0) <
-                            (selectedItemVariant?.variant_wholesale_item ?? 0)
-                    }
-                >
-                    <div className="flex items-center gap-2">
-                        {!selectedItemVariant ? (
-                            <span className="text-xs text-default-400 italic">
-                                No variant selected
-                            </span>
-                        ) : selectedItemVariant.variant_price_wholesale ==
-                          null ? (
-                            <span className="text-xs text-default-400 italic">
-                                No wholesale price available
-                            </span>
-                        ) : (selectedItemVariant.variant_stocks ?? 0) <
-                          (selectedItemVariant.variant_wholesale_item ?? 0) ? (
-                            <span className="text-xs text-default-400 italic">
-                                Insufficient stocks for wholesale
+
+            <div className="flex flex-col gap-2 items-start">
+                {canShowWholesale && (
+                    <div>
+                        <span className="text-xs text-default-400">
+                            A minimum purchase of{" "}
+                        </span>
+
+                        {quantity >=
+                        (selectedItemVariant?.variant_wholesale_item ?? 0) ? (
+                            <span className="text-sm font-semibold text-success-500 transition-colors duration-300">
+                                {selectedItemVariant?.variant_wholesale_item ??
+                                    0}{" "}
+                                {item.item_sold_by}s
                             </span>
                         ) : (
-                            <>
-                                <span>
-                                    ₱
-                                    {selectedItemVariant.variant_price_wholesale?.toFixed(
-                                        2,
-                                    )}{" "}
-                                    / {item.item_sold_by}
-                                </span>
-                                <span className="text-xs text-default-400">
-                                    –{" "}
-                                    {selectedItemVariant.variant_wholesale_item ??
-                                        0}{" "}
-                                    {item.item_sold_by}s / item
-                                </span>
-                            </>
+                            <span className="text-sm font-semibold transition-colors duration-300">
+                                {selectedItemVariant?.variant_wholesale_item ??
+                                    0}{" "}
+                                {item.item_sold_by}s
+                            </span>
                         )}
-                    </div>
-                </CustomRadio>
-            </RadioGroup>
-            <Divider />
 
-            {/* Quantity Section */}
-            <div className="flex flex-row items-center gap-2 mb-4">
-                <NumberInput
-                    key={`${selectedPriceVariant}-${selectedItemVariant?.variant_stocks ?? 0}-${rawQuantity}-${selectedItemVariant?.variant_wholesale_item ?? 0}`}
-                    defaultValue={1}
-                    minValue={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
-                    step={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
-                    maxValue={
-                        selectedPriceVariant === "Wholesale"
-                            ? (selectedItemVariant?.variant_stocks ?? 0) /
-                              (selectedItemVariant?.variant_wholesale_item ?? 1)
-                            : (selectedItemVariant?.variant_stocks ?? 0)
-                    }
-                    value={rawQuantity}
-                    onValueChange={(val) => setRawQuantity(val)}
-                    description={computedDescription}
-                    placeholder="Enter quantity"
-                    labelPlacement="outside"
-                    radius="sm"
-                    variant="faded"
-                    endContent={
-                        <div className="text-sm text-default-500 mr-2">
-                            {selectedPriceVariant === "Wholesale"
-                                ? "Item"
-                                : item.item_sold_by}
-                        </div>
-                    }
-                    className="w-3/4"
-                    label={`Quantity (${selectedPriceVariant})`}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            setTimeout(() => {
-                                (e.currentTarget as HTMLInputElement).blur();
-                                window.scrollTo(0, 0);
-                            }, 150);
-                        }
-                    }}
-                />
-                <Button
-                    color="success"
-                    onPress={() => {
-                        setRawQuantity(rawQuantity);
-                    }}
-                >
-                    Confirm
-                </Button>
+                        <span className="text-xs text-default-400">
+                            {" "}
+                            is needed to avail the wholesale price of{" "}
+                        </span>
+
+                        <span className="text-sm font-semibold">
+                            ₱
+                            {selectedItemVariant?.variant_price_wholesale?.toLocaleString(
+                                "en-PH",
+                                {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                },
+                            ) ?? "0.00"}
+                        </span>
+                    </div>
+                )}
+
+                {/* Quantity Section */}
+                <div className="flex flex-row items-center gap-2 mb-4">
+                    <NumberInput
+                        step={0.25}
+                        maxValue={selectedItemVariant?.variant_stocks ?? 0}
+                        minValue={0}
+                        placeholder="Enter quantity"
+                        radius="sm"
+                        variant="faded"
+                        labelPlacement="outside"
+                        className="w-3/4"
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                setTimeout(() => {
+                                    (
+                                        e.currentTarget as HTMLInputElement
+                                    ).blur();
+                                    window.scrollTo(0, 0);
+                                }, 150);
+                            }
+                        }}
+                        onValueChange={(val) => setQuantity(Math.max(0, val))}
+                        value={quantity}
+                        // description={
+                        //     <div>
+                        //         Minimum purchase of{" "}
+                        //         <strong>
+                        //             {selectedItemVariant?.variant_wholesale_item ??
+                        //                 0}
+                        //         </strong>{" "}
+                        //         <strong>{item.item_sold_by}s</strong> to avail
+                        //         wholesale price
+                        //     </div>
+                        // }
+                        // key={`${selectedPriceVariant}-${selectedItemVariant?.variant_stocks ?? 0}-${rawQuantity}-${selectedItemVariant?.variant_wholesale_item ?? 0}`}
+                        // defaultValue={1}
+                        // minValue={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
+                        // step={selectedPriceVariant === "Wholesale" ? 1 : 0.25}
+                        // maxValue={
+                        //     selectedPriceVariant === "Wholesale"
+                        //         ? (selectedItemVariant?.variant_stocks ?? 0) /
+                        //           (selectedItemVariant?.variant_wholesale_item ?? 1)
+                        //         : (selectedItemVariant?.variant_stocks ?? 0)
+                        // }
+                        // value={rawQuantity}
+                        // onValueChange={(val) => setRawQuantity(val)}
+                        // description={computedDescription}
+                        // placeholder="Enter quantity"
+                        // labelPlacement="outside"
+                        // radius="sm"
+                        // variant="faded"
+                        // endContent={
+                        //     <div className="text-sm text-default-500 mr-2">
+                        //         {selectedPriceVariant === "Wholesale"
+                        //             ? "Item"
+                        //             : item.item_sold_by}
+                        //     </div>
+                        // }
+                        // className="w-3/4"
+                        // label={`Quantity (${selectedPriceVariant})`}
+                        // onKeyDown={(e) => {
+                        //     if (e.key === "Enter") {
+                        //         setTimeout(() => {
+                        //             (e.currentTarget as HTMLInputElement).blur();
+                        //             window.scrollTo(0, 0);
+                        //         }, 150);
+                        //     }
+                        // }}
+                    />
+                    <Button
+                        color="success"
+                        onPress={() => {
+                            setQuantity(quantity);
+                        }}
+                    >
+                        Confirm
+                    </Button>
+                </div>
             </div>
         </>
     );

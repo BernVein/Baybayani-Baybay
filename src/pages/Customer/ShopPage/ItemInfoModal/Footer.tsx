@@ -6,111 +6,110 @@ import { Item } from "@/model/Item";
 import { useState } from "react";
 
 export default function Footer({
-	selectedItem,
-	selectedItemVariant,
-	selectedPriceVariant,
-	rawQuantity,
-	actualQuantity,
-	onClose,
+    selectedItem,
+    selectedItemVariant,
+    quantity,
+    priceVariant,
+    onClose,
 }: {
-	selectedItem: Item;
-	selectedItemVariant: Variant | null;
-	selectedPriceVariant: string;
-	rawQuantity: number;
-	actualQuantity: number;
-	onClose: () => void;
+    selectedItem: Item;
+    selectedItemVariant: Variant | null;
+    quantity: number;
+    priceVariant: string;
+    onClose: () => void;
 }) {
-	const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-	async function addToCartHandler() {
-		setIsLoading(true);
-		const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
+    async function addToCartHandler() {
+        setIsLoading(true);
+        const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
 
-		if (!selectedItemVariant) {
-			addToast({
-				title: "No variant selected",
-				description: `Please select a variant.`,
-				severity: "warning",
-				color: "warning",
-				shouldShowTimeoutProgress: true,
-			});
-			return;
-		}
-		const result = await addToCart(
-			userId,
-			selectedItem,
-			selectedItemVariant,
-			selectedPriceVariant as "Retail" | "Wholesale",
-			rawQuantity
-		);
-		setIsLoading(false);
+        if (!selectedItemVariant) {
+            addToast({
+                title: "No variant selected",
+                description: `Please select a variant.`,
+                severity: "warning",
+                color: "warning",
+                shouldShowTimeoutProgress: true,
+            });
+            return;
+        }
+        const result = await addToCart(
+            userId,
+            selectedItem,
+            selectedItemVariant,
+            priceVariant as "Retail" | "Wholesale",
+            quantity,
+        );
+        setIsLoading(false);
 
-		if (!result.success && result.error === "OUT_OF_STOCK_EXCEEDED") {
-			addToast({
-				title: "Not enough stock",
-				description: result.message,
-				severity: "warning",
-				color: "warning",
-				shouldShowTimeoutProgress: true,
-			});
-			return;
-		}
+        if (!result.success && result.error === "OUT_OF_STOCK_EXCEEDED") {
+            addToast({
+                title: "Not enough stock",
+                description: result.message,
+                severity: "warning",
+                color: "warning",
+                shouldShowTimeoutProgress: true,
+            });
+            return;
+        }
 
-		if (result.success) {
-			addToast({
-				title: "Item added to cart",
-				description: `${selectedItemVariant.variant_name} has been added to your cart.`,
-				severity: "success",
-				color: "success",
-				shouldShowTimeoutProgress: true,
-			});
-			onClose();
-		} else {
-			addToast({
-				title: "Error adding item to cart",
-				description: `Sorry, ${selectedItemVariant.variant_name} could not be added to your cart, Plase try again later.`,
-				severity: "danger",
-				color: "danger",
-				shouldShowTimeoutProgress: true,
-			});
-		}
-	}
+        if (result.success) {
+            addToast({
+                title: "Item added to cart",
+                description: `${selectedItemVariant.variant_name} has been added to your cart.`,
+                severity: "success",
+                color: "success",
+                shouldShowTimeoutProgress: true,
+            });
+            onClose();
+        } else {
+            addToast({
+                title: "Error adding item to cart",
+                description: `Sorry, ${selectedItemVariant.variant_name} could not be added to your cart, Plase try again later.`,
+                severity: "danger",
+                color: "danger",
+                shouldShowTimeoutProgress: true,
+            });
+        }
+    }
 
-	return (
-		<>
-			<div className="flex flex-col gap-2 items-start">
-				<span className="text-sm text-default-500">
-					Subtotal ({selectedPriceVariant}):
-				</span>
-				<div className="flex flex-row gap-2 items-center">
-					<span className="text-base font-semibold">
-				{rawQuantity
-					? `₱${(selectedPriceVariant === "Wholesale"
-							? (selectedItemVariant?.variant_price_wholesale ??
-									0) * actualQuantity
-							: (selectedItemVariant?.variant_price_retail ??
-									0) * rawQuantity
-						).toLocaleString(undefined, {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					})}`
-					: "Enter quantity"}
-					</span>
-				</div>
-			</div>
-			<div className="flex gap-2">
-				<Button color="danger" variant="light" onPress={onClose}>
-					Close
-				</Button>
-				<Button
-					color="success"
-					startContent={!isLoading && <CartIcon className="size-5" />}
-					onPress={addToCartHandler}
-					isLoading={isLoading}
-				>
-					Add to Cart
-				</Button>
-			</div>
-		</>
-	);
+    return (
+        <>
+            <div className="flex flex-col gap-2 items-start">
+                <span className="text-sm text-default-500">
+                    Subtotal ({priceVariant}):
+                </span>
+                <div className="flex flex-row gap-2 items-center">
+                    <span className="text-base font-semibold">
+                        ₱
+                        {(
+                            quantity *
+                            (priceVariant === "Wholesale"
+                                ? (selectedItemVariant?.variant_price_wholesale ??
+                                  0)
+                                : (selectedItemVariant?.variant_price_retail ??
+                                  0))
+                        ).toLocaleString("en-PH", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        })}
+                    </span>
+                </div>
+            </div>
+            <div className="flex gap-2">
+                <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                </Button>
+                <Button
+                    color="success"
+                    startContent={!isLoading && <CartIcon className="size-5" />}
+                    onPress={addToCartHandler}
+                    isLoading={isLoading}
+                >
+                    Add to Cart
+                </Button>
+            </div>
+        </>
+    );
 }
