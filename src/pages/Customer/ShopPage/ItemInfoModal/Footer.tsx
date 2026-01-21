@@ -14,7 +14,7 @@ export default function Footer({
 }: {
     selectedItem: Item;
     selectedItemVariant: Variant | null;
-    quantity: number;
+    quantity: number | null;
     priceVariant: string;
     onClose: () => void;
 }) {
@@ -32,6 +32,18 @@ export default function Footer({
                 color: "warning",
                 shouldShowTimeoutProgress: true,
             });
+            return;
+        }
+
+        if (!quantity || quantity <= 0) {
+            addToast({
+                title: "Quantity required",
+                description: "Please enter the quantity before adding to cart.",
+                severity: "warning",
+                color: "warning",
+                shouldShowTimeoutProgress: true,
+            });
+            setIsLoading(false);
             return;
         }
         const result = await addToCart(
@@ -84,7 +96,7 @@ export default function Footer({
                     <span className="text-base font-semibold">
                         ₱
                         {(
-                            quantity *
+                            (quantity ?? 0) *
                             (priceVariant === "Wholesale"
                                 ? (selectedItemVariant?.variant_price_wholesale ??
                                   0)

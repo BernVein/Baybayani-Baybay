@@ -160,7 +160,7 @@ export default function ItemInfoModal({
                             <Footer
                                 selectedItem={item}
                                 selectedItemVariant={selectedItemVariant}
-                                quantity={quantity}
+                                quantity={quantity || null}
                                 priceVariant={priceVariant}
                                 onClose={onClose}
                             />
