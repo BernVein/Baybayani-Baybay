@@ -4,24 +4,26 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
+    Skeleton,
 } from "@heroui/react";
 import { useState, useEffect } from "react";
-import { Item } from "@/model/Item";
 import { Variant } from "@/model/variant";
 import useIsMobile from "@/lib/isMobile";
 import ImageCarousel from "./ImageCarousel";
 import InformationSection from "./InformationSection";
 import Footer from "./Footer";
+import { useFetchItemById } from "@/data/supabase/useFetchSingleItem";
 
 export default function ItemInfoModal({
     isOpen,
     onOpenChange,
-    item,
+    itemId,
 }: {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
-    item: Item | null;
+    itemId: string | number | null;
 }) {
+    const { item, loading } = useFetchItemById(itemId);
     // State for selected item variant
     const [selectedItemVariant, setSelectedItemVariant] =
         useState<Variant | null>(null);
@@ -98,32 +100,60 @@ export default function ItemInfoModal({
                         </ModalHeader>
 
                         <ModalBody>
-                            <div className="flex flex-col md:flex-row gap-6">
-                                <div className="flex flex-col items-center md:sticky md:items-start gap-2 top-4 w-full self-start">
-                                    {/* Left: Carousel */}
-                                    <ImageCarousel
-                                        item={item}
-                                        mainImg={mainImg}
-                                        setMainImg={setMainImg}
-                                        isMobile={isMobile}
-                                    />
-                                </div>
+                            {loading ? (
+                                <div className="flex flex-col md:flex-row gap-6">
+                                    {/* Left: image */}
+                                    <div className="w-full md:w-1/2">
+                                        <Skeleton className="w-full aspect-square rounded-lg" />
+                                        <div className="flex gap-2 mt-3">
+                                            {Array.from({ length: 4 }).map(
+                                                (_, i) => (
+                                                    <Skeleton
+                                                        key={i}
+                                                        className="w-16 h-16 rounded-md"
+                                                    />
+                                                ),
+                                            )}
+                                        </div>
+                                    </div>
 
-                                {/* Right: Info */}
-                                <div className="flex flex-col gap-4 justify-start w-full mt-3">
-                                    <InformationSection
-                                        item={item}
-                                        selectedItemVariant={
-                                            selectedItemVariant
-                                        }
-                                        setSelectedItemVariant={
-                                            setSelectedItemVariant
-                                        }
-                                        setQuantity={setQuantity}
-                                        quantity={quantity}
-                                    />
+                                    {/* Right: info */}
+                                    <div className="flex flex-col gap-4 w-full">
+                                        <Skeleton className="h-6 w-3/4" />
+                                        <Skeleton className="h-4 w-1/2" />
+                                        <Skeleton className="h-10 w-full" />
+                                        <Skeleton className="h-10 w-full" />
+                                        <Skeleton className="h-10 w-2/3" />
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="flex flex-col md:flex-row gap-6">
+                                    <div className="flex flex-col items-center md:sticky md:items-start gap-2 top-4 w-full self-start">
+                                        {/* Left: Carousel */}
+                                        <ImageCarousel
+                                            item={item}
+                                            mainImg={mainImg}
+                                            setMainImg={setMainImg}
+                                            isMobile={isMobile}
+                                        />
+                                    </div>
+
+                                    {/* Right: Info */}
+                                    <div className="flex flex-col gap-4 justify-start w-full mt-3">
+                                        <InformationSection
+                                            item={item}
+                                            selectedItemVariant={
+                                                selectedItemVariant
+                                            }
+                                            setSelectedItemVariant={
+                                                setSelectedItemVariant
+                                            }
+                                            setQuantity={setQuantity}
+                                            quantity={quantity}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </ModalBody>
 
                         <ModalFooter className="flex justify-between items-center">
