@@ -9,8 +9,14 @@ import {
     Listbox,
     ListboxItem,
     ListboxSection,
+    useDisclosure,
 } from "@heroui/react";
 import { PencilIcon, PlusIcon, TrashIcon } from "@/components/icons";
+import { EditCatModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/EditCatModal";
+import { DeleteCatModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/DeleteCatModal";
+import { EditTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/EditTagModal";
+import { DeleteTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/DeleteTagModal";
+
 export function ManageCatTagModal({
     isOpen,
     onOpenChange,
@@ -18,6 +24,26 @@ export function ManageCatTagModal({
     isOpen: boolean;
     onOpenChange: () => void;
 }) {
+    const {
+        isOpen: isOpenEditCat,
+        onOpen: onOpenEditCat,
+        onOpenChange: onOpenChangeEditCat,
+    } = useDisclosure();
+    const {
+        isOpen: isOpenDeleteCat,
+        onOpen: onOpenDeleteCat,
+        onOpenChange: onOpenChangeDeleteCat,
+    } = useDisclosure();
+    const {
+        isOpen: isOpenEditTag,
+        onOpen: onOpenEditTag,
+        onOpenChange: onOpenChangeEditTag,
+    } = useDisclosure();
+    const {
+        isOpen: isOpenDeleteTag,
+        onOpen: onOpenDeleteTag,
+        onOpenChange: onOpenChangeDeleteTag,
+    } = useDisclosure();
     return (
         <>
             <Modal
@@ -58,6 +84,9 @@ export function ManageCatTagModal({
                                                             isIconOnly
                                                             size="sm"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenEditCat
+                                                            }
                                                         >
                                                             <PencilIcon className="w-4" />
                                                         </Button>
@@ -66,6 +95,9 @@ export function ManageCatTagModal({
                                                             size="sm"
                                                             color="danger"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenDeleteCat
+                                                            }
                                                         >
                                                             <TrashIcon className="w-4" />
                                                         </Button>
@@ -84,6 +116,9 @@ export function ManageCatTagModal({
                                                             isIconOnly
                                                             size="sm"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenEditCat
+                                                            }
                                                         >
                                                             <PencilIcon className="w-4" />
                                                         </Button>
@@ -92,6 +127,9 @@ export function ManageCatTagModal({
                                                             size="sm"
                                                             color="danger"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenDeleteCat
+                                                            }
                                                         >
                                                             <TrashIcon className="w-4" />
                                                         </Button>
@@ -109,6 +147,9 @@ export function ManageCatTagModal({
                                                             isIconOnly
                                                             size="sm"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenEditCat
+                                                            }
                                                         >
                                                             <PencilIcon className="w-4" />
                                                         </Button>
@@ -117,6 +158,9 @@ export function ManageCatTagModal({
                                                             size="sm"
                                                             color="danger"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenDeleteCat
+                                                            }
                                                         >
                                                             <TrashIcon className="w-4" />
                                                         </Button>
@@ -134,6 +178,9 @@ export function ManageCatTagModal({
                                                             isIconOnly
                                                             size="sm"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenEditCat
+                                                            }
                                                         >
                                                             <PencilIcon className="w-4" />
                                                         </Button>
@@ -142,6 +189,9 @@ export function ManageCatTagModal({
                                                             size="sm"
                                                             color="danger"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenDeleteCat
+                                                            }
                                                         >
                                                             <TrashIcon className="w-4" />
                                                         </Button>
@@ -159,6 +209,9 @@ export function ManageCatTagModal({
                                                             isIconOnly
                                                             size="sm"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenEditCat
+                                                            }
                                                         >
                                                             <PencilIcon className="w-4" />
                                                         </Button>
@@ -167,6 +220,9 @@ export function ManageCatTagModal({
                                                             size="sm"
                                                             color="danger"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenDeleteCat
+                                                            }
                                                         >
                                                             <TrashIcon className="w-4" />
                                                         </Button>
@@ -202,6 +258,9 @@ export function ManageCatTagModal({
                                                             isIconOnly
                                                             size="sm"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenEditTag
+                                                            }
                                                         >
                                                             <PencilIcon className="w-4" />
                                                         </Button>
@@ -210,6 +269,9 @@ export function ManageCatTagModal({
                                                             size="sm"
                                                             color="danger"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenDeleteTag
+                                                            }
                                                         >
                                                             <TrashIcon className="w-4" />
                                                         </Button>
@@ -228,6 +290,9 @@ export function ManageCatTagModal({
                                                             isIconOnly
                                                             size="sm"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenEditTag
+                                                            }
                                                         >
                                                             <PencilIcon className="w-4" />
                                                         </Button>
@@ -236,6 +301,9 @@ export function ManageCatTagModal({
                                                             size="sm"
                                                             color="danger"
                                                             variant="light"
+                                                            onPress={
+                                                                onOpenDeleteTag
+                                                            }
                                                         >
                                                             <TrashIcon className="w-4" />
                                                         </Button>
@@ -259,6 +327,22 @@ export function ManageCatTagModal({
                     )}
                 </ModalContent>
             </Modal>
+            <EditCatModal
+                isOpenEditCat={isOpenEditCat}
+                onOpenChangeEditCat={onOpenChangeEditCat}
+            />
+            <DeleteCatModal
+                isOpenDeleteCat={isOpenDeleteCat}
+                onOpenChangeDeleteCat={onOpenChangeDeleteCat}
+            />
+            <EditTagModal
+                isOpenEditTag={isOpenEditTag}
+                onOpenChangeEditTag={onOpenChangeEditTag}
+            />
+            <DeleteTagModal
+                isOpenDeleteTag={isOpenDeleteTag}
+                onOpenChangeDeleteTag={onOpenChangeDeleteTag}
+            />
         </>
     );
 }
