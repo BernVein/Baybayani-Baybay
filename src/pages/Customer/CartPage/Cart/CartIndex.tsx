@@ -27,6 +27,18 @@ export default function Cart() {
     const { items, loading, errorMsg, refetch } = useFetchCartItems(
         "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
     );
+
+    useEffect(() => {
+        const handleCartUpdate = () => refetch();
+        window.addEventListener("baybayani:cart-updated", handleCartUpdate);
+        return () => {
+            window.removeEventListener(
+                "baybayani:cart-updated",
+                handleCartUpdate,
+            );
+        };
+    }, [refetch]);
+
     const allCartItems = items ?? [];
 
     const selectedSubtotal = useMemo(
