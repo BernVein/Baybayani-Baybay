@@ -8,6 +8,7 @@ import {
     Input,
     Listbox,
     ListboxItem,
+    ListboxSection,
 } from "@heroui/react";
 import { PencilIcon, PlusIcon, TrashIcon } from "@/components/icons";
 export function ManageCatTagModal({
@@ -19,7 +20,12 @@ export function ManageCatTagModal({
 }) {
     return (
         <>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                scrollBehavior="inside"
+                size="lg"
+            >
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -40,132 +46,134 @@ export function ManageCatTagModal({
                                         />
                                     </div>
                                     <Listbox aria-label="Actions">
-                                        <ListboxItem
-                                            key="1"
-                                            className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                        >
-                                            <div className="flex justify-between items-center w-full">
-                                                <span>Vegetable</span>
-                                                <div className="flex flex-row items-center">
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        variant="light"
-                                                    >
-                                                        <PencilIcon className="w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        color="danger"
-                                                        variant="light"
-                                                    >
-                                                        <TrashIcon className="w-4" />
-                                                    </Button>
+                                        <ListboxSection title="Categories">
+                                            <ListboxItem
+                                                key="1"
+                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                            >
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span>Vegetable</span>
+                                                    <div className="flex flex-row items-center">
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                        >
+                                                            <PencilIcon className="w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            color="danger"
+                                                            variant="light"
+                                                        >
+                                                            <TrashIcon className="w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ListboxItem>
+                                            </ListboxItem>
 
-                                        <ListboxItem
-                                            key="2"
-                                            className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                        >
-                                            <div className="flex justify-between items-center w-full">
-                                                <span>Grain</span>
-                                                <div className="flex flex-row items-center">
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        variant="light"
-                                                    >
-                                                        <PencilIcon className="w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        color="danger"
-                                                        variant="light"
-                                                    >
-                                                        <TrashIcon className="w-4" />
-                                                    </Button>
+                                            <ListboxItem
+                                                key="2"
+                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                            >
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span>Grain</span>
+                                                    <div className="flex flex-row items-center">
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                        >
+                                                            <PencilIcon className="w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            color="danger"
+                                                            variant="light"
+                                                        >
+                                                            <TrashIcon className="w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ListboxItem>
-                                        <ListboxItem
-                                            key="3"
-                                            className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                        >
-                                            <div className="flex justify-between items-center w-full">
-                                                <span>Fruit</span>
-                                                <div className="flex flex-row items-center">
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        variant="light"
-                                                    >
-                                                        <PencilIcon className="w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        color="danger"
-                                                        variant="light"
-                                                    >
-                                                        <TrashIcon className="w-4" />
-                                                    </Button>
+                                            </ListboxItem>
+                                            <ListboxItem
+                                                key="3"
+                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                            >
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span>Fruit</span>
+                                                    <div className="flex flex-row items-center">
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                        >
+                                                            <PencilIcon className="w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            color="danger"
+                                                            variant="light"
+                                                        >
+                                                            <TrashIcon className="w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ListboxItem>
-                                        <ListboxItem
-                                            key="4"
-                                            className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                        >
-                                            <div className="flex justify-between items-center w-full">
-                                                <span>Poultry</span>
-                                                <div className="flex flex-row items-center">
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        variant="light"
-                                                    >
-                                                        <PencilIcon className="w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        color="danger"
-                                                        variant="light"
-                                                    >
-                                                        <TrashIcon className="w-4" />
-                                                    </Button>
+                                            </ListboxItem>
+                                            <ListboxItem
+                                                key="4"
+                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                            >
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span>Poultry</span>
+                                                    <div className="flex flex-row items-center">
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                        >
+                                                            <PencilIcon className="w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            color="danger"
+                                                            variant="light"
+                                                        >
+                                                            <TrashIcon className="w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ListboxItem>
-                                        <ListboxItem
-                                            key="5"
-                                            className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                        >
-                                            <div className="flex justify-between items-center w-full">
-                                                <span>Spice</span>
-                                                <div className="flex flex-row items-center">
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        variant="light"
-                                                    >
-                                                        <PencilIcon className="w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        color="danger"
-                                                        variant="light"
-                                                    >
-                                                        <TrashIcon className="w-4" />
-                                                    </Button>
+                                            </ListboxItem>
+                                            <ListboxItem
+                                                key="5"
+                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                            >
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span>Spice</span>
+                                                    <div className="flex flex-row items-center">
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                        >
+                                                            <PencilIcon className="w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            color="danger"
+                                                            variant="light"
+                                                        >
+                                                            <TrashIcon className="w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ListboxItem>
+                                            </ListboxItem>
+                                        </ListboxSection>
                                     </Listbox>
                                 </div>
 
@@ -182,57 +190,59 @@ export function ManageCatTagModal({
                                         />
                                     </div>
                                     <Listbox aria-label="Actions">
-                                        <ListboxItem
-                                            key="1"
-                                            className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                        >
-                                            <div className="flex justify-between items-center w-full">
-                                                <span>Fresh</span>
-                                                <div className="flex flex-row items-center">
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        variant="light"
-                                                    >
-                                                        <PencilIcon className="w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        color="danger"
-                                                        variant="light"
-                                                    >
-                                                        <TrashIcon className="w-4" />
-                                                    </Button>
+                                        <ListboxSection title="Tags">
+                                            <ListboxItem
+                                                key="1"
+                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                            >
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span>Fresh</span>
+                                                    <div className="flex flex-row items-center">
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                        >
+                                                            <PencilIcon className="w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            color="danger"
+                                                            variant="light"
+                                                        >
+                                                            <TrashIcon className="w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ListboxItem>
+                                            </ListboxItem>
 
-                                        <ListboxItem
-                                            key="2"
-                                            className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                        >
-                                            <div className="flex justify-between items-center w-full">
-                                                <span>Price Drop</span>
-                                                <div className="flex flex-row items-center">
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        variant="light"
-                                                    >
-                                                        <PencilIcon className="w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        isIconOnly
-                                                        size="sm"
-                                                        color="danger"
-                                                        variant="light"
-                                                    >
-                                                        <TrashIcon className="w-4" />
-                                                    </Button>
+                                            <ListboxItem
+                                                key="2"
+                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                            >
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span>Price Drop</span>
+                                                    <div className="flex flex-row items-center">
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                        >
+                                                            <PencilIcon className="w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            color="danger"
+                                                            variant="light"
+                                                        >
+                                                            <TrashIcon className="w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ListboxItem>
+                                            </ListboxItem>
+                                        </ListboxSection>
                                     </Listbox>
                                 </div>
                             </ModalBody>
@@ -243,9 +253,6 @@ export function ManageCatTagModal({
                                     onPress={onClose}
                                 >
                                     Close
-                                </Button>
-                                <Button color="success" onPress={onClose}>
-                                    Save
                                 </Button>
                             </ModalFooter>
                         </>
