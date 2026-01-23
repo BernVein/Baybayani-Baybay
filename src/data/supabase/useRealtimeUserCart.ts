@@ -51,14 +51,20 @@ export const useRealtimeUserCart = (userId: string | null) => {
                     event: "*",
                     schema: "public",
                     table: "CartItemUser",
-                    // Listen to all changes, will refetch after filtering by user_id
                 },
                 () => fetchCartItems(),
             )
             .subscribe();
 
+        const handleManualUpdate = () => fetchCartItems();
+        window.addEventListener("baybayani:cart-updated", handleManualUpdate);
+
         return () => {
             supabase.removeChannel(channel);
+            window.removeEventListener(
+                "baybayani:cart-updated",
+                handleManualUpdate,
+            );
         };
     }, [userId, fetchCartItems]);
 
