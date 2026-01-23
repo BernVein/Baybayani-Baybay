@@ -86,6 +86,7 @@ export const useFetchItemById = (itemId: string | number | null) => {
                 item_sold_by: data.item_sold_by,
                 item_description: data.item_description,
                 item_tag: data.item_tag ?? null,
+                item_has_variant: data.item_has_variant,
                 is_soft_deleted: data.is_soft_deleted,
                 last_updated: data.last_updated,
                 created_at: data.created_at,

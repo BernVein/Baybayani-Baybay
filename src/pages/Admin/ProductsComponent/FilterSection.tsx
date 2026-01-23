@@ -1,13 +1,4 @@
-import {
-    SearchIcon,
-    FilterIcon,
-    VegetablesOutline,
-    FoodGrains24Regular,
-    FruitsOutline,
-    PoultryLeg,
-    PlusIcon,
-    Chili,
-} from "@/components/icons";
+import { SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import {
     Dropdown,
     DropdownTrigger,
@@ -75,31 +66,26 @@ export function FilterSection() {
                     >
                         <DropdownItem key="vegetable">
                             <div className="flex items-center gap-2">
-                                <VegetablesOutline />
                                 <span>Vegetable</span>
                             </div>
                         </DropdownItem>
                         <DropdownItem key="grain">
                             <div className="flex items-center gap-2">
-                                <FoodGrains24Regular />
                                 <span>Grain</span>
                             </div>
                         </DropdownItem>
                         <DropdownItem key="fruit">
                             <div className="flex items-center gap-2">
-                                <FruitsOutline />
                                 <span>Fruit</span>
                             </div>
                         </DropdownItem>
                         <DropdownItem key="poultry">
                             <div className="flex items-center gap-2">
-                                <PoultryLeg />
                                 <span>Poultry</span>
                             </div>
                         </DropdownItem>
                         <DropdownItem key="spice">
                             <div className="flex items-center gap-2">
-                                <Chili />
                                 <span>Spice</span>
                             </div>
                         </DropdownItem>
