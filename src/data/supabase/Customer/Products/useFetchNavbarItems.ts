@@ -20,7 +20,7 @@ export const useFetchNavbarItems = () => {
                 const { data, error } = await supabase
                     .from("Item")
                     .select(
-                        "item_id, item_title, item_category, Item_Image(item_image_url)",
+                        "item_id, item_title, Category(category_name), Item_Image(item_image_url)",
                     )
                     .eq("is_soft_deleted", false)
                     .order("item_title", { ascending: true })
@@ -31,7 +31,7 @@ export const useFetchNavbarItems = () => {
                 const mapped = (data ?? []).map((row: any) => ({
                     item_id: row.item_id,
                     item_title: row.item_title,
-                    item_category: row.item_category,
+                    item_category: row.Category?.category_name ?? "",
                     item_first_img: row.Item_Image?.[0]?.item_image_url ?? "",
                 }));
 

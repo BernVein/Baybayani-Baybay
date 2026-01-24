@@ -26,8 +26,8 @@ export const useFetchItemCardItems = (
                 .select(
                     `
                     item_id,
-					item_category,
-					item_tag,
+					Tag(tag_name),
+                    Category(category_name),
 					item_title,
 					item_sold_by,
 					Item_Image(item_image_url),
@@ -62,8 +62,8 @@ export const useFetchItemCardItems = (
 
                     return {
                         item_id: row.item_id,
-                        item_category: row.item_category,
-                        item_tag: row.item_tag ?? null,
+                        item_category: row.Category?.category_name ?? "",
+                        item_tag: row.Tag?.tag_name ?? null,
                         item_title: row.item_title,
                         item_sold_by: row.item_sold_by,
                         item_first_img:
