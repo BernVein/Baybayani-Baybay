@@ -1,5 +1,14 @@
 import { OrderCard } from "@/model/ui/order_card";
-import { Card, CardBody, Image, Divider, Chip } from "@heroui/react";
+import {
+    Card,
+    CardBody,
+    Image,
+    Divider,
+    Chip,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+} from "@heroui/react";
 export default function OrderItem({
     orderItem,
     // onPress,
@@ -43,9 +52,18 @@ export default function OrderItem({
 
                             <Chip size="sm">{orderItem.status}</Chip>
                         </div>
-                        <span className="text-default-500 text-xs italic max-w-[150px] truncate block">
-                            Order ID: {orderItem.order_item_user_id}
-                        </span>
+                        <Popover placement="bottom" showArrow={true}>
+                            <PopoverTrigger>
+                                <span className="text-default-500 text-xs italic max-w-[150px] truncate block cursor-pointer">
+                                    Order ID: {orderItem.order_item_user_id}
+                                </span>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <p className="text-bold text-sm">
+                                    Order ID: {orderItem.order_item_user_id}
+                                </p>
+                            </PopoverContent>
+                        </Popover>
 
                         <Divider className="my-3 sm:my-2" />
 
