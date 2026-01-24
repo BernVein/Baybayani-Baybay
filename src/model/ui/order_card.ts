@@ -7,7 +7,7 @@ export interface OrderCard {
     item_first_image: string;
     subtotal: number;
     quantity: number;
-    price_variant: number;
+    price_variant: string;
     date_ordered: string;
     status: string;
 }
