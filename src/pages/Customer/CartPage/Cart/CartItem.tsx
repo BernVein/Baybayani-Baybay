@@ -7,7 +7,6 @@ import {
     Divider,
     useDisclosure,
     Button,
-    Skeleton,
     Chip,
 } from "@heroui/react";
 import { TrashIcon } from "@/components/icons";
@@ -38,32 +37,8 @@ export default function CartItem({
         onOpenChange: onOpenChangeDeleteModal,
     } = useDisclosure();
 
-    const { cartItems, loading } = useFetchCartItems(cartItemUserId);
+    const { cartItems } = useFetchCartItems(cartItemUserId);
     const cartItemUser = cartItems[0];
-    if (loading) {
-        return (
-            <div className="relative w-full shadow-sm border border-default-200 rounded-lg">
-                <Card className="w-full shadow-none border-none bg-transparent">
-                    <CardBody className="flex flex-row gap-3 items-stretch">
-                        {/* Image skeleton */}
-                        <Skeleton className="w-[100px] sm:w-[150px] rounded-sm" />
-
-                        {/* Content skeleton */}
-                        <div className="flex flex-col flex-1 gap-1">
-                            <Skeleton className="h-3 w-1/2 rounded" />
-
-                            <Divider className="my-3 sm:my-2" />
-
-                            <Skeleton className="h-3 w-1/4 rounded" />
-                            <Skeleton className="h-3 w-1/4 rounded" />
-                            <Skeleton className="h-3 w-1/4 rounded" />
-                            <Skeleton className="h-3 w-2/3 rounded" />
-                        </div>
-                    </CardBody>
-                </Card>
-            </div>
-        );
-    }
 
     if (!cartItemUser) {
         return null;

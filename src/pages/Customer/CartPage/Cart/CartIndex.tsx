@@ -60,12 +60,6 @@ export default function Cart() {
         });
     }, [allCartItems]);
 
-    // const selectedItems = useMemo(() => {
-    //     return allCartItems.filter((i) =>
-    //         selectedItemsId.includes(i.cart_item_user_id),
-    //     );
-    // }, [selectedItemsId, allCartItems]);
-
     const allIds = useMemo(
         () => allCartItems.map((i) => i.cart_item_user_id),
         [allCartItems],
@@ -154,11 +148,34 @@ export default function Cart() {
                             {loading && !allCartItems.length ? (
                                 <>
                                     {[...Array(3)].map((_, i) => (
-                                        <CartItem
-                                            key={`skeleton-${i}`}
-                                            cartItemUserId={""}
-                                            value={`loading-${i}`}
-                                        />
+                                        <div className="relative w-full shadow-sm border border-default-200 rounded-lg">
+                                            <Card
+                                                key={`skeleton-${i}`}
+                                                className="w-full shadow-none border-none bg-transparent"
+                                            >
+                                                <CardBody className="flex flex-row gap-3 items-stretch">
+                                                    {/* Image */}
+                                                    <Skeleton className="w-[100px] sm:w-[150px] h-[90px] rounded-sm" />
+
+                                                    {/* Content */}
+                                                    <div className="flex flex-col flex-1 gap-2">
+                                                        <Skeleton className="h-4 w-3/4 rounded-md" />
+                                                        <Skeleton className="h-3 w-1/2 rounded-md" />
+
+                                                        <Skeleton className="h-3 w-full rounded-md" />
+                                                        <Skeleton className="h-3 w-full rounded-md" />
+                                                        <Skeleton className="h-3 w-2/3 rounded-md" />
+
+                                                        <div className="flex justify-end mt-3">
+                                                            <Skeleton className="h-8 w-32 rounded-lg" />
+                                                        </div>
+                                                    </div>
+                                                </CardBody>
+                                            </Card>
+
+                                            {/* Trash button skeleton */}
+                                            <Skeleton className="absolute top-2 right-3 h-8 w-8 rounded-full" />
+                                        </div>
                                     ))}
                                 </>
                             ) : (
