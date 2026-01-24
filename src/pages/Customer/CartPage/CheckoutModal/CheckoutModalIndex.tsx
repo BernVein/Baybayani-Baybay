@@ -6,11 +6,13 @@ import {
     ModalFooter,
     Button,
     Skeleton,
+    useDisclosure,
 } from "@heroui/react";
 import { AddToCart } from "@/components/icons";
 import { addOrderItems } from "@/data/supabase/addOrderItems";
 import { useState } from "react";
 import { useFetchCartItems } from "@/data/supabase/useFetchCartItem";
+import { OrderSuccessfulModal } from "@/pages/Customer/CartPage/CheckoutModal/OrderSuccessfulModal";
 
 export default function CheckoutModalIndex({
     checkoutModalIsOpen,
@@ -23,6 +25,11 @@ export default function CheckoutModalIndex({
     selectedItemsId: string[];
     selectedSubtotal: number;
 }) {
+    const {
+        onOpen: onOpenOrderSuccessful,
+        isOpen: isOpenOrderSuccessful,
+        onOpenChange: onOpenChangeOrderSuccessful,
+    } = useDisclosure();
     const { cartItems: selectedItems, loading } =
         useFetchCartItems(selectedItemsId);
     const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
@@ -33,7 +40,7 @@ export default function CheckoutModalIndex({
                 "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
                 selectedItems,
             );
-            alert("Order placed!");
+            onOpenOrderSuccessful();
             onClose();
         } catch (err) {
             alert("Something went wrong");
@@ -237,6 +244,10 @@ export default function CheckoutModalIndex({
                     )}
                 </ModalContent>
             </Modal>
+            <OrderSuccessfulModal
+                isOpenOrderSuccessful={isOpenOrderSuccessful}
+                onOpenChangeOrderSuccessful={onOpenChangeOrderSuccessful}
+            />
         </>
     );
 }
