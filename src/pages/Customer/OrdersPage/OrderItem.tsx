@@ -54,7 +54,7 @@ export default function OrderItem({
     return (
         <div className="relative w-full rounded-lg">
             <Card
-                isPressable={isAvailable}
+                // isPressable={isAvailable}
                 // onPress={onPress}
                 className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start cursor-pointer rounded-lg p-0 border-2 border-transparent"
             >
@@ -125,20 +125,6 @@ export default function OrderItem({
                             </span>
                             <span className="text-sm text-default-600">
                                 ₱{orderItemUser.subtotal.toLocaleString()}
-                            </span>
-                        </div>
-
-                        <div className="flex w-full justify-end">
-                            <span
-                                className={`text-sm italic ${
-                                    isAvailable
-                                        ? "text-success-500"
-                                        : "text-red-500"
-                                }`}
-                            >
-                                {isAvailable
-                                    ? "Select to view"
-                                    : unavailableReason}
                             </span>
                         </div>
                     </div>
