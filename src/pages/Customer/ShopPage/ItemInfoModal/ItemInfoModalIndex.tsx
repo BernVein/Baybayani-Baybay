@@ -29,7 +29,7 @@ export default function ItemInfoModal({
     const [selectedItemVariant, setSelectedItemVariant] =
         useState<Variant | null>(null);
     const [mainImg, setMainImg] = useState<string>("");
-    const [quantity, setQuantity] = useState<number>(1);
+    const [quantity, setQuantity] = useState<number | null>(null);
     const [priceVariant, setPriceVariant] = useState<"Retail" | "Wholesale">(
         "Retail",
     );
@@ -39,7 +39,7 @@ export default function ItemInfoModal({
         if (item) {
             setMainImg(item.item_img?.[0] || "");
             setSelectedItemVariant(item.item_variants?.[0] || null);
-            setQuantity(1);
+            setQuantity(null);
             setPriceVariant("Retail");
         }
     }, [item]);
@@ -53,7 +53,7 @@ export default function ItemInfoModal({
             selectedItemVariant.variant_price_wholesale != null;
 
         setPriceVariant(
-            hasWholesalePrice && quantity >= wholesaleMin
+            hasWholesalePrice && quantity! >= wholesaleMin
                 ? "Wholesale"
                 : "Retail",
         );
@@ -140,7 +140,7 @@ export default function ItemInfoModal({
                                             setSelectedItemVariant={
                                                 setSelectedItemVariant
                                             }
-                                            quantity={quantity}
+                                            quantity={quantity!}
                                             setQuantity={setQuantity}
                                         />
                                     </div>
