@@ -56,16 +56,23 @@ export default function OrderIndex() {
                                   </div>
                               </div>
                           ))
-                        : orderItems?.map((order) => (
-                              <OrderItem
-                                  key={order.order_item_user_id}
-                                  orderItemUser={order}
-                                  onPress={() => {
-                                      setSelectedItem(order.item);
-                                      onOpen();
-                                  }}
-                              />
-                          ))}
+                        : orderItems
+                              ?.slice()
+                              .sort(
+                                  (a, b) =>
+                                      new Date(b.created_at).getTime() -
+                                      new Date(a.created_at).getTime(),
+                              )
+                              .map((order) => (
+                                  <OrderItem
+                                      key={order.order_item_user_id}
+                                      orderItemUser={order}
+                                      onPress={() => {
+                                          setSelectedItem(order.item);
+                                          onOpen();
+                                      }}
+                                  />
+                              ))}
                 </div>
 
                 {/* No orders message */}
