@@ -74,6 +74,7 @@ export function Navbar({
                 justify="center"
             >
                 <Autocomplete
+                    isDisabled={loading}
                     size="sm"
                     fullWidth
                     className="w-full opacity-90"
