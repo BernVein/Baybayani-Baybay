@@ -56,7 +56,7 @@ export default function OrderItem({
             <Card
                 // isPressable={isAvailable}
                 // onPress={onPress}
-                className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start cursor-pointer rounded-lg p-0 border-2 border-transparent"
+                className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start rounded-lg p-0 border-2 border-transparent"
             >
                 <CardBody className="flex flex-row gap-3 items-stretch">
                     {/* Image column */}
