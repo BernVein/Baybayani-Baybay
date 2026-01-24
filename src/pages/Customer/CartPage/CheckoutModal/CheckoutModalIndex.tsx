@@ -9,9 +9,9 @@ import {
     useDisclosure,
 } from "@heroui/react";
 import { AddToCart } from "@/components/icons";
-import { addOrderItems } from "@/data/supabase/addOrderItems";
+import { addOrderItems } from "@/data/supabase/Customer/Orders/addOrderItems";
 import { useState } from "react";
-import { useFetchCartItems } from "@/data/supabase/useFetchCartItem";
+import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItem";
 import { OrderSuccessfulModal } from "@/pages/Customer/CartPage/CheckoutModal/OrderSuccessfulModal";
 
 export default function CheckoutModalIndex({

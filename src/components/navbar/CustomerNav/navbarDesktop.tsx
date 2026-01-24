@@ -12,6 +12,7 @@ import {
     Autocomplete,
     AutocompleteItem,
     Badge,
+    Spinner,
 } from "@heroui/react";
 import {
     BaybayaniLogo,
@@ -20,16 +21,10 @@ import {
     MessageIcon,
 } from "@/components/icons";
 import { useState } from "react";
-import { items } from "@/data/items";
+import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
 import { useNavigate, useLocation } from "react-router-dom";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
-import { useRealtimeUserCart } from "@/data/supabase/useRealtimeUserCart";
-
-const searchItems = items.map((i, index) => ({
-    label: i.item_title,
-    key: `${i.item_title}-${index}`,
-    description: i.item_category,
-}));
+import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 
 export function Navbar({
     setSearchTerm,
@@ -44,6 +39,13 @@ export function Navbar({
     const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
     const { cartItems } = useRealtimeUserCart(userId);
     const cartCount = cartItems.length;
+
+    const { items: fetchedItems, loading } = useFetchNavbarItems();
+    const searchItems = fetchedItems.map((i, index) => ({
+        label: i.item_title,
+        key: `${i.item_title}-${index}`,
+        description: i.item_category,
+    }));
 
     return (
         <HeroNavBar>
@@ -76,10 +78,16 @@ export function Navbar({
                     fullWidth
                     className="w-full opacity-90"
                     defaultItems={searchItems}
-                    placeholder="Search products..."
+                    placeholder={
+                        loading ? "Gathering items..." : "Search products..."
+                    }
                     selectorIcon={null}
                     startContent={
-                        <SearchIcon className="size-5 text-default-500" />
+                        loading ? (
+                            <Spinner size="sm" color="success" />
+                        ) : (
+                            <SearchIcon className="size-5 text-default-500" />
+                        )
                     }
                     variant="flat"
                     value={searchValue}

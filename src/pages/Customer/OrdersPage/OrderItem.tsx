@@ -2,10 +2,10 @@ import { OrderItemUser } from "@/model/orderItemUser";
 import { Card, CardBody, Image, Divider, Chip } from "@heroui/react";
 export default function OrderItem({
     orderItemUser,
-    onPress,
+    // onPress,
 }: {
     orderItemUser: OrderItemUser;
-    onPress: () => void;
+    // onPress: () => void;
 }) {
     // Frozen snapshot of the variant when added to cart
     const variant_snapshot = orderItemUser.variant_snapshot;
@@ -55,7 +55,7 @@ export default function OrderItem({
         <div className="relative w-full rounded-lg">
             <Card
                 isPressable={isAvailable}
-                onPress={onPress}
+                // onPress={onPress}
                 className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start cursor-pointer rounded-lg p-0 border-2 border-transparent"
             >
                 <CardBody className="flex flex-row gap-3 items-stretch">

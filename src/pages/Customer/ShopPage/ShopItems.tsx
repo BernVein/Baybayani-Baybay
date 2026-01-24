@@ -12,7 +12,7 @@ import {
     Button,
 } from "@heroui/react";
 import ItemInfoModal from "@/pages/Customer/ShopPage/ItemInfoModal/ItemInfoModalIndex";
-import { useFetchItemCardItems } from "@/data/supabase/useFetchItemCardItems";
+import { useFetchItemCardItems } from "@/data/supabase/Customer/Products/useFetchItemCardItems";
 
 interface ShopItemsProps {
     activeCategories: string[];

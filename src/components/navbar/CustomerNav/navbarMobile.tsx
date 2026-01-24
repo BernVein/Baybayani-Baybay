@@ -14,7 +14,7 @@ import { BaybayaniLogo, CartIcon, MessageIcon } from "@/components/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
-import { useRealtimeUserCart } from "@/data/supabase/useRealtimeUserCart";
+import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 export function NavbarMobile() {
     const [active, setActive] = useState("");
     const navigate = useNavigate();

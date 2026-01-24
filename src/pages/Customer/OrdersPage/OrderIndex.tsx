@@ -1,15 +1,10 @@
 import OrderItem from "./OrderItem";
-import { Button, Link, Skeleton, useDisclosure } from "@heroui/react";
+import { Button, Link, Skeleton } from "@heroui/react";
 import { BaybayaniLogo, CartIcon } from "@/components/icons";
-import { useState, useEffect } from "react";
-import { Item } from "@/model/Item";
-import ItemInfoModalOrder from "./ItemInfoModalOrder/ItemInfoModalOrderIndex";
-import { useFetchOrderItems } from "@/data/supabase/useFetchOrderItems";
+import { useEffect } from "react";
+import { useFetchOrderItems } from "@/data/supabase/Customer/Orders/useFetchOrderItems";
 
 export default function OrderIndex() {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-
     const { data: orderItems, error } = useFetchOrderItems(
         "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
     );
@@ -67,10 +62,10 @@ export default function OrderIndex() {
                                   <OrderItem
                                       key={order.order_item_user_id}
                                       orderItemUser={order}
-                                      onPress={() => {
-                                          setSelectedItem(order.item);
-                                          onOpen();
-                                      }}
+                                      //   onPress={() => {
+                                      //       setSelectedItem(order.item);
+                                      //       onOpen();
+                                      //   }}
                                   />
                               ))}
                 </div>
@@ -98,13 +93,6 @@ export default function OrderIndex() {
                     </div>
                 )}
             </div>
-
-            {/* Modal for order details */}
-            <ItemInfoModalOrder
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                item={selectedItem as Item}
-            />
         </>
     );
 }

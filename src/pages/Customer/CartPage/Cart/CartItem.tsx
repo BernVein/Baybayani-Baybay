@@ -12,7 +12,7 @@ import {
 import { TrashIcon } from "@/components/icons";
 import EditDetailInfoModal from "@/pages/Customer/CartPage/EditDetailModal/EditDetailModalIndex";
 import DeleteCartItemModalIndex from "../DeleteCartItemModal/DeleteCartItemModalIndex";
-import { useFetchCartItems } from "@/data/supabase/useFetchCartItem";
+import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItem";
 
 export default function CartItem({
     cartItemUserId,

@@ -2,7 +2,7 @@ import { Variant } from "@/model/variant";
 import { Button, addToast } from "@heroui/react";
 import { CartIcon } from "@/components/icons";
 import { useState } from "react";
-import { updateCartItemQuantity } from "@/data/supabase/updateCartItemQuantity";
+import { updateCartItemQuantity } from "@/data/supabase/Customer/Cart/updateCartItemQuantity";
 import { CartItemUser } from "@/model/cartItemUser";
 export default function Footer({
     cartItemUser,

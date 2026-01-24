@@ -12,7 +12,7 @@ import useIsMobile from "@/lib/isMobile";
 import ImageCarousel from "@/pages/Customer/ShopPage/ItemInfoModal/ImageCarousel";
 import InformationSection from "@/pages/Customer/ShopPage/ItemInfoModal/InformationSection";
 import Footer from "@/pages/Customer/ShopPage/ItemInfoModal/Footer";
-import { useFetchItemById } from "@/data/supabase/useFetchSingleItem";
+import { useFetchItemById } from "@/data/supabase/Customer/Products/useFetchSingleItem";
 
 export default function ItemInfoModal({
     isOpen,
