@@ -61,10 +61,6 @@ export default function OrderIndex() {
                                   <OrderItem
                                       key={order.order_item_user_id}
                                       orderItem={order}
-                                      //   onPress={() => {
-                                      //       setSelectedItem(order.item);
-                                      //       onOpen();
-                                      //   }}
                                   />
                               ))}
                 </div>

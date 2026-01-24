@@ -9,21 +9,10 @@ import {
     PopoverTrigger,
     PopoverContent,
 } from "@heroui/react";
-export default function OrderItem({
-    orderItem,
-    // onPress,
-}: {
-    orderItem: OrderCard;
-    // onPress: () => void;
-}) {
-    console.log("Order item: ", orderItem);
+export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
     return (
         <div className="relative w-full rounded-lg">
-            <Card
-                // isPressable={isAvailable}
-                // onPress={onPress}
-                className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start rounded-lg p-0 border-2 border-transparent"
-            >
+            <Card className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start rounded-lg p-0 border-2 border-transparent">
                 <CardBody className="flex flex-row gap-3 items-stretch">
                     {/* Image column */}
                     <div className="relative w-[100px] sm:w-[150px] shrink-0 self-stretch overflow-hidden rounded-sm">

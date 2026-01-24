@@ -8,6 +8,6 @@ export interface OrderCard {
     subtotal: number;
     quantity: number;
     price_variant: number;
-    date_ordered: string; //timestamptz
+    date_ordered: string;
     status: string;
 }
