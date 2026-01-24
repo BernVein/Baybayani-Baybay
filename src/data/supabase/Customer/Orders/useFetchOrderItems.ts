@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { OrderCard } from "@/model/ui/order_card";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 8;
 
 export const useFetchOrderCards = (userId?: string, page = 1) => {
     const [data, setData] = useState<OrderCard[]>([]);

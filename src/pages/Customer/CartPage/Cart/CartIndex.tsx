@@ -148,11 +148,11 @@ export default function Cart() {
                             {loading && !allCartItems.length ? (
                                 <>
                                     {[...Array(3)].map((_, i) => (
-                                        <div className="relative w-full shadow-sm border border-default-200 rounded-lg">
-                                            <Card
-                                                key={`skeleton-${i}`}
-                                                className="w-full shadow-none border-none bg-transparent"
-                                            >
+                                        <div
+                                            key={`skeleton-${i}`}
+                                            className="relative w-full shadow-sm border border-default-200 rounded-lg"
+                                        >
+                                            <Card className="w-full shadow-none border-none bg-transparent">
                                                 <CardBody className="flex flex-row gap-3 items-stretch">
                                                     {/* Image */}
                                                     <Skeleton className="w-[100px] sm:w-[150px] h-[90px] rounded-sm" />
