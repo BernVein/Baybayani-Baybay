@@ -3,7 +3,7 @@ import { supabase } from "@/config/supabaseclient";
 import { ItemCard } from "@/model/ui/item_card";
 
 export const useFetchItemCardItems = (
-    activeCategories: string[],
+    activeCategories: string[], // category names
     searchTerm: string | null,
     itemsPerPage = 8,
 ) => {
@@ -21,71 +21,91 @@ export const useFetchItemCardItems = (
             const from = pageNum * itemsPerPage;
             const to = from + itemsPerPage - 1;
 
-            let query = supabase
-                .from("Item")
-                .select(
-                    `
-                    item_id,
-					Tag(tag_name),
-                    Category(category_name),
-					item_title,
-					item_sold_by,
-					Item_Image(item_image_url),
-					Variant(variant_price_retail)
-				`,
-                )
-                .eq("is_soft_deleted", false)
-                .order("item_title", { ascending: false })
-                .range(from, to);
+            try {
+                // Step 1: Get category IDs if activeCategories are specified
+                let categoryIds: string[] = [];
+                if (activeCategories.length > 0) {
+                    const { data: categories, error: catError } = await supabase
+                        .from("Category")
+                        .select("category_id")
+                        .in("category_name", activeCategories)
+                        .eq("is_soft_deleted", false);
 
-            if (activeCategories.length > 0) {
-                query = query.in("item_category", activeCategories);
-            }
+                    if (catError) throw catError;
+                    categoryIds = categories?.map((c) => c.category_id) ?? [];
+                }
 
-            if (searchTerm?.trim()) {
-                query = query.ilike("item_title", `%${searchTerm}%`);
-            }
+                // Step 2: Build query for items
+                let query = supabase
+                    .from("Item")
+                    .select(
+                        `
+                        item_id,
+                        Tag(tag_name),
+                        Category(category_name),
+                        item_title,
+                        item_sold_by,
+                        Item_Image(item_image_url),
+                        Variant(variant_price_retail)
+                    `,
+                    )
+                    .eq("is_soft_deleted", false)
+                    .order("item_title", { ascending: false })
+                    .range(from, to);
 
-            const { data, error } = await query;
-            setLoading(false);
+                // Step 3: Filter by category IDs if any
+                if (categoryIds.length > 0) {
+                    query = query.in("category_id", categoryIds);
+                }
 
-            if (error) {
-                console.error(error);
-                setError(error.message);
-                return;
-            }
+                // Step 4: Filter by search term
+                if (searchTerm?.trim()) {
+                    query = query.ilike("item_title", `%${searchTerm}%`);
+                }
 
-            const mapped: ItemCard[] = (data ?? [])
-                .map((row: any) => {
-                    const firstVariant = row.Variant?.[0];
-                    if (!firstVariant?.variant_price_retail) return null;
+                const { data, error: itemError } = await query;
 
-                    return {
-                        item_id: row.item_id,
-                        item_category: row.Category?.category_name ?? "",
-                        item_tag: row.Tag?.tag_name ?? null,
-                        item_title: row.item_title,
-                        item_sold_by: row.item_sold_by,
-                        item_first_img:
-                            row.Item_Image?.[0]?.item_image_url ?? "",
-                        item_first_variant_retail_price: Number(
-                            firstVariant.variant_price_retail,
-                        ),
-                    };
-                })
-                .filter(Boolean) as ItemCard[];
+                if (itemError) throw itemError;
 
-            setHasMore((data ?? []).length === itemsPerPage);
+                // Step 5: Map result to ItemCard
+                const mapped: ItemCard[] = (data ?? [])
+                    .map((row: any) => {
+                        const firstVariant = row.Variant?.[0];
+                        if (!firstVariant?.variant_price_retail) return null;
 
-            if (reset) {
-                setItems(mapped);
-            } else {
-                setItems((prev) => [...prev, ...mapped]);
+                        return {
+                            item_id: row.item_id,
+                            item_category: row.Category?.category_name ?? "",
+                            item_tag: row.Tag?.tag_name ?? null,
+                            item_title: row.item_title,
+                            item_sold_by: row.item_sold_by,
+                            item_first_img:
+                                row.Item_Image?.[0]?.item_image_url ?? "",
+                            item_first_variant_retail_price: Number(
+                                firstVariant.variant_price_retail,
+                            ),
+                        };
+                    })
+                    .filter(Boolean) as ItemCard[];
+
+                setHasMore((data ?? []).length === itemsPerPage);
+
+                if (reset) {
+                    setItems(mapped);
+                } else {
+                    setItems((prev) => [...prev, ...mapped]);
+                }
+            } catch (err: any) {
+                console.error(err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
             }
         },
         [activeCategories, searchTerm, itemsPerPage],
     );
 
+    // Reset items when filters change
     useEffect(() => {
         setPage(0);
         setItems([]);
