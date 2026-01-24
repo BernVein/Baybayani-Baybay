@@ -53,8 +53,6 @@ export default function OrderItem({
 
     return (
         <div className="relative w-full rounded-lg">
-            {/* Checkbox with product info */}
-
             <Card
                 isPressable={isAvailable}
                 onPress={onPress}
@@ -88,6 +86,9 @@ export default function OrderItem({
 
                             <Chip size="sm">{orderItemUser.status}</Chip>
                         </div>
+                        <span className="text-default-500 text-xs italic max-w-[150px] truncate block">
+                            Order ID: {orderItemUser.order_item_user_id}
+                        </span>
 
                         <Divider className="my-3 sm:my-2" />
 
