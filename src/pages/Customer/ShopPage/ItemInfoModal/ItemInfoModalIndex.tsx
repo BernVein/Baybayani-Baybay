@@ -24,37 +24,27 @@ export default function ItemInfoModal({
     itemId: string | number | null;
 }) {
     const { item, loading } = useFetchItemById(itemId);
-    // State for selected item variant
+    const isMobile = useIsMobile();
+
     const [selectedItemVariant, setSelectedItemVariant] =
         useState<Variant | null>(null);
-    // State for selected image
-    const [mainImg, setMainImg] = useState(item?.item_img?.[0] || "");
-    // For mobile view, but its kinda useless
-    const isMobile = useIsMobile();
-    // State for selected price variant
+    const [mainImg, setMainImg] = useState<string>("");
+    const [quantity, setQuantity] = useState<number>(1);
     const [priceVariant, setPriceVariant] = useState<"Retail" | "Wholesale">(
         "Retail",
     );
-    const [quantity, setQuantity] = useState(1);
-    // Set default values when modal opens
+
+    // Populate states when item data is fetched
     useEffect(() => {
-        if (isOpen && item) {
+        if (item) {
+            setMainImg(item.item_img?.[0] || "");
+            setSelectedItemVariant(item.item_variants?.[0] || null);
+            setQuantity(1);
             setPriceVariant("Retail");
-            setQuantity(0);
         }
-        if (item?.item_img?.[0]) {
-            setMainImg(item.item_img[0]);
-        }
-        if (item?.item_variants?.length) {
-            setSelectedItemVariant(item.item_variants[0]);
-        }
-    }, [isOpen, item]);
+    }, [item]);
 
-    useEffect(() => {
-        setQuantity(0);
-    }, [selectedItemVariant]);
-
-    // Set default values when selected price variant changes
+    // Update price variant based on quantity & selected variant
     useEffect(() => {
         if (!selectedItemVariant) return;
 
@@ -69,41 +59,41 @@ export default function ItemInfoModal({
         );
     }, [selectedItemVariant, quantity]);
 
+    // Update document title
     useEffect(() => {
-        if (isOpen && item) {
-            document.title = `Baybayani | Shop | ${item.item_title}`;
-        } else {
-            document.title = "Baybayani | Shop";
-        }
+        document.title =
+            isOpen && item
+                ? `Baybayani | Shop | ${item.item_title}`
+                : "Baybayani | Shop";
     }, [isOpen, item]);
-
-    if (!item) return null;
 
     return (
         <Modal
             isOpen={isOpen}
             onOpenChange={onOpenChange}
+            size="2xl"
+            scrollBehavior="inside"
             classNames={{
                 header: "border-b-[1px] border-[rgba(41,47,70,0.4)]",
                 footer: "border-t-[1px] border-[rgba(41,47,70,0.4)]",
             }}
-            size="2xl"
-            scrollBehavior="inside"
         >
             <ModalContent>
                 {(onClose) => (
                     <>
                         <ModalHeader className="flex flex-col gap-2">
                             <h2 className="text-lg font-semibold">
-                                {item.item_title || "Sample Item"}
+                                {loading
+                                    ? "Loading..."
+                                    : item?.item_title || "Item"}
                             </h2>
                         </ModalHeader>
 
                         <ModalBody>
-                            {loading ? (
+                            {loading || !item ? (
                                 <div className="flex flex-col md:flex-row gap-6">
-                                    {/* Left: image */}
-                                    <div className="w-full md:w-1/2">
+                                    {/* Left: Skeleton Images */}
+                                    <div className="w-full md:w-1/2 flex flex-col gap-2">
                                         <Skeleton className="w-full aspect-square rounded-lg" />
                                         <div className="flex gap-2 mt-3">
                                             {Array.from({ length: 4 }).map(
@@ -117,7 +107,7 @@ export default function ItemInfoModal({
                                         </div>
                                     </div>
 
-                                    {/* Right: info */}
+                                    {/* Right: Skeleton Info */}
                                     <div className="flex flex-col gap-4 w-full">
                                         <Skeleton className="h-6 w-3/4" />
                                         <Skeleton className="h-4 w-1/2" />
@@ -128,8 +118,8 @@ export default function ItemInfoModal({
                                 </div>
                             ) : (
                                 <div className="flex flex-col md:flex-row gap-6">
+                                    {/* Left: Carousel */}
                                     <div className="flex flex-col items-center md:sticky md:items-start gap-2 top-4 w-full self-start">
-                                        {/* Left: Carousel */}
                                         <ImageCarousel
                                             item_title={item.item_title}
                                             item_tag={item.item_tag ?? null}
@@ -140,7 +130,7 @@ export default function ItemInfoModal({
                                         />
                                     </div>
 
-                                    {/* Right: Info */}
+                                    {/* Right: Information */}
                                     <div className="flex flex-col gap-4 justify-start w-full mt-3">
                                         <InformationSection
                                             item={item}
@@ -150,8 +140,8 @@ export default function ItemInfoModal({
                                             setSelectedItemVariant={
                                                 setSelectedItemVariant
                                             }
-                                            setQuantity={setQuantity}
                                             quantity={quantity}
+                                            setQuantity={setQuantity}
                                         />
                                     </div>
                                 </div>
@@ -160,8 +150,8 @@ export default function ItemInfoModal({
 
                         <ModalFooter className="flex justify-between items-center">
                             <Footer
-                                item_id={item.item_id}
-                                item_sold_by={item.item_sold_by}
+                                item_id={item?.item_id || ""}
+                                item_sold_by={item?.item_sold_by || ""}
                                 selectedItemVariant={selectedItemVariant}
                                 quantity={quantity || null}
                                 priceVariant={priceVariant}
