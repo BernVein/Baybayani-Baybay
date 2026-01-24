@@ -114,7 +114,6 @@ export function Navbar({
                         }
                     }}
                     onClear={() => {
-                        // <-- this handles the X button if your component exposes this
                         setSearchValue("");
                         setSearchTerm("");
                         setShowSuggestions(false);

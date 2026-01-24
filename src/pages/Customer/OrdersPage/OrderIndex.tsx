@@ -2,10 +2,9 @@ import OrderItem from "./OrderItem";
 import { Button, Link, Skeleton } from "@heroui/react";
 import { BaybayaniLogo, CartIcon } from "@/components/icons";
 import { useEffect } from "react";
-import { useFetchOrderItems } from "@/data/supabase/Customer/Orders/useFetchOrderItems";
-
+import { useFetchOrderCards } from "@/data/supabase/Customer/Orders/useFetchOrderItems";
 export default function OrderIndex() {
-    const { data: orderItems, error } = useFetchOrderItems(
+    const { data: orderItems, error } = useFetchOrderCards(
         "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
     );
 
@@ -55,13 +54,13 @@ export default function OrderIndex() {
                               ?.slice()
                               .sort(
                                   (a, b) =>
-                                      new Date(b.created_at).getTime() -
-                                      new Date(a.created_at).getTime(),
+                                      new Date(b.date_ordered).getTime() -
+                                      new Date(a.date_ordered).getTime(),
                               )
                               .map((order) => (
                                   <OrderItem
                                       key={order.order_item_user_id}
-                                      orderItemUser={order}
+                                      orderItem={order}
                                       //   onPress={() => {
                                       //       setSelectedItem(order.item);
                                       //       onOpen();
