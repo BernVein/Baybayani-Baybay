@@ -55,6 +55,7 @@ export default function CheckoutModalIndex({
                 scrollBehavior="inside"
                 isOpen={checkoutModalIsOpen}
                 onOpenChange={checkoutModalOnOpenChange}
+                disableAnimation
             >
                 <ModalContent>
                     {(onClose) => (

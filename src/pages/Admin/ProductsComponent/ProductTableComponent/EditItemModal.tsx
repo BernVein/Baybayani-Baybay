@@ -25,7 +25,6 @@ export function EditItemModal({
     onOpenChange: () => void;
 }) {
     const { item, loading } = useFetchSingleItem(item_id);
-    console.log(item);
     const {
         isOpen: isOpenAddVar,
         onOpen: onOpenAddVar,
@@ -39,6 +38,7 @@ export function EditItemModal({
                 onOpenChange={onOpenChange}
                 size="xl"
                 scrollBehavior="inside"
+                disableAnimation
             >
                 <ModalContent>
                     {(onClose) => (
@@ -377,7 +377,11 @@ export function EditItemModal({
                     )}
                 </ModalContent>
             </Modal>
-            <Modal isOpen={isOpenAddVar} onOpenChange={onOpenChangeAddVar}>
+            <Modal
+                isOpen={isOpenAddVar}
+                onOpenChange={onOpenChangeAddVar}
+                disableAnimation
+            >
                 <ModalContent>
                     {(onClose) => (
                         <>

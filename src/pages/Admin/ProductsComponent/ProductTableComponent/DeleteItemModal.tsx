@@ -1,69 +1,70 @@
 import {
-	Button,
-	Modal,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
+    Button,
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
 } from "@heroui/react";
 import { ExclamationCircle } from "@/components/icons";
 
 export function DeleteItemModal({
-	isOpenDeleteItem,
-	onOpenChangeDeleteItem,
+    isOpenDeleteItem,
+    onOpenChangeDeleteItem,
 }: {
-	isOpenDeleteItem: boolean;
-	onOpenChangeDeleteItem: () => void;
+    isOpenDeleteItem: boolean;
+    onOpenChangeDeleteItem: () => void;
 }) {
-	return (
-		<Modal
-			isOpen={isOpenDeleteItem}
-			onOpenChange={onOpenChangeDeleteItem}
-			size="sm"
-		>
-			<ModalContent>
-				{(onClose) => (
-					<>
-						<ModalHeader className="flex flex-col items-center gap-2 text-center">
-							<div className="flex items-center justify-center h-12 w-12 rounded-full bg-danger/10 text-danger">
-								<ExclamationCircle className="w-6 h-6" />
-							</div>
-							<h2 className="text-lg font-semibold text-danger">
-								Delete item
-							</h2>
-						</ModalHeader>
+    return (
+        <Modal
+            isOpen={isOpenDeleteItem}
+            onOpenChange={onOpenChangeDeleteItem}
+            size="sm"
+            disableAnimation
+        >
+            <ModalContent>
+                {(onClose) => (
+                    <>
+                        <ModalHeader className="flex flex-col items-center gap-2 text-center">
+                            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-danger/10 text-danger">
+                                <ExclamationCircle className="w-6 h-6" />
+                            </div>
+                            <h2 className="text-lg font-semibold text-danger">
+                                Delete item
+                            </h2>
+                        </ModalHeader>
 
-						<ModalBody className="text-center text-default-600">
-							<p className="text-sm leading-relaxed">
-								Are you sure you want to remove{" "}
-								<span className="font-semibold text-default-800">
-									Item 1
-								</span>
-							</p>
-							<p className="text-xs text-default-500 mt-1">
-								This action cannot be undone.
-							</p>
-						</ModalBody>
+                        <ModalBody className="text-center text-default-600">
+                            <p className="text-sm leading-relaxed">
+                                Are you sure you want to remove{" "}
+                                <span className="font-semibold text-default-800">
+                                    Item 1
+                                </span>
+                            </p>
+                            <p className="text-xs text-default-500 mt-1">
+                                This action cannot be undone.
+                            </p>
+                        </ModalBody>
 
-						<ModalFooter className="flex justify-center gap-3 pt-4">
-							<Button
-								variant="flat"
-								color="default"
-								className="px-6"
-								onPress={onClose}
-							>
-								Cancel
-							</Button>
-							<Button
-								color="danger"
-								className="px-6 font-semibold"
-							>
-								Delete
-							</Button>
-						</ModalFooter>
-					</>
-				)}
-			</ModalContent>
-		</Modal>
-	);
+                        <ModalFooter className="flex justify-center gap-3 pt-4">
+                            <Button
+                                variant="flat"
+                                color="default"
+                                className="px-6"
+                                onPress={onClose}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                color="danger"
+                                className="px-6 font-semibold"
+                            >
+                                Delete
+                            </Button>
+                        </ModalFooter>
+                    </>
+                )}
+            </ModalContent>
+        </Modal>
+    );
 }

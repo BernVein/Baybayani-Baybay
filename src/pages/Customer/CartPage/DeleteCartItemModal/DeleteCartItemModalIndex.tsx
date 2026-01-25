@@ -45,7 +45,12 @@ export default function DeleteCartItemModalIndex({
     }
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="sm">
+        <Modal
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            size="sm"
+            disableAnimation
+        >
             <ModalContent>
                 {(onClose) => (
                     <>

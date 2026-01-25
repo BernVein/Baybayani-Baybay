@@ -20,6 +20,7 @@ export function DeleteTagModal({
             isOpen={isOpenDeleteTag}
             onOpenChange={onOpenChangeDeleteTag}
             size="sm"
+            disableAnimation
         >
             <ModalContent>
                 {(onClose) => (

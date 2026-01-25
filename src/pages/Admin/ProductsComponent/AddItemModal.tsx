@@ -35,6 +35,7 @@ export function AddItemModal({
                 onOpenChange={onOpenChange}
                 size="xl"
                 scrollBehavior="inside"
+                disableAnimation
             >
                 <ModalContent>
                     {(onClose) => (
@@ -217,7 +218,11 @@ export function AddItemModal({
                     )}
                 </ModalContent>
             </Modal>
-            <Modal isOpen={isOpenAddVar} onOpenChange={onOpenChangeAddVar}>
+            <Modal
+                isOpen={isOpenAddVar}
+                onOpenChange={onOpenChangeAddVar}
+                disableAnimation
+            >
                 <ModalContent>
                     {(onClose) => (
                         <>

@@ -20,6 +20,7 @@ export function DeleteCatModal({
             isOpen={isOpenDeleteCat}
             onOpenChange={onOpenChangeDeleteCat}
             size="sm"
+            disableAnimation
         >
             <ModalContent>
                 {(onClose) => (

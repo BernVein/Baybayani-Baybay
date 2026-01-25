@@ -77,6 +77,7 @@ export default function ItemInfoModal({
                 header: "border-b-[1px] border-[rgba(41,47,70,0.4)]",
                 footer: "border-t-[1px] border-[rgba(41,47,70,0.4)]",
             }}
+            disableAnimation
         >
             <ModalContent>
                 {(onClose) => (

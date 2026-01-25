@@ -16,7 +16,11 @@ export function EditTagModal({
     onOpenChangeEditTag: () => void;
 }) {
     return (
-        <Modal isOpen={isOpenEditTag} onOpenChange={onOpenChangeEditTag}>
+        <Modal
+            isOpen={isOpenEditTag}
+            onOpenChange={onOpenChangeEditTag}
+            disableAnimation
+        >
             <ModalContent>
                 {(onClose) => (
                     <>

@@ -94,6 +94,7 @@ export default function EditDetailInfoModal({
             }}
             size="2xl"
             scrollBehavior="inside"
+            disableAnimation
         >
             <ModalContent>
                 {(onClose) => (

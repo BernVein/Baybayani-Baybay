@@ -19,6 +19,7 @@ export function OrderSuccessfulModal({
         <Modal
             isOpen={isOpenOrderSuccessful}
             onOpenChange={onOpenChangeOrderSuccessful}
+            disableAnimation
         >
             <ModalContent>
                 {(onClose) => (

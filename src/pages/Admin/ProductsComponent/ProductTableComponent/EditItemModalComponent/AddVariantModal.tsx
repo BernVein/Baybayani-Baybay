@@ -16,7 +16,11 @@ export function AddVariantModal({
     onOpenChangeAddVar: () => void;
 }) {
     return (
-        <Modal isOpen={isOpenAddVar} onOpenChange={onOpenChangeAddVar}>
+        <Modal
+            isOpen={isOpenAddVar}
+            onOpenChange={onOpenChangeAddVar}
+            disableAnimation
+        >
             <ModalContent>
                 {(onClose) => (
                     <>

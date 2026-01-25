@@ -51,6 +51,7 @@ export function ManageCatTagModal({
                 onOpenChange={onOpenChange}
                 scrollBehavior="inside"
                 size="lg"
+                disableAnimation
             >
                 <ModalContent>
                     {(onClose) => (

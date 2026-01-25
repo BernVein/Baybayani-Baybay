@@ -16,7 +16,11 @@ export function EditCatModal({
     onOpenChangeEditCat: () => void;
 }) {
     return (
-        <Modal isOpen={isOpenEditCat} onOpenChange={onOpenChangeEditCat}>
+        <Modal
+            isOpen={isOpenEditCat}
+            onOpenChange={onOpenChangeEditCat}
+            disableAnimation
+        >
             <ModalContent>
                 {(onClose) => (
                     <>
