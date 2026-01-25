@@ -28,7 +28,7 @@ export default function AdminLayout() {
     return (
         <div className="relative h-[100dvh] w-full bg-background text-foreground overflow-hidden flex flex-col sm:flex-row">
             {/* Sidebar Desktop */}
-            <div className="hidden sm:block w-[330px] h-full flex-shrink-0 border-r border-default-200">
+            <div className="hidden sm:block w-[330px] h-full flex-shrink-0">
                 <SidebarDesktopAdmin />
             </div>
 
