@@ -11,7 +11,7 @@ import {
     Chip,
     useDisclosure,
 } from "@heroui/react";
-import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
+import { EditItemModal } from "@/pages/Admin/ProductsComponent/EditItemModal";
 import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { useState } from "react";
@@ -134,7 +134,7 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                 </TableBody>
             </Table>
 
-            <AddEditItemModal
+            <EditItemModal
                 item_id={selectedItemId ?? ""}
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}

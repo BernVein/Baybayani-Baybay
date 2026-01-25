@@ -11,7 +11,7 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
-import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
+import { AddItemModal } from "@/pages/Admin/ProductsComponent/AddItemModal";
 import { useState } from "react";
 
 export function FilterSection() {
@@ -90,7 +90,11 @@ export function FilterSection() {
                     </DropdownMenu>
                 </Dropdown>
             </div>
-            <AddEditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
+            <AddItemModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                itemHasVariant={itemHasVariant}
+            />
         </div>
     );
 }

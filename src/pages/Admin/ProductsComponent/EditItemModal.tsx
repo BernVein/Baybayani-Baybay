@@ -15,25 +15,21 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import { useFetchSingleItem } from "@/data/supabase/Admin/Products/useFetchSingleItem";
-import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModalComponent/AddVariantModal";
-export function AddEditItemModal({
+export function EditItemModal({
     item_id,
     isOpen,
     onOpenChange,
 }: {
-    item_id?: string; // optional
+    item_id: string;
     isOpen: boolean;
     onOpenChange: () => void;
 }) {
-    const { item, loading } = useFetchSingleItem(item_id || "");
+    const { item, loading } = useFetchSingleItem(item_id);
     const {
         isOpen: isOpenAddVar,
         onOpen: onOpenAddVar,
         onOpenChange: onOpenChangeAddVar,
     } = useDisclosure();
-
-    const isEdit = !!item_id; // determine add or edit
-
     return (
         <>
             <Modal
@@ -48,7 +44,7 @@ export function AddEditItemModal({
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                {isEdit ? "Edit Item" : "Add Item"}
+                                Edit Item
                             </ModalHeader>
                             <ModalBody>
                                 {loading ? (
@@ -78,7 +74,7 @@ export function AddEditItemModal({
                                                 label="Item Name"
                                                 labelPlacement="outside"
                                                 className="w-1/2"
-                                                value={item?.item_title || ""}
+                                                value={item?.item_title}
                                             />
                                             <ModalAwareSelect
                                                 labelPlacement="outside"
@@ -111,7 +107,7 @@ export function AddEditItemModal({
                                         <Input
                                             key="2"
                                             label="Item Short Description"
-                                            value={item?.item_description || ""}
+                                            value={item?.item_description}
                                             labelPlacement="outside"
                                             className="w-full"
                                             type="text"
@@ -149,8 +145,6 @@ export function AddEditItemModal({
                                                 </SelectItem>
                                             </ModalAwareSelect>
                                         </div>
-
-                                        {/* Variants & prices */}
                                         {item?.item_has_variant === false && (
                                             <>
                                                 <div className="flex flex-row gap-2 items-center">
@@ -161,9 +155,8 @@ export function AddEditItemModal({
                                                         className="w-1/2"
                                                         value={
                                                             item
-                                                                ?.item_variants?.[0]
-                                                                ?.variant_stocks ||
-                                                            undefined
+                                                                ?.item_variants[0]
+                                                                .variant_stocks
                                                         }
                                                     />
                                                     <NumberInput
@@ -180,9 +173,8 @@ export function AddEditItemModal({
                                                         className="w-1/2"
                                                         value={
                                                             item
-                                                                ?.item_variants?.[0]
-                                                                ?.variant_price_retail ||
-                                                            undefined
+                                                                ?.item_variants[0]
+                                                                .variant_price_retail
                                                         }
                                                         formatOptions={{
                                                             style: "decimal",
@@ -211,9 +203,13 @@ export function AddEditItemModal({
                                                         }}
                                                         value={
                                                             item
-                                                                ?.item_variants?.[0]
-                                                                ?.variant_price_wholesale ||
-                                                            undefined
+                                                                ?.item_variants[0]
+                                                                ?.variant_price_wholesale !=
+                                                            null
+                                                                ? item
+                                                                      .item_variants[0]
+                                                                      .variant_price_wholesale
+                                                                : undefined
                                                         }
                                                     />
                                                     <NumberInput
@@ -222,15 +218,18 @@ export function AddEditItemModal({
                                                         className="w-1/2"
                                                         value={
                                                             item
-                                                                ?.item_variants?.[0]
-                                                                ?.variant_wholesale_item ||
-                                                            undefined
+                                                                ?.item_variants[0]
+                                                                ?.variant_wholesale_item !=
+                                                            null
+                                                                ? item
+                                                                      .item_variants[0]
+                                                                      .variant_wholesale_item
+                                                                : undefined
                                                         }
                                                     />
                                                 </div>
                                             </>
                                         )}
-
                                         <div className="flex flex-row gap-2 items-center">
                                             <Button
                                                 startContent={
@@ -241,7 +240,6 @@ export function AddEditItemModal({
                                                 View Photos
                                             </Button>
                                         </div>
-
                                         {item?.item_has_variant === true && (
                                             <>
                                                 <Divider />
@@ -259,7 +257,7 @@ export function AddEditItemModal({
                                                     </Button>
                                                 </div>
 
-                                                {item?.item_variants?.map(
+                                                {item?.item_variants.map(
                                                     (variant, index) => (
                                                         <div
                                                             key={index}
@@ -325,8 +323,10 @@ export function AddEditItemModal({
                                                                     labelPlacement="outside"
                                                                     className="w-1/2"
                                                                     value={
-                                                                        variant.variant_price_wholesale ||
-                                                                        undefined
+                                                                        variant.variant_price_wholesale !=
+                                                                        null
+                                                                            ? variant.variant_price_wholesale
+                                                                            : undefined
                                                                     }
                                                                 />
                                                                 <NumberInput
@@ -334,8 +334,10 @@ export function AddEditItemModal({
                                                                     labelPlacement="outside"
                                                                     className="w-1/2"
                                                                     value={
-                                                                        variant.variant_wholesale_item ||
-                                                                        undefined
+                                                                        variant.variant_wholesale_item !=
+                                                                        null
+                                                                            ? variant.variant_wholesale_item
+                                                                            : undefined
                                                                     }
                                                                 />
                                                             </div>
@@ -368,18 +370,99 @@ export function AddEditItemModal({
                                     Cancel
                                 </Button>
                                 <Button color="success" onPress={onClose}>
-                                    {isEdit ? "Save Changes" : "Add Item"}
+                                    Add item
                                 </Button>
                             </ModalFooter>
                         </>
                     )}
                 </ModalContent>
             </Modal>
+            <Modal
+                isOpen={isOpenAddVar}
+                onOpenChange={onOpenChangeAddVar}
+                disableAnimation
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                Add Variant
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="flex flex-row gap-2 items-center">
+                                    <Input
+                                        label="Variant Name"
+                                        isRequired
+                                        labelPlacement="outside"
+                                        className="w-1/3"
+                                    />
+                                    <NumberInput
+                                        label="Stocks"
+                                        isRequired
+                                        labelPlacement="outside"
+                                        className="w-1/3"
+                                    />
+                                    <NumberInput
+                                        label="Retail Price"
+                                        formatOptions={{
+                                            style: "decimal",
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        }}
+                                        isRequired
+                                        startContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    ₱
+                                                </span>
+                                            </div>
+                                        }
+                                        labelPlacement="outside"
+                                        className="w-1/3"
+                                    />
+                                </div>
 
-            <AddVariantModal
-                isOpenAddVar={isOpenAddVar}
-                onOpenChangeAddVar={onOpenChangeAddVar}
-            />
+                                <div className="flex flex-row gap-2 items-center">
+                                    <NumberInput
+                                        label="Wholesale Price"
+                                        formatOptions={{
+                                            style: "decimal",
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        }}
+                                        startContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    ₱
+                                                </span>
+                                            </div>
+                                        }
+                                        labelPlacement="outside"
+                                        className="w-1/2"
+                                    />
+                                    <NumberInput
+                                        label="Wholesale Min Qty"
+                                        labelPlacement="outside"
+                                        className="w-1/2"
+                                    />
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    Close
+                                </Button>
+                                <Button color="success" onPress={onClose}>
+                                    Add Variant
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </>
     );
 }
