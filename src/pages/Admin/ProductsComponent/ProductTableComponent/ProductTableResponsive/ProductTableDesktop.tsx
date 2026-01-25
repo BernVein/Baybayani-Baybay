@@ -88,9 +88,13 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                 </div>
                             </TableCell>
                             <TableCell>
-                                <Chip variant="flat">
-                                    {item.item_tag ?? "No tag"}
-                                </Chip>
+                                {item.item_tag ? (
+                                    <Chip variant="flat">{item.item_tag}</Chip>
+                                ) : (
+                                    <span className="text-sm italic text-default-500">
+                                        No tag
+                                    </span>
+                                )}
                             </TableCell>
 
                             <TableCell>
