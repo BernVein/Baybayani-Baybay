@@ -15,21 +15,24 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import { useFetchSingleItem } from "@/data/supabase/Admin/Products/useFetchSingleItem";
-export function EditItemModal({
+export function AddEditItemModal({
     item_id,
     isOpen,
     onOpenChange,
 }: {
-    item_id: string;
+    item_id?: string; // optional
     isOpen: boolean;
     onOpenChange: () => void;
 }) {
-    const { item, loading } = useFetchSingleItem(item_id);
+    const { item, loading } = useFetchSingleItem(item_id || "");
     const {
         isOpen: isOpenAddVar,
         onOpen: onOpenAddVar,
         onOpenChange: onOpenChangeAddVar,
     } = useDisclosure();
+
+    const isEdit = !!item_id; // determine add or edit
+
     return (
         <>
             <Modal
@@ -44,7 +47,7 @@ export function EditItemModal({
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                Edit Item
+                                {isEdit ? "Edit Item" : "Add Item"}
                             </ModalHeader>
                             <ModalBody>
                                 {loading ? (
@@ -74,7 +77,7 @@ export function EditItemModal({
                                                 label="Item Name"
                                                 labelPlacement="outside"
                                                 className="w-1/2"
-                                                value={item?.item_title}
+                                                value={item?.item_title || ""}
                                             />
                                             <ModalAwareSelect
                                                 labelPlacement="outside"
@@ -107,7 +110,7 @@ export function EditItemModal({
                                         <Input
                                             key="2"
                                             label="Item Short Description"
-                                            value={item?.item_description}
+                                            value={item?.item_description || ""}
                                             labelPlacement="outside"
                                             className="w-full"
                                             type="text"
@@ -145,6 +148,8 @@ export function EditItemModal({
                                                 </SelectItem>
                                             </ModalAwareSelect>
                                         </div>
+
+                                        {/* Variants & prices */}
                                         {item?.item_has_variant === false && (
                                             <>
                                                 <div className="flex flex-row gap-2 items-center">
@@ -155,8 +160,9 @@ export function EditItemModal({
                                                         className="w-1/2"
                                                         value={
                                                             item
-                                                                ?.item_variants[0]
-                                                                .variant_stocks
+                                                                ?.item_variants?.[0]
+                                                                ?.variant_stocks ||
+                                                            undefined
                                                         }
                                                     />
                                                     <NumberInput
@@ -173,8 +179,9 @@ export function EditItemModal({
                                                         className="w-1/2"
                                                         value={
                                                             item
-                                                                ?.item_variants[0]
-                                                                .variant_price_retail
+                                                                ?.item_variants?.[0]
+                                                                ?.variant_price_retail ||
+                                                            undefined
                                                         }
                                                         formatOptions={{
                                                             style: "decimal",
@@ -203,13 +210,9 @@ export function EditItemModal({
                                                         }}
                                                         value={
                                                             item
-                                                                ?.item_variants[0]
-                                                                ?.variant_price_wholesale !=
-                                                            null
-                                                                ? item
-                                                                      .item_variants[0]
-                                                                      .variant_price_wholesale
-                                                                : undefined
+                                                                ?.item_variants?.[0]
+                                                                ?.variant_price_wholesale ||
+                                                            undefined
                                                         }
                                                     />
                                                     <NumberInput
@@ -218,18 +221,15 @@ export function EditItemModal({
                                                         className="w-1/2"
                                                         value={
                                                             item
-                                                                ?.item_variants[0]
-                                                                ?.variant_wholesale_item !=
-                                                            null
-                                                                ? item
-                                                                      .item_variants[0]
-                                                                      .variant_wholesale_item
-                                                                : undefined
+                                                                ?.item_variants?.[0]
+                                                                ?.variant_wholesale_item ||
+                                                            undefined
                                                         }
                                                     />
                                                 </div>
                                             </>
                                         )}
+
                                         <div className="flex flex-row gap-2 items-center">
                                             <Button
                                                 startContent={
@@ -240,6 +240,7 @@ export function EditItemModal({
                                                 View Photos
                                             </Button>
                                         </div>
+
                                         {item?.item_has_variant === true && (
                                             <>
                                                 <Divider />
@@ -257,7 +258,7 @@ export function EditItemModal({
                                                     </Button>
                                                 </div>
 
-                                                {item?.item_variants.map(
+                                                {item?.item_variants?.map(
                                                     (variant, index) => (
                                                         <div
                                                             key={index}
@@ -323,10 +324,8 @@ export function EditItemModal({
                                                                     labelPlacement="outside"
                                                                     className="w-1/2"
                                                                     value={
-                                                                        variant.variant_price_wholesale !=
-                                                                        null
-                                                                            ? variant.variant_price_wholesale
-                                                                            : undefined
+                                                                        variant.variant_price_wholesale ||
+                                                                        undefined
                                                                     }
                                                                 />
                                                                 <NumberInput
@@ -334,10 +333,8 @@ export function EditItemModal({
                                                                     labelPlacement="outside"
                                                                     className="w-1/2"
                                                                     value={
-                                                                        variant.variant_wholesale_item !=
-                                                                        null
-                                                                            ? variant.variant_wholesale_item
-                                                                            : undefined
+                                                                        variant.variant_wholesale_item ||
+                                                                        undefined
                                                                     }
                                                                 />
                                                             </div>
@@ -370,13 +367,15 @@ export function EditItemModal({
                                     Cancel
                                 </Button>
                                 <Button color="success" onPress={onClose}>
-                                    Add item
+                                    {isEdit ? "Save Changes" : "Add Item"}
                                 </Button>
                             </ModalFooter>
                         </>
                     )}
                 </ModalContent>
             </Modal>
+
+            {/* Add Variant Modal remains the same */}
             <Modal
                 isOpen={isOpenAddVar}
                 onOpenChange={onOpenChangeAddVar}

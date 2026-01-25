@@ -109,7 +109,6 @@ export function ProductTable() {
         );
     }
 
-    // --- REAL DATA ---
     return (
         <div>
             <ProductTableMobile items={items} />

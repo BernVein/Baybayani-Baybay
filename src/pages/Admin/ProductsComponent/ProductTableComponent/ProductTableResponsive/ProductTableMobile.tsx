@@ -14,7 +14,7 @@ import {
     DropdownSection,
     useDisclosure,
 } from "@heroui/react";
-import { EditItemModal } from "../EditItemModal";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddEditItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { useState } from "react";
 export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
@@ -128,7 +128,7 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                     ))}
                 </TableBody>
             </Table>
-            <EditItemModal
+            <AddEditItemModal
                 item_id={selectedItemId ?? ""}
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}

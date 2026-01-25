@@ -11,15 +11,13 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
-import { AddItemModal } from "@/pages/Admin/ProductsComponent/AddItemModal";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddEditItemModal";
 import { useState } from "react";
 
 export function FilterSection() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
-    const [selectedItemAddOption, setSelectedItemAddOption] = useState<
-        string | null
-    >(null);
+    const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
     const isMobile = useIsMobile();
     return (
         <div className="flex flex-row justify-between w-full">
@@ -37,10 +35,10 @@ export function FilterSection() {
                     selectionMode="single"
                     selectedKeys={selectKeys}
                     onSelectionChange={(keys) => {
-                        console.log(selectedItemAddOption);
+                        console.log(itemHasVariant);
                         const key = Array.from(keys)[0] as string | undefined;
                         if (!key) return;
-                        setSelectedItemAddOption(key);
+                        setItemHasVariant(key === "with-variant");
                         onOpen();
                         setSelectKeys(new Set());
                     }}
@@ -92,11 +90,7 @@ export function FilterSection() {
                     </DropdownMenu>
                 </Dropdown>
             </div>
-            <AddItemModal
-                selectedItemAddOption={selectedItemAddOption}
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-            />
+            <AddEditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
         </div>
     );
 }
