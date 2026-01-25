@@ -14,7 +14,9 @@ import {
 import { EditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/EditItemModal";
 import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
+import { useState } from "react";
 export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
+    const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const {
         isOpen: isOpenDeleteItem,
@@ -75,9 +77,12 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                         {item.item_sold_by} left
                                     </span>
 
-                                    <span className="text-sm italic text-default-500">
-                                        on {item.item_variant_count} variants
-                                    </span>
+                                    {item.item_variant_count > 1 && (
+                                        <span className="text-sm italic text-default-500">
+                                            on {item.item_variant_count}{" "}
+                                            variants
+                                        </span>
+                                    )}
                                 </div>
                             </TableCell>
                             <TableCell>
@@ -103,7 +108,10 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                         size="sm"
                                         variant="light"
                                         isIconOnly
-                                        onPress={onOpen}
+                                        onPress={() => {
+                                            setSelectedItemId(item.item_id);
+                                            onOpen();
+                                        }}
                                     >
                                         <PencilIcon className="w-5" />
                                     </Button>
@@ -122,7 +130,12 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                     ))}
                 </TableBody>
             </Table>
-            <EditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
+
+            <EditItemModal
+                item_id={selectedItemId ?? ""}
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+            />
             <DeleteItemModal
                 isOpenDeleteItem={isOpenDeleteItem}
                 onOpenChangeDeleteItem={onOpenChangeDeleteItem}

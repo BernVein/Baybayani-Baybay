@@ -16,8 +16,10 @@ import {
 } from "@heroui/react";
 import { EditItemModal } from "../EditItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
+import { useState } from "react";
 export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     return (
         <div className="sm:hidden">
             <Table
@@ -88,7 +90,12 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                                                 startContent={
                                                     <PencilIcon className="w-5" />
                                                 }
-                                                onClick={onOpen}
+                                                onClick={() => {
+                                                    setSelectedItemId(
+                                                        item.item_id,
+                                                    );
+                                                    onOpen();
+                                                }}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <span>Edit</span>
@@ -115,7 +122,11 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                     ))}
                 </TableBody>
             </Table>
-            <EditItemModal isOpen={isOpen} onOpenChange={onOpenChange} />
+            <EditItemModal
+                item_id={selectedItemId ?? ""}
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+            />
         </div>
     );
 }
