@@ -64,8 +64,14 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                             Starts from
                                         </span>
                                         <span className="text-base font-bold">
-                                            ₱{item.item_min_price} per{" "}
-                                            {item.item_sold_by}
+                                            ₱
+                                            {Number(
+                                                item.item_min_price,
+                                            ).toLocaleString("en-US", {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2,
+                                            })}{" "}
+                                            per {item.item_sold_by}
                                         </span>
                                     </div>
                                 </div>

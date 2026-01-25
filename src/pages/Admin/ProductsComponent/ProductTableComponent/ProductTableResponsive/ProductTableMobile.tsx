@@ -63,14 +63,20 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                                             Starts from
                                         </span>
                                         <span className="font-bold">
-                                            ₱{item.item_min_price}
+                                            ₱
+                                            {Number(
+                                                item.item_min_price,
+                                            ).toLocaleString("en-US", {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2,
+                                            })}
                                         </span>
                                         <span className="font-light italic text-xs text-default-500">
                                             per {item.item_sold_by}
                                         </span>
 
                                         <span className="text-default-500 text-xs italic">
-                                            {item.variant_stock}{" "}
+                                            {item.variant_stock.toLocaleString()}{" "}
                                             {item.item_sold_by} left
                                         </span>
                                     </div>
