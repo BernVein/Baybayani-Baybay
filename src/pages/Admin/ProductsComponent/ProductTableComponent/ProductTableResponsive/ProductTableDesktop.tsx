@@ -25,11 +25,8 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
     } = useDisclosure();
     console.log(items);
     return (
-        <div className="sm:flex hidden">
-            <Table
-                isHeaderSticky
-                className="overflow-y-auto h-[calc(100vh-350px)] w-full"
-            >
+        <div className="sm:flex hidden flex-1 min-h-0 flex-col">
+            <Table isHeaderSticky className="overflow-y-auto h-full w-full">
                 <TableHeader>
                     <TableColumn>ITEM</TableColumn>
                     <TableColumn>PRICE</TableColumn>

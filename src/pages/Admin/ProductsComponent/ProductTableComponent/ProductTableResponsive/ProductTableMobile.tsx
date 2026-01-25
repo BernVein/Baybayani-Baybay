@@ -21,11 +21,8 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     return (
-        <div className="sm:hidden">
-            <Table
-                isHeaderSticky
-                className="overflow-y-auto h-[calc(100vh-350px)] w-full"
-            >
+        <div className="sm:hidden flex-1 min-h-0 flex flex-col">
+            <Table isHeaderSticky className="overflow-y-auto h-full w-full">
                 <TableHeader>
                     <TableColumn>ITEM</TableColumn>
                     <TableColumn>PRICE & STOCK</TableColumn>

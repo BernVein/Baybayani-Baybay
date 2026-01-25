@@ -5,8 +5,8 @@ import { ProductTable } from "@/pages/Admin/ProductsComponent/ProductTable";
 
 export default function Products() {
     return (
-        <div className="flex flex-col gap-8 p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="flex flex-col gap-8 p-4 h-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
                 <div className="flex flex-row items-center gap-2">
                     <ProductIcon className="w-10" />
                     <div className="text-3xl font-semibold">Products</div>
@@ -18,14 +18,16 @@ export default function Products() {
                     <div className="text-lg font-semibold">Admin Bern Vein</div>
                 </div>
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden sm:block shrink-0">
                 <ProductSummary />
             </div>
 
-            <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-row items-center justify-between shrink-0">
                 <FilterSection />
             </div>
-            <ProductTable />
+            <div className="flex-1 min-h-0">
+                <ProductTable />
+            </div>
         </div>
     );
 }

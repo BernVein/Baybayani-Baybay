@@ -110,7 +110,7 @@ export function ProductTable() {
     }
 
     return (
-        <div>
+        <div className="h-full flex flex-col">
             <ProductTableMobile items={items} />
             <ProductTableDesktop items={items} />
         </div>
