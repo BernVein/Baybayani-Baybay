@@ -11,7 +11,7 @@ import {
     Chip,
     useDisclosure,
 } from "@heroui/react";
-import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddEditItemModal";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
 import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { useState } from "react";

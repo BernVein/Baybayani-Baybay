@@ -14,7 +14,7 @@ import {
     DropdownSection,
     useDisclosure,
 } from "@heroui/react";
-import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddEditItemModal";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { useState } from "react";
 export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {

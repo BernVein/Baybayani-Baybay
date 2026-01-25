@@ -11,7 +11,7 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
-import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddEditItemModal";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
 import { useState } from "react";
 
 export function FilterSection() {
