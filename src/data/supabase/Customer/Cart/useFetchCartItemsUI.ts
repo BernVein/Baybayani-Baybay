@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
-import { CartCard } from "@/model/ui/cart_card";
+import { CartCard } from "@/model/ui/Customer/cart_card";
 
 export const useFetchCartItems = (userId: string) => {
     const [items, setItems] = useState<CartCard[]>([]);

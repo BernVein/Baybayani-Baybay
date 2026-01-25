@@ -1,8 +1,7 @@
 import { ProductIcon } from "@/components/icons";
 import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
-import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableMobile";
-import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableDesktop";
 import { FilterSection } from "@/pages/Admin/ProductsComponent/FilterSection";
+import { ProductTable } from "@/pages/Admin/ProductsComponent/ProductTable";
 
 export default function Products() {
     return (
@@ -26,9 +25,7 @@ export default function Products() {
             <div className="flex flex-row items-center justify-between">
                 <FilterSection />
             </div>
-
-            <ProductTableMobile />
-            <ProductTableDesktop />
+            <ProductTable />
         </div>
     );
 }

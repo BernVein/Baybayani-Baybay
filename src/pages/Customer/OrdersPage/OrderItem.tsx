@@ -1,4 +1,4 @@
-import { OrderCard } from "@/model/ui/order_card";
+import { OrderCard } from "@/model/ui/Customer/order_card";
 import {
     Card,
     CardBody,

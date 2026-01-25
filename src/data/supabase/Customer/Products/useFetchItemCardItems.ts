@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
-import { ItemCard } from "@/model/ui/item_card";
+import { ItemCard } from "@/model/ui/Customer/item_card";
 
 export const useFetchItemCardItems = (
     activeCategories: string[], // category names

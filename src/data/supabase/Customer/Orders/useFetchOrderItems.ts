@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/config/supabaseclient";
-import { OrderCard } from "@/model/ui/order_card";
+import { OrderCard } from "@/model/ui/Customer/order_card";
 
 const PAGE_SIZE = 8;
 
