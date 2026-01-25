@@ -80,7 +80,7 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                 <div className="flex flex-col items-start">
                                     <span className="text-base font-bold">
                                         {item.variant_stock.toLocaleString()}{" "}
-                                        {item.item_sold_by} left
+                                        {item.item_sold_by}s left
                                     </span>
 
                                     {item.item_variant_count > 1 && (

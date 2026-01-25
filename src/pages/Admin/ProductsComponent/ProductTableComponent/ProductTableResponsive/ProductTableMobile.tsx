@@ -77,7 +77,7 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
 
                                         <span className="text-default-500 text-xs italic">
                                             {item.variant_stock.toLocaleString()}{" "}
-                                            {item.item_sold_by} left
+                                            {item.item_sold_by}s left
                                         </span>
                                     </div>
                                 </div>
