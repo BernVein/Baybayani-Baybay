@@ -62,10 +62,8 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                             Starts from
                                         </span>
                                         <span className="text-base font-bold">
-                                            ₱{item.item_min_price}
-                                        </span>
-                                        <span className="text-sm italic text-default-500">
-                                            per {item.item_sold_by}
+                                            ₱{item.item_min_price} per{" "}
+                                            {item.item_sold_by}
                                         </span>
                                     </div>
                                 </div>
