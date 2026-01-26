@@ -1,4 +1,4 @@
-import { PhotoIcon, TrashIcon, PlusIcon } from "@/components/icons";
+import { PhotoIcon } from "@/components/icons";
 import {
     Button,
     Modal,
@@ -8,14 +8,15 @@ import {
     ModalFooter,
     NumberInput,
     SelectItem,
-    Divider,
     Input,
     useDisclosure,
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ItemHasNoVariant } from "./ProductTableComponent/AddItemModalComponent/ItemHasNoVariant";
+import { ItemHasVariant } from "./ProductTableComponent/AddItemModalComponent/ItemHasVariant";
 
-type DBVariant = {
+export type DBVariant = {
     name: string;
     stocks: number | undefined;
     priceRetail: number | undefined;
@@ -45,6 +46,8 @@ export function AddItemModal({
     const [itemSoldBy, setItemSoldBy] = useState<string>("");
     const [itemTagId, setItemTagId] = useState<string | null>(null);
     // const [itemImage, setItemImage] = useState<string[]>([]);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmittedAddVar, setIsSubmittedAddVar] = useState(false);
 
     const [variants, setVariants] = useState<DBVariant[]>([
         {
@@ -88,6 +91,63 @@ export function AddItemModal({
             priceWholesale: null,
             wholesaleMinQty: null,
         });
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            // Reset all fields when modal opens
+            setItemTitle("");
+            setItemCategoryId("");
+            setItemDescription("");
+            setItemSoldBy("");
+            setItemTagId(null);
+
+            setVariants([
+                {
+                    name: "",
+                    stocks: undefined,
+                    priceRetail: undefined,
+                    priceWholesale: null,
+                    wholesaleMinQty: null,
+                },
+            ]);
+
+            setTempVariant({
+                name: "",
+                stocks: undefined,
+                priceRetail: undefined,
+                priceWholesale: null,
+                wholesaleMinQty: null,
+            });
+        }
+    }, [isOpen]);
+
+    const validate = (): boolean => {
+        // item fields
+        if (!itemTitle.trim()) return false;
+        if (!itemCategoryId.trim()) return false;
+        if (!itemSoldBy.trim()) return false;
+
+        // variant fields
+        if (itemHasVariant) {
+            for (const v of variants) {
+                if (!v.name?.trim()) return false;
+                if (v.stocks === undefined || v.stocks === null) return false;
+                if (v.priceRetail === undefined || v.priceRetail === null)
+                    return false;
+            }
+        } else {
+            if (!tempVariant.name.trim()) return false;
+            if (tempVariant.stocks === undefined || tempVariant.stocks === null)
+                return false;
+            if (
+                tempVariant.priceRetail === undefined ||
+                tempVariant.priceRetail === null
+            )
+                return false;
+        }
+
+        return true;
     };
 
     return (
@@ -136,15 +196,31 @@ export function AddItemModal({
                                                 }));
                                             }
                                         }}
+                                        isInvalid={
+                                            isSubmitted && !itemTitle.trim()
+                                        }
                                     />
                                     <ModalAwareSelect
                                         labelPlacement="outside"
                                         isRequired
                                         label="Item Category"
                                         className="w-1/2"
-                                        selectedKeys={itemCategoryId}
-                                        onSelectionChange={(keys) =>
-                                            setItemCategoryId(keys as string)
+                                        selectedKeys={
+                                            itemCategoryId
+                                                ? new Set([itemCategoryId])
+                                                : new Set()
+                                        }
+                                        onSelectionChange={(keys) => {
+                                            const firstKey =
+                                                Array.from(keys)[0];
+                                            setItemCategoryId(
+                                                firstKey !== undefined
+                                                    ? String(firstKey)
+                                                    : "",
+                                            );
+                                        }}
+                                        isInvalid={
+                                            isSubmitted && !itemSoldBy.trim()
                                         }
                                     >
                                         <SelectItem key="dcee3d7a-fd90-4ab8-a6cf-445a482b79ec">
@@ -182,6 +258,9 @@ export function AddItemModal({
                                         className="w-1/2"
                                         value={itemSoldBy}
                                         onValueChange={setItemSoldBy}
+                                        isInvalid={
+                                            isSubmitted && !itemSoldBy.trim()
+                                        }
                                     />
                                     <ModalAwareSelect
                                         labelPlacement="outside"
@@ -207,93 +286,11 @@ export function AddItemModal({
                                     </ModalAwareSelect>
                                 </div>
                                 {itemHasVariant === false && (
-                                    <>
-                                        <div className="flex flex-row gap-2 items-center">
-                                            <NumberInput
-                                                label="Stocks"
-                                                isRequired
-                                                labelPlacement="outside"
-                                                className="w-1/2"
-                                                value={tempVariant.stocks}
-                                                onValueChange={(value) =>
-                                                    setTempVariant((prev) => ({
-                                                        ...prev,
-                                                        stocks: value,
-                                                    }))
-                                                }
-                                            />
-                                            <NumberInput
-                                                label="Retail Price"
-                                                isRequired
-                                                startContent={
-                                                    <div className="pointer-events-none flex items-center">
-                                                        <span className="text-default-400 text-small">
-                                                            ₱
-                                                        </span>
-                                                    </div>
-                                                }
-                                                labelPlacement="outside"
-                                                className="w-1/2"
-                                                formatOptions={{
-                                                    style: "decimal",
-                                                    minimumFractionDigits: 2,
-                                                    maximumFractionDigits: 2,
-                                                }}
-                                                value={tempVariant.priceRetail}
-                                                onValueChange={(value) =>
-                                                    setTempVariant((prev) => ({
-                                                        ...prev,
-                                                        priceRetail: value,
-                                                    }))
-                                                }
-                                            />
-                                        </div>
-
-                                        <div className="flex flex-row gap-2 items-center">
-                                            <NumberInput
-                                                label="Wholesale Price"
-                                                labelPlacement="outside"
-                                                className="w-1/2"
-                                                startContent={
-                                                    <div className="pointer-events-none flex items-center">
-                                                        <span className="text-default-400 text-small">
-                                                            ₱
-                                                        </span>
-                                                    </div>
-                                                }
-                                                formatOptions={{
-                                                    style: "decimal",
-                                                    minimumFractionDigits: 2,
-                                                    maximumFractionDigits: 2,
-                                                }}
-                                                value={
-                                                    tempVariant.priceWholesale ??
-                                                    undefined
-                                                }
-                                                onValueChange={(value) =>
-                                                    setTempVariant((prev) => ({
-                                                        ...prev,
-                                                        priceWholesale: value,
-                                                    }))
-                                                }
-                                            />
-                                            <NumberInput
-                                                label="Wholesale Min Qty"
-                                                labelPlacement="outside"
-                                                className="w-1/2"
-                                                value={
-                                                    tempVariant.wholesaleMinQty ??
-                                                    undefined
-                                                }
-                                                onValueChange={(value) =>
-                                                    setTempVariant((prev) => ({
-                                                        ...prev,
-                                                        wholesaleMinQty: value,
-                                                    }))
-                                                }
-                                            />
-                                        </div>
-                                    </>
+                                    <ItemHasNoVariant
+                                        tempVariant={tempVariant}
+                                        setTempVariant={setTempVariant}
+                                        isSubmitted={isSubmitted}
+                                    />
                                 )}
                                 <div className="flex flex-row gap-2 items-center">
                                     <Button
@@ -306,153 +303,13 @@ export function AddItemModal({
                                     </Button>
                                 </div>
                                 {itemHasVariant === true && (
-                                    <>
-                                        <Divider />
-                                        <div className="flex flex-row justify-between">
-                                            <span className="text-lg font-semibold">
-                                                Item Variants
-                                            </span>
-                                            <Button
-                                                startContent={
-                                                    <PlusIcon className="w-5" />
-                                                }
-                                                onPress={onOpenAddVar}
-                                            >
-                                                Add Variant
-                                            </Button>
-                                        </div>
-
-                                        {variants.map((variant, index) => (
-                                            <div
-                                                key={index}
-                                                className="space-y-2"
-                                            >
-                                                <div className="flex flex-row gap-2 items-center">
-                                                    <Input
-                                                        label="Variant Name"
-                                                        isRequired
-                                                        labelPlacement="outside"
-                                                        className="w-1/3"
-                                                        value={variant.name}
-                                                        onValueChange={(v) =>
-                                                            updateVariant(
-                                                                index,
-                                                                "name",
-                                                                v,
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <NumberInput
-                                                        label="Stocks"
-                                                        isRequired
-                                                        labelPlacement="outside"
-                                                        className="w-1/3"
-                                                        value={variant.stocks}
-                                                        onValueChange={(v) =>
-                                                            updateVariant(
-                                                                index,
-                                                                "stocks",
-                                                                v,
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <NumberInput
-                                                        label="Retail Price"
-                                                        isRequired
-                                                        labelPlacement="outside"
-                                                        className="w-1/3"
-                                                        formatOptions={{
-                                                            style: "decimal",
-                                                            minimumFractionDigits: 2,
-                                                            maximumFractionDigits: 2,
-                                                        }}
-                                                        startContent={
-                                                            <div className="pointer-events-none flex items-center">
-                                                                <span className="text-default-400 text-small">
-                                                                    ₱
-                                                                </span>
-                                                            </div>
-                                                        }
-                                                        value={
-                                                            variant.priceRetail
-                                                        }
-                                                        onValueChange={(v) =>
-                                                            updateVariant(
-                                                                index,
-                                                                "priceRetail",
-                                                                v,
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-
-                                                <div className="flex flex-row gap-2 items-center">
-                                                    <NumberInput
-                                                        label="Wholesale Price"
-                                                        labelPlacement="outside"
-                                                        className="w-1/2"
-                                                        formatOptions={{
-                                                            style: "decimal",
-                                                            minimumFractionDigits: 2,
-                                                            maximumFractionDigits: 2,
-                                                        }}
-                                                        startContent={
-                                                            <div className="pointer-events-none flex items-center">
-                                                                <span className="text-default-400 text-small">
-                                                                    ₱
-                                                                </span>
-                                                            </div>
-                                                        }
-                                                        value={
-                                                            variant.priceWholesale ??
-                                                            undefined
-                                                        }
-                                                        onValueChange={(v) =>
-                                                            updateVariant(
-                                                                index,
-                                                                "priceWholesale",
-                                                                v,
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <NumberInput
-                                                        label="Wholesale Min Qty"
-                                                        labelPlacement="outside"
-                                                        className="w-1/2"
-                                                        value={
-                                                            variant.wholesaleMinQty ??
-                                                            undefined
-                                                        }
-                                                        onValueChange={(v) =>
-                                                            updateVariant(
-                                                                index,
-                                                                "wholesaleMinQty",
-                                                                v,
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-
-                                                <div className="flex justify-end">
-                                                    <Button
-                                                        startContent={
-                                                            <TrashIcon className="w-5" />
-                                                        }
-                                                        color="danger"
-                                                        className="mt-2"
-                                                        onPress={() =>
-                                                            removeVariant(index)
-                                                        }
-                                                    >
-                                                        Remove Variant
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </>
+                                    <ItemHasVariant
+                                        variants={variants}
+                                        updateVariant={updateVariant}
+                                        removeVariant={removeVariant}
+                                        onOpenAddVar={onOpenAddVar}
+                                        isSubmitted={isSubmitted}
+                                    />
                                 )}
                             </ModalBody>
                             <ModalFooter>
@@ -463,7 +320,16 @@ export function AddItemModal({
                                 >
                                     Cancel
                                 </Button>
-                                <Button color="success" onPress={onClose}>
+                                <Button
+                                    color="success"
+                                    onPress={() => {
+                                        setIsSubmitted(true);
+                                        if (validate()) {
+                                            onClose();
+                                            setIsSubmitted(false);
+                                        }
+                                    }}
+                                >
                                     Add item
                                 </Button>
                             </ModalFooter>
@@ -496,6 +362,10 @@ export function AddItemModal({
                                                 name: value,
                                             }))
                                         }
+                                        isInvalid={
+                                            isSubmittedAddVar &&
+                                            !tempVariant.name.trim()
+                                        }
                                     />
                                     <NumberInput
                                         label="Stocks"
@@ -508,6 +378,11 @@ export function AddItemModal({
                                                 ...prev,
                                                 stocks: value,
                                             }))
+                                        }
+                                        isInvalid={
+                                            isSubmittedAddVar &&
+                                            (tempVariant.stocks === undefined ||
+                                                tempVariant.stocks === null)
                                         }
                                     />
                                     <NumberInput
@@ -533,6 +408,13 @@ export function AddItemModal({
                                                 ...prev,
                                                 priceRetail: value,
                                             }))
+                                        }
+                                        isInvalid={
+                                            isSubmittedAddVar &&
+                                            (tempVariant.priceRetail ===
+                                                undefined ||
+                                                tempVariant.priceRetail ===
+                                                    null)
                                         }
                                     />
                                 </div>
@@ -583,8 +465,19 @@ export function AddItemModal({
                                 <Button
                                     color="success"
                                     onPress={() => {
-                                        handleAddVariant();
-                                        onClose();
+                                        setIsSubmittedAddVar(true);
+                                        if (
+                                            tempVariant.name.trim() &&
+                                            tempVariant.stocks !== undefined &&
+                                            tempVariant.stocks !== null &&
+                                            tempVariant.priceRetail !==
+                                                undefined &&
+                                            tempVariant.priceRetail !== null
+                                        ) {
+                                            handleAddVariant();
+                                            onClose();
+                                            setIsSubmittedAddVar(false);
+                                        }
                                     }}
                                 >
                                     Add Variant
