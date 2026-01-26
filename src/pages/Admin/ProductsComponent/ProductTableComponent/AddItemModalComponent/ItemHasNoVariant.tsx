@@ -1,6 +1,5 @@
 import { NumberInput } from "@heroui/react";
 import { DBVariant } from "@/pages/Admin/ProductsComponent/AddItemModal";
-import { useEffect } from "react";
 export function ItemHasNoVariant({
     tempVariant,
     setTempVariant,
@@ -10,18 +9,6 @@ export function ItemHasNoVariant({
     setTempVariant: React.Dispatch<React.SetStateAction<DBVariant>>;
     isSubmitted: boolean;
 }) {
-    useEffect(() => {
-        if (
-            tempVariant.priceWholesale == null ||
-            tempVariant.priceWholesale <= 0
-        ) {
-            setTempVariant((prev) => ({
-                ...prev,
-                wholesaleMinQty: null,
-            }));
-        }
-    }, [tempVariant.priceWholesale]);
-
     return (
         <>
             <div className="flex flex-row gap-2 items-center">
@@ -32,10 +19,7 @@ export function ItemHasNoVariant({
                     className="w-1/2"
                     value={tempVariant.stocks}
                     onValueChange={(value) =>
-                        setTempVariant((prev) => ({
-                            ...prev,
-                            stocks: value,
-                        }))
+                        setTempVariant((prev) => ({ ...prev, stocks: value }))
                     }
                     isInvalid={
                         isSubmitted &&
@@ -97,7 +81,7 @@ export function ItemHasNoVariant({
                     onValueChange={(value) =>
                         setTempVariant((prev) => ({
                             ...prev,
-                            priceWholesale: value,
+                            priceWholesale: isNaN(value) ? null : value,
                         }))
                     }
                 />
@@ -124,7 +108,7 @@ export function ItemHasNoVariant({
                     onValueChange={(value) =>
                         setTempVariant((prev) => ({
                             ...prev,
-                            wholesaleMinQty: value,
+                            wholesaleMinQty: isNaN(value) ? null : value,
                         }))
                     }
                 />

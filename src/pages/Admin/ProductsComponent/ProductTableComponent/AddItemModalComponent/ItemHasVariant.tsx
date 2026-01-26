@@ -131,11 +131,7 @@ export function ItemHasVariant({
                                 isSubmitted &&
                                 variant.priceWholesale !== undefined &&
                                 variant.priceWholesale !== null &&
-                                variant.priceWholesale > 0 &&
-                                (!variant.stocks ||
-                                    variant.stocks <= 0 ||
-                                    !variant.wholesaleMinQty ||
-                                    variant.wholesaleMinQty <= 0)
+                                variant.priceWholesale > 0
                             }
                         />
                     </div>
