@@ -19,6 +19,7 @@ export function FilterSection() {
     const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
     const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
     const isMobile = useIsMobile();
+
     return (
         <div className="flex flex-row justify-between w-full">
             <Input
@@ -43,8 +44,8 @@ export function FilterSection() {
                         setSelectKeys(new Set());
                     }}
                 >
-                    <SelectItem key="with-variant">With Variant</SelectItem>
                     <SelectItem key="no-variant">No Variant</SelectItem>
+                    <SelectItem key="with-variant">With Variant</SelectItem>
                 </ModalAwareSelect>
                 <Dropdown>
                     <DropdownTrigger>
