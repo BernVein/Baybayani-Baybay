@@ -1,6 +1,6 @@
 import { NumberInput } from "@heroui/react";
 import { DBVariant } from "@/pages/Admin/ProductsComponent/AddItemModal";
-
+import { useEffect } from "react";
 export function ItemHasNoVariant({
     tempVariant,
     setTempVariant,
@@ -10,6 +10,18 @@ export function ItemHasNoVariant({
     setTempVariant: React.Dispatch<React.SetStateAction<DBVariant>>;
     isSubmitted: boolean;
 }) {
+    useEffect(() => {
+        if (
+            tempVariant.priceWholesale == null ||
+            tempVariant.priceWholesale <= 0
+        ) {
+            setTempVariant((prev) => ({
+                ...prev,
+                wholesaleMinQty: null,
+            }));
+        }
+    }, [tempVariant.priceWholesale]);
+
     return (
         <>
             <div className="flex flex-row gap-2 items-center">
@@ -26,8 +38,10 @@ export function ItemHasNoVariant({
                         }))
                     }
                     isInvalid={
-                        (isSubmitted && tempVariant.stocks === 0) ||
-                        tempVariant.stocks === undefined
+                        isSubmitted &&
+                        (tempVariant.stocks === undefined ||
+                            tempVariant.stocks === null ||
+                            tempVariant.stocks === 0)
                     }
                 />
                 <NumberInput
@@ -91,6 +105,21 @@ export function ItemHasNoVariant({
                     label="Wholesale Min Qty"
                     labelPlacement="outside"
                     className="w-1/2"
+                    isRequired={
+                        tempVariant.priceWholesale != null &&
+                        tempVariant.priceWholesale > 0
+                    }
+                    isDisabled={
+                        tempVariant.priceWholesale == null ||
+                        tempVariant.priceWholesale <= 0
+                    }
+                    isInvalid={
+                        isSubmitted &&
+                        tempVariant.priceWholesale != null &&
+                        tempVariant.priceWholesale > 0 &&
+                        (tempVariant.wholesaleMinQty == null ||
+                            tempVariant.wholesaleMinQty <= 0)
+                    }
                     value={tempVariant.wholesaleMinQty ?? undefined}
                     onValueChange={(value) =>
                         setTempVariant((prev) => ({

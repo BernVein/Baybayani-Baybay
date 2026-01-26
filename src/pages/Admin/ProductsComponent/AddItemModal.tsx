@@ -45,6 +45,7 @@ export function AddItemModal({
     const [itemDescription, setItemDescription] = useState<string>("");
     const [itemSoldBy, setItemSoldBy] = useState<string>("");
     const [itemTagId, setItemTagId] = useState<string | null>(null);
+    const [itemUnitOfMeasure, setItemUnitOfMeasure] = useState<string>("");
     // const [itemImage, setItemImage] = useState<string[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmittedAddVar, setIsSubmittedAddVar] = useState(false);
@@ -101,7 +102,8 @@ export function AddItemModal({
             setItemDescription("");
             setItemSoldBy("");
             setItemTagId(null);
-
+            setIsSubmitted(false);
+            setIsSubmittedAddVar(false);
             setVariants([
                 {
                     name: "",
@@ -135,16 +137,35 @@ export function AddItemModal({
                 if (v.stocks === undefined || v.stocks === null) return false;
                 if (v.priceRetail === undefined || v.priceRetail === null)
                     return false;
+
+                // Wholesale validation
+                if (v.priceWholesale && v.priceWholesale > 0) {
+                    if (!v.wholesaleMinQty || v.wholesaleMinQty <= 0)
+                        return false;
+                }
             }
         } else {
             if (!tempVariant.name.trim()) return false;
-            if (tempVariant.stocks === undefined || tempVariant.stocks === null)
+            if (
+                tempVariant.stocks === undefined ||
+                tempVariant.stocks === null ||
+                tempVariant.stocks === 0
+            )
                 return false;
             if (
                 tempVariant.priceRetail === undefined ||
                 tempVariant.priceRetail === null
             )
                 return false;
+
+            // Wholesale validation
+            if (tempVariant.priceWholesale && tempVariant.priceWholesale > 0) {
+                if (
+                    !tempVariant.wholesaleMinQty ||
+                    tempVariant.wholesaleMinQty <= 0
+                )
+                    return false;
+            }
         }
 
         return true;
@@ -220,7 +241,8 @@ export function AddItemModal({
                                             );
                                         }}
                                         isInvalid={
-                                            isSubmitted && !itemSoldBy.trim()
+                                            isSubmitted &&
+                                            !itemCategoryId.trim()
                                         }
                                     >
                                         <SelectItem key="dcee3d7a-fd90-4ab8-a6cf-445a482b79ec">
@@ -256,10 +278,11 @@ export function AddItemModal({
                                         label="Unit of Measure"
                                         labelPlacement="outside"
                                         className="w-1/2"
-                                        value={itemSoldBy}
-                                        onValueChange={setItemSoldBy}
+                                        value={itemUnitOfMeasure}
+                                        onValueChange={setItemUnitOfMeasure}
                                         isInvalid={
-                                            isSubmitted && !itemSoldBy.trim()
+                                            isSubmitted &&
+                                            !itemUnitOfMeasure.trim()
                                         }
                                     />
                                     <ModalAwareSelect
@@ -451,6 +474,33 @@ export function AddItemModal({
                                         label="Wholesale Min Qty"
                                         labelPlacement="outside"
                                         className="w-1/2"
+                                        value={
+                                            tempVariant.wholesaleMinQty ??
+                                            undefined
+                                        }
+                                        onValueChange={(value) =>
+                                            setTempVariant((prev) => ({
+                                                ...prev,
+                                                wholesaleMinQty: value,
+                                            }))
+                                        }
+                                        isDisabled={
+                                            !tempVariant.priceWholesale ||
+                                            tempVariant.priceWholesale <= 0
+                                        }
+                                        isInvalid={
+                                            isSubmittedAddVar &&
+                                            tempVariant.priceWholesale !==
+                                                undefined &&
+                                            tempVariant.priceWholesale !==
+                                                null &&
+                                            tempVariant.priceWholesale > 0 &&
+                                            (!tempVariant.stocks ||
+                                                tempVariant.stocks <= 0 ||
+                                                !tempVariant.wholesaleMinQty ||
+                                                tempVariant.wholesaleMinQty <=
+                                                    0)
+                                        }
                                     />
                                 </div>
                             </ModalBody>
@@ -466,13 +516,23 @@ export function AddItemModal({
                                     color="success"
                                     onPress={() => {
                                         setIsSubmittedAddVar(true);
+                                        const isValidWholesale =
+                                            !tempVariant.priceWholesale ||
+                                            tempVariant.priceWholesale <= 0 ||
+                                            (tempVariant.wholesaleMinQty !==
+                                                undefined &&
+                                                tempVariant.wholesaleMinQty !==
+                                                    null &&
+                                                tempVariant.wholesaleMinQty >
+                                                    0);
+
                                         if (
                                             tempVariant.name.trim() &&
-                                            tempVariant.stocks !== undefined &&
-                                            tempVariant.stocks !== null &&
+                                            tempVariant.stocks !== 0 &&
                                             tempVariant.priceRetail !==
                                                 undefined &&
-                                            tempVariant.priceRetail !== null
+                                            tempVariant.priceRetail !== null &&
+                                            isValidWholesale
                                         ) {
                                             handleAddVariant();
                                             onClose();

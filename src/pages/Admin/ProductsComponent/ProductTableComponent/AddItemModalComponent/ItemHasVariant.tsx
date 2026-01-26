@@ -123,18 +123,36 @@ export function ItemHasVariant({
                             onValueChange={(v) =>
                                 updateVariant(index, "wholesaleMinQty", v)
                             }
+                            isDisabled={
+                                !variant.priceWholesale ||
+                                variant.priceWholesale <= 0
+                            }
+                            isInvalid={
+                                isSubmitted &&
+                                variant.priceWholesale !== undefined &&
+                                variant.priceWholesale !== null &&
+                                variant.priceWholesale > 0 &&
+                                (!variant.stocks ||
+                                    variant.stocks <= 0 ||
+                                    !variant.wholesaleMinQty ||
+                                    variant.wholesaleMinQty <= 0)
+                            }
                         />
                     </div>
 
                     <div className="flex justify-end">
-                        <Button
-                            startContent={<TrashIcon className="w-5" />}
-                            color="danger"
-                            className="mt-2"
-                            onPress={() => removeVariant(index)}
-                        >
-                            Remove Variant
-                        </Button>
+                        {variants.length > 1 && (
+                            <div className="flex justify-end">
+                                <Button
+                                    startContent={<TrashIcon className="w-5" />}
+                                    color="danger"
+                                    className="mt-2"
+                                    onPress={() => removeVariant(index)}
+                                >
+                                    Remove Variant
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}
