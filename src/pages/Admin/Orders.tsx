@@ -4,24 +4,15 @@ import {
     DropdownTrigger,
     DropdownMenu,
     DropdownItem,
-    Autocomplete,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
     Button,
     useDisclosure,
     Input,
-    Spinner,
-    AutocompleteItem,
 } from "@heroui/react";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableMobile";
 import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableDesktop";
 import useIsMobile from "@/lib/isMobile";
-import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
-import { useState } from "react";
+import { AddOrderModal } from "./OrdersComponent/AddOrderModalComponent/AddOrderModal";
 
 export default function Orders() {
     const isMobile = useIsMobile();
@@ -30,13 +21,7 @@ export default function Orders() {
         onOpen: onOpenAddOrder,
         onOpenChange: onOpenChangeAddOrder,
     } = useDisclosure();
-    const [searchValue, setSearchValue] = useState("");
-    const [showSuggestions, setShowSuggestions] = useState(true);
-    const { items: fetchedItems, loading } = useFetchNavbarItems();
-    const searchItems = fetchedItems.map((i) => ({
-        label: i.item_title,
-        key: `${i.item_id}`,
-    }));
+
     return (
         <>
             <div className="flex flex-col gap-8 p-4 h-full">
@@ -128,130 +113,10 @@ export default function Orders() {
                     <OrderTableDesktop />
                 </div>
             </div>
-            <Modal
-                isOpen={isOpenAddOrder}
-                onOpenChange={onOpenChangeAddOrder}
-                disableAnimation
-            >
-                <ModalContent>
-                    {(onClose) => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1">
-                                <div className="flex flex-col gap-2">
-                                    <span className="text-lg font-semibold">
-                                        Add Order
-                                    </span>
-                                    <span className="text-sm text-default-500 italic">
-                                        Changes here are temporary. The order
-                                        will be officially added only when you
-                                        click the{" "}
-                                        <span className="text-success-500 font-semibold">
-                                            Add Order
-                                        </span>{" "}
-                                        button below.
-                                    </span>
-                                </div>
-                            </ModalHeader>
-                            <ModalBody className="flex flex-col gap-2">
-                                <p className="text-sm text-default-500">
-                                    Note: When adding an order, the name will
-                                    automatically be set to{" "}
-                                    <span className="font-semibold text-default-700">
-                                        Bern Vein Balermo
-                                    </span>
-                                    , the admin currently logged in.
-                                </p>
-                                <Autocomplete
-                                    isDisabled={loading}
-                                    fullWidth
-                                    className="w-full opacity-90"
-                                    defaultItems={searchItems}
-                                    placeholder={
-                                        loading
-                                            ? "Gathering items..."
-                                            : "Search products..."
-                                    }
-                                    startContent={
-                                        loading ? (
-                                            <Spinner
-                                                size="sm"
-                                                color="success"
-                                            />
-                                        ) : (
-                                            <SearchIcon className="size-5 text-default-500" />
-                                        )
-                                    }
-                                    variant="flat"
-                                    value={searchValue}
-                                    onValueChange={(val) => {
-                                        setSearchValue(val);
-
-                                        if (val.trim() === "") {
-                                            setShowSuggestions(false);
-                                        } else {
-                                            setShowSuggestions(true);
-                                        }
-                                    }}
-                                    allowsCustomValue
-                                    onKeyDown={(
-                                        e: React.KeyboardEvent<HTMLInputElement>,
-                                    ) => {
-                                        if (e.key === "Enter") {
-                                            (
-                                                e.target as HTMLInputElement
-                                            ).blur();
-                                        }
-                                    }}
-                                    onClear={() => {
-                                        setSearchValue("");
-                                        setShowSuggestions(false);
-                                    }}
-                                >
-                                    {showSuggestions
-                                        ? searchItems
-                                              .slice(0, 20)
-                                              .map((item) => (
-                                                  <AutocompleteItem
-                                                      key={item.key}
-                                                      onClick={() => {
-                                                          setSearchValue(
-                                                              item.label,
-                                                          );
-                                                          setTimeout(() => {
-                                                              (
-                                                                  document.activeElement as HTMLInputElement
-                                                              )?.blur();
-                                                          }, 100);
-                                                      }}
-                                                  >
-                                                      {item.label}
-                                                  </AutocompleteItem>
-                                              ))
-                                        : null}
-                                </Autocomplete>
-                            </ModalBody>
-
-                            <ModalFooter className="justify-between items-center">
-                                <span className="text-sm text-default-500 italic">
-                                    <span className="text-red-500">*</span>{" "}
-                                    Required field
-                                </span>
-
-                                <div className="flex gap-2">
-                                    <Button
-                                        color="danger"
-                                        variant="light"
-                                        onPress={onClose}
-                                    >
-                                        Cancel
-                                    </Button>
-                                    <Button color="success">Add Order</Button>
-                                </div>
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
+            <AddOrderModal
+                onOpenChangeAddOrder={onOpenChangeAddOrder}
+                isOpenAddOrder={isOpenAddOrder}
+            />
         </>
     );
 }
