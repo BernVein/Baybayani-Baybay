@@ -44,7 +44,6 @@ export function Navbar({
     const searchItems = fetchedItems.map((i, index) => ({
         label: i.item_title,
         key: `${i.item_title}-${index}`,
-        description: i.item_category,
     }));
 
     return (

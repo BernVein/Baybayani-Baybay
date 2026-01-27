@@ -187,9 +187,9 @@ export function AddItemModal({
                                         Add Item
                                     </span>
                                     <span className="text-sm text-default-500 italic">
-                                        Note: Changes here are temporary. The
-                                        item will be officially added only when
-                                        you click the{" "}
+                                        Changes here are temporary. The item
+                                        will be officially added only when you
+                                        click the{" "}
                                         <span className="text-success-500 font-semibold">
                                             Add Item
                                         </span>{" "}

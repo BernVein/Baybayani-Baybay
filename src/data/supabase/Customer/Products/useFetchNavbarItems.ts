@@ -4,8 +4,6 @@ import { supabase } from "@/config/supabaseclient";
 export interface NavbarItem {
     item_id: string;
     item_title: string;
-    item_category: string;
-    item_first_img?: string;
 }
 
 export const useFetchNavbarItems = () => {
@@ -19,20 +17,15 @@ export const useFetchNavbarItems = () => {
             try {
                 const { data, error } = await supabase
                     .from("Item")
-                    .select(
-                        "item_id, item_title, Category(category_name), Item_Image(item_image_url)",
-                    )
+                    .select("item_id, item_title")
                     .eq("is_soft_deleted", false)
-                    .order("item_title", { ascending: true })
-                    .limit(50); // you can adjust as needed
+                    .order("item_title", { ascending: true });
 
                 if (error) throw error;
 
                 const mapped = (data ?? []).map((row: any) => ({
                     item_id: row.item_id,
                     item_title: row.item_title,
-                    item_category: row.Category?.category_name ?? "",
-                    item_first_img: row.Item_Image?.[0]?.item_image_url ?? "",
                 }));
 
                 setItems(mapped);
