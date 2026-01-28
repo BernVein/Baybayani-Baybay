@@ -8,12 +8,12 @@ import {
     useDisclosure,
     Spinner,
 } from "@heroui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SearchBarAutocomplete } from "./AddOrderModalComponent/SearchBarAutocomplete";
 import ItemInfoModal from "@/pages/Customer/ShopPage/ItemInfoModal/ItemInfoModalIndex";
-import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMultipleCartItems";
 import { OrderCartItems } from "@/pages/Admin/OrdersComponent/AddOrderModalComponent/OrderCartItems";
+import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 export function AddOrderModal({
     isOpenAddOrder,
     onOpenChangeAddOrder,
@@ -33,20 +33,8 @@ export function AddOrderModal({
         "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
     );
 
-    useEffect(() => {
-        const handleCartUpdate = () => refetch();
-        window.addEventListener("baybayani:cart-updated", handleCartUpdate);
-        return () => {
-            window.removeEventListener(
-                "baybayani:cart-updated",
-                handleCartUpdate,
-            );
-        };
-    }, [refetch]);
-
     const handleClose = async () => {
         setIsLoading(true);
-        // Delete all items in the cart
         if (cartItems.length > 0) {
             const allIds = cartItems.map((item) => item.cart_item_user_id);
             try {
@@ -56,10 +44,8 @@ export function AddOrderModal({
             }
         }
 
-        // Reset selection
         setItemId("");
         setIsLoading(false);
-        // Actually close the modal
         onOpenChangeAddOrder();
     };
 
@@ -77,9 +63,7 @@ export function AddOrderModal({
                 size="xl"
                 scrollBehavior="inside"
                 closeButton={
-                    isLoading ? (
-                        <Spinner color="success" size="sm" />
-                    ) : undefined
+                    isLoading ? <Spinner color="danger" size="sm" /> : undefined
                 }
             >
                 <ModalContent>
@@ -113,7 +97,10 @@ export function AddOrderModal({
                                 onOpenItemInfo={onOpenItemInfo}
                             />
 
-                            <OrderCartItems />
+                            <OrderCartItems
+                                cartItems={cartItems}
+                                refetch={refetch}
+                            />
                         </ModalBody>
 
                         <ModalFooter className="justify-end items-center">

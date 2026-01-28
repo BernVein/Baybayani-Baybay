@@ -1,14 +1,17 @@
 import { Button, Divider, CheckboxGroup } from "@heroui/react";
 import { TrashIcon } from "@/components/icons";
-import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import { useEffect, useMemo, useState } from "react";
 import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMultipleCartItems";
+import { CartCard } from "@/model/ui/Customer/cart_card";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 
-export function OrderCartItems() {
-    const { items: cartItems, refetch } = useFetchCartItems(
-        "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
-    );
+export function OrderCartItems({
+    cartItems,
+    refetch,
+}: {
+    cartItems: CartCard[];
+    refetch: () => void;
+}) {
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
     const [isDeleting, setIsDeleting] = useState(false);
     const totalSubtotal = useMemo(
