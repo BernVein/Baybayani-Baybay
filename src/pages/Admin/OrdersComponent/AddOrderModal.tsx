@@ -6,6 +6,7 @@ import {
     ModalFooter,
     Button,
     useDisclosure,
+    Spinner,
 } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { SearchBarAutocomplete } from "./AddOrderModalComponent/SearchBarAutocomplete";
@@ -66,11 +67,20 @@ export function AddOrderModal({
         <>
             <Modal
                 isOpen={isOpenAddOrder}
-                onOpenChange={onOpenChangeAddOrder}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        handleClose();
+                    }
+                }}
                 disableAnimation
                 isDismissable={false}
                 size="xl"
                 scrollBehavior="inside"
+                closeButton={
+                    isLoading ? (
+                        <Spinner color="success" size="sm" />
+                    ) : undefined
+                }
             >
                 <ModalContent>
                     <>
