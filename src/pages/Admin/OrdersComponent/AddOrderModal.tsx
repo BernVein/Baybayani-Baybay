@@ -6,16 +6,13 @@ import {
     ModalFooter,
     Button,
     useDisclosure,
-    CheckboxGroup,
-    Divider,
 } from "@heroui/react";
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect } from "react";
 import { SearchBarAutocomplete } from "./AddOrderModalComponent/SearchBarAutocomplete";
-import { TrashIcon } from "@/components/icons";
 import ItemInfoModal from "@/pages/Customer/ShopPage/ItemInfoModal/ItemInfoModalIndex";
 import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
-import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMultipleCartItems";
+import { OrderCartItems } from "@/pages/Admin/OrdersComponent/AddOrderModalComponent/OrderCartItems";
 export function AddOrderModal({
     isOpenAddOrder,
     onOpenChangeAddOrder,
@@ -24,9 +21,6 @@ export function AddOrderModal({
     onOpenChangeAddOrder: () => void;
 }) {
     const [itemId, setItemId] = useState<string>("");
-    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const prevCartIdsRef = useRef<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const {
         isOpen: isOpenItemInfo,
@@ -39,30 +33,6 @@ export function AddOrderModal({
     );
 
     useEffect(() => {
-        const currentIds = cartItems.map((item) => item.cart_item_user_id);
-
-        const prevIds = prevCartIdsRef.current;
-
-        // IDs that are newly added to the cart
-        const newIds = currentIds.filter((id) => !prevIds.includes(id));
-
-        setSelectedKeys((prev) => {
-            // Remove selections that no longer exist
-            const stillValid = prev.filter((id) => currentIds.includes(id));
-
-            // Add only brand-new cart items
-            return [...stillValid, ...newIds];
-        });
-
-        // If cart is empty, reset selection
-        if (currentIds.length === 0) {
-            setSelectedKeys([]);
-        }
-
-        prevCartIdsRef.current = currentIds;
-    }, [cartItems]);
-
-    useEffect(() => {
         const handleCartUpdate = () => refetch();
         window.addEventListener("baybayani:cart-updated", handleCartUpdate);
         return () => {
@@ -72,27 +42,6 @@ export function AddOrderModal({
             );
         };
     }, [refetch]);
-
-    const totalSubtotal = useMemo(
-        () =>
-            cartItems
-                .filter((item) => selectedKeys.includes(item.cart_item_user_id))
-                .reduce((sum, item) => sum + item.subtotal, 0),
-        [cartItems, selectedKeys],
-    );
-
-    const handleDeleteSelected = async () => {
-        if (selectedKeys.length === 0) return;
-        setIsDeleting(true);
-        try {
-            await deleteMultipleCartItems(selectedKeys);
-            // selectedKeys will be updated by the useEffect above once refetch completes
-        } catch (error) {
-            console.error("Batch delete failed:", error);
-        } finally {
-            setIsDeleting(false);
-        }
-    };
 
     const handleClose = async () => {
         setIsLoading(true);
@@ -107,7 +56,6 @@ export function AddOrderModal({
         }
 
         // Reset selection
-        setSelectedKeys([]);
         setItemId("");
         setIsLoading(false);
         // Actually close the modal
@@ -155,63 +103,7 @@ export function AddOrderModal({
                                 onOpenItemInfo={onOpenItemInfo}
                             />
 
-                            {cartItems.length > 0 && (
-                                <div className="flex flex-col gap-3 mt-4">
-                                    <div className="flex justify-between items-center px-1">
-                                        <div className="flex flex-col items-start gap-1">
-                                            <span className="text-sm font-semibold text-default-700">
-                                                Selected Items (
-                                                {selectedKeys.length}/
-                                                {cartItems.length})
-                                            </span>
-                                            <span className="text-sm font-bold text-success-600">
-                                                Total: ₱
-                                                {totalSubtotal.toLocaleString()}
-                                            </span>
-                                        </div>
-                                        <Button
-                                            size="sm"
-                                            color="danger"
-                                            startContent={
-                                                <TrashIcon className="size-4" />
-                                            }
-                                            isDisabled={
-                                                selectedKeys.length === 0 ||
-                                                isDeleting
-                                            }
-                                            isLoading={isDeleting}
-                                            onPress={handleDeleteSelected}
-                                        >
-                                            Delete Selected
-                                        </Button>
-                                    </div>
-                                    <Divider />
-                                    <div className="max-h-[400px] overflow-y-auto pr-2 flex flex-col gap-3">
-                                        <CheckboxGroup
-                                            value={selectedKeys}
-                                            onValueChange={(value) =>
-                                                setSelectedKeys(
-                                                    value as string[],
-                                                )
-                                            }
-                                        >
-                                            {cartItems.map((item) => (
-                                                <CartItem
-                                                    key={item.cart_item_user_id}
-                                                    cartItemUserId={
-                                                        item.cart_item_user_id
-                                                    }
-                                                    value={
-                                                        item.cart_item_user_id
-                                                    }
-                                                    onDeleted={refetch}
-                                                    onUpdated={refetch}
-                                                />
-                                            ))}
-                                        </CheckboxGroup>
-                                    </div>
-                                </div>
-                            )}
+                            <OrderCartItems />
                         </ModalBody>
 
                         <ModalFooter className="justify-end items-center">
