@@ -38,6 +38,10 @@ export const useFetchCartItems = (userId: string) => {
             )
             .eq("user_id", userId)
             .eq("is_soft_deleted", false)
+            .order("cart_item_user_id", {
+                foreignTable: "CartItemUser",
+                ascending: true,
+            })
             .maybeSingle();
 
         if (error) {

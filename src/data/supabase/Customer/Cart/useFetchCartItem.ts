@@ -173,6 +173,17 @@ export const useFetchCartItems = (
         fetchCartItems();
     }, [fetchCartItems]);
 
+    useEffect(() => {
+        const handleCartUpdate = () => fetchCartItems();
+        window.addEventListener("baybayani:cart-updated", handleCartUpdate);
+        return () => {
+            window.removeEventListener(
+                "baybayani:cart-updated",
+                handleCartUpdate,
+            );
+        };
+    }, [fetchCartItems]);
+
     return {
         cartItems,
         loading,
