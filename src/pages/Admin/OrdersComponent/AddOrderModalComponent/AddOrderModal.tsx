@@ -67,6 +67,8 @@ export function AddOrderModal({
                 onOpenChange={onOpenChangeAddOrder}
                 disableAnimation
                 isDismissable={false}
+                size="xl"
+                scrollBehavior="inside"
             >
                 <ModalContent>
                     {(onClose) => (
@@ -87,7 +89,10 @@ export function AddOrderModal({
                                     </span>
                                 </div>
                             </ModalHeader>
-                            <ModalBody className="flex flex-col gap-2">
+                            <ModalBody
+                                key={cartItems.map((i) => i.subtotal).join("-")}
+                                className="flex flex-col gap-2"
+                            >
                                 <p className="text-sm text-default-500">
                                     Note: When adding an order, the name will
                                     automatically be set to{" "}
