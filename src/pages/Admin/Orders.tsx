@@ -12,7 +12,7 @@ import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableMobile";
 import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableDesktop";
 import useIsMobile from "@/lib/isMobile";
-import { AddOrderModal } from "./OrdersComponent/AddOrderModalComponent/AddOrderModal";
+import { AddOrderModal } from "@/pages/Admin/OrdersComponent/AddOrderModal";
 
 export default function Orders() {
     const isMobile = useIsMobile();

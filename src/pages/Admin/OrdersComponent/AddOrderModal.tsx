@@ -4,17 +4,14 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    Autocomplete,
-    AutocompleteItem,
     Button,
-    Spinner,
     useDisclosure,
     CheckboxGroup,
     Divider,
 } from "@heroui/react";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { SearchIcon, TrashIcon } from "@/components/icons";
-import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
+import { SearchBarAutocomplete } from "./AddOrderModalComponent/SearchBarAutocomplete";
+import { TrashIcon } from "@/components/icons";
 import ItemInfoModal from "@/pages/Customer/ShopPage/ItemInfoModal/ItemInfoModalIndex";
 import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
@@ -27,7 +24,6 @@ export function AddOrderModal({
     onOpenChangeAddOrder: () => void;
 }) {
     const [itemId, setItemId] = useState<string>("");
-    const [searchValue, setSearchValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
     const [isDeleting, setIsDeleting] = useState(false);
     const prevCartIdsRef = useRef<string[]>([]);
@@ -37,11 +33,6 @@ export function AddOrderModal({
         onOpen: onOpenItemInfo,
         onOpenChange: onOpenChangeItemInfo,
     } = useDisclosure();
-    const { items: fetchedItems, loading } = useFetchNavbarItems();
-    const searchItems = fetchedItems.map((i) => ({
-        label: i.item_title,
-        key: `${i.item_id}`,
-    }));
 
     const { items: cartItems, refetch } = useFetchCartItems(
         "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
@@ -117,7 +108,6 @@ export function AddOrderModal({
 
         // Reset selection
         setSelectedKeys([]);
-        setSearchValue("");
         setItemId("");
         setIsLoading(false);
         // Actually close the modal
@@ -160,61 +150,10 @@ export function AddOrderModal({
                                 </span>
                                 , the admin currently logged in.
                             </p>
-                            <Autocomplete
-                                isDisabled={loading}
-                                fullWidth
-                                className="w-full opacity-90"
-                                defaultItems={loading ? [] : searchItems}
-                                placeholder={
-                                    loading
-                                        ? "Gathering items..."
-                                        : "Search products..."
-                                }
-                                startContent={
-                                    loading ? (
-                                        <Spinner size="sm" color="success" />
-                                    ) : (
-                                        <SearchIcon className="size-5 text-default-500" />
-                                    )
-                                }
-                                variant="flat"
-                                inputValue={searchValue}
-                                onInputChange={setSearchValue}
-                                allowsCustomValue
-                                onClear={() => {
-                                    setSearchValue("");
-                                }}
-                                onSelectionChange={(key) => {
-                                    const selected = searchItems.find(
-                                        (i) => i.key === key,
-                                    );
-                                    if (selected) {
-                                        setItemId(selected.key);
-                                        setSearchValue(selected.label);
-                                    }
-
-                                    setTimeout(() => {
-                                        (
-                                            document.activeElement as HTMLElement | null
-                                        )?.blur();
-                                    }, 0);
-                                }}
-                                listboxProps={{
-                                    emptyContent:
-                                        "No products found. Try another search.",
-                                }}
-                            >
-                                {(item) => (
-                                    <AutocompleteItem
-                                        key={item.key}
-                                        onPress={() => {
-                                            onOpenItemInfo();
-                                        }}
-                                    >
-                                        {item.label}
-                                    </AutocompleteItem>
-                                )}
-                            </Autocomplete>
+                            <SearchBarAutocomplete
+                                setItemId={setItemId}
+                                onOpenItemInfo={onOpenItemInfo}
+                            />
 
                             {cartItems.length > 0 && (
                                 <div className="flex flex-col gap-3 mt-4">
