@@ -288,7 +288,7 @@ export default function InformationSection({
                     <NumberInput
                         step={0.25}
                         maxValue={selectedItemVariant?.variant_stocks ?? 0}
-                        minValue={0}
+                        minValue={1}
                         placeholder="Enter quantity"
                         radius="sm"
                         variant="faded"
@@ -304,7 +304,10 @@ export default function InformationSection({
                                 }, 150);
                             }
                         }}
-                        onValueChange={(val) => setQuantity(Math.max(0, val))}
+                        onValueChange={(val) => {
+                            if (Number.isNaN(val)) return;
+                            setQuantity(Math.max(1, val));
+                        }}
                         value={quantity}
                     />
                     <Button
