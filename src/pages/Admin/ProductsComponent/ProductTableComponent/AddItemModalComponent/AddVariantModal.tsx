@@ -12,9 +12,11 @@ import {
 } from "@heroui/react";
 // import { useState, useEffect } from "react";
 export function AddVariantModal({
+    itemHasVariant,
     isOpenAddVar,
     onOpenChangeAddVar,
 }: {
+    itemHasVariant: boolean;
     isOpenAddVar: boolean;
     onOpenChangeAddVar: () => void;
 }) {
@@ -30,17 +32,23 @@ export function AddVariantModal({
                 {(onClose) => (
                     <>
                         <ModalHeader className="flex flex-col gap-1">
-                            Add Variant
+                            <span className="font-semibold">
+                                {itemHasVariant
+                                    ? "Add Variant"
+                                    : "Set Additional Details"}
+                            </span>
                         </ModalHeader>
                         <ModalBody>
                             <>
-                                <div className="flex flex-row gap-2 items-center">
-                                    <Input
-                                        label="Variant Name"
-                                        isRequired
-                                        labelPlacement="outside"
-                                    />
-                                </div>
+                                {!itemHasVariant && (
+                                    <div className="flex flex-row gap-2 items-center">
+                                        <Input
+                                            label="Variant Name"
+                                            isRequired
+                                            labelPlacement="outside"
+                                        />
+                                    </div>
+                                )}
                                 <Divider />
                                 <span className="text-lg font-semibold">
                                     Set Item Stock Details

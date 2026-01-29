@@ -1,4 +1,4 @@
-import { PhotoIcon } from "@/components/icons";
+import { PhotoIcon, RightArrow } from "@/components/icons";
 import {
     Button,
     Modal,
@@ -11,9 +11,6 @@ import {
     useDisclosure,
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
-// import { useState, useEffect } from "react";
-import { ItemHasNoVariant } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/ItemHasNoVariant";
-import { ItemHasVariant } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/ItemHasVariant";
 import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModal";
 export type DBVariant = {
     name: string;
@@ -53,7 +50,12 @@ export function AddItemModal({
                             <ModalHeader className="flex flex-col gap-1">
                                 <div className="flex flex-col gap-2">
                                     <span className="text-lg font-semibold">
-                                        Add Item
+                                        Add Item{" "}
+                                        <span className="font-extrabold">
+                                            {itemHasVariant
+                                                ? "with variant"
+                                                : "without variant"}
+                                        </span>
                                     </span>
                                     <span className="text-sm text-default-500 italic">
                                         Changes here are temporary. The item
@@ -134,25 +136,22 @@ export function AddItemModal({
                                         </SelectItem>
                                     </ModalAwareSelect>
                                 </div>
-                                <div className="flex flex-row gap-2 items-center">
-                                    <Button
-                                        startContent={
-                                            <PhotoIcon className="w-5" />
-                                        }
-                                        className="mt-2 w-full"
-                                    >
-                                        View Photos
-                                    </Button>
-                                </div>
-                                {itemHasVariant === false && (
-                                    <ItemHasNoVariant />
-                                )}
-
-                                {itemHasVariant === true && (
-                                    <ItemHasVariant
-                                        onOpenAddVar={onOpenAddVar}
-                                    />
-                                )}
+                                <Button
+                                    startContent={<PhotoIcon className="w-5" />}
+                                    className="mt-2 w-full"
+                                >
+                                    Add Photos
+                                </Button>
+                                <Button
+                                    startContent={
+                                        <RightArrow className="w-5" />
+                                    }
+                                    className="mt-2 w-full"
+                                    color="success"
+                                    onPress={onOpenAddVar}
+                                >
+                                    Proceed
+                                </Button>
                             </ModalBody>
                             <ModalFooter className="justify-between items-center">
                                 <span className="text-sm text-default-500 italic">
@@ -178,6 +177,7 @@ export function AddItemModal({
             <AddVariantModal
                 isOpenAddVar={isOpenAddVar}
                 onOpenChangeAddVar={onOpenChangeAddVar}
+                itemHasVariant={itemHasVariant}
             />
         </>
     );
