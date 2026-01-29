@@ -11,13 +11,12 @@ import {
     useDisclosure,
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { ItemHasNoVariant } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/ItemHasNoVariant";
 import { ItemHasVariant } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/ItemHasVariant";
 import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModal";
 export type DBVariant = {
     name: string;
-    stocks: number | undefined;
     priceRetail: number | undefined;
     priceWholesale: number | null;
     wholesaleMinQty: number | null;
@@ -37,136 +36,6 @@ export function AddItemModal({
         onOpen: onOpenAddVar,
         onOpenChange: onOpenChangeAddVar,
     } = useDisclosure();
-
-    // Item fields
-    const [itemTitle, setItemTitle] = useState<string>("");
-    const [itemCategoryId, setItemCategoryId] = useState<string>("");
-    const [itemDescription, setItemDescription] = useState<string>("");
-    const [itemSoldBy, setItemSoldBy] = useState<string>("");
-    const [itemTagId, setItemTagId] = useState<string | null>(null);
-    const [itemUnitOfMeasure, setItemUnitOfMeasure] = useState<string>("");
-    // const [itemImage, setItemImage] = useState<string[]>([]);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-
-    const [variants, setVariants] = useState<DBVariant[]>([
-        {
-            name: itemTitle || "",
-            stocks: undefined,
-            priceRetail: undefined,
-            priceWholesale: null,
-            wholesaleMinQty: null,
-        },
-    ]);
-
-    const [tempVariant, setTempVariant] = useState<DBVariant>({
-        name: "",
-        stocks: undefined,
-        priceRetail: undefined,
-        priceWholesale: null,
-        wholesaleMinQty: null,
-    });
-
-    const updateVariant = <K extends keyof DBVariant>(
-        index: number,
-        key: K,
-        value: DBVariant[K],
-    ) => {
-        setVariants((prev) =>
-            prev.map((v, i) => (i === index ? { ...v, [key]: value } : v)),
-        );
-    };
-
-    const removeVariant = (index: number) => {
-        setVariants((prev) => prev.filter((_, i) => i !== index));
-    };
-
-    const handleAddVariant = () => {
-        setVariants((prev) => [...prev, tempVariant]);
-
-        setTempVariant({
-            name: "",
-            stocks: 0,
-            priceRetail: 0,
-            priceWholesale: null,
-            wholesaleMinQty: null,
-        });
-    };
-
-    useEffect(() => {
-        if (isOpen) {
-            // Reset all fields when modal opens
-            setItemTitle("");
-            setItemCategoryId("");
-            setItemDescription("");
-            setItemSoldBy("");
-            setItemTagId(null);
-            setIsSubmitted(false);
-            setVariants([
-                {
-                    name: "",
-                    stocks: undefined,
-                    priceRetail: undefined,
-                    priceWholesale: null,
-                    wholesaleMinQty: null,
-                },
-            ]);
-
-            setTempVariant({
-                name: "",
-                stocks: undefined,
-                priceRetail: undefined,
-                priceWholesale: null,
-                wholesaleMinQty: null,
-            });
-        }
-    }, [isOpen]);
-
-    const validate = (): boolean => {
-        // item fields
-        if (!itemTitle.trim()) return false;
-        if (!itemCategoryId.trim()) return false;
-        if (!itemSoldBy.trim()) return false;
-
-        // variant fields
-        if (itemHasVariant) {
-            for (const v of variants) {
-                if (!v.name?.trim()) return false;
-                if (v.stocks === undefined || v.stocks === null) return false;
-                if (v.priceRetail === undefined || v.priceRetail === null)
-                    return false;
-
-                // Wholesale validation
-                if (v.priceWholesale && v.priceWholesale > 0) {
-                    if (!v.wholesaleMinQty || v.wholesaleMinQty <= 0)
-                        return false;
-                }
-            }
-        } else {
-            if (!tempVariant.name.trim()) return false;
-            if (
-                tempVariant.stocks === undefined ||
-                tempVariant.stocks === null ||
-                tempVariant.stocks === 0
-            )
-                return false;
-            if (
-                tempVariant.priceRetail === undefined ||
-                tempVariant.priceRetail === null
-            )
-                return false;
-
-            // Wholesale validation
-            if (tempVariant.priceWholesale && tempVariant.priceWholesale > 0) {
-                if (
-                    !tempVariant.wholesaleMinQty ||
-                    tempVariant.wholesaleMinQty <= 0
-                )
-                    return false;
-            }
-        }
-
-        return true;
-    };
 
     return (
         <>
@@ -203,48 +72,16 @@ export function AddItemModal({
                                 </span>
                                 <div className="flex flex-row gap-2 items-center">
                                     <Input
-                                        key="1"
-                                        isRequired
                                         label="Item Name"
                                         labelPlacement="outside"
                                         className="w-1/2"
-                                        value={itemTitle}
-                                        onValueChange={(value) => {
-                                            setItemTitle(value);
-                                            if (!itemHasVariant) {
-                                                setTempVariant((prev) => ({
-                                                    ...prev,
-                                                    name: value,
-                                                }));
-                                            }
-                                        }}
-                                        isInvalid={
-                                            isSubmitted && !itemTitle.trim()
-                                        }
+                                        isRequired
                                     />
                                     <ModalAwareSelect
                                         labelPlacement="outside"
                                         isRequired
                                         label="Item Category"
                                         className="w-1/2"
-                                        selectedKeys={
-                                            itemCategoryId
-                                                ? new Set([itemCategoryId])
-                                                : new Set()
-                                        }
-                                        onSelectionChange={(keys) => {
-                                            const firstKey =
-                                                Array.from(keys)[0];
-                                            setItemCategoryId(
-                                                firstKey !== undefined
-                                                    ? String(firstKey)
-                                                    : "",
-                                            );
-                                        }}
-                                        isInvalid={
-                                            isSubmitted &&
-                                            !itemCategoryId.trim()
-                                        }
                                     >
                                         <SelectItem key="dcee3d7a-fd90-4ab8-a6cf-445a482b79ec">
                                             Vegetable
@@ -269,8 +106,6 @@ export function AddItemModal({
                                     labelPlacement="outside"
                                     className="w-full"
                                     type="text"
-                                    value={itemDescription}
-                                    onValueChange={setItemDescription}
                                 />
                                 <div className="flex flex-row gap-2 items-center">
                                     <Input
@@ -279,21 +114,11 @@ export function AddItemModal({
                                         label="Unit of Measure"
                                         labelPlacement="outside"
                                         className="w-1/2"
-                                        value={itemUnitOfMeasure}
-                                        onValueChange={setItemUnitOfMeasure}
-                                        isInvalid={
-                                            isSubmitted &&
-                                            !itemUnitOfMeasure.trim()
-                                        }
                                     />
                                     <ModalAwareSelect
                                         labelPlacement="outside"
                                         label="Item Tag"
                                         className="w-1/2"
-                                        selectedKeys={itemTagId || undefined}
-                                        onSelectionChange={(keys) =>
-                                            setItemTagId(keys as string)
-                                        }
                                     >
                                         <SelectItem key="f95d0a99-d212-4323-95c6-dedfbdd51079">
                                             Restocked
@@ -309,13 +134,6 @@ export function AddItemModal({
                                         </SelectItem>
                                     </ModalAwareSelect>
                                 </div>
-                                {itemHasVariant === false && (
-                                    <ItemHasNoVariant
-                                        tempVariant={tempVariant}
-                                        setTempVariant={setTempVariant}
-                                        isSubmitted={isSubmitted}
-                                    />
-                                )}
                                 <div className="flex flex-row gap-2 items-center">
                                     <Button
                                         startContent={
@@ -326,13 +144,13 @@ export function AddItemModal({
                                         View Photos
                                     </Button>
                                 </div>
+                                {itemHasVariant === false && (
+                                    <ItemHasNoVariant />
+                                )}
+
                                 {itemHasVariant === true && (
                                     <ItemHasVariant
-                                        variants={variants}
-                                        updateVariant={updateVariant}
-                                        removeVariant={removeVariant}
                                         onOpenAddVar={onOpenAddVar}
-                                        isSubmitted={isSubmitted}
                                     />
                                 )}
                             </ModalBody>
@@ -350,18 +168,7 @@ export function AddItemModal({
                                     >
                                         Cancel
                                     </Button>
-                                    <Button
-                                        color="success"
-                                        onPress={() => {
-                                            setIsSubmitted(true);
-                                            if (validate()) {
-                                                onClose();
-                                                setIsSubmitted(false);
-                                            }
-                                        }}
-                                    >
-                                        Add Item
-                                    </Button>
+                                    <Button color="success">Add Item</Button>
                                 </div>
                             </ModalFooter>
                         </>
@@ -371,9 +178,6 @@ export function AddItemModal({
             <AddVariantModal
                 isOpenAddVar={isOpenAddVar}
                 onOpenChangeAddVar={onOpenChangeAddVar}
-                tempVariant={tempVariant}
-                setTempVariant={setTempVariant}
-                handleAddVariant={handleAddVariant}
             />
         </>
     );

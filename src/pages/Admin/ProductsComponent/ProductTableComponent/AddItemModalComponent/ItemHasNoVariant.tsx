@@ -1,70 +1,44 @@
-import { NumberInput } from "@heroui/react";
-import { DBVariant } from "@/pages/Admin/ProductsComponent/AddItemModal";
-export function ItemHasNoVariant({
-    tempVariant,
-    setTempVariant,
-    isSubmitted,
-}: {
-    tempVariant: DBVariant;
-    setTempVariant: React.Dispatch<React.SetStateAction<DBVariant>>;
-    isSubmitted: boolean;
-}) {
+import { Input, NumberInput, Divider, DatePicker } from "@heroui/react";
+
+export function ItemHasNoVariant() {
     return (
         <>
+            <Divider />
+            <span className="text-lg font-semibold">
+                Set Item Stock Details
+            </span>
             <div className="flex flex-row gap-2 items-center">
                 <NumberInput
                     label="Stocks"
                     isRequired
                     labelPlacement="outside"
                     className="w-1/2"
-                    value={tempVariant.stocks}
-                    onValueChange={(value) =>
-                        setTempVariant((prev) => ({ ...prev, stocks: value }))
-                    }
-                    isInvalid={
-                        isSubmitted &&
-                        (tempVariant.stocks === undefined ||
-                            tempVariant.stocks === null ||
-                            tempVariant.stocks === 0)
-                    }
                 />
-                <NumberInput
-                    label="Retail Price"
-                    isRequired
-                    startContent={
-                        <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">
-                                ₱
-                            </span>
-                        </div>
-                    }
-                    labelPlacement="outside"
+                <DatePicker
                     className="w-1/2"
-                    formatOptions={{
-                        style: "decimal",
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                    }}
-                    value={tempVariant.priceRetail}
-                    onValueChange={(value) =>
-                        setTempVariant((prev) => ({
-                            ...prev,
-                            priceRetail: value,
-                        }))
-                    }
-                    isInvalid={
-                        isSubmitted &&
-                        (tempVariant.priceRetail === undefined ||
-                            tempVariant.priceRetail === null)
-                    }
+                    label="Date Delivered"
+                    labelPlacement="outside"
+                    isRequired
                 />
             </div>
 
             <div className="flex flex-row gap-2 items-center">
-                <NumberInput
-                    label="Wholesale Price"
+                <Input
+                    label="Supplier"
+                    isRequired
                     labelPlacement="outside"
                     className="w-1/2"
+                />
+                <NumberInput
+                    label="Total Buying Price"
+                    isRequired
+                    labelPlacement="outside"
+                    className="w-1/2"
+                    formatOptions={{
+                        style: "decimal",
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }}
                     startContent={
                         <div className="pointer-events-none flex items-center">
                             <span className="text-default-400 text-small">
@@ -72,45 +46,75 @@ export function ItemHasNoVariant({
                             </span>
                         </div>
                     }
+                />
+            </div>
+            <Divider />
+            <span className="text-lg font-semibold">
+                For low stock notification
+                <p className="text-sm text-default-500 italic">
+                    Set the stock level at which you’ll be notified that items
+                    are running low.
+                </p>
+            </span>
+            <div className="flex flex-col gap-2 items-center">
+                <NumberInput
+                    label="Low Stock Alert Threshold"
+                    isRequired
+                    labelPlacement="outside"
+                />
+            </div>
+            <Divider />
+            <span className="text-lg font-semibold">Set Item Pricing</span>
+            <div className="flex flex-row gap-2 items-center">
+                <NumberInput
+                    label="Retail Price"
+                    isRequired
+                    labelPlacement="outside"
+                    className="w-1/2"
                     formatOptions={{
                         style: "decimal",
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     }}
-                    value={tempVariant.priceWholesale ?? undefined}
-                    onValueChange={(value) =>
-                        setTempVariant((prev) => ({
-                            ...prev,
-                            priceWholesale: isNaN(value) ? null : value,
-                        }))
+                    startContent={
+                        <div className="pointer-events-none flex items-center">
+                            <span className="text-default-400 text-small">
+                                ₱
+                            </span>
+                        </div>
                     }
                 />
                 <NumberInput
-                    label="Wholesale Min Qty"
+                    label="Wholesale Price"
+                    isRequired
                     labelPlacement="outside"
                     className="w-1/2"
-                    isRequired={
-                        tempVariant.priceWholesale != null &&
-                        tempVariant.priceWholesale > 0
+                    formatOptions={{
+                        style: "decimal",
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }}
+                    startContent={
+                        <div className="pointer-events-none flex items-center">
+                            <span className="text-default-400 text-small">
+                                ₱
+                            </span>
+                        </div>
                     }
-                    isDisabled={
-                        tempVariant.priceWholesale == null ||
-                        tempVariant.priceWholesale <= 0
-                    }
-                    isInvalid={
-                        isSubmitted &&
-                        tempVariant.priceWholesale != null &&
-                        tempVariant.priceWholesale > 0 &&
-                        (tempVariant.wholesaleMinQty == null ||
-                            tempVariant.wholesaleMinQty <= 0)
-                    }
-                    value={tempVariant.wholesaleMinQty ?? undefined}
-                    onValueChange={(value) =>
-                        setTempVariant((prev) => ({
-                            ...prev,
-                            wholesaleMinQty: isNaN(value) ? null : value,
-                        }))
-                    }
+                />
+            </div>
+            <Divider />
+            <span className="text-lg font-semibold">
+                Set Wholesale Minimum Quantity
+                <p className="text-sm text-default-500 italic">
+                    Applicable only if wholesale price is set
+                </p>
+            </span>
+            <div className="flex flex-col gap-2 items-center">
+                <NumberInput
+                    label="Wholesale Minimum Quantity"
+                    isRequired
+                    labelPlacement="outside"
                 />
             </div>
         </>

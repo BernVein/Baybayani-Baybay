@@ -6,34 +6,25 @@ import {
     ModalBody,
     ModalFooter,
     NumberInput,
+    Divider,
+    DatePicker,
     Input,
 } from "@heroui/react";
-import { DBVariant } from "@/pages/Admin/ProductsComponent/AddItemModal";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 export function AddVariantModal({
     isOpenAddVar,
     onOpenChangeAddVar,
-    tempVariant,
-    setTempVariant,
-    handleAddVariant,
 }: {
     isOpenAddVar: boolean;
-    onOpenChangeAddVar: (isOpen: boolean) => void;
-    tempVariant: DBVariant;
-    setTempVariant: React.Dispatch<React.SetStateAction<DBVariant>>;
-    handleAddVariant: () => void;
+    onOpenChangeAddVar: () => void;
 }) {
-    const [isSubmittedAddVar, setIsSubmittedAddVar] = useState(false);
-    useEffect(() => {
-        if (isOpenAddVar) {
-            setIsSubmittedAddVar(false);
-        }
-    }, [isOpenAddVar]);
     return (
         <Modal
             isOpen={isOpenAddVar}
             onOpenChange={onOpenChangeAddVar}
             disableAnimation
+            scrollBehavior="inside"
+            size="xl"
         >
             <ModalContent>
                 {(onClose) => (
@@ -42,132 +33,132 @@ export function AddVariantModal({
                             Add Variant
                         </ModalHeader>
                         <ModalBody>
-                            <div className="flex flex-row gap-2 items-center">
-                                <Input
-                                    label="Variant Name"
-                                    isRequired
-                                    labelPlacement="outside"
-                                    className="w-1/3"
-                                    value={tempVariant.name}
-                                    onValueChange={(value) =>
-                                        setTempVariant((prev) => ({
-                                            ...prev,
-                                            name: value,
-                                        }))
-                                    }
-                                    isInvalid={
-                                        isSubmittedAddVar &&
-                                        !tempVariant.name.trim()
-                                    }
-                                />
-                                <NumberInput
-                                    label="Stocks"
-                                    isRequired
-                                    labelPlacement="outside"
-                                    className="w-1/3"
-                                    value={tempVariant.stocks}
-                                    onValueChange={(value) =>
-                                        setTempVariant((prev) => ({
-                                            ...prev,
-                                            stocks: value,
-                                        }))
-                                    }
-                                    isInvalid={
-                                        isSubmittedAddVar &&
-                                        (tempVariant.stocks === undefined ||
-                                            tempVariant.stocks === null)
-                                    }
-                                />
-                                <NumberInput
-                                    label="Retail Price"
-                                    formatOptions={{
-                                        style: "decimal",
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    }}
-                                    isRequired
-                                    startContent={
-                                        <div className="pointer-events-none flex items-center">
-                                            <span className="text-default-400 text-small">
-                                                ₱
-                                            </span>
-                                        </div>
-                                    }
-                                    labelPlacement="outside"
-                                    className="w-1/3"
-                                    value={tempVariant.priceRetail}
-                                    onValueChange={(value) =>
-                                        setTempVariant((prev) => ({
-                                            ...prev,
-                                            priceRetail: value,
-                                        }))
-                                    }
-                                    isInvalid={
-                                        isSubmittedAddVar &&
-                                        (tempVariant.priceRetail ===
-                                            undefined ||
-                                            tempVariant.priceRetail === null)
-                                    }
-                                />
-                            </div>
+                            <>
+                                <div className="flex flex-row gap-2 items-center">
+                                    <Input
+                                        label="Variant Name"
+                                        isRequired
+                                        labelPlacement="outside"
+                                    />
+                                </div>
+                                <Divider />
+                                <span className="text-lg font-semibold">
+                                    Set Item Stock Details
+                                </span>
+                                <div className="flex flex-row gap-2 items-center">
+                                    <NumberInput
+                                        label="Stocks"
+                                        isRequired
+                                        labelPlacement="outside"
+                                        className="w-1/2"
+                                    />
+                                    <DatePicker
+                                        className="w-1/2"
+                                        label="Date Delivered"
+                                        labelPlacement="outside"
+                                        isRequired
+                                    />
+                                </div>
 
-                            <div className="flex flex-row gap-2 items-center">
-                                <NumberInput
-                                    label="Wholesale Price"
-                                    formatOptions={{
-                                        style: "decimal",
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    }}
-                                    startContent={
-                                        <div className="pointer-events-none flex items-center">
-                                            <span className="text-default-400 text-small">
-                                                ₱
-                                            </span>
-                                        </div>
-                                    }
-                                    labelPlacement="outside"
-                                    className="w-1/2"
-                                    value={
-                                        tempVariant.priceWholesale ?? undefined
-                                    }
-                                    onValueChange={(value) =>
-                                        setTempVariant((prev) => ({
-                                            ...prev,
-                                            priceWholesale: value,
-                                        }))
-                                    }
-                                />
-                                <NumberInput
-                                    label="Wholesale Min Qty"
-                                    labelPlacement="outside"
-                                    className="w-1/2"
-                                    value={
-                                        tempVariant.wholesaleMinQty ?? undefined
-                                    }
-                                    onValueChange={(value) =>
-                                        setTempVariant((prev) => ({
-                                            ...prev,
-                                            wholesaleMinQty: value,
-                                        }))
-                                    }
-                                    isDisabled={
-                                        !tempVariant.priceWholesale ||
-                                        tempVariant.priceWholesale <= 0
-                                    }
-                                    isInvalid={
-                                        isSubmittedAddVar &&
-                                        tempVariant.priceWholesale !==
-                                            undefined &&
-                                        tempVariant.priceWholesale !== null &&
-                                        tempVariant.priceWholesale > 0 &&
-                                        (!tempVariant.stocks ||
-                                            tempVariant.stocks <= 0 ||
-                                            !tempVariant.wholesaleMinQty ||
-                                            tempVariant.wholesaleMinQty <= 0)
-                                    }
-                                />
-                            </div>
+                                <div className="flex flex-row gap-2 items-center">
+                                    <Input
+                                        label="Supplier"
+                                        isRequired
+                                        labelPlacement="outside"
+                                        className="w-1/2"
+                                    />
+                                    <NumberInput
+                                        label="Total Buying Price"
+                                        isRequired
+                                        labelPlacement="outside"
+                                        className="w-1/2"
+                                        formatOptions={{
+                                            style: "decimal",
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        }}
+                                        startContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    ₱
+                                                </span>
+                                            </div>
+                                        }
+                                    />
+                                </div>
+                                <Divider />
+                                <span className="text-lg font-semibold">
+                                    For low stock notification
+                                    <p className="text-sm text-default-500 italic">
+                                        Set the stock level at which you’ll be
+                                        notified that items are running low.
+                                    </p>
+                                </span>
+                                <div className="flex flex-col gap-2 items-center">
+                                    <NumberInput
+                                        label="Low Stock Alert Threshold"
+                                        isRequired
+                                        labelPlacement="outside"
+                                    />
+                                </div>
+                                <Divider />
+                                <span className="text-lg font-semibold">
+                                    Set Item Pricing
+                                </span>
+                                <div className="flex flex-row gap-2 items-center">
+                                    <NumberInput
+                                        label="Retail Price"
+                                        isRequired
+                                        labelPlacement="outside"
+                                        className="w-1/2"
+                                        formatOptions={{
+                                            style: "decimal",
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        }}
+                                        startContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    ₱
+                                                </span>
+                                            </div>
+                                        }
+                                    />
+                                    <NumberInput
+                                        label="Wholesale Price"
+                                        isRequired
+                                        labelPlacement="outside"
+                                        className="w-1/2"
+                                        formatOptions={{
+                                            style: "decimal",
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        }}
+                                        startContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    ₱
+                                                </span>
+                                            </div>
+                                        }
+                                    />
+                                </div>
+                                <Divider />
+                                <span className="text-lg font-semibold">
+                                    Set Wholesale Minimum Quantity
+                                    <p className="text-sm text-default-500 italic">
+                                        Applicable only if wholesale price is
+                                        set
+                                    </p>
+                                </span>
+                                <div className="flex flex-col gap-2 items-center">
+                                    <NumberInput
+                                        label="Wholesale Minimum Quantity"
+                                        isRequired
+                                        labelPlacement="outside"
+                                    />
+                                </div>
+                            </>
                         </ModalBody>
                         <ModalFooter>
                             <Button
@@ -177,32 +168,7 @@ export function AddVariantModal({
                             >
                                 Close
                             </Button>
-                            <Button
-                                color="success"
-                                onPress={() => {
-                                    setIsSubmittedAddVar(true);
-                                    const isValidWholesale =
-                                        !tempVariant.priceWholesale ||
-                                        tempVariant.priceWholesale <= 0 ||
-                                        (tempVariant.wholesaleMinQty !==
-                                            undefined &&
-                                            tempVariant.wholesaleMinQty !==
-                                                null &&
-                                            tempVariant.wholesaleMinQty > 0);
-
-                                    if (
-                                        tempVariant.name.trim() &&
-                                        tempVariant.stocks !== 0 &&
-                                        tempVariant.priceRetail !== undefined &&
-                                        tempVariant.priceRetail !== null &&
-                                        isValidWholesale
-                                    ) {
-                                        handleAddVariant();
-                                        onClose();
-                                        setIsSubmittedAddVar(false);
-                                    }
-                                }}
-                            >
+                            <Button color="success" onPress={onClose}>
                                 Add Variant
                             </Button>
                         </ModalFooter>
