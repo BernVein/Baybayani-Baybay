@@ -1,37 +1,43 @@
-import { Button, Divider, CheckboxGroup } from "@heroui/react";
+import { Button, Divider, CheckboxGroup, Skeleton } from "@heroui/react";
 import { TrashIcon } from "@/components/icons";
 import { useEffect, useMemo, useState } from "react";
 import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMultipleCartItems";
-import { CartCard } from "@/model/ui/Customer/cart_card";
+import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 
 export function OrderCartItems({
-    cartItems,
-    refetch,
+    selectedCartItem,
+    setSelectedCartItem,
 }: {
-    cartItems: CartCard[];
-    refetch: () => void;
+    selectedCartItem: string[];
+    setSelectedCartItem: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
-    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
     const [isDeleting, setIsDeleting] = useState(false);
+    const { items, loading, refetch } = useFetchCartItemsUI(
+        "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
+    );
     const totalSubtotal = useMemo(
         () =>
-            cartItems
-                .filter((item) => selectedKeys.includes(item.cart_item_user_id))
-                .reduce((sum, item) => sum + item.subtotal, 0),
-        [cartItems, selectedKeys],
+            items
+                .filter((cartItem) =>
+                    selectedCartItem.includes(cartItem.cart_item_user_id),
+                )
+                .reduce((sum, cartItem) => sum + cartItem.subtotal, 0),
+        [items, selectedCartItem],
     );
     useEffect(() => {
-        setSelectedKeys(cartItems.map((item) => item.cart_item_user_id));
-    }, [cartItems]);
+        setSelectedCartItem(
+            items.map((cartItem) => cartItem.cart_item_user_id),
+        );
+    }, [items]);
 
     const handleDeleteSelected = async () => {
-        if (selectedKeys.length === 0) return;
+        if (selectedCartItem.length === 0) return;
         setIsDeleting(true);
         try {
-            await deleteMultipleCartItems(selectedKeys);
+            await deleteMultipleCartItems(selectedCartItem);
             await refetch();
-            setSelectedKeys([]);
+            setSelectedCartItem([]);
         } catch (error) {
             console.error("Batch delete failed:", error);
         } finally {
@@ -48,15 +54,35 @@ export function OrderCartItems({
             );
     }, [refetch]);
 
+    if (loading) {
+        return (
+            <div className="flex flex-col gap-3 mt-4">
+                {[...Array(3)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="flex items-center gap-3 p-3 rounded-lg"
+                    >
+                        <Skeleton className="h-12 w-12 rounded-md" />
+                        <div className="flex flex-col gap-2 flex-1">
+                            <Skeleton className="h-4 w-3/4 rounded-md" />
+                            <Skeleton className="h-3 w-1/2 rounded-md" />
+                        </div>
+                        <Skeleton className="h-6 w-10 rounded-md" />
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
     return (
         <>
-            {cartItems.length > 0 && (
+            {items.length > 0 && (
                 <div className="flex flex-col gap-3 mt-4">
                     <div className="flex justify-between items-center px-1">
                         <div className="flex flex-col items-start gap-1">
                             <span className="text-sm font-semibold text-default-700">
-                                Selected Items ({selectedKeys.length}/
-                                {cartItems.length})
+                                Selected Items ({selectedCartItem.length}/
+                                {items.length})
                             </span>
                             <span className="text-sm font-bold text-success-600">
                                 Total: ₱{totalSubtotal.toLocaleString()}
@@ -66,7 +92,9 @@ export function OrderCartItems({
                             size="sm"
                             color="danger"
                             startContent={<TrashIcon className="size-4" />}
-                            isDisabled={selectedKeys.length === 0 || isDeleting}
+                            isDisabled={
+                                selectedCartItem.length === 0 || isDeleting
+                            }
                             isLoading={isDeleting}
                             onPress={handleDeleteSelected}
                         >
@@ -76,12 +104,12 @@ export function OrderCartItems({
                     <Divider />
                     <div className="max-h-[400px] overflow-y-auto pr-2 flex flex-col gap-3">
                         <CheckboxGroup
-                            value={selectedKeys}
+                            value={selectedCartItem}
                             onValueChange={(value) =>
-                                setSelectedKeys(value as string[])
+                                setSelectedCartItem(value as string[])
                             }
                         >
-                            {cartItems.map((item) => (
+                            {items.map((item) => (
                                 <CartItem
                                     key={item.cart_item_user_id}
                                     cartItemUserId={item.cart_item_user_id}

@@ -33,14 +33,14 @@ export const useFetchCartItems = (
             .from("CartItemUser")
             .select(
                 `
-        *,
-        Item (
-          *,
-          Item_Image ( item_image_url ),
-          Variant ( * )
-        ),
-        VariantSnapshot ( * )
-      `,
+                    *,
+                    Item (
+                    *,
+                    Item_Image ( item_image_url ),
+                    Variant ( * )
+                    ),
+                    VariantSnapshot ( * )
+                `,
             )
             .in("cart_item_user_id", normalizedIds)
             .eq("is_soft_deleted", false);

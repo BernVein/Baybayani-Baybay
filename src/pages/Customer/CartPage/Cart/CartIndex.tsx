@@ -14,7 +14,7 @@ import useIsMobile from "@/lib/isMobile";
 import { AddToCart, CartIcon, BaybayaniLogo } from "@/components/icons";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 import CheckoutModalIndex from "@/pages/Customer/CartPage/CheckoutModal/CheckoutModalIndex";
-import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
+import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 export default function Cart() {
     const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
     const {
@@ -24,7 +24,7 @@ export default function Cart() {
     } = useDisclosure();
 
     const isMobile = useIsMobile();
-    const { items, loading, errorMsg, refetch } = useFetchCartItems(
+    const { items, loading, errorMsg, refetch } = useFetchCartItemsUI(
         "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f",
     );
 
