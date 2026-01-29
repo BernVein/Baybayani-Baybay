@@ -114,6 +114,13 @@ export function AddVariantModal({
                                         label="Low Stock Alert Threshold"
                                         isRequired
                                         labelPlacement="outside"
+                                        endContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    kilos
+                                                </span>
+                                            </div>
+                                        }
                                     />
                                 </div>
                                 <Divider />
