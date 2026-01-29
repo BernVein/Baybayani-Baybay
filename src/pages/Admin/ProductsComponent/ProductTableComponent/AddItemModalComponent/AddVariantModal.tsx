@@ -40,7 +40,7 @@ export function AddVariantModal({
                         </ModalHeader>
                         <ModalBody>
                             <>
-                                {!itemHasVariant && (
+                                {itemHasVariant && (
                                     <div className="flex flex-row gap-2 items-center">
                                         <Input
                                             label="Variant Name"
