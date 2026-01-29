@@ -150,7 +150,7 @@ export function AddItemModal({
                                     color="success"
                                     onPress={onOpenAddVar}
                                 >
-                                    Proceed
+                                    {itemHasVariant ? "Add Variant" : "Proceed"}
                                 </Button>
                             </ModalBody>
                             <ModalFooter className="justify-between items-center">

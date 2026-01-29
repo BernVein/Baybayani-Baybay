@@ -59,6 +59,13 @@ export function AddVariantModal({
                                         isRequired
                                         labelPlacement="outside"
                                         className="w-1/2"
+                                        endContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    kilos
+                                                </span>
+                                            </div>
+                                        }
                                     />
                                     <DatePicker
                                         className="w-1/2"
@@ -164,6 +171,13 @@ export function AddVariantModal({
                                         label="Wholesale Minimum Quantity"
                                         isRequired
                                         labelPlacement="outside"
+                                        endContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">
+                                                    kilos
+                                                </span>
+                                            </div>
+                                        }
                                     />
                                 </div>
                             </>
