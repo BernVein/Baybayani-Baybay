@@ -38,6 +38,7 @@ export function AddItemModal({
         variants: [],
     });
 
+    console.log(item);
     return (
         <>
             <Modal
@@ -252,9 +253,12 @@ export function AddItemModal({
                 onOpenChangeAddVar={onOpenChangeAddVar}
                 itemHasVariant={itemHasVariant}
                 itemUnitOfMeasure={item.unitOfMeasure}
-                // onAddVariant={(variant) =>
-                //     setVariants((prev) => [...prev, variant])
-                // }
+                onAddVariant={(newVariant) =>
+                    setItem((prev) => ({
+                        ...prev,
+                        variants: [...prev.variants, newVariant],
+                    }))
+                }
             />
         </>
     );

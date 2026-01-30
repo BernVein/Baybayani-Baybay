@@ -1,7 +1,7 @@
 export interface VariantDB {
     name: string; // only if itemHasVariant === true
     stocks: number;
-    dateDelivered: Date;
+    dateDelivered: string;
     supplier: string;
     totalBuyingPrice: number;
     lowStockThreshold: number;

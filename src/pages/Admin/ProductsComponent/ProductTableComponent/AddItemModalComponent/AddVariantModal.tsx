@@ -1,3 +1,4 @@
+import { VariantDB } from "@/model/db/additem";
 import {
     Button,
     Modal,
@@ -10,20 +11,34 @@ import {
     DatePicker,
     Input,
 } from "@heroui/react";
+import { useState } from "react";
+import { getLocalTimeZone } from "@internationalized/date";
 
 export function AddVariantModal({
     itemUnitOfMeasure,
     itemHasVariant,
     isOpenAddVar,
     onOpenChangeAddVar,
-    // onAddVariant,
+    onAddVariant,
 }: {
     itemUnitOfMeasure: string;
     itemHasVariant: boolean;
     isOpenAddVar: boolean;
     onOpenChangeAddVar: () => void;
-    // onAddVariant: (variant: VariantDB) => void;
+    onAddVariant: (variant: VariantDB) => void;
 }) {
+    const [variant, setVariant] = useState<VariantDB>({
+        name: "",
+        stocks: 0,
+        dateDelivered: "",
+        supplier: "",
+        totalBuyingPrice: 0,
+        lowStockThreshold: 0,
+        retailPrice: 0,
+        wholesalePrice: null,
+        wholesaleMinQty: null,
+    });
+
     return (
         <Modal
             isOpen={isOpenAddVar}
@@ -52,6 +67,13 @@ export function AddVariantModal({
                                             isRequired
                                             labelPlacement="outside-top"
                                             description="Enter the variant name"
+                                            value={variant.name}
+                                            onValueChange={(v) =>
+                                                setVariant({
+                                                    ...variant,
+                                                    name: v,
+                                                })
+                                            }
                                         />
                                     </div>
                                 )}
@@ -73,6 +95,13 @@ export function AddVariantModal({
                                                 </span>
                                             </div>
                                         }
+                                        value={variant.stocks}
+                                        onValueChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                stocks: v,
+                                            })
+                                        }
                                     />
                                     <DatePicker
                                         className="w-1/2"
@@ -80,6 +109,18 @@ export function AddVariantModal({
                                         labelPlacement="outside-top"
                                         isRequired
                                         description="Enter the date the stock was delivered"
+                                        onChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                dateDelivered: v
+                                                    ? v
+                                                          .toDate(
+                                                              getLocalTimeZone(),
+                                                          )
+                                                          .toISOString()
+                                                    : "",
+                                            })
+                                        }
                                     />
                                 </div>
 
@@ -90,6 +131,13 @@ export function AddVariantModal({
                                         labelPlacement="outside-top"
                                         description="Enter the supplier name"
                                         className="w-1/2"
+                                        value={variant.supplier}
+                                        onValueChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                supplier: v,
+                                            })
+                                        }
                                     />
                                     <NumberInput
                                         label="Total Buying Price"
@@ -97,6 +145,13 @@ export function AddVariantModal({
                                         labelPlacement="outside-top"
                                         description="Enter the total price on purchase"
                                         className="w-1/2"
+                                        value={variant.totalBuyingPrice}
+                                        onValueChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                totalBuyingPrice: v,
+                                            })
+                                        }
                                         formatOptions={{
                                             style: "decimal",
                                             minimumFractionDigits: 2,
@@ -128,6 +183,13 @@ export function AddVariantModal({
                                             </div>
                                         }
                                         description="Notification will trigger when the stock level reaches this threshold"
+                                        value={variant.lowStockThreshold}
+                                        onValueChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                lowStockThreshold: v,
+                                            })
+                                        }
                                     />
                                 </div>
                                 <Divider />
@@ -153,6 +215,13 @@ export function AddVariantModal({
                                             </div>
                                         }
                                         description="Enter the retail price of the item"
+                                        value={variant.retailPrice}
+                                        onValueChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                retailPrice: v,
+                                            })
+                                        }
                                     />
                                     <NumberInput
                                         label="Wholesale Price"
@@ -172,6 +241,17 @@ export function AddVariantModal({
                                             </div>
                                         }
                                         description="Enter the wholesale price of the item"
+                                        value={
+                                            variant.wholesalePrice
+                                                ? variant.wholesalePrice
+                                                : undefined
+                                        }
+                                        onValueChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                wholesalePrice: v,
+                                            })
+                                        }
                                     />
                                 </div>
                                 <Divider />
@@ -194,6 +274,17 @@ export function AddVariantModal({
                                                 </span>
                                             </div>
                                         }
+                                        value={
+                                            variant.wholesaleMinQty
+                                                ? variant.wholesaleMinQty
+                                                : undefined
+                                        }
+                                        onValueChange={(v) =>
+                                            setVariant({
+                                                ...variant,
+                                                wholesaleMinQty: v,
+                                            })
+                                        }
                                         description="Enter the minimum quantity required for wholesale purchase"
                                     />
                                 </div>
@@ -210,7 +301,7 @@ export function AddVariantModal({
                             <Button
                                 color="success"
                                 onPress={() => {
-                                    // onAddVariant(variant); // variant = your form state object
+                                    onAddVariant(variant); // variant = your form state object
                                     onClose(); // close the modal
                                 }}
                             >
