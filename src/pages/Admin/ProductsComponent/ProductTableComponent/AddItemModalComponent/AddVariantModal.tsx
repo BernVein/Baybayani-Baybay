@@ -65,6 +65,7 @@ export function AddVariantModal({
                                         <Input
                                             label="Variant Name"
                                             isRequired
+                                            isClearable
                                             labelPlacement="outside-top"
                                             description="Enter the variant name"
                                             value={variant.name}
@@ -85,6 +86,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Stocks"
                                         isRequired
+                                        isClearable
                                         labelPlacement="outside-top"
                                         description="Enter the acquired stock quantity"
                                         className="w-1/2"
@@ -128,6 +130,7 @@ export function AddVariantModal({
                                     <Input
                                         label="Supplier"
                                         isRequired
+                                        isClearable
                                         labelPlacement="outside-top"
                                         description="Enter the supplier name"
                                         className="w-1/2"
@@ -142,6 +145,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Total Buying Price"
                                         isRequired
+                                        isClearable
                                         labelPlacement="outside-top"
                                         description="Enter the total price on purchase"
                                         className="w-1/2"
@@ -174,6 +178,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Low Stock Alert Threshold"
                                         isRequired
+                                        isClearable
                                         labelPlacement="outside-top"
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
@@ -200,6 +205,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Retail Price"
                                         isRequired
+                                        isClearable
                                         labelPlacement="outside-top"
                                         className="w-1/2"
                                         formatOptions={{
@@ -226,6 +232,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Wholesale Price"
                                         isRequired
+                                        isClearable
                                         labelPlacement="outside-top"
                                         className="w-1/2"
                                         formatOptions={{
@@ -266,6 +273,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Wholesale Minimum Quantity"
                                         isRequired
+                                        isClearable
                                         labelPlacement="outside-top"
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
