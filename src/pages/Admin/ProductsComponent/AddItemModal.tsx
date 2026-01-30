@@ -12,13 +12,8 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModal";
-export type DBVariant = {
-    name: string;
-    priceRetail: number | undefined;
-    priceWholesale: number | null;
-    wholesaleMinQty: number | null;
-};
-
+import { useState } from "react";
+import { ItemDB } from "@/model/db/additem";
 export function AddItemModal({
     itemHasVariant,
     isOpen,
@@ -33,6 +28,15 @@ export function AddItemModal({
         onOpen: onOpenAddVar,
         onOpenChange: onOpenChangeAddVar,
     } = useDisclosure();
+
+    const [item, setItem] = useState<ItemDB>({
+        name: "",
+        categoryId: "",
+        shortDescription: "",
+        unitOfMeasure: "",
+        tagId: "",
+        variants: [],
+    });
 
     return (
         <>
@@ -75,15 +79,40 @@ export function AddItemModal({
                                 <div className="flex flex-row gap-2 items-center">
                                     <Input
                                         label="Item Name"
-                                        labelPlacement="outside"
+                                        labelPlacement="outside-top"
                                         className="w-1/2"
                                         isRequired
+                                        isClearable
+                                        description="Enter the name of the item"
+                                        value={item.name}
+                                        onValueChange={(value) =>
+                                            setItem({
+                                                ...item,
+                                                name: value,
+                                            })
+                                        }
                                     />
                                     <ModalAwareSelect
-                                        labelPlacement="outside"
+                                        labelPlacement="outside-top"
                                         isRequired
                                         label="Item Category"
+                                        isClearable
                                         className="w-1/2"
+                                        description="Select the category of the item"
+                                        selectedKeys={
+                                            item.categoryId
+                                                ? [item.categoryId]
+                                                : []
+                                        }
+                                        onSelectionChange={(keys) => {
+                                            const key = Array.from(keys)[0] as
+                                                | string
+                                                | undefined;
+                                            setItem({
+                                                ...item,
+                                                categoryId: key ?? "",
+                                            });
+                                        }}
                                     >
                                         <SelectItem key="dcee3d7a-fd90-4ab8-a6cf-445a482b79ec">
                                             Vegetable
@@ -105,22 +134,59 @@ export function AddItemModal({
                                 <Input
                                     key="2"
                                     label="Item Short Description"
-                                    labelPlacement="outside"
+                                    labelPlacement="outside-top"
                                     className="w-full"
                                     type="text"
+                                    isClearable
+                                    description="Enter the optional short description of the item"
+                                    value={
+                                        item.shortDescription
+                                            ? item.shortDescription
+                                            : ""
+                                    }
+                                    onValueChange={(value) =>
+                                        setItem({
+                                            ...item,
+                                            shortDescription: value,
+                                        })
+                                    }
                                 />
                                 <div className="flex flex-row gap-2 items-center">
                                     <Input
                                         key="1"
                                         isRequired
                                         label="Unit of Measure"
-                                        labelPlacement="outside"
+                                        labelPlacement="outside-top"
                                         className="w-1/2"
+                                        isClearable
+                                        description="by kg, lbs, piece, etc."
+                                        value={item.unitOfMeasure}
+                                        onValueChange={(value) =>
+                                            setItem({
+                                                ...item,
+                                                unitOfMeasure: value,
+                                            })
+                                        }
                                     />
+
                                     <ModalAwareSelect
-                                        labelPlacement="outside"
+                                        labelPlacement="outside-top"
                                         label="Item Tag"
+                                        isClearable
                                         className="w-1/2"
+                                        description="Select an optional short promotional tag"
+                                        selectedKeys={
+                                            item.tagId ? [item.tagId] : []
+                                        }
+                                        onSelectionChange={(keys) => {
+                                            const key = Array.from(keys)[0] as
+                                                | string
+                                                | undefined;
+                                            setItem({
+                                                ...item,
+                                                tagId: key ?? "",
+                                            });
+                                        }}
                                     >
                                         <SelectItem key="f95d0a99-d212-4323-95c6-dedfbdd51079">
                                             Restocked
@@ -136,22 +202,29 @@ export function AddItemModal({
                                         </SelectItem>
                                     </ModalAwareSelect>
                                 </div>
-                                <Button
-                                    startContent={<PhotoIcon className="w-5" />}
-                                    className="mt-2 w-full"
-                                >
-                                    Add Photos
-                                </Button>
-                                <Button
-                                    startContent={
-                                        <RightArrow className="w-5" />
-                                    }
-                                    className="mt-2 w-full"
-                                    color="success"
-                                    onPress={onOpenAddVar}
-                                >
-                                    {itemHasVariant ? "Add Variant" : "Proceed"}
-                                </Button>
+                                <div className="flex flex-col gap-3 mt-2">
+                                    <Button
+                                        startContent={
+                                            <PhotoIcon className="w-5" />
+                                        }
+                                        className="w-full"
+                                    >
+                                        Add Photos
+                                    </Button>
+
+                                    <Button
+                                        startContent={
+                                            <RightArrow className="w-5" />
+                                        }
+                                        className="w-full"
+                                        color="success"
+                                        onPress={onOpenAddVar}
+                                    >
+                                        {itemHasVariant
+                                            ? "Add Variant"
+                                            : "Proceed"}
+                                    </Button>
+                                </div>
                             </ModalBody>
                             <ModalFooter className="justify-between items-center">
                                 <span className="text-sm text-default-500 italic">
@@ -178,6 +251,10 @@ export function AddItemModal({
                 isOpenAddVar={isOpenAddVar}
                 onOpenChangeAddVar={onOpenChangeAddVar}
                 itemHasVariant={itemHasVariant}
+                itemUnitOfMeasure={item.unitOfMeasure}
+                // onAddVariant={(variant) =>
+                //     setVariants((prev) => [...prev, variant])
+                // }
             />
         </>
     );
