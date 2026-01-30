@@ -80,7 +80,6 @@ export function AddItemModal({
                                 <div className="flex flex-row gap-2 items-center">
                                     <Input
                                         label="Item Name"
-                                        labelPlacement="outside-top"
                                         className="w-1/2"
                                         isRequired
                                         isClearable
@@ -94,7 +93,6 @@ export function AddItemModal({
                                         }
                                     />
                                     <ModalAwareSelect
-                                        labelPlacement="outside-top"
                                         isRequired
                                         label="Item Category"
                                         isClearable
@@ -135,7 +133,6 @@ export function AddItemModal({
                                 <Input
                                     key="2"
                                     label="Item Short Description"
-                                    labelPlacement="outside-top"
                                     className="w-full"
                                     type="text"
                                     isClearable
@@ -157,7 +154,6 @@ export function AddItemModal({
                                         key="1"
                                         isRequired
                                         label="Unit of Measure"
-                                        labelPlacement="outside-top"
                                         className="w-1/2"
                                         isClearable
                                         description="by kg, lbs, piece, etc."
@@ -171,7 +167,6 @@ export function AddItemModal({
                                     />
 
                                     <ModalAwareSelect
-                                        labelPlacement="outside-top"
                                         label="Item Tag"
                                         isClearable
                                         className="w-1/2"

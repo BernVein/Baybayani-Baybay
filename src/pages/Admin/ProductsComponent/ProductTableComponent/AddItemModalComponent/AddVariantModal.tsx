@@ -66,7 +66,6 @@ export function AddVariantModal({
                                             label="Variant Name"
                                             isRequired
                                             isClearable
-                                            labelPlacement="outside-top"
                                             description="Enter the variant name"
                                             value={variant.name}
                                             onValueChange={(v) =>
@@ -87,7 +86,6 @@ export function AddVariantModal({
                                         label="Stocks"
                                         isRequired
                                         isClearable
-                                        labelPlacement="outside-top"
                                         description="Enter the acquired stock quantity"
                                         className="w-1/2"
                                         endContent={
@@ -108,7 +106,6 @@ export function AddVariantModal({
                                     <DatePicker
                                         className="w-1/2"
                                         label="Date Delivered"
-                                        labelPlacement="outside-top"
                                         isRequired
                                         defaultValue={today("UTC")}
                                         description="Enter the date the stock was delivered"
@@ -132,7 +129,6 @@ export function AddVariantModal({
                                         label="Supplier"
                                         isRequired
                                         isClearable
-                                        labelPlacement="outside-top"
                                         description="Enter the supplier name"
                                         className="w-1/2"
                                         value={variant.supplier}
@@ -147,7 +143,6 @@ export function AddVariantModal({
                                         label="Total Buying Price"
                                         isRequired
                                         isClearable
-                                        labelPlacement="outside-top"
                                         description="Enter the total price on purchase"
                                         className="w-1/2"
                                         value={variant.totalBuyingPrice}
@@ -180,7 +175,6 @@ export function AddVariantModal({
                                         label="Low Stock Alert Threshold"
                                         isRequired
                                         isClearable
-                                        labelPlacement="outside-top"
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
                                                 <span className="text-default-400 text-small">
@@ -207,7 +201,6 @@ export function AddVariantModal({
                                         label="Retail Price"
                                         isRequired
                                         isClearable
-                                        labelPlacement="outside-top"
                                         className="w-1/2"
                                         formatOptions={{
                                             style: "decimal",
@@ -234,7 +227,6 @@ export function AddVariantModal({
                                         label="Wholesale Price"
                                         isRequired
                                         isClearable
-                                        labelPlacement="outside-top"
                                         className="w-1/2"
                                         formatOptions={{
                                             style: "decimal",
@@ -275,7 +267,6 @@ export function AddVariantModal({
                                         label="Wholesale Minimum Quantity"
                                         isRequired
                                         isClearable
-                                        labelPlacement="outside-top"
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
                                                 <span className="text-default-400 text-small">
