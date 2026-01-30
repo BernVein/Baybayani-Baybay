@@ -256,7 +256,15 @@ export function AddItemModal({
                 onAddVariant={(newVariant) =>
                     setItem((prev) => ({
                         ...prev,
-                        variants: [...prev.variants, newVariant],
+                        variants: [
+                            ...prev.variants,
+                            {
+                                ...newVariant,
+                                name: itemHasVariant
+                                    ? newVariant.name
+                                    : prev.name,
+                            },
+                        ],
                     }))
                 }
             />
