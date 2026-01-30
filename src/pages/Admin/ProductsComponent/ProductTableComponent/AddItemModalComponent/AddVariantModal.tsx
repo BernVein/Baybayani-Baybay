@@ -12,7 +12,7 @@ import {
     Input,
 } from "@heroui/react";
 import { useState } from "react";
-import { getLocalTimeZone } from "@internationalized/date";
+import { getLocalTimeZone, today } from "@internationalized/date";
 
 export function AddVariantModal({
     itemUnitOfMeasure,
@@ -29,14 +29,14 @@ export function AddVariantModal({
 }) {
     const [variant, setVariant] = useState<VariantDB>({
         name: "",
-        stocks: 0,
-        dateDelivered: "",
+        stocks: undefined,
+        dateDelivered: undefined,
         supplier: "",
-        totalBuyingPrice: 0,
-        lowStockThreshold: 0,
-        retailPrice: 0,
-        wholesalePrice: null,
-        wholesaleMinQty: null,
+        totalBuyingPrice: undefined,
+        lowStockThreshold: undefined,
+        retailPrice: undefined,
+        wholesalePrice: undefined,
+        wholesaleMinQty: undefined,
     });
 
     return (
@@ -110,6 +110,7 @@ export function AddVariantModal({
                                         label="Date Delivered"
                                         labelPlacement="outside-top"
                                         isRequired
+                                        defaultValue={today("UTC")}
                                         description="Enter the date the stock was delivered"
                                         onChange={(v) =>
                                             setVariant({

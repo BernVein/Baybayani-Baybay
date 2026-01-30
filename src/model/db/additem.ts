@@ -1,13 +1,13 @@
 export interface VariantDB {
-    name: string; // only if itemHasVariant === true
-    stocks: number;
-    dateDelivered: string;
-    supplier: string;
-    totalBuyingPrice: number;
-    lowStockThreshold: number;
-    retailPrice: number;
-    wholesalePrice: number | null;
-    wholesaleMinQty: number | null;
+    name?: string; // only if itemHasVariant === true
+    stocks?: number;
+    dateDelivered?: string;
+    supplier?: string;
+    totalBuyingPrice?: number;
+    lowStockThreshold?: number;
+    retailPrice?: number;
+    wholesalePrice?: number | null;
+    wholesaleMinQty?: number | null;
 }
 
 export interface ItemDB {
