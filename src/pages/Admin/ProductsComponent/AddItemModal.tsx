@@ -8,6 +8,7 @@ import {
     ModalFooter,
     SelectItem,
     Input,
+    addToast,
     useDisclosure,
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
@@ -37,9 +38,18 @@ export function AddItemModal({
         tagId: "",
         variants: [],
     });
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    function validate(): boolean {
+        if (!item.name.trim()) return false;
+        if (!item.categoryId) return false;
+        if (!item.unitOfMeasure.trim()) return false;
+        return true;
+    }
 
     useEffect(() => {
         if (isOpen) {
+            setIsSubmitted(false);
             setItem({
                 name: "",
                 categoryId: "",
@@ -104,6 +114,10 @@ export function AddItemModal({
                                                 name: value,
                                             })
                                         }
+                                        isInvalid={
+                                            isSubmitted && !item.name.trim()
+                                        }
+                                        errorMessage="Item Name can't be empty"
                                     />
                                     <ModalAwareSelect
                                         isRequired
@@ -125,6 +139,10 @@ export function AddItemModal({
                                                 categoryId: key ?? "",
                                             });
                                         }}
+                                        isInvalid={
+                                            isSubmitted && !item.categoryId
+                                        }
+                                        errorMessage="Item Category can't be empty"
                                     >
                                         <SelectItem key="dcee3d7a-fd90-4ab8-a6cf-445a482b79ec">
                                             Vegetable
@@ -164,7 +182,6 @@ export function AddItemModal({
                                 />
                                 <div className="flex flex-row gap-2 items-center">
                                     <Input
-                                        key="1"
                                         isRequired
                                         label="Unit of Measure"
                                         className="w-1/2"
@@ -177,6 +194,11 @@ export function AddItemModal({
                                                 unitOfMeasure: value,
                                             })
                                         }
+                                        isInvalid={
+                                            isSubmitted &&
+                                            !item.unitOfMeasure.trim()
+                                        }
+                                        errorMessage="Unit of Measure can't be empty"
                                     />
 
                                     <ModalAwareSelect
@@ -229,7 +251,22 @@ export function AddItemModal({
                                             }
                                             className="w-full"
                                             color="success"
-                                            onPress={onOpenAddVar}
+                                            onPress={() => {
+                                                setIsSubmitted(true);
+                                                if (validate()) {
+                                                    onOpenAddVar();
+                                                } else {
+                                                    addToast({
+                                                        title: "Empty Required Fields.",
+                                                        description:
+                                                            "Please fill in all required fields.",
+                                                        timeout: 3000,
+                                                        color: "danger",
+                                                        shouldShowTimeoutProgress:
+                                                            true,
+                                                    });
+                                                }
+                                            }}
                                         >
                                             {itemHasVariant
                                                 ? "Add Variant"
