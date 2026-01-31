@@ -11,7 +11,7 @@ import {
     DatePicker,
     Input,
 } from "@heroui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 
 export function AddVariantModal({
@@ -24,7 +24,7 @@ export function AddVariantModal({
     itemUnitOfMeasure: string;
     itemHasVariant: boolean;
     isOpenAddVar: boolean;
-    onOpenChangeAddVar: () => void;
+    onOpenChangeAddVar: (open: boolean) => void;
     onAddVariant: (variant: VariantDB) => void;
 }) {
     const [variant, setVariant] = useState<VariantDB>({
@@ -38,6 +38,21 @@ export function AddVariantModal({
         wholesalePrice: undefined,
         wholesaleMinQty: undefined,
     });
+
+    useEffect(() => {
+        if (isOpenAddVar) {
+            setVariant({
+                name: "",
+                stocks: undefined,
+                supplier: "",
+                totalBuyingPrice: undefined,
+                lowStockThreshold: undefined,
+                retailPrice: undefined,
+                wholesalePrice: undefined,
+                wholesaleMinQty: undefined,
+            });
+        }
+    }, [isOpenAddVar]);
 
     return (
         <Modal

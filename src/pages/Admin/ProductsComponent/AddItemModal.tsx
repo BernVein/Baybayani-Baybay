@@ -12,7 +12,7 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ItemDB } from "@/model/db/additem";
 export function AddItemModal({
     itemHasVariant,
@@ -21,7 +21,7 @@ export function AddItemModal({
 }: {
     itemHasVariant: boolean;
     isOpen: boolean;
-    onOpenChange: () => void;
+    onOpenChange: (open: boolean) => void;
 }) {
     const {
         isOpen: isOpenAddVar,
@@ -37,6 +37,19 @@ export function AddItemModal({
         tagId: "",
         variants: [],
     });
+
+    useEffect(() => {
+        if (isOpen) {
+            setItem({
+                name: "",
+                categoryId: "",
+                shortDescription: "",
+                unitOfMeasure: "",
+                tagId: "",
+                variants: [],
+            });
+        }
+    }, [isOpen]);
 
     console.log(item);
     return (
@@ -208,19 +221,23 @@ export function AddItemModal({
                                         Add Photos
                                     </Button>
 
-                                    <Button
-                                        startContent={
-                                            <RightArrow className="w-5" />
-                                        }
-                                        className="w-full"
-                                        color="success"
-                                        onPress={onOpenAddVar}
-                                    >
-                                        {itemHasVariant
-                                            ? "Add Variant"
-                                            : "Proceed"}
-                                    </Button>
+                                    {(itemHasVariant ||
+                                        item.variants.length === 0) && (
+                                        <Button
+                                            startContent={
+                                                <RightArrow className="w-5" />
+                                            }
+                                            className="w-full"
+                                            color="success"
+                                            onPress={onOpenAddVar}
+                                        >
+                                            {itemHasVariant
+                                                ? "Add Variant"
+                                                : "Proceed"}
+                                        </Button>
+                                    )}
                                 </div>
+                                <p>Variant Count: {item.variants.length}</p>
                             </ModalBody>
                             <ModalFooter className="justify-between items-center">
                                 <span className="text-sm text-default-500 italic">
