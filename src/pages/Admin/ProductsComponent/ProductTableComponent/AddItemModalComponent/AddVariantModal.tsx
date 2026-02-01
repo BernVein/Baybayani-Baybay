@@ -6,7 +6,6 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    NumberInput,
     Divider,
     DatePicker,
     Input,
@@ -125,11 +124,10 @@ export function AddVariantModal({
                                     Set Item Stock Details
                                 </span>
                                 <div className="flex flex-row gap-2 items-center">
-                                    <NumberInput
+                                    <Input
                                         label="Acquired Stocks"
                                         isRequired
-                                        isClearable
-                                        minValue={1}
+                                        type="number"
                                         description="Enter the acquired stock quantity"
                                         className="w-1/2"
                                         endContent={
@@ -139,11 +137,11 @@ export function AddVariantModal({
                                                 </span>
                                             </div>
                                         }
-                                        value={variant.stocks}
+                                        value={variant.stocks?.toString()}
                                         onValueChange={(v) =>
                                             setVariant({
                                                 ...variant,
-                                                stocks: v,
+                                                stocks: Math.max(Number(v), 1),
                                             })
                                         }
                                         isInvalid={
@@ -194,25 +192,22 @@ export function AddVariantModal({
                                         }
                                         errorMessage="Supplier is required"
                                     />
-                                    <NumberInput
+                                    <Input
                                         label="Total Buying Price"
-                                        minValue={1}
+                                        type="number"
                                         isRequired
-                                        isClearable
                                         description="Enter the total price on purchase"
                                         className="w-1/2"
-                                        value={variant.totalBuyingPrice}
+                                        value={variant.totalBuyingPrice?.toString()}
                                         onValueChange={(v) =>
                                             setVariant({
                                                 ...variant,
-                                                totalBuyingPrice: v,
+                                                totalBuyingPrice: Math.max(
+                                                    Number(v),
+                                                    1,
+                                                ),
                                             })
                                         }
-                                        formatOptions={{
-                                            style: "decimal",
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                        }}
                                         startContent={
                                             <div className="pointer-events-none flex items-center">
                                                 <span className="text-default-400 text-small">
@@ -233,11 +228,10 @@ export function AddVariantModal({
                                     For low stock notification
                                 </span>
                                 <div className="flex flex-col gap-2 items-center">
-                                    <NumberInput
+                                    <Input
                                         label="Low Stock Alert Threshold"
                                         isRequired
-                                        minValue={1}
-                                        isClearable
+                                        type="number"
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
                                                 <span className="text-default-400 text-small">
@@ -246,11 +240,14 @@ export function AddVariantModal({
                                             </div>
                                         }
                                         description="Notification will trigger when the stock level reaches this threshold"
-                                        value={variant.lowStockThreshold}
+                                        value={variant.lowStockThreshold?.toString()}
                                         onValueChange={(v) =>
                                             setVariant({
                                                 ...variant,
-                                                lowStockThreshold: v,
+                                                lowStockThreshold: Math.max(
+                                                    Number(v),
+                                                    1,
+                                                ),
                                             })
                                         }
                                         isInvalid={
@@ -267,17 +264,11 @@ export function AddVariantModal({
                                     Set Item Pricing
                                 </span>
                                 <div className="flex flex-row gap-2 items-center">
-                                    <NumberInput
+                                    <Input
                                         label="Retail Price"
+                                        type="number"
                                         isRequired
-                                        minValue={1}
-                                        isClearable
                                         className="w-1/2"
-                                        formatOptions={{
-                                            style: "decimal",
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                        }}
                                         startContent={
                                             <div className="pointer-events-none flex items-center">
                                                 <span className="text-default-400 text-small">
@@ -286,11 +277,14 @@ export function AddVariantModal({
                                             </div>
                                         }
                                         description="Enter the retail price of the item"
-                                        value={variant.retailPrice}
+                                        value={variant.retailPrice?.toString()}
                                         onValueChange={(v) =>
                                             setVariant({
                                                 ...variant,
-                                                retailPrice: v,
+                                                retailPrice: Math.max(
+                                                    Number(v),
+                                                    1,
+                                                ),
                                             })
                                         }
                                         isInvalid={
@@ -300,16 +294,10 @@ export function AddVariantModal({
                                         }
                                         errorMessage="Retail price is required"
                                     />
-                                    <NumberInput
+                                    <Input
                                         label="Wholesale Price"
-                                        isClearable
-                                        minValue={1}
+                                        type="number"
                                         className="w-1/2"
-                                        formatOptions={{
-                                            style: "decimal",
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                        }}
                                         startContent={
                                             <div className="pointer-events-none flex items-center">
                                                 <span className="text-default-400 text-small">
@@ -320,13 +308,13 @@ export function AddVariantModal({
                                         description="Enter the wholesale price of the item"
                                         value={
                                             variant.wholesalePrice
-                                                ? variant.wholesalePrice
+                                                ? variant.wholesalePrice.toString()
                                                 : undefined
                                         }
                                         onValueChange={(v) =>
                                             setVariant({
                                                 ...variant,
-                                                wholesalePrice: v,
+                                                wholesalePrice: Number(v),
                                             })
                                         }
                                     />
@@ -340,11 +328,18 @@ export function AddVariantModal({
                                     </p>
                                 </span>
                                 <div className="flex flex-col gap-2 items-center">
-                                    <NumberInput
+                                    <Input
                                         label="Wholesale Minimum Quantity"
                                         isRequired={!!variant.wholesalePrice}
-                                        isClearable
-                                        minValue={1}
+                                        type="number"
+                                        isInvalid={
+                                            isSubmitted &&
+                                            (variant.wholesaleMinQty == null ||
+                                                variant.wholesaleMinQty ===
+                                                    0) &&
+                                            variant.wholesalePrice != null
+                                        }
+                                        errorMessage="Wholesale minimum quantity is required."
                                         isDisabled={!variant.wholesalePrice}
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
@@ -355,13 +350,16 @@ export function AddVariantModal({
                                         }
                                         value={
                                             variant.wholesaleMinQty
-                                                ? variant.wholesaleMinQty
+                                                ? variant.wholesaleMinQty.toString()
                                                 : undefined
                                         }
                                         onValueChange={(v) =>
                                             setVariant({
                                                 ...variant,
-                                                wholesaleMinQty: v,
+                                                wholesaleMinQty: Math.max(
+                                                    Number(v),
+                                                    1,
+                                                ),
                                             })
                                         }
                                         description="Enter the minimum quantity required for wholesale purchase"
@@ -386,28 +384,14 @@ export function AddVariantModal({
                                         onClose();
                                         setIsSubmitted(false);
                                     } else {
-                                        if (
-                                            variant.wholesalePrice != null &&
-                                            variant.wholesaleMinQty == null
-                                        ) {
-                                            addToast({
-                                                title: "Empty Required Fields.",
-                                                description:
-                                                    "Please fill in the wholesale minimum quantity.",
-                                                timeout: 3000,
-                                                color: "danger",
-                                                shouldShowTimeoutProgress: true,
-                                            });
-                                        } else {
-                                            addToast({
-                                                title: "Empty Required Fields.",
-                                                description:
-                                                    "Please fill in all required fields.",
-                                                timeout: 3000,
-                                                color: "danger",
-                                                shouldShowTimeoutProgress: true,
-                                            });
-                                        }
+                                        addToast({
+                                            title: "Empty Required Fields.",
+                                            description:
+                                                "Please fill in all required fields.",
+                                            timeout: 3000,
+                                            color: "danger",
+                                            shouldShowTimeoutProgress: true,
+                                        });
                                     }
                                 }}
                             >

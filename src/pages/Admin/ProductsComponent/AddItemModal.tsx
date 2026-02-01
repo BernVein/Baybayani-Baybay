@@ -59,7 +59,6 @@ export function AddItemModal({
         });
     }, [isOpen]);
 
-    console.log(item);
     return (
         <>
             <Modal
