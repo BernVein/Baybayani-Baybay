@@ -48,17 +48,15 @@ export function AddItemModal({
     }
 
     useEffect(() => {
-        if (isOpen) {
-            setIsSubmitted(false);
-            setItem({
-                name: "",
-                categoryId: "",
-                shortDescription: "",
-                unitOfMeasure: "",
-                tagId: "",
-                variants: [],
-            });
-        }
+        setIsSubmitted(false);
+        setItem({
+            name: "",
+            categoryId: "",
+            shortDescription: "",
+            unitOfMeasure: "",
+            tagId: "",
+            variants: [],
+        });
     }, [isOpen]);
 
     console.log(item);

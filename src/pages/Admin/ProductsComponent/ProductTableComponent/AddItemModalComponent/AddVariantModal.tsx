@@ -29,6 +29,7 @@ export function AddVariantModal({
     onAddVariant: (variant: VariantDB) => void;
 }) {
     const [isSubmitted, setIsSubmitted] = useState(false);
+
     const [variant, setVariant] = useState<VariantDB>({
         name: "",
         stocks: undefined,
@@ -40,34 +41,37 @@ export function AddVariantModal({
         wholesalePrice: undefined,
         wholesaleMinQty: undefined,
     });
-
     useEffect(() => {
-        if (isOpenAddVar) {
-            setVariant({
-                name: "",
-                stocks: undefined,
-                dateDelivered: today("UTC").toString(),
-                supplier: "",
-                totalBuyingPrice: undefined,
-                lowStockThreshold: undefined,
-                retailPrice: undefined,
-                wholesalePrice: undefined,
-                wholesaleMinQty: undefined,
-            });
-            setIsSubmitted(false);
-        }
+        setIsSubmitted(false);
+        setVariant({
+            name: "",
+            stocks: undefined,
+            dateDelivered: today("UTC").toString(),
+            supplier: "",
+            totalBuyingPrice: undefined,
+            lowStockThreshold: undefined,
+            retailPrice: undefined,
+            wholesalePrice: undefined,
+            wholesaleMinQty: undefined,
+        });
     }, [isOpenAddVar]);
 
     function validateVariant(): boolean {
         if (itemHasVariant && !variant.name?.trim()) return false;
-        if (variant.stocks == null) return false;
+        if (variant.stocks == null || variant.stocks == 0) return false;
         if (!variant.supplier?.trim()) return false;
-        if (variant.totalBuyingPrice == null) return false;
-        if (variant.lowStockThreshold == null) return false;
-        if (variant.retailPrice == null) return false;
+        if (variant.totalBuyingPrice == null || variant.totalBuyingPrice == 0)
+            return false;
+        if (variant.lowStockThreshold == null || variant.lowStockThreshold == 0)
+            return false;
+        if (variant.retailPrice == null || variant.retailPrice == 0)
+            return false;
 
         // wholesaleMinQty is only required if wholesalePrice is set
-        if (variant.wholesalePrice != null && variant.wholesaleMinQty == null)
+        if (
+            variant.wholesalePrice &&
+            (variant.wholesaleMinQty == null || variant.wholesaleMinQty == 0)
+        )
             return false;
 
         return true;
@@ -112,12 +116,7 @@ export function AddVariantModal({
                                                 isSubmitted &&
                                                 !variant.name?.trim()
                                             }
-                                            errorMessage={
-                                                isSubmitted &&
-                                                !variant.name?.trim()
-                                                    ? "Variant name is required"
-                                                    : ""
-                                            }
+                                            errorMessage="Variant name is required."
                                         />
                                     </div>
                                 )}
@@ -127,9 +126,10 @@ export function AddVariantModal({
                                 </span>
                                 <div className="flex flex-row gap-2 items-center">
                                     <NumberInput
-                                        label="Stocks"
+                                        label="Acquired Stocks"
                                         isRequired
                                         isClearable
+                                        minValue={1}
                                         description="Enter the acquired stock quantity"
                                         className="w-1/2"
                                         endContent={
@@ -148,14 +148,10 @@ export function AddVariantModal({
                                         }
                                         isInvalid={
                                             isSubmitted &&
-                                            variant.stocks == null
+                                            (variant.stocks == null ||
+                                                variant.stocks == 0)
                                         }
-                                        errorMessage={
-                                            isSubmitted &&
-                                            variant.stocks == null
-                                                ? "Stocks is required"
-                                                : ""
-                                        }
+                                        errorMessage="Acquired stock is required"
                                     />
                                     <DatePicker
                                         className="w-1/2"
@@ -193,16 +189,14 @@ export function AddVariantModal({
                                             })
                                         }
                                         isInvalid={
-                                            isSubmitted && !variant.supplier
+                                            isSubmitted &&
+                                            !variant.supplier?.trim()
                                         }
-                                        errorMessage={
-                                            isSubmitted && !variant.supplier
-                                                ? "Supplier is required"
-                                                : ""
-                                        }
+                                        errorMessage="Supplier is required"
                                     />
                                     <NumberInput
                                         label="Total Buying Price"
+                                        minValue={1}
                                         isRequired
                                         isClearable
                                         description="Enter the total price on purchase"
@@ -228,14 +222,10 @@ export function AddVariantModal({
                                         }
                                         isInvalid={
                                             isSubmitted &&
-                                            variant.totalBuyingPrice == null
+                                            (variant.totalBuyingPrice == null ||
+                                                variant.totalBuyingPrice == 0)
                                         }
-                                        errorMessage={
-                                            isSubmitted &&
-                                            variant.totalBuyingPrice == null
-                                                ? "Total buying price is required"
-                                                : ""
-                                        }
+                                        errorMessage="Total buying price is required"
                                     />
                                 </div>
                                 <Divider />
@@ -246,6 +236,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Low Stock Alert Threshold"
                                         isRequired
+                                        minValue={1}
                                         isClearable
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
@@ -264,14 +255,11 @@ export function AddVariantModal({
                                         }
                                         isInvalid={
                                             isSubmitted &&
-                                            variant.lowStockThreshold == null
+                                            (variant.lowStockThreshold ==
+                                                null ||
+                                                variant.lowStockThreshold == 0)
                                         }
-                                        errorMessage={
-                                            isSubmitted &&
-                                            variant.lowStockThreshold == null
-                                                ? "Low stock threshold is required"
-                                                : ""
-                                        }
+                                        errorMessage="Low stock threshold is required"
                                     />
                                 </div>
                                 <Divider />
@@ -282,6 +270,7 @@ export function AddVariantModal({
                                     <NumberInput
                                         label="Retail Price"
                                         isRequired
+                                        minValue={1}
                                         isClearable
                                         className="w-1/2"
                                         formatOptions={{
@@ -306,18 +295,15 @@ export function AddVariantModal({
                                         }
                                         isInvalid={
                                             isSubmitted &&
-                                            variant.retailPrice == null
+                                            (variant.retailPrice == null ||
+                                                variant.retailPrice == 0)
                                         }
-                                        errorMessage={
-                                            isSubmitted &&
-                                            variant.retailPrice == null
-                                                ? "Retail price is required"
-                                                : ""
-                                        }
+                                        errorMessage="Retail price is required"
                                     />
                                     <NumberInput
                                         label="Wholesale Price"
                                         isClearable
+                                        minValue={1}
                                         className="w-1/2"
                                         formatOptions={{
                                             style: "decimal",
@@ -356,10 +342,9 @@ export function AddVariantModal({
                                 <div className="flex flex-col gap-2 items-center">
                                     <NumberInput
                                         label="Wholesale Minimum Quantity"
-                                        isRequired={
-                                            variant.wholesalePrice != null
-                                        }
+                                        isRequired={!!variant.wholesalePrice}
                                         isClearable
+                                        minValue={1}
                                         isDisabled={!variant.wholesalePrice}
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
@@ -380,18 +365,6 @@ export function AddVariantModal({
                                             })
                                         }
                                         description="Enter the minimum quantity required for wholesale purchase"
-                                        isInvalid={
-                                            isSubmitted &&
-                                            variant.wholesalePrice != null &&
-                                            variant.wholesaleMinQty == null
-                                        }
-                                        errorMessage={
-                                            isSubmitted &&
-                                            variant.wholesalePrice != null &&
-                                            variant.wholesaleMinQty == null
-                                                ? "Wholesale minimum quantity is required"
-                                                : ""
-                                        }
                                     />
                                 </div>
                             </>
@@ -413,14 +386,28 @@ export function AddVariantModal({
                                         onClose();
                                         setIsSubmitted(false);
                                     } else {
-                                        addToast({
-                                            title: "Empty Required Fields.",
-                                            description:
-                                                "Please fill in all required fields.",
-                                            timeout: 3000,
-                                            color: "danger",
-                                            shouldShowTimeoutProgress: true,
-                                        });
+                                        if (
+                                            variant.wholesalePrice != null &&
+                                            variant.wholesaleMinQty == null
+                                        ) {
+                                            addToast({
+                                                title: "Empty Required Fields.",
+                                                description:
+                                                    "Please fill in the wholesale minimum quantity.",
+                                                timeout: 3000,
+                                                color: "danger",
+                                                shouldShowTimeoutProgress: true,
+                                            });
+                                        } else {
+                                            addToast({
+                                                title: "Empty Required Fields.",
+                                                description:
+                                                    "Please fill in all required fields.",
+                                                timeout: 3000,
+                                                color: "danger",
+                                                shouldShowTimeoutProgress: true,
+                                            });
+                                        }
                                     }
                                 }}
                             >
