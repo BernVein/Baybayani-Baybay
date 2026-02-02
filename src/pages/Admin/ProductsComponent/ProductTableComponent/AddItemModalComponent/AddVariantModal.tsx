@@ -20,39 +20,34 @@ export function AddVariantModal({
     isOpenAddVar,
     onOpenChangeAddVar,
     onAddVariant,
+    variant,
+    setVariant,
 }: {
     itemUnitOfMeasure: string;
     itemHasVariant: boolean;
     isOpenAddVar: boolean;
     onOpenChangeAddVar: (open: boolean) => void;
     onAddVariant: (variant: VariantDB) => void;
+    variant: VariantDB;
+    setVariant: React.Dispatch<React.SetStateAction<VariantDB>>;
 }) {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const [variant, setVariant] = useState<VariantDB>({
-        name: "",
-        stocks: undefined,
-        dateDelivered: undefined,
-        supplier: "",
-        totalBuyingPrice: undefined,
-        lowStockThreshold: undefined,
-        retailPrice: undefined,
-        wholesalePrice: undefined,
-        wholesaleMinQty: undefined,
-    });
     useEffect(() => {
         setIsSubmitted(false);
-        setVariant({
-            name: "",
-            stocks: undefined,
-            dateDelivered: today("UTC").toString(),
-            supplier: "",
-            totalBuyingPrice: undefined,
-            lowStockThreshold: undefined,
-            retailPrice: undefined,
-            wholesalePrice: undefined,
-            wholesaleMinQty: undefined,
-        });
+        if (isOpenAddVar) {
+            setVariant({
+                name: "",
+                stocks: undefined,
+                dateDelivered: today("UTC").toString(),
+                supplier: "",
+                totalBuyingPrice: undefined,
+                lowStockThreshold: undefined,
+                retailPrice: undefined,
+                wholesalePrice: undefined,
+                wholesaleMinQty: undefined,
+            });
+        }
     }, [isOpenAddVar]);
 
     function validateVariant(): boolean {
@@ -395,7 +390,9 @@ export function AddVariantModal({
                                     }
                                 }}
                             >
-                                Add Variant
+                                {itemHasVariant
+                                    ? "Add Variant"
+                                    : "Save Details"}
                             </Button>
                         </ModalFooter>
                     </>

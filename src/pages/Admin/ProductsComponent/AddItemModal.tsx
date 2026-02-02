@@ -10,11 +10,15 @@ import {
     Input,
     addToast,
     useDisclosure,
+    Card,
+    CardHeader,
+    CardBody,
+    Divider,
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModal";
 import { useState, useEffect } from "react";
-import { ItemDB } from "@/model/db/additem";
+import { ItemDB, VariantDB } from "@/model/db/additem";
 export function AddItemModal({
     itemHasVariant,
     isOpen,
@@ -37,6 +41,18 @@ export function AddItemModal({
         unitOfMeasure: "",
         tagId: "",
         variants: [],
+    });
+
+    const [variant, setVariant] = useState<VariantDB>({
+        name: "",
+        stocks: undefined,
+        dateDelivered: undefined,
+        supplier: "",
+        totalBuyingPrice: undefined,
+        lowStockThreshold: undefined,
+        retailPrice: undefined,
+        wholesalePrice: undefined,
+        wholesaleMinQty: undefined,
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -230,6 +246,7 @@ export function AddItemModal({
                                         </SelectItem>
                                     </ModalAwareSelect>
                                 </div>
+
                                 <div className="flex flex-col gap-3 mt-2">
                                     <Button
                                         startContent={
@@ -267,11 +284,120 @@ export function AddItemModal({
                                         >
                                             {itemHasVariant
                                                 ? "Add Variant"
-                                                : "Proceed"}
+                                                : item.variants.length === 0
+                                                  ? "Proceed"
+                                                  : "Edit Details"}
                                         </Button>
                                     )}
                                 </div>
-                                <p>Variant Count: {item.variants.length}</p>
+                                <div>
+                                    <Divider className="my-4" />
+                                    <p className="text-base font-semibold mb-2">
+                                        Variant List
+                                    </p>
+                                    <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+                                        {item.variants.length === 0 ? (
+                                            <p className="text-sm text-default-400 italic text-center py-4">
+                                                No variants added yet.
+                                            </p>
+                                        ) : (
+                                            item.variants.map((v, index) => (
+                                                <Card
+                                                    key={index}
+                                                    className="shadow-sm"
+                                                >
+                                                    <CardHeader className="flex flex-row justify-between items-start">
+                                                        <div className="flex flex-col">
+                                                            <h4 className="text-large font-bold">
+                                                                {v.name ||
+                                                                    "Default Variant"}
+                                                            </h4>
+                                                            <p className="text-tiny text-default-400">
+                                                                Variant{" "}
+                                                                {index + 1}
+                                                            </p>
+                                                        </div>
+                                                        <Button
+                                                            isIconOnly
+                                                            color="danger"
+                                                            variant="light"
+                                                            size="sm"
+                                                            onPress={() => {
+                                                                setItem(
+                                                                    (prev) => ({
+                                                                        ...prev,
+                                                                        variants:
+                                                                            prev.variants.filter(
+                                                                                (
+                                                                                    _,
+                                                                                    i,
+                                                                                ) =>
+                                                                                    i !==
+                                                                                    index,
+                                                                            ),
+                                                                    }),
+                                                                );
+                                                            }}
+                                                        >
+                                                            ✕
+                                                        </Button>
+                                                    </CardHeader>
+                                                    <Divider />
+                                                    <CardBody className="py-2 text-sm grid grid-cols-2 gap-x-4 gap-y-1">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-default-500">
+                                                                Stocks:
+                                                            </span>
+                                                            <span className="font-medium">
+                                                                {v.stocks}{" "}
+                                                                {
+                                                                    item.unitOfMeasure
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-default-500">
+                                                                Retail Price:
+                                                            </span>
+                                                            <span className="font-medium">
+                                                                ₱
+                                                                {v.retailPrice?.toLocaleString()}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-default-500">
+                                                                Low Stock Alert:
+                                                            </span>
+                                                            <span className="font-medium">
+                                                                {
+                                                                    v.lowStockThreshold
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-default-500">
+                                                                Wholesale Price:
+                                                            </span>
+                                                            <span className="font-medium">
+                                                                {v.wholesalePrice
+                                                                    ? `₱${v.wholesalePrice.toLocaleString()}`
+                                                                    : "N/A"}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between col-span-2">
+                                                            <span className="text-default-500">
+                                                                Supplier:
+                                                            </span>
+                                                            <span className="font-medium truncate ml-2">
+                                                                {v.supplier}
+                                                            </span>
+                                                        </div>
+                                                    </CardBody>
+                                                </Card>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
                             </ModalBody>
                             <ModalFooter className="justify-between items-center">
                                 <span className="text-sm text-default-500 italic">
@@ -313,6 +439,8 @@ export function AddItemModal({
                         ],
                     }))
                 }
+                variant={variant}
+                setVariant={setVariant}
             />
         </>
     );
