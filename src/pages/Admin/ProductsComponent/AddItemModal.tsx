@@ -15,6 +15,7 @@ import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableCom
 import { useState, useEffect } from "react";
 import { ItemDB } from "@/model/db/additem";
 import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/VariantList";
+import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/CloseWarningModal";
 export function AddItemModal({
     itemHasVariant,
     isOpen,
@@ -28,6 +29,12 @@ export function AddItemModal({
         isOpen: isOpenAddVar,
         onOpen: onOpenAddVar,
         onOpenChange: onOpenChangeAddVar,
+    } = useDisclosure();
+
+    const {
+        isOpen: isOpenWarning,
+        onOpen: onOpenWarning,
+        onOpenChange: onOpenChangeWarning,
     } = useDisclosure();
 
     const [item, setItem] = useState<ItemDB>({
@@ -65,130 +72,150 @@ export function AddItemModal({
             <Modal
                 isDismissable={false}
                 isOpen={isOpen}
-                onOpenChange={onOpenChange}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        if (item.variants.length > 0) {
+                            onOpenWarning();
+                        } else {
+                            onOpenChange(false);
+                        }
+                    } else {
+                        onOpenChange(true);
+                    }
+                }}
                 size="xl"
                 scrollBehavior="inside"
                 disableAnimation
             >
                 <ModalContent>
-                    {(onClose) => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1">
-                                <div className="flex flex-col gap-2">
-                                    <span className="text-lg font-semibold">
-                                        Add Item{" "}
-                                        <span className="font-extrabold">
-                                            {itemHasVariant
-                                                ? "with variant"
-                                                : "without variant"}
-                                        </span>
-                                    </span>
-                                    <span className="text-sm text-default-500 italic">
-                                        Changes here are temporary. The item
-                                        will be officially added only when you
-                                        click the{" "}
-                                        <span className="text-success-500 font-semibold">
-                                            Add Item
-                                        </span>{" "}
-                                        button below.
-                                    </span>
-                                </div>
-                            </ModalHeader>
-                            <ModalBody>
+                    <>
+                        <ModalHeader className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-2">
                                 <span className="text-lg font-semibold">
-                                    Set Item Details
+                                    Add Item{" "}
+                                    <span className="font-extrabold">
+                                        {itemHasVariant
+                                            ? "with variant"
+                                            : "without variant"}
+                                    </span>
                                 </span>
-                                <ItemInitialDetail
-                                    item={item}
-                                    setItem={setItem}
-                                    isSubmitted={isSubmitted}
-                                />
+                                <span className="text-sm text-default-500 italic">
+                                    Changes here are temporary. The item will be
+                                    officially added only when you click the{" "}
+                                    <span className="text-success-500 font-semibold">
+                                        Add Item
+                                    </span>{" "}
+                                    button below.
+                                </span>
+                            </div>
+                        </ModalHeader>
+                        <ModalBody>
+                            <span className="text-lg font-semibold">
+                                Set Item Details
+                            </span>
+                            <ItemInitialDetail
+                                item={item}
+                                setItem={setItem}
+                                isSubmitted={isSubmitted}
+                            />
 
-                                <div className="flex flex-col gap-3 mt-2">
+                            <div className="flex flex-col gap-3 mt-2">
+                                <Button
+                                    startContent={<PhotoIcon className="w-5" />}
+                                    className="w-full"
+                                >
+                                    Add Photos
+                                </Button>
+
+                                {(itemHasVariant ||
+                                    item.variants.length === 0) && (
                                     <Button
                                         startContent={
-                                            <PhotoIcon className="w-5" />
+                                            itemHasVariant ? (
+                                                <PlusIcon className="w-5" />
+                                            ) : (
+                                                <RightArrow className="w-5" />
+                                            )
                                         }
                                         className="w-full"
-                                    >
-                                        Add Photos
-                                    </Button>
-
-                                    {(itemHasVariant ||
-                                        item.variants.length === 0) && (
-                                        <Button
-                                            startContent={
-                                                itemHasVariant ? (
-                                                    <PlusIcon className="w-5" />
-                                                ) : (
-                                                    <RightArrow className="w-5" />
-                                                )
+                                        color="success"
+                                        onPress={() => {
+                                            setIsSubmitted(true);
+                                            if (validate()) {
+                                                onOpenAddVar();
+                                            } else {
+                                                addToast({
+                                                    title: "Empty Required Fields.",
+                                                    description:
+                                                        "Please fill in all required fields.",
+                                                    timeout: 3000,
+                                                    color: "danger",
+                                                    shouldShowTimeoutProgress:
+                                                        true,
+                                                });
                                             }
-                                            className="w-full"
-                                            color="success"
-                                            onPress={() => {
-                                                setIsSubmitted(true);
-                                                if (validate()) {
-                                                    onOpenAddVar();
-                                                } else {
-                                                    addToast({
-                                                        title: "Empty Required Fields.",
-                                                        description:
-                                                            "Please fill in all required fields.",
-                                                        timeout: 3000,
-                                                        color: "danger",
-                                                        shouldShowTimeoutProgress:
-                                                            true,
-                                                    });
-                                                }
-                                            }}
-                                        >
-                                            {itemHasVariant
-                                                ? "Add Variant"
-                                                : item.variants.length === 0
-                                                  ? "Set Additional Details"
-                                                  : "Edit Details"}
-                                        </Button>
-                                    )}
-                                </div>
-                                <div>
-                                    {itemHasVariant && (
-                                        <>
-                                            <Divider className="my-4" />
-                                            <p className="text-base font-semibold mb-2">
-                                                Variant List
-                                            </p>
-                                        </>
-                                    )}
-
-                                    <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
-                                        <VariantList
-                                            itemHasVariant={itemHasVariant}
-                                            item={item}
-                                            setItem={setItem}
-                                        />
-                                    </div>
-                                </div>
-                            </ModalBody>
-                            <ModalFooter className="justify-between items-center">
-                                <span className="text-sm text-default-500 italic">
-                                    <span className="text-red-500">*</span>{" "}
-                                    Required field
-                                </span>
-
-                                <div className="flex gap-2">
-                                    <Button
-                                        color="danger"
-                                        variant="light"
-                                        onPress={onClose}
+                                        }}
                                     >
-                                        Cancel
+                                        {itemHasVariant
+                                            ? "Add Variant"
+                                            : item.variants.length === 0
+                                              ? "Set Additional Details"
+                                              : "Edit Details"}
                                     </Button>
-                                    <Button color="success">Add Item</Button>
+                                )}
+                            </div>
+                            <div>
+                                {itemHasVariant && (
+                                    <>
+                                        <Divider className="my-4" />
+                                        <p className="text-base font-semibold mb-2">
+                                            Variant List{" "}
+                                            {item.variants.length
+                                                ? `(${item.variants.length})`
+                                                : ""}
+                                        </p>
+                                    </>
+                                )}
+
+                                <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+                                    <VariantList
+                                        itemHasVariant={itemHasVariant}
+                                        item={item}
+                                        setItem={setItem}
+                                    />
                                 </div>
-                            </ModalFooter>
-                        </>
-                    )}
+                            </div>
+                        </ModalBody>
+                        <ModalFooter className="justify-between items-center">
+                            <span className="text-sm text-default-500 italic">
+                                <span className="text-red-500">*</span> Required
+                                field
+                            </span>
+
+                            <div className="flex gap-2">
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={() => {
+                                        if (item.variants.length > 0)
+                                            onOpenWarning();
+                                        else onOpenChange(false);
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    color="success"
+                                    isDisabled={
+                                        itemHasVariant &&
+                                        item.variants.length < 2
+                                    }
+                                >
+                                    Add Item
+                                </Button>
+                            </div>
+                        </ModalFooter>
+                    </>
                 </ModalContent>
             </Modal>
             <AddVariantModal
@@ -211,6 +238,15 @@ export function AddItemModal({
                     }))
                 }
             />
+            {item.variants.length > 0 && (
+                <CloseWarningModal
+                    isOpenWarning={isOpenWarning}
+                    onOpenChangeWarning={onOpenChangeWarning}
+                    onConfirmClose={() => {
+                        onOpenChange(false);
+                    }}
+                />
+            )}
         </>
     );
 }
