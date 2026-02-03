@@ -1,4 +1,4 @@
-import { PhotoIcon, RightArrow, PlusIcon } from "@/components/icons";
+import { PhotoIcon } from "@/components/icons";
 import {
     Button,
     Modal,
@@ -6,7 +6,6 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    addToast,
     useDisclosure,
     Divider,
 } from "@heroui/react";
@@ -16,6 +15,7 @@ import { useState, useEffect } from "react";
 import { ItemDB } from "@/model/db/additem";
 import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/VariantList";
 import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/CloseWarningModal";
+import { AddVariantButton } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantButton";
 export function AddItemModal({
     itemHasVariant,
     isOpen,
@@ -129,39 +129,13 @@ export function AddItemModal({
 
                                 {(itemHasVariant ||
                                     item.variants.length === 0) && (
-                                    <Button
-                                        startContent={
-                                            itemHasVariant ? (
-                                                <PlusIcon className="w-5" />
-                                            ) : (
-                                                <RightArrow className="w-5" />
-                                            )
-                                        }
-                                        className="w-full"
-                                        color="success"
-                                        onPress={() => {
-                                            setIsSubmitted(true);
-                                            if (validate()) {
-                                                onOpenAddVar();
-                                            } else {
-                                                addToast({
-                                                    title: "Empty Required Fields.",
-                                                    description:
-                                                        "Please fill in all required fields.",
-                                                    timeout: 3000,
-                                                    color: "danger",
-                                                    shouldShowTimeoutProgress:
-                                                        true,
-                                                });
-                                            }
-                                        }}
-                                    >
-                                        {itemHasVariant
-                                            ? "Add Variant"
-                                            : item.variants.length === 0
-                                              ? "Set Additional Details"
-                                              : "Edit Details"}
-                                    </Button>
+                                    <AddVariantButton
+                                        itemHasVariant={itemHasVariant}
+                                        item={item}
+                                        onOpenAddVar={onOpenAddVar}
+                                        setIsSubmitted={setIsSubmitted}
+                                        validate={validate}
+                                    />
                                 )}
                             </div>
                             <div>
