@@ -7,12 +7,13 @@ import {
     ModalBody,
     ModalFooter,
     Divider,
-    DatePicker,
     Input,
     addToast,
 } from "@heroui/react";
 import { useState, useEffect } from "react";
-import { getLocalTimeZone, today } from "@internationalized/date";
+import { today } from "@internationalized/date";
+import { ItemStockDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemStockDetail";
+import { ItemPricingDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemPricingDetail";
 
 export function AddVariantModal({
     itemUnitOfMeasure,
@@ -20,19 +21,25 @@ export function AddVariantModal({
     isOpenAddVar,
     onOpenChangeAddVar,
     onAddVariant,
-    variant,
-    setVariant,
 }: {
     itemUnitOfMeasure: string;
     itemHasVariant: boolean;
     isOpenAddVar: boolean;
     onOpenChangeAddVar: (open: boolean) => void;
     onAddVariant: (variant: VariantDB) => void;
-    variant: VariantDB;
-    setVariant: React.Dispatch<React.SetStateAction<VariantDB>>;
 }) {
     const [isSubmitted, setIsSubmitted] = useState(false);
-
+    const [variant, setVariant] = useState<VariantDB>({
+        name: "",
+        stocks: undefined,
+        dateDelivered: undefined,
+        supplier: "",
+        totalBuyingPrice: undefined,
+        lowStockThreshold: undefined,
+        retailPrice: undefined,
+        wholesalePrice: undefined,
+        wholesaleMinQty: undefined,
+    });
     useEffect(() => {
         setIsSubmitted(false);
         if (isOpenAddVar) {
@@ -118,106 +125,12 @@ export function AddVariantModal({
                                 <span className="text-lg font-semibold">
                                     Set Item Stock Details
                                 </span>
-                                <div className="flex flex-row gap-2 items-center">
-                                    <Input
-                                        label="Acquired Stocks"
-                                        isRequired
-                                        type="number"
-                                        description="Enter the acquired stock quantity"
-                                        className="w-1/2"
-                                        endContent={
-                                            <div className="pointer-events-none flex items-center">
-                                                <span className="text-default-400 text-small">
-                                                    {itemUnitOfMeasure}
-                                                </span>
-                                            </div>
-                                        }
-                                        value={variant.stocks?.toString()}
-                                        onValueChange={(v) =>
-                                            setVariant({
-                                                ...variant,
-                                                stocks: Math.max(Number(v), 1),
-                                            })
-                                        }
-                                        isInvalid={
-                                            isSubmitted &&
-                                            (variant.stocks == null ||
-                                                variant.stocks == 0)
-                                        }
-                                        errorMessage="Acquired stock is required"
-                                    />
-                                    <DatePicker
-                                        className="w-1/2"
-                                        label="Date Delivered"
-                                        isRequired
-                                        defaultValue={today("UTC")}
-                                        description="Enter the date the stock was delivered"
-                                        onChange={(v) =>
-                                            setVariant({
-                                                ...variant,
-                                                dateDelivered: v
-                                                    ? v
-                                                          .toDate(
-                                                              getLocalTimeZone(),
-                                                          )
-                                                          .toISOString()
-                                                    : "",
-                                            })
-                                        }
-                                    />
-                                </div>
-
-                                <div className="flex flex-row gap-2 items-center">
-                                    <Input
-                                        label="Supplier"
-                                        isRequired
-                                        isClearable
-                                        description="Enter the supplier name"
-                                        className="w-1/2"
-                                        value={variant.supplier}
-                                        onValueChange={(v) =>
-                                            setVariant({
-                                                ...variant,
-                                                supplier: v,
-                                            })
-                                        }
-                                        isInvalid={
-                                            isSubmitted &&
-                                            !variant.supplier?.trim()
-                                        }
-                                        errorMessage="Supplier is required"
-                                    />
-                                    <Input
-                                        label="Total Buying Price"
-                                        type="number"
-                                        isRequired
-                                        description="Enter the total price on purchase"
-                                        className="w-1/2"
-                                        value={variant.totalBuyingPrice?.toString()}
-                                        onValueChange={(v) =>
-                                            setVariant({
-                                                ...variant,
-                                                totalBuyingPrice: Math.max(
-                                                    Number(v),
-                                                    1,
-                                                ),
-                                            })
-                                        }
-                                        startContent={
-                                            <div className="pointer-events-none flex items-center">
-                                                <span className="text-default-400 text-small">
-                                                    ₱
-                                                </span>
-                                            </div>
-                                        }
-                                        isInvalid={
-                                            isSubmitted &&
-                                            (variant.totalBuyingPrice == null ||
-                                                variant.totalBuyingPrice == 0)
-                                        }
-                                        errorMessage="Total buying price is required"
-                                    />
-                                </div>
+                                <ItemStockDetail
+                                    variant={variant}
+                                    setVariant={setVariant}
+                                    isSubmitted={isSubmitted}
+                                    itemUnitOfMeasure={itemUnitOfMeasure}
+                                />
                                 <Divider />
                                 <span className="text-lg font-semibold">
                                     For low stock notification
@@ -258,62 +171,11 @@ export function AddVariantModal({
                                 <span className="text-lg font-semibold">
                                     Set Item Pricing
                                 </span>
-                                <div className="flex flex-row gap-2 items-center">
-                                    <Input
-                                        label="Retail Price"
-                                        type="number"
-                                        isRequired
-                                        className="w-1/2"
-                                        startContent={
-                                            <div className="pointer-events-none flex items-center">
-                                                <span className="text-default-400 text-small">
-                                                    ₱
-                                                </span>
-                                            </div>
-                                        }
-                                        description="Enter the retail price of the item"
-                                        value={variant.retailPrice?.toString()}
-                                        onValueChange={(v) =>
-                                            setVariant({
-                                                ...variant,
-                                                retailPrice: Math.max(
-                                                    Number(v),
-                                                    1,
-                                                ),
-                                            })
-                                        }
-                                        isInvalid={
-                                            isSubmitted &&
-                                            (variant.retailPrice == null ||
-                                                variant.retailPrice == 0)
-                                        }
-                                        errorMessage="Retail price is required"
-                                    />
-                                    <Input
-                                        label="Wholesale Price"
-                                        type="number"
-                                        className="w-1/2"
-                                        startContent={
-                                            <div className="pointer-events-none flex items-center">
-                                                <span className="text-default-400 text-small">
-                                                    ₱
-                                                </span>
-                                            </div>
-                                        }
-                                        description="Enter the wholesale price of the item"
-                                        value={
-                                            variant.wholesalePrice
-                                                ? variant.wholesalePrice.toString()
-                                                : undefined
-                                        }
-                                        onValueChange={(v) =>
-                                            setVariant({
-                                                ...variant,
-                                                wholesalePrice: Number(v),
-                                            })
-                                        }
-                                    />
-                                </div>
+                                <ItemPricingDetail
+                                    variant={variant}
+                                    setVariant={setVariant}
+                                    isSubmitted={isSubmitted}
+                                />
                                 <Divider />
                                 <span className="text-lg font-semibold">
                                     Set Wholesale Minimum Quantity

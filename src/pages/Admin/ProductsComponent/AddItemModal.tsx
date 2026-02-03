@@ -6,19 +6,15 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    SelectItem,
-    Input,
     addToast,
     useDisclosure,
-    Card,
-    CardHeader,
-    CardBody,
     Divider,
 } from "@heroui/react";
-import ModalAwareSelect from "@/lib/ModalAwareSelect";
+import { ItemInitialDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemInitialDetail";
 import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModal";
 import { useState, useEffect } from "react";
-import { ItemDB, VariantDB } from "@/model/db/additem";
+import { ItemDB } from "@/model/db/additem";
+import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/VariantList";
 export function AddItemModal({
     itemHasVariant,
     isOpen,
@@ -43,17 +39,6 @@ export function AddItemModal({
         variants: [],
     });
 
-    const [variant, setVariant] = useState<VariantDB>({
-        name: "",
-        stocks: undefined,
-        dateDelivered: undefined,
-        supplier: "",
-        totalBuyingPrice: undefined,
-        lowStockThreshold: undefined,
-        retailPrice: undefined,
-        wholesalePrice: undefined,
-        wholesaleMinQty: undefined,
-    });
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     function validate(): boolean {
@@ -113,139 +98,11 @@ export function AddItemModal({
                                 <span className="text-lg font-semibold">
                                     Set Item Details
                                 </span>
-                                <div className="flex flex-row gap-2 items-center">
-                                    <Input
-                                        label="Item Name"
-                                        className="w-1/2"
-                                        isRequired
-                                        isClearable
-                                        description="Enter the name of the item"
-                                        value={item.name}
-                                        onValueChange={(value) =>
-                                            setItem({
-                                                ...item,
-                                                name: value,
-                                            })
-                                        }
-                                        isInvalid={
-                                            isSubmitted && !item.name.trim()
-                                        }
-                                        errorMessage="Item Name can't be empty"
-                                    />
-                                    <ModalAwareSelect
-                                        isRequired
-                                        label="Item Category"
-                                        isClearable
-                                        className="w-1/2"
-                                        description="Select the category of the item"
-                                        selectedKeys={
-                                            item.categoryId
-                                                ? [item.categoryId]
-                                                : []
-                                        }
-                                        onSelectionChange={(keys) => {
-                                            const key = Array.from(keys)[0] as
-                                                | string
-                                                | undefined;
-                                            setItem({
-                                                ...item,
-                                                categoryId: key ?? "",
-                                            });
-                                        }}
-                                        isInvalid={
-                                            isSubmitted && !item.categoryId
-                                        }
-                                        errorMessage="Item Category can't be empty"
-                                    >
-                                        <SelectItem key="dcee3d7a-fd90-4ab8-a6cf-445a482b79ec">
-                                            Vegetable
-                                        </SelectItem>
-                                        <SelectItem key="2a70992d-d42d-4f84-8da0-a3c67858c9fa">
-                                            Fruit
-                                        </SelectItem>
-                                        <SelectItem key="d57fbbf4-1b78-4d79-9414-f3df92b32174">
-                                            Grain
-                                        </SelectItem>
-                                        <SelectItem key="38322c8d-ec86-45e5-9d04-2a2012259ba9">
-                                            Poultry
-                                        </SelectItem>
-                                        <SelectItem key="257eaa6d-3549-40bc-b2ce-733258b37b0f">
-                                            Spice
-                                        </SelectItem>
-                                    </ModalAwareSelect>
-                                </div>
-                                <Input
-                                    key="2"
-                                    label="Item Short Description"
-                                    className="w-full"
-                                    type="text"
-                                    isClearable
-                                    description="Enter the optional short description of the item"
-                                    value={
-                                        item.shortDescription
-                                            ? item.shortDescription
-                                            : ""
-                                    }
-                                    onValueChange={(value) =>
-                                        setItem({
-                                            ...item,
-                                            shortDescription: value,
-                                        })
-                                    }
+                                <ItemInitialDetail
+                                    item={item}
+                                    setItem={setItem}
+                                    isSubmitted={isSubmitted}
                                 />
-                                <div className="flex flex-row gap-2 items-center">
-                                    <Input
-                                        isRequired
-                                        label="Unit of Measure"
-                                        className="w-1/2"
-                                        isClearable
-                                        description="by kg, lbs, piece, etc."
-                                        value={item.unitOfMeasure}
-                                        onValueChange={(value) =>
-                                            setItem({
-                                                ...item,
-                                                unitOfMeasure: value,
-                                            })
-                                        }
-                                        isInvalid={
-                                            isSubmitted &&
-                                            !item.unitOfMeasure.trim()
-                                        }
-                                        errorMessage="Unit of Measure can't be empty"
-                                    />
-
-                                    <ModalAwareSelect
-                                        label="Item Tag"
-                                        isClearable
-                                        className="w-1/2"
-                                        description="Select an optional short promotional tag"
-                                        selectedKeys={
-                                            item.tagId ? [item.tagId] : []
-                                        }
-                                        onSelectionChange={(keys) => {
-                                            const key = Array.from(keys)[0] as
-                                                | string
-                                                | undefined;
-                                            setItem({
-                                                ...item,
-                                                tagId: key ?? "",
-                                            });
-                                        }}
-                                    >
-                                        <SelectItem key="f95d0a99-d212-4323-95c6-dedfbdd51079">
-                                            Restocked
-                                        </SelectItem>
-                                        <SelectItem key="a80485a4-a437-4160-bb5e-5b5b520d7ab8">
-                                            Price Drop
-                                        </SelectItem>
-                                        <SelectItem key="975a7cc0-620d-447e-b8eb-626b3da177be">
-                                            Fresh
-                                        </SelectItem>
-                                        <SelectItem key="6ecbbca0-29d6-4dbe-9825-f4b4dd8ae831">
-                                            Discounted
-                                        </SelectItem>
-                                    </ModalAwareSelect>
-                                </div>
 
                                 <div className="flex flex-col gap-3 mt-2">
                                     <Button
@@ -296,106 +153,10 @@ export function AddItemModal({
                                         Variant List
                                     </p>
                                     <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
-                                        {item.variants.length === 0 ? (
-                                            <p className="text-sm text-default-400 italic text-center py-4">
-                                                No variants added yet.
-                                            </p>
-                                        ) : (
-                                            item.variants.map((v, index) => (
-                                                <Card
-                                                    key={index}
-                                                    className="shadow-sm"
-                                                >
-                                                    <CardHeader className="flex flex-row justify-between items-start">
-                                                        <div className="flex flex-col">
-                                                            <h4 className="text-large font-bold">
-                                                                {v.name ||
-                                                                    "Default Variant"}
-                                                            </h4>
-                                                            <p className="text-tiny text-default-400">
-                                                                Variant{" "}
-                                                                {index + 1}
-                                                            </p>
-                                                        </div>
-                                                        <Button
-                                                            isIconOnly
-                                                            color="danger"
-                                                            variant="light"
-                                                            size="sm"
-                                                            onPress={() => {
-                                                                setItem(
-                                                                    (prev) => ({
-                                                                        ...prev,
-                                                                        variants:
-                                                                            prev.variants.filter(
-                                                                                (
-                                                                                    _,
-                                                                                    i,
-                                                                                ) =>
-                                                                                    i !==
-                                                                                    index,
-                                                                            ),
-                                                                    }),
-                                                                );
-                                                            }}
-                                                        >
-                                                            ✕
-                                                        </Button>
-                                                    </CardHeader>
-                                                    <Divider />
-                                                    <CardBody className="py-2 text-sm grid grid-cols-2 gap-x-4 gap-y-1">
-                                                        <div className="flex justify-between">
-                                                            <span className="text-default-500">
-                                                                Stocks:
-                                                            </span>
-                                                            <span className="font-medium">
-                                                                {v.stocks}{" "}
-                                                                {
-                                                                    item.unitOfMeasure
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex justify-between">
-                                                            <span className="text-default-500">
-                                                                Retail Price:
-                                                            </span>
-                                                            <span className="font-medium">
-                                                                ₱
-                                                                {v.retailPrice?.toLocaleString()}
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex justify-between">
-                                                            <span className="text-default-500">
-                                                                Low Stock Alert:
-                                                            </span>
-                                                            <span className="font-medium">
-                                                                {
-                                                                    v.lowStockThreshold
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex justify-between">
-                                                            <span className="text-default-500">
-                                                                Wholesale Price:
-                                                            </span>
-                                                            <span className="font-medium">
-                                                                {v.wholesalePrice
-                                                                    ? `₱${v.wholesalePrice.toLocaleString()}`
-                                                                    : "N/A"}
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex justify-between col-span-2">
-                                                            <span className="text-default-500">
-                                                                Supplier:
-                                                            </span>
-                                                            <span className="font-medium truncate ml-2">
-                                                                {v.supplier}
-                                                            </span>
-                                                        </div>
-                                                    </CardBody>
-                                                </Card>
-                                            ))
-                                        )}
+                                        <VariantList
+                                            item={item}
+                                            setItem={setItem}
+                                        />
                                     </div>
                                 </div>
                             </ModalBody>
@@ -439,8 +200,6 @@ export function AddItemModal({
                         ],
                     }))
                 }
-                variant={variant}
-                setVariant={setVariant}
             />
         </>
     );
