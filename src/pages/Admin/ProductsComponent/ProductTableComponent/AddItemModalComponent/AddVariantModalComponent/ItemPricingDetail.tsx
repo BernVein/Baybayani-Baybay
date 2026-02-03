@@ -25,7 +25,7 @@ export function ItemPricingDetail({
                             </span>
                         </div>
                     }
-                    description="Enter the retail price of the item"
+                    description="Starting price"
                     value={variant.retailPrice?.toString()}
                     onValueChange={(v) =>
                         setVariant({
@@ -51,7 +51,7 @@ export function ItemPricingDetail({
                             </span>
                         </div>
                     }
-                    description="Enter the wholesale price of the item"
+                    description="For bulk purchase"
                     value={
                         variant.wholesalePrice
                             ? variant.wholesalePrice.toString()

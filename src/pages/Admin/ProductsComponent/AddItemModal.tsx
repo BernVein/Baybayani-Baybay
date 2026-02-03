@@ -1,4 +1,4 @@
-import { PhotoIcon, RightArrow } from "@/components/icons";
+import { PhotoIcon, RightArrow, PlusIcon } from "@/components/icons";
 import {
     Button,
     Modal,
@@ -118,7 +118,11 @@ export function AddItemModal({
                                         item.variants.length === 0) && (
                                         <Button
                                             startContent={
-                                                <RightArrow className="w-5" />
+                                                itemHasVariant ? (
+                                                    <PlusIcon className="w-5" />
+                                                ) : (
+                                                    <RightArrow className="w-5" />
+                                                )
                                             }
                                             className="w-full"
                                             color="success"
@@ -148,12 +152,18 @@ export function AddItemModal({
                                     )}
                                 </div>
                                 <div>
-                                    <Divider className="my-4" />
-                                    <p className="text-base font-semibold mb-2">
-                                        Variant List
-                                    </p>
+                                    {itemHasVariant && (
+                                        <>
+                                            <Divider className="my-4" />
+                                            <p className="text-base font-semibold mb-2">
+                                                Variant List
+                                            </p>
+                                        </>
+                                    )}
+
                                     <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
                                         <VariantList
+                                            itemHasVariant={itemHasVariant}
                                             item={item}
                                             setItem={setItem}
                                         />

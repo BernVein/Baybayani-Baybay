@@ -42,19 +42,17 @@ export function AddVariantModal({
     });
     useEffect(() => {
         setIsSubmitted(false);
-        if (isOpenAddVar) {
-            setVariant({
-                name: "",
-                stocks: undefined,
-                dateDelivered: today("UTC").toString(),
-                supplier: "",
-                totalBuyingPrice: undefined,
-                lowStockThreshold: undefined,
-                retailPrice: undefined,
-                wholesalePrice: undefined,
-                wholesaleMinQty: undefined,
-            });
-        }
+        setVariant({
+            name: "",
+            stocks: undefined,
+            dateDelivered: today("UTC").toString(),
+            supplier: "",
+            totalBuyingPrice: undefined,
+            lowStockThreshold: undefined,
+            retailPrice: undefined,
+            wholesalePrice: undefined,
+            wholesaleMinQty: undefined,
+        });
     }, [isOpenAddVar]);
 
     function validateVariant(): boolean {
@@ -105,7 +103,7 @@ export function AddVariantModal({
                                             label="Variant Name"
                                             isRequired
                                             isClearable
-                                            description="Enter the variant name"
+                                            description="For variant name display"
                                             value={variant.name}
                                             onValueChange={(v) =>
                                                 setVariant({

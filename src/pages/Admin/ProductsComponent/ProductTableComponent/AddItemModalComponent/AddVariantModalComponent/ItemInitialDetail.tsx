@@ -19,7 +19,7 @@ export function ItemInitialDetail({
                     className="w-1/2"
                     isRequired
                     isClearable
-                    description="Enter the name of the item"
+                    description="For customer item display"
                     value={item.name}
                     onValueChange={(value) =>
                         setItem({
@@ -35,7 +35,7 @@ export function ItemInitialDetail({
                     label="Item Category"
                     isClearable
                     className="w-1/2"
-                    description="Select the category of the item"
+                    description="For item filtering"
                     selectedKeys={item.categoryId ? [item.categoryId] : []}
                     onSelectionChange={(keys) => {
                         const key = Array.from(keys)[0] as string | undefined;
@@ -65,11 +65,11 @@ export function ItemInitialDetail({
                 </ModalAwareSelect>
             </div>
             <Input
-                label="Item Short Description"
+                label="Item description"
                 className="w-full"
                 type="text"
                 isClearable
-                description="Enter the optional short description of the item"
+                description="For customer item description display"
                 value={item.shortDescription ? item.shortDescription : ""}
                 onValueChange={(value) =>
                     setItem({
@@ -100,7 +100,7 @@ export function ItemInitialDetail({
                     label="Item Tag"
                     isClearable
                     className="w-1/2"
-                    description="Select an optional short promotional tag"
+                    description="For promotional"
                     selectedKeys={item.tagId ? [item.tagId] : []}
                     onSelectionChange={(keys) => {
                         const key = Array.from(keys)[0] as string | undefined;

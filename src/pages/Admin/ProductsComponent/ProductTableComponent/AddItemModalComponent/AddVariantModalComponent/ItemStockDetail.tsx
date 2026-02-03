@@ -20,7 +20,7 @@ export function ItemStockDetail({
                     label="Acquired Stocks"
                     isRequired
                     type="number"
-                    description="Enter the acquired stock quantity"
+                    description="For stock display"
                     className="w-1/2"
                     endContent={
                         <div className="pointer-events-none flex items-center">
@@ -47,7 +47,7 @@ export function ItemStockDetail({
                     label="Date Delivered"
                     isRequired
                     defaultValue={today("UTC")}
-                    description="Enter the date the stock was delivered"
+                    description="Date the stock was acquired"
                     onChange={(v) =>
                         setVariant({
                             ...variant,
@@ -64,13 +64,13 @@ export function ItemStockDetail({
                     label="Supplier"
                     isRequired
                     isClearable
-                    description="Enter the supplier name"
+                    description="Stock supplier name"
                     className="w-1/2"
                     value={variant.supplier}
                     onValueChange={(v) =>
                         setVariant({
                             ...variant,
-                            supplier: v,
+                            supplier: String(v),
                         })
                     }
                     isInvalid={isSubmitted && !variant.supplier?.trim()}
@@ -80,7 +80,7 @@ export function ItemStockDetail({
                     label="Total Buying Price"
                     type="number"
                     isRequired
-                    description="Enter the total price on purchase"
+                    description="Total ₱ on purchase"
                     className="w-1/2"
                     value={variant.totalBuyingPrice?.toString()}
                     onValueChange={(v) =>
