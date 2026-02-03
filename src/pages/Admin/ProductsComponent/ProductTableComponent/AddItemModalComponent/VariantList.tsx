@@ -1,6 +1,15 @@
 import { PencilIcon, TrashIcon } from "@/components/icons";
 import { ItemDB } from "@/model/db/additem";
-import { Card, CardHeader, CardBody, Divider, Button } from "@heroui/react";
+import {
+    Card,
+    CardHeader,
+    CardBody,
+    Divider,
+    Button,
+    useDisclosure,
+} from "@heroui/react";
+import { useState } from "react";
+import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/VariantListComponent/DeleteVariantModal";
 
 export function VariantList({
     itemHasVariant,
@@ -11,6 +20,15 @@ export function VariantList({
     item: ItemDB;
     setItem: React.Dispatch<React.SetStateAction<ItemDB>>;
 }) {
+    const {
+        isOpen: isOpenDeleteVar,
+        onOpen: onOpenDeleteVar,
+        onOpenChange: onOpenChangeDeleteVar,
+    } = useDisclosure();
+    const [selectedVarIndex, setSelectedVarIndex] = useState<number | null>(
+        null,
+    );
+    const [selectedVarName, setSelectedVarName] = useState<string | null>(null);
     return (
         <>
             {item.variants.length === 0 && itemHasVariant ? (
@@ -40,24 +58,21 @@ export function VariantList({
                                     isIconOnly
                                     className="ml-auto"
                                     size="sm"
-                                    onPress={() => {
-                                        setItem((prev) => ({
-                                            ...prev,
-                                            variants: prev.variants.filter(
-                                                (_, i) => i !== index,
-                                            ),
-                                        }));
-                                    }}
                                     startContent={
                                         <PencilIcon className="w-5" />
                                     }
                                 />
                                 <Button
                                     isIconOnly
-                                    color="danger"
                                     className="ml-auto"
                                     size="sm"
+                                    color="danger"
                                     startContent={<TrashIcon className="w-5" />}
+                                    onPress={() => {
+                                        setSelectedVarIndex(index);
+                                        setSelectedVarName(v.name ?? null);
+                                        onOpenDeleteVar();
+                                    }}
                                 />
                             </div>
                         </CardHeader>
@@ -184,6 +199,15 @@ export function VariantList({
                     </Card>
                 ))
             )}
+            <DeleteVariantModal
+                itemHasVariant={itemHasVariant}
+                isOpenDeleteVar={isOpenDeleteVar}
+                onOpenChangeDeleteVar={onOpenChangeDeleteVar}
+                selectedVarIndex={selectedVarIndex}
+                selectedVarName={selectedVarName}
+                setSelectedVarIndex={setSelectedVarIndex}
+                setItem={setItem}
+            />
         </>
     );
 }

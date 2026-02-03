@@ -146,7 +146,7 @@ export function AddItemModal({
                                             {itemHasVariant
                                                 ? "Add Variant"
                                                 : item.variants.length === 0
-                                                  ? "Proceed"
+                                                  ? "Set Additional Details"
                                                   : "Edit Details"}
                                         </Button>
                                     )}
