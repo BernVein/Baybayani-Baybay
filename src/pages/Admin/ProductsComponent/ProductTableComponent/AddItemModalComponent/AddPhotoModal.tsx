@@ -42,9 +42,7 @@ export function AddPhotoModal({
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        // Here you can upload `images` with your own API logic.
-        // e.g. const formData = new FormData(); images.forEach(...)
-        console.log("Uploading images:", images);
+        console.log(images);
     };
 
     return (
@@ -108,9 +106,10 @@ export function AddPhotoModal({
                                                     onPress={() =>
                                                         handleRemoveImage(index)
                                                     }
-                                                >
-                                                    <TrashIcon className="w-5" />
-                                                </Button>
+                                                    startContent={
+                                                        <TrashIcon className="w-5" />
+                                                    }
+                                                />
                                             )}
                                         </div>
                                     ))}
@@ -118,11 +117,12 @@ export function AddPhotoModal({
                             </ModalBody>
 
                             <ModalFooter>
-                                <Button variant="flat" onPress={onClose}>
-                                    Cancel
-                                </Button>
-                                <Button color="success" type="submit">
-                                    Add
+                                <Button
+                                    color="success"
+                                    type="submit"
+                                    onPress={onClose}
+                                >
+                                    Confirm
                                 </Button>
                             </ModalFooter>
                         </form>

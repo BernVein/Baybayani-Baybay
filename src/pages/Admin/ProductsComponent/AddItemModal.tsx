@@ -62,10 +62,13 @@ export function AddItemModal({
         null,
     ]);
 
+    const selectedCount = images.filter(Boolean).length;
+
     function validate(): boolean {
         if (!item.name.trim()) return false;
         if (!item.categoryId) return false;
         if (!item.unitOfMeasure.trim()) return false;
+        if (selectedCount === 0) return false;
         return true;
     }
 
@@ -79,6 +82,7 @@ export function AddItemModal({
             tagId: "",
             variants: [],
         });
+        setImages([null, null, null, null]);
     }, [isOpen]);
 
     return (
@@ -136,10 +140,21 @@ export function AddItemModal({
                             <div className="flex flex-col gap-3 mt-2">
                                 <Button
                                     startContent={<PhotoIcon className="w-5" />}
-                                    className="w-full"
+                                    className="w-full gap-1"
                                     onPress={onOpenPhoto}
+                                    color={
+                                        isSubmitted && selectedCount === 0
+                                            ? "danger"
+                                            : "default"
+                                    }
                                 >
-                                    Add Photos
+                                    {isSubmitted && selectedCount === 0
+                                        ? "Photo is required"
+                                        : "Add Photos"}{" "}
+                                    {selectedCount > 0 && `(${selectedCount})`}
+                                    {isSubmitted && selectedCount === 0 && (
+                                        <span className="text-red-500">*</span>
+                                    )}
                                 </Button>
 
                                 {(itemHasVariant ||

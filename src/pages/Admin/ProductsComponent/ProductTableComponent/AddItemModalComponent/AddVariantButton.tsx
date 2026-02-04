@@ -34,7 +34,8 @@ export function AddVariantButton({
                     } else {
                         addToast({
                             title: "Empty Required Fields.",
-                            description: "Please fill in all required fields.",
+                            description:
+                                "Please fill in all required fields to proceed.",
                             timeout: 3000,
                             color: "danger",
                             shouldShowTimeoutProgress: true,
