@@ -222,38 +222,44 @@ export function AddVariantModal({
                                 </div>
                             </>
                         </ModalBody>
-                        <ModalFooter>
-                            <Button
-                                color="danger"
-                                variant="light"
-                                onPress={onClose}
-                            >
-                                Close
-                            </Button>
-                            <Button
-                                color="success"
-                                onPress={() => {
-                                    setIsSubmitted(true);
-                                    if (validateVariant()) {
-                                        onAddVariant(variant);
-                                        onClose();
-                                        setIsSubmitted(false);
-                                    } else {
-                                        addToast({
-                                            title: "Empty Required Fields.",
-                                            description:
-                                                "Please fill in all required fields.",
-                                            timeout: 3000,
-                                            color: "danger",
-                                            shouldShowTimeoutProgress: true,
-                                        });
-                                    }
-                                }}
-                            >
-                                {itemHasVariant
-                                    ? "Add Variant"
-                                    : "Save Details"}
-                            </Button>
+                        <ModalFooter className="justify-between items-center">
+                            <span className="text-sm text-default-500 italic">
+                                <span className="text-red-500">*</span> Required
+                                field
+                            </span>
+                            <div className="flex gap-2">
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    color="success"
+                                    onPress={() => {
+                                        setIsSubmitted(true);
+                                        if (validateVariant()) {
+                                            onAddVariant(variant);
+                                            onClose();
+                                            setIsSubmitted(false);
+                                        } else {
+                                            addToast({
+                                                title: "Empty Required Fields.",
+                                                description:
+                                                    "Please fill in all required fields.",
+                                                timeout: 3000,
+                                                color: "danger",
+                                                shouldShowTimeoutProgress: true,
+                                            });
+                                        }
+                                    }}
+                                >
+                                    {itemHasVariant
+                                        ? "Add Variant"
+                                        : "Save Details"}
+                                </Button>
+                            </div>
                         </ModalFooter>
                     </>
                 )}
