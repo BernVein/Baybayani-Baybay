@@ -10,12 +10,15 @@ import {
     ListboxItem,
     ListboxSection,
     useDisclosure,
+    Skeleton,
 } from "@heroui/react";
 import { PencilIcon, PlusIcon, TrashIcon } from "@/components/icons";
 import { EditCatModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/EditCatModal";
 import { DeleteCatModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/DeleteCatModal";
 import { EditTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/EditTagModal";
 import { DeleteTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/DeleteTagModal";
+import { useFetchCategories } from "@/data/supabase/useFetchCategories";
+import { useFetchTags } from "@/data/supabase/useFetchTags";
 
 export function ManageCatTagModal({
     isOpen,
@@ -44,6 +47,20 @@ export function ManageCatTagModal({
         onOpen: onOpenDeleteTag,
         onOpenChange: onOpenChangeDeleteTag,
     } = useDisclosure();
+
+    const { categories, loading: catLoading } = useFetchCategories();
+    const { tags, loading: tagLoading } = useFetchTags();
+
+    const ListSkeleton = () => (
+        <div className="flex justify-between items-center w-full py-1">
+            <Skeleton className="h-4 w-24 rounded-lg" />
+            <div className="flex gap-2">
+                <Skeleton className="h-6 w-6 rounded-md" />
+                <Skeleton className="h-6 w-6 rounded-md" />
+            </div>
+        </div>
+    );
+
     return (
         <>
             <Modal
@@ -74,162 +91,57 @@ export function ManageCatTagModal({
                                     </div>
                                     <Listbox aria-label="Actions">
                                         <ListboxSection title="Categories">
-                                            <ListboxItem
-                                                key="1"
-                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                            >
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span>Vegetable</span>
-                                                    <div className="flex flex-row items-center">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenEditCat
-                                                            }
-                                                        >
-                                                            <PencilIcon className="w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            color="danger"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenDeleteCat
-                                                            }
-                                                        >
-                                                            <TrashIcon className="w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </ListboxItem>
-
-                                            <ListboxItem
-                                                key="2"
-                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                            >
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span>Grain</span>
-                                                    <div className="flex flex-row items-center">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenEditCat
-                                                            }
-                                                        >
-                                                            <PencilIcon className="w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            color="danger"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenDeleteCat
-                                                            }
-                                                        >
-                                                            <TrashIcon className="w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </ListboxItem>
-                                            <ListboxItem
-                                                key="3"
-                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                            >
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span>Fruit</span>
-                                                    <div className="flex flex-row items-center">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenEditCat
-                                                            }
-                                                        >
-                                                            <PencilIcon className="w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            color="danger"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenDeleteCat
-                                                            }
-                                                        >
-                                                            <TrashIcon className="w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </ListboxItem>
-                                            <ListboxItem
-                                                key="4"
-                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                            >
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span>Poultry</span>
-                                                    <div className="flex flex-row items-center">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenEditCat
-                                                            }
-                                                        >
-                                                            <PencilIcon className="w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            color="danger"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenDeleteCat
-                                                            }
-                                                        >
-                                                            <TrashIcon className="w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </ListboxItem>
-                                            <ListboxItem
-                                                key="5"
-                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                            >
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span>Spice</span>
-                                                    <div className="flex flex-row items-center">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenEditCat
-                                                            }
-                                                        >
-                                                            <PencilIcon className="w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            color="danger"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenDeleteCat
-                                                            }
-                                                        >
-                                                            <TrashIcon className="w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </ListboxItem>
+                                            {catLoading ? (
+                                                <>
+                                                    <ListboxItem key="sk1">
+                                                        <ListSkeleton />
+                                                    </ListboxItem>
+                                                    <ListboxItem key="sk2">
+                                                        <ListSkeleton />
+                                                    </ListboxItem>
+                                                    <ListboxItem key="sk3">
+                                                        <ListSkeleton />
+                                                    </ListboxItem>
+                                                </>
+                                            ) : (
+                                                categories.map((cat) => (
+                                                    <ListboxItem
+                                                        key={cat.category_id}
+                                                        className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                                    >
+                                                        <div className="flex justify-between items-center w-full">
+                                                            <span>
+                                                                {
+                                                                    cat.category_name
+                                                                }
+                                                            </span>
+                                                            <div className="flex flex-row items-center">
+                                                                <Button
+                                                                    isIconOnly
+                                                                    size="sm"
+                                                                    variant="light"
+                                                                    onPress={
+                                                                        onOpenEditCat
+                                                                    }
+                                                                >
+                                                                    <PencilIcon className="w-4" />
+                                                                </Button>
+                                                                <Button
+                                                                    isIconOnly
+                                                                    size="sm"
+                                                                    color="danger"
+                                                                    variant="light"
+                                                                    onPress={
+                                                                        onOpenDeleteCat
+                                                                    }
+                                                                >
+                                                                    <TrashIcon className="w-4" />
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                    </ListboxItem>
+                                                ))
+                                            )}
                                         </ListboxSection>
                                     </Listbox>
                                 </div>
@@ -248,69 +160,52 @@ export function ManageCatTagModal({
                                     </div>
                                     <Listbox aria-label="Actions">
                                         <ListboxSection title="Tags">
-                                            <ListboxItem
-                                                key="1"
-                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                            >
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span>Fresh</span>
-                                                    <div className="flex flex-row items-center">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenEditTag
-                                                            }
-                                                        >
-                                                            <PencilIcon className="w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            color="danger"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenDeleteTag
-                                                            }
-                                                        >
-                                                            <TrashIcon className="w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </ListboxItem>
-
-                                            <ListboxItem
-                                                key="2"
-                                                className="hover:bg-transparent data-[hover=true]:bg-transparent"
-                                            >
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span>Price Drop</span>
-                                                    <div className="flex flex-row items-center">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenEditTag
-                                                            }
-                                                        >
-                                                            <PencilIcon className="w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            color="danger"
-                                                            variant="light"
-                                                            onPress={
-                                                                onOpenDeleteTag
-                                                            }
-                                                        >
-                                                            <TrashIcon className="w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </ListboxItem>
+                                            {tagLoading ? (
+                                                <>
+                                                    <ListboxItem key="tsk1">
+                                                        <ListSkeleton />
+                                                    </ListboxItem>
+                                                    <ListboxItem key="tsk2">
+                                                        <ListSkeleton />
+                                                    </ListboxItem>
+                                                </>
+                                            ) : (
+                                                tags.map((tag) => (
+                                                    <ListboxItem
+                                                        key={tag.tag_id}
+                                                        className="hover:bg-transparent data-[hover=true]:bg-transparent"
+                                                    >
+                                                        <div className="flex justify-between items-center w-full">
+                                                            <span>
+                                                                {tag.tag_name}
+                                                            </span>
+                                                            <div className="flex flex-row items-center">
+                                                                <Button
+                                                                    isIconOnly
+                                                                    size="sm"
+                                                                    variant="light"
+                                                                    onPress={
+                                                                        onOpenEditTag
+                                                                    }
+                                                                >
+                                                                    <PencilIcon className="w-4" />
+                                                                </Button>
+                                                                <Button
+                                                                    isIconOnly
+                                                                    size="sm"
+                                                                    color="danger"
+                                                                    variant="light"
+                                                                    onPress={
+                                                                        onOpenDeleteTag
+                                                                    }
+                                                                >
+                                                                    <TrashIcon className="w-4" />
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                    </ListboxItem>
+                                                ))
+                                            )}
                                         </ListboxSection>
                                     </Listbox>
                                 </div>
