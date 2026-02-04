@@ -41,7 +41,9 @@ export function ItemInitialDetail({
                         catLoading ? (
                             <div className="flex flex-row gap-2 items-center">
                                 <Spinner color="success" size="sm" />
-                                <span>Fetching categories...</span>
+                                <span className="sm:text-base text-xs">
+                                    Fetching categories...
+                                </span>
                             </div>
                         ) : (
                             "Item Category"
@@ -106,7 +108,9 @@ export function ItemInitialDetail({
                         tagLoading ? (
                             <div className="flex flex-row gap-2 items-center">
                                 <Spinner color="success" size="sm" />
-                                <span>Fetching tags...</span>
+                                <span className="sm:text-base text-xs">
+                                    Fetching tags...
+                                </span>
                             </div>
                         ) : (
                             "Item Tag"
