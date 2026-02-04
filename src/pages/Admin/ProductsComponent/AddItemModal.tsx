@@ -16,6 +16,7 @@ import { ItemDB } from "@/model/db/additem";
 import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/VariantList";
 import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/CloseWarningModal";
 import { AddVariantButton } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantButton";
+import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddPhotoModal";
 export function AddItemModal({
     itemHasVariant,
     isOpen,
@@ -35,6 +36,12 @@ export function AddItemModal({
         isOpen: isOpenWarning,
         onOpen: onOpenWarning,
         onOpenChange: onOpenChangeWarning,
+    } = useDisclosure();
+
+    const {
+        isOpen: isOpenPhoto,
+        onOpen: onOpenPhoto,
+        onOpenChange: onOpenChangePhoto,
     } = useDisclosure();
 
     const [item, setItem] = useState<ItemDB>({
@@ -123,6 +130,7 @@ export function AddItemModal({
                                 <Button
                                     startContent={<PhotoIcon className="w-5" />}
                                     className="w-full"
+                                    onPress={onOpenPhoto}
                                 >
                                     Add Photos
                                 </Button>
@@ -221,6 +229,10 @@ export function AddItemModal({
                     }}
                 />
             )}
+            <AddPhotoModal
+                isOpen={isOpenPhoto}
+                onOpenChange={onOpenChangePhoto}
+            />
         </>
     );
 }
