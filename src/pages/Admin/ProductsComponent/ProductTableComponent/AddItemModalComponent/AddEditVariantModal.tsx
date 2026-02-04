@@ -15,18 +15,20 @@ import { today } from "@internationalized/date";
 import { ItemStockDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemStockDetail";
 import { ItemPricingDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemPricingDetail";
 
-export function AddVariantModal({
+export function AddEditVariantModal({
     itemUnitOfMeasure,
     itemHasVariant,
     isOpenAddVar,
     onOpenChangeAddVar,
-    onAddVariant,
+    onAddEditVariant,
+    defaultVariant,
 }: {
     itemUnitOfMeasure: string;
     itemHasVariant: boolean;
     isOpenAddVar: boolean;
     onOpenChangeAddVar: (open: boolean) => void;
-    onAddVariant: (variant: VariantDB) => void;
+    onAddEditVariant: (variant: VariantDB) => void;
+    defaultVariant?: VariantDB | null;
 }) {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [variant, setVariant] = useState<VariantDB>({
@@ -40,20 +42,22 @@ export function AddVariantModal({
         wholesalePrice: undefined,
         wholesaleMinQty: undefined,
     });
+
     useEffect(() => {
         setIsSubmitted(false);
         setVariant({
-            name: "",
-            stocks: undefined,
-            dateDelivered: today("UTC").toString(),
-            supplier: "",
-            totalBuyingPrice: undefined,
-            lowStockThreshold: undefined,
-            retailPrice: undefined,
-            wholesalePrice: undefined,
-            wholesaleMinQty: undefined,
+            name: defaultVariant?.name ?? "",
+            stocks: defaultVariant?.stocks,
+            dateDelivered:
+                defaultVariant?.dateDelivered ?? today("UTC").toString(),
+            supplier: defaultVariant?.supplier ?? "",
+            totalBuyingPrice: defaultVariant?.totalBuyingPrice,
+            lowStockThreshold: defaultVariant?.lowStockThreshold,
+            retailPrice: defaultVariant?.retailPrice,
+            wholesalePrice: defaultVariant?.wholesalePrice,
+            wholesaleMinQty: defaultVariant?.wholesaleMinQty,
         });
-    }, [isOpenAddVar]);
+    }, [isOpenAddVar, defaultVariant]);
 
     function validateVariant(): boolean {
         if (itemHasVariant && !variant.name?.trim()) return false;
@@ -240,7 +244,7 @@ export function AddVariantModal({
                                     onPress={() => {
                                         setIsSubmitted(true);
                                         if (validateVariant()) {
-                                            onAddVariant(variant);
+                                            onAddEditVariant(variant);
                                             onClose();
                                             setIsSubmitted(false);
                                         } else {
@@ -255,9 +259,11 @@ export function AddVariantModal({
                                         }
                                     }}
                                 >
-                                    {itemHasVariant
+                                    {itemHasVariant && !defaultVariant
                                         ? "Add Variant"
-                                        : "Save Details"}
+                                        : defaultVariant
+                                          ? "Update Details"
+                                          : "Save Details"}
                                 </Button>
                             </div>
                         </ModalFooter>

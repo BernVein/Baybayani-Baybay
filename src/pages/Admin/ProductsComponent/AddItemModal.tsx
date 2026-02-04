@@ -10,7 +10,7 @@ import {
     Divider,
 } from "@heroui/react";
 import { ItemInitialDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemInitialDetail";
-import { AddVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModal";
+import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddEditVariantModal";
 import { useState, useEffect } from "react";
 import { ItemDB } from "@/model/db/additem";
 import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/VariantList";
@@ -242,12 +242,12 @@ export function AddItemModal({
                     </>
                 </ModalContent>
             </Modal>
-            <AddVariantModal
+            <AddEditVariantModal
                 isOpenAddVar={isOpenAddVar}
                 onOpenChangeAddVar={onOpenChangeAddVar}
                 itemHasVariant={itemHasVariant}
                 itemUnitOfMeasure={item.unitOfMeasure}
-                onAddVariant={(newVariant) =>
+                onAddEditVariant={(newVariant) =>
                     setItem((prev) => ({
                         ...prev,
                         variants: [
@@ -261,6 +261,7 @@ export function AddItemModal({
                         ],
                     }))
                 }
+                defaultVariant={null}
             />
             <CloseWarningModal
                 isOpenWarning={isOpenWarning}

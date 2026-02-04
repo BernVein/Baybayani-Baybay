@@ -10,6 +10,7 @@ import {
 } from "@heroui/react";
 import { useState } from "react";
 import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/VariantListComponent/DeleteVariantModal";
+import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddEditVariantModal";
 
 export function VariantList({
     itemHasVariant,
@@ -25,6 +26,12 @@ export function VariantList({
         onOpen: onOpenDeleteVar,
         onOpenChange: onOpenChangeDeleteVar,
     } = useDisclosure();
+    const {
+        isOpen: isOpenAddVar,
+        onOpen: onOpenAddVar,
+        onOpenChange: onOpenChangeAddVar,
+    } = useDisclosure();
+
     const [selectedVarIndex, setSelectedVarIndex] = useState<number | null>(
         null,
     );
@@ -61,6 +68,11 @@ export function VariantList({
                                     startContent={
                                         <PencilIcon className="w-5" />
                                     }
+                                    onPress={() => {
+                                        setSelectedVarIndex(index);
+                                        setSelectedVarName(v.name ?? null);
+                                        onOpenAddVar();
+                                    }}
                                 />
                                 <Button
                                     isIconOnly
@@ -207,6 +219,41 @@ export function VariantList({
                 selectedVarName={selectedVarName}
                 setSelectedVarIndex={setSelectedVarIndex}
                 setItem={setItem}
+            />
+            <AddEditVariantModal
+                isOpenAddVar={isOpenAddVar}
+                onOpenChangeAddVar={onOpenChangeAddVar}
+                itemHasVariant={itemHasVariant}
+                itemUnitOfMeasure={item.unitOfMeasure}
+                onAddEditVariant={(newVariant) => {
+                    if (selectedVarIndex !== null) {
+                        // edit existing variant
+                        setItem((prev) => {
+                            const variants = [...prev.variants];
+                            variants[selectedVarIndex] = newVariant;
+                            return { ...prev, variants };
+                        });
+                    } else {
+                        // add new variant
+                        setItem((prev) => ({
+                            ...prev,
+                            variants: [
+                                ...prev.variants,
+                                {
+                                    ...newVariant,
+                                    name: itemHasVariant
+                                        ? newVariant.name
+                                        : prev.name,
+                                },
+                            ],
+                        }));
+                    }
+                }}
+                defaultVariant={
+                    selectedVarIndex !== null
+                        ? item.variants[selectedVarIndex]
+                        : null
+                }
             />
         </>
     );
