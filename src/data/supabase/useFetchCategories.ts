@@ -21,12 +21,25 @@ export const useFetchCategories = () => {
 
             if (error) throw error;
 
-            const mapped: Category[] = (data ?? []).map((row: any) => ({
+            let newCategories: Category[] = (data ?? []).map((row: any) => ({
                 category_id: row.category_id,
                 category_name: row.category_name,
             }));
 
-            setCategories(mapped);
+            // Preserve previous order
+            if (categories.length > 0) {
+                newCategories.sort(
+                    (a, b) =>
+                        categories.findIndex(
+                            (c) => c.category_id === a.category_id,
+                        ) -
+                        categories.findIndex(
+                            (c) => c.category_id === b.category_id,
+                        ),
+                );
+            }
+
+            setCategories(newCategories);
         } catch (err: any) {
             console.error(err);
             setError(err.message);

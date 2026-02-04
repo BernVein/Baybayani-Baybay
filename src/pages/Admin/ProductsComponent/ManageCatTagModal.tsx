@@ -253,6 +253,7 @@ export function ManageCatTagModal({
                 isOpenEditCat={isOpenEditCat}
                 onOpenChangeEditCat={onOpenChangeEditCat}
                 selectedCategory={selectedCategory}
+                refetch={refetchCategories}
             />
             <DeleteCatModal
                 isOpenDeleteCat={isOpenDeleteCat}
@@ -264,6 +265,7 @@ export function ManageCatTagModal({
                 isOpenEditTag={isOpenEditTag}
                 onOpenChangeEditTag={onOpenChangeEditTag}
                 selectedTag={selectedTag}
+                refetch={refetchTags}
             />
             <DeleteTagModal
                 isOpenDeleteTag={isOpenDeleteTag}

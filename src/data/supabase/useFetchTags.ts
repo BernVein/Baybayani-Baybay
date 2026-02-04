@@ -21,7 +21,17 @@ export const useFetchTags = () => {
 
             if (error) throw error;
 
-            setTags(data ?? []);
+            let newTags: Tag[] = data ?? [];
+
+            if (tags.length > 0) {
+                newTags.sort(
+                    (a, b) =>
+                        tags.findIndex((t) => t.tag_id === a.tag_id) -
+                        tags.findIndex((t) => t.tag_id === b.tag_id),
+                );
+            }
+
+            setTags(newTags);
         } catch (err: any) {
             console.error(err);
             setError(err.message);
