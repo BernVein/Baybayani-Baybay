@@ -5,16 +5,71 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
+    addToast,
 } from "@heroui/react";
 import { ExclamationCircle } from "@/components/icons";
+import { Category } from "@/data/supabase/useFetchCategories";
+import { deleteCategory } from "@/data/supabase/Customer/Products/deleteCat";
+import { useState } from "react";
 
 export function DeleteCatModal({
     isOpenDeleteCat,
     onOpenChangeDeleteCat,
+    selectedCategory,
+    refetch,
 }: {
     isOpenDeleteCat: boolean;
     onOpenChangeDeleteCat: () => void;
+    selectedCategory: Category | null;
+    refetch: () => Promise<void>;
 }) {
+    const [loading, setLoading] = useState(false);
+    const handleDelete = async () => {
+        if (!selectedCategory) return;
+
+        try {
+            setLoading(true);
+            const result = await deleteCategory(selectedCategory.category_id);
+
+            if (!result.success) {
+                if (result.error === "CATEGORY_IN_USE") {
+                    addToast({
+                        title: "Category in use",
+                        description: `There are ${result.count} item/s with this category. Reassign items with this category`,
+                        color: "danger",
+                        shouldShowTimeoutProgress: true,
+                    });
+                    onOpenChangeDeleteCat();
+                } else {
+                    addToast({
+                        title: "Error",
+                        description: result.error,
+                        color: "danger",
+                        shouldShowTimeoutProgress: true,
+                    });
+                }
+                setLoading(false);
+                return;
+            }
+            setLoading(false);
+            onOpenChangeDeleteCat();
+            addToast({
+                title: "Success",
+                description: `Category ${selectedCategory.category_name} deleted successfully!`,
+                color: "success",
+                shouldShowTimeoutProgress: true,
+            });
+            refetch();
+        } catch (err) {
+            setLoading(false);
+            addToast({
+                title: "Error",
+                description: err as string,
+                color: "danger",
+                shouldShowTimeoutProgress: true,
+            });
+        }
+    };
     return (
         <Modal
             isOpen={isOpenDeleteCat}
@@ -38,7 +93,7 @@ export function DeleteCatModal({
                             <p className="text-sm leading-relaxed">
                                 Are you sure you want to remove{" "}
                                 <span className="font-semibold text-default-800">
-                                    Category 1
+                                    {selectedCategory?.category_name}
                                 </span>
                             </p>
                             <p className="text-xs text-default-500 mt-1">
@@ -58,6 +113,8 @@ export function DeleteCatModal({
                             <Button
                                 color="danger"
                                 className="px-6 font-semibold"
+                                onPress={handleDelete}
+                                isLoading={loading}
                             >
                                 Delete
                             </Button>

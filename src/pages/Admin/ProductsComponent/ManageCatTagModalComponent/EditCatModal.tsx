@@ -7,13 +7,16 @@ import {
     ModalFooter,
     Input,
 } from "@heroui/react";
+import { Category } from "@/data/supabase/useFetchCategories";
 
 export function EditCatModal({
     isOpenEditCat,
     onOpenChangeEditCat,
+    selectedCategory,
 }: {
     isOpenEditCat: boolean;
     onOpenChangeEditCat: () => void;
+    selectedCategory: Category | null;
 }) {
     return (
         <Modal
@@ -30,7 +33,7 @@ export function EditCatModal({
                         <ModalBody>
                             <Input
                                 placeholder="Edit Category Name"
-                                defaultValue="Category Name 1"
+                                defaultValue={selectedCategory?.category_name}
                             />
                         </ModalBody>
                         <ModalFooter>

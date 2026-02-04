@@ -7,13 +7,16 @@ import {
     ModalFooter,
     Input,
 } from "@heroui/react";
+import { Tag } from "@/data/supabase/useFetchTags";
 
 export function EditTagModal({
     isOpenEditTag,
     onOpenChangeEditTag,
+    selectedTag,
 }: {
     isOpenEditTag: boolean;
     onOpenChangeEditTag: () => void;
+    selectedTag: Tag | null;
 }) {
     return (
         <Modal
@@ -30,7 +33,7 @@ export function EditTagModal({
                         <ModalBody>
                             <Input
                                 placeholder="Edit Tag Name"
-                                defaultValue="Tag Name 1"
+                                defaultValue={selectedTag?.tag_name}
                             />
                         </ModalBody>
                         <ModalFooter>

@@ -17,8 +17,12 @@ import { EditCatModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalC
 import { DeleteCatModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/DeleteCatModal";
 import { EditTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/EditTagModal";
 import { DeleteTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModalComponent/DeleteTagModal";
-import { useFetchCategories } from "@/data/supabase/useFetchCategories";
-import { useFetchTags } from "@/data/supabase/useFetchTags";
+import {
+    useFetchCategories,
+    Category,
+} from "@/data/supabase/useFetchCategories";
+import { useFetchTags, Tag } from "@/data/supabase/useFetchTags";
+import { useState } from "react";
 
 export function ManageCatTagModal({
     isOpen,
@@ -48,8 +52,17 @@ export function ManageCatTagModal({
         onOpenChange: onOpenChangeDeleteTag,
     } = useDisclosure();
 
-    const { categories, loading: catLoading } = useFetchCategories();
-    const { tags, loading: tagLoading } = useFetchTags();
+    const {
+        categories,
+        loading: catLoading,
+        refetch: refetchCategories,
+    } = useFetchCategories();
+    const { tags, loading: tagLoading, refetch: refetchTags } = useFetchTags();
+
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+        null,
+    );
+    const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
 
     const ListSkeleton = () => (
         <div className="flex justify-between items-center w-full py-1">
@@ -120,9 +133,12 @@ export function ManageCatTagModal({
                                                                     isIconOnly
                                                                     size="sm"
                                                                     variant="light"
-                                                                    onPress={
-                                                                        onOpenEditCat
-                                                                    }
+                                                                    onPress={() => {
+                                                                        setSelectedCategory(
+                                                                            cat,
+                                                                        );
+                                                                        onOpenEditCat();
+                                                                    }}
                                                                 >
                                                                     <PencilIcon className="w-4" />
                                                                 </Button>
@@ -131,9 +147,12 @@ export function ManageCatTagModal({
                                                                     size="sm"
                                                                     color="danger"
                                                                     variant="light"
-                                                                    onPress={
-                                                                        onOpenDeleteCat
-                                                                    }
+                                                                    onPress={() => {
+                                                                        setSelectedCategory(
+                                                                            cat,
+                                                                        );
+                                                                        onOpenDeleteCat();
+                                                                    }}
                                                                 >
                                                                     <TrashIcon className="w-4" />
                                                                 </Button>
@@ -184,9 +203,12 @@ export function ManageCatTagModal({
                                                                     isIconOnly
                                                                     size="sm"
                                                                     variant="light"
-                                                                    onPress={
-                                                                        onOpenEditTag
-                                                                    }
+                                                                    onPress={() => {
+                                                                        setSelectedTag(
+                                                                            tag,
+                                                                        );
+                                                                        onOpenEditTag();
+                                                                    }}
                                                                 >
                                                                     <PencilIcon className="w-4" />
                                                                 </Button>
@@ -195,9 +217,12 @@ export function ManageCatTagModal({
                                                                     size="sm"
                                                                     color="danger"
                                                                     variant="light"
-                                                                    onPress={
-                                                                        onOpenDeleteTag
-                                                                    }
+                                                                    onPress={() => {
+                                                                        setSelectedTag(
+                                                                            tag,
+                                                                        );
+                                                                        onOpenDeleteTag();
+                                                                    }}
                                                                 >
                                                                     <TrashIcon className="w-4" />
                                                                 </Button>
@@ -223,21 +248,28 @@ export function ManageCatTagModal({
                     )}
                 </ModalContent>
             </Modal>
+
             <EditCatModal
                 isOpenEditCat={isOpenEditCat}
                 onOpenChangeEditCat={onOpenChangeEditCat}
+                selectedCategory={selectedCategory}
             />
             <DeleteCatModal
                 isOpenDeleteCat={isOpenDeleteCat}
                 onOpenChangeDeleteCat={onOpenChangeDeleteCat}
+                selectedCategory={selectedCategory}
+                refetch={refetchCategories}
             />
             <EditTagModal
                 isOpenEditTag={isOpenEditTag}
                 onOpenChangeEditTag={onOpenChangeEditTag}
+                selectedTag={selectedTag}
             />
             <DeleteTagModal
                 isOpenDeleteTag={isOpenDeleteTag}
                 onOpenChangeDeleteTag={onOpenChangeDeleteTag}
+                selectedTag={selectedTag}
+                refetch={refetchTags}
             />
         </>
     );

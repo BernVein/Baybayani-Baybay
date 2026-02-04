@@ -5,16 +5,72 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
+    addToast,
 } from "@heroui/react";
 import { ExclamationCircle } from "@/components/icons";
+import { Tag } from "@/data/supabase/useFetchTags";
+import { deleteTag } from "@/data/supabase/Customer/Products/deleteTag";
+import { useState } from "react";
 
 export function DeleteTagModal({
     isOpenDeleteTag,
     onOpenChangeDeleteTag,
+    selectedTag,
+    refetch,
 }: {
     isOpenDeleteTag: boolean;
     onOpenChangeDeleteTag: () => void;
+    selectedTag: Tag | null;
+    refetch: () => Promise<void>;
 }) {
+    const [loading, setLoading] = useState(false);
+    const handleDelete = async () => {
+        if (!selectedTag) return;
+
+        try {
+            setLoading(true);
+            const result = await deleteTag(selectedTag.tag_id);
+
+            if (!result.success) {
+                if (result.error === "TAG_IN_USE") {
+                    addToast({
+                        title: "Tag in use",
+                        description: `There are ${result.count} item/s with this tag. Reassign items with this tag`,
+                        color: "danger",
+                        shouldShowTimeoutProgress: true,
+                    });
+                    onOpenChangeDeleteTag();
+                } else {
+                    addToast({
+                        title: "Error",
+                        description: result.error,
+                        color: "danger",
+                        shouldShowTimeoutProgress: true,
+                    });
+                }
+                setLoading(false);
+                return;
+            }
+            setLoading(false);
+            onOpenChangeDeleteTag();
+            addToast({
+                title: "Success",
+                description: `Tag ${selectedTag.tag_name} deleted successfully!`,
+                color: "success",
+                shouldShowTimeoutProgress: true,
+            });
+            refetch();
+        } catch (err) {
+            setLoading(false);
+            addToast({
+                title: "Error",
+                description: err as string,
+                color: "danger",
+                shouldShowTimeoutProgress: true,
+            });
+        }
+    };
+
     return (
         <Modal
             isOpen={isOpenDeleteTag}
@@ -38,7 +94,7 @@ export function DeleteTagModal({
                             <p className="text-sm leading-relaxed">
                                 Are you sure you want to remove{" "}
                                 <span className="font-semibold text-default-800">
-                                    Tag 1
+                                    {selectedTag?.tag_name}
                                 </span>
                             </p>
                             <p className="text-xs text-default-500 mt-1">
@@ -52,12 +108,15 @@ export function DeleteTagModal({
                                 color="default"
                                 className="px-6"
                                 onPress={onClose}
+                                disabled={loading}
                             >
                                 Cancel
                             </Button>
                             <Button
                                 color="danger"
                                 className="px-6 font-semibold"
+                                onPress={handleDelete}
+                                isLoading={loading}
                             >
                                 Delete
                             </Button>
