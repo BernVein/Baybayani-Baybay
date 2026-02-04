@@ -1,6 +1,8 @@
-import { Input, SelectItem } from "@heroui/react";
+import { Input, SelectItem, Spinner } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import { ItemDB } from "@/model/db/additem";
+import { useFetchCategories } from "@/data/supabase/useFetchCategories";
+import { useFetchTags } from "@/data/supabase/useFetchTags";
 
 export function ItemInitialDetail({
     item,
@@ -11,6 +13,9 @@ export function ItemInitialDetail({
     setItem: (item: ItemDB) => void;
     isSubmitted: boolean;
 }) {
+    const { categories, loading: catLoading } = useFetchCategories();
+    const { tags, loading: tagLoading } = useFetchTags();
+
     return (
         <>
             <div className="flex flex-row gap-2 items-center">
@@ -31,8 +36,17 @@ export function ItemInitialDetail({
                     errorMessage="Item Name can't be empty"
                 />
                 <ModalAwareSelect
-                    isRequired
-                    label="Item Category"
+                    isRequired={catLoading ? false : true}
+                    label={
+                        catLoading ? (
+                            <div className="flex flex-row gap-2 items-center">
+                                <Spinner color="success" size="sm" />
+                                <span>Fetching categories...</span>
+                            </div>
+                        ) : (
+                            "Item Category"
+                        )
+                    }
                     isClearable
                     className="w-1/2"
                     description="For item filtering"
@@ -46,22 +60,13 @@ export function ItemInitialDetail({
                     }}
                     isInvalid={isSubmitted && !item.categoryId}
                     errorMessage="Item Category can't be empty"
+                    isDisabled={catLoading}
                 >
-                    <SelectItem key="dcee3d7a-fd90-4ab8-a6cf-445a482b79ec">
-                        Vegetable
-                    </SelectItem>
-                    <SelectItem key="2a70992d-d42d-4f84-8da0-a3c67858c9fa">
-                        Fruit
-                    </SelectItem>
-                    <SelectItem key="d57fbbf4-1b78-4d79-9414-f3df92b32174">
-                        Grain
-                    </SelectItem>
-                    <SelectItem key="38322c8d-ec86-45e5-9d04-2a2012259ba9">
-                        Poultry
-                    </SelectItem>
-                    <SelectItem key="257eaa6d-3549-40bc-b2ce-733258b37b0f">
-                        Spice
-                    </SelectItem>
+                    {categories.map((cat) => (
+                        <SelectItem key={cat.category_id}>
+                            {cat.category_name}
+                        </SelectItem>
+                    ))}
                 </ModalAwareSelect>
             </div>
             <Input
@@ -97,7 +102,16 @@ export function ItemInitialDetail({
                 />
 
                 <ModalAwareSelect
-                    label="Item Tag"
+                    label={
+                        tagLoading ? (
+                            <div className="flex flex-row gap-2 items-center">
+                                <Spinner color="success" size="sm" />
+                                <span>Fetching tags...</span>
+                            </div>
+                        ) : (
+                            "Item Tag"
+                        )
+                    }
                     isClearable
                     className="w-1/2"
                     description="For promotional"
@@ -109,19 +123,11 @@ export function ItemInitialDetail({
                             tagId: key ?? "",
                         });
                     }}
+                    isDisabled={tagLoading}
                 >
-                    <SelectItem key="f95d0a99-d212-4323-95c6-dedfbdd51079">
-                        Restocked
-                    </SelectItem>
-                    <SelectItem key="a80485a4-a437-4160-bb5e-5b5b520d7ab8">
-                        Price Drop
-                    </SelectItem>
-                    <SelectItem key="975a7cc0-620d-447e-b8eb-626b3da177be">
-                        Fresh
-                    </SelectItem>
-                    <SelectItem key="6ecbbca0-29d6-4dbe-9825-f4b4dd8ae831">
-                        Discounted
-                    </SelectItem>
+                    {tags.map((tag) => (
+                        <SelectItem key={tag.tag_id}>{tag.tag_name}</SelectItem>
+                    ))}
                 </ModalAwareSelect>
             </div>
         </>

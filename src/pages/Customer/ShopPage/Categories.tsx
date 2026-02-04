@@ -1,6 +1,6 @@
 import { ScrollShadow, Button, Skeleton } from "@heroui/react";
 import { XIcon } from "@/components/icons";
-import { useFetchCategories } from "@/data/supabase/Customer/Products/useFetchCategories";
+import { useFetchCategories } from "@/data/supabase/useFetchCategories";
 
 interface CategoriesProps {
     activeCategories: string[];

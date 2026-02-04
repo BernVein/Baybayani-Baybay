@@ -154,6 +154,7 @@ export function AddItemModal({
                             <span className="text-lg font-semibold">
                                 Set Item Details
                             </span>
+
                             <ItemInitialDetail
                                 item={item}
                                 setItem={setItem}
