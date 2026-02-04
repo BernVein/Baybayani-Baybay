@@ -60,7 +60,7 @@ export function ItemPricingDetail({
                     onValueChange={(v) =>
                         setVariant({
                             ...variant,
-                            wholesalePrice: Number(v),
+                            wholesalePrice: Math.max(Number(v), 1),
                         })
                     }
                 />
