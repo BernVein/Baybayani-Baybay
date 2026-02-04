@@ -17,6 +17,7 @@ import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableCompone
 import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/CloseWarningModal";
 import { AddVariantButton } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantButton";
 import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddPhotoModal";
+
 export function AddItemModal({
     itemHasVariant,
     isOpen,
@@ -54,6 +55,12 @@ export function AddItemModal({
     });
 
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [images, setImages] = useState<(File | null)[]>([
+        null,
+        null,
+        null,
+        null,
+    ]);
 
     function validate(): boolean {
         if (!item.name.trim()) return false;
@@ -232,6 +239,8 @@ export function AddItemModal({
             <AddPhotoModal
                 isOpen={isOpenPhoto}
                 onOpenChange={onOpenChangePhoto}
+                images={images}
+                setImages={setImages}
             />
         </>
     );

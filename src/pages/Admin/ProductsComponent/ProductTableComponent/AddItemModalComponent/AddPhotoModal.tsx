@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, FormEvent } from "react";
 import {
     Button,
     Modal,
@@ -10,17 +10,17 @@ import {
 } from "@heroui/react";
 import { TrashIcon, CursorIcon } from "@/components/icons";
 
-type ImageSlot = File | null;
-
 export function AddPhotoModal({
     isOpen,
     onOpenChange,
+    images,
+    setImages,
 }: {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
+    images: (File | null)[];
+    setImages: React.Dispatch<React.SetStateAction<(File | null)[]>>;
 }) {
-    const [images, setImages] = useState<ImageSlot[]>([null, null, null, null]);
-
     const handleFileChange =
         (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
             const file = e.target.files?.[0] ?? null;
