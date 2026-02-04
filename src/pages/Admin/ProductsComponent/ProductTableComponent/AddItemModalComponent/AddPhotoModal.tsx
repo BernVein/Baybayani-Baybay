@@ -8,7 +8,7 @@ import {
     ModalFooter,
     Image,
 } from "@heroui/react";
-import { TrashIcon } from "@/components/icons";
+import { TrashIcon, CursorIcon } from "@/components/icons";
 
 type ImageSlot = File | null;
 
@@ -67,7 +67,7 @@ export function AddPhotoModal({
                                 <div className="grid grid-cols-2 gap-4">
                                     {images.map((file, index) => (
                                         <div className="relative w-full">
-                                            <label className="flex flex-col items-center justify-center border border-dashed border-default-300 rounded-lg p-3 cursor-pointer hover:border-success">
+                                            <label className="flex flex-col items-center h-32 justify-center border border-dashed border-default-300 rounded-lg p-3 cursor-pointer hover:border-success">
                                                 {file ? (
                                                     <Image
                                                         src={URL.createObjectURL(
@@ -79,10 +79,13 @@ export function AddPhotoModal({
                                                         className="w-full h-32 object-cover"
                                                     />
                                                 ) : (
-                                                    <span className="text-sm text-default-500">
-                                                        Click to select image{" "}
-                                                        {index + 1}
-                                                    </span>
+                                                    <div className="flex flex-row items-center">
+                                                        <CursorIcon className="w-7" />
+                                                        <span className="text-sm text-default-500">
+                                                            Select image{" "}
+                                                            {index + 1}
+                                                        </span>
+                                                    </div>
                                                 )}
 
                                                 <input
@@ -101,7 +104,7 @@ export function AddPhotoModal({
                                                     size="sm"
                                                     color="danger"
                                                     variant="solid"
-                                                    className="absolute top-1 right-1 z-10"
+                                                    className="absolute top-2 right-2 z-10"
                                                     onPress={() =>
                                                         handleRemoveImage(index)
                                                     }

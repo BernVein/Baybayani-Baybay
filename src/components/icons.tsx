@@ -532,6 +532,43 @@ export function RightArrow(props: IconSvgProps, className: string) {
     );
 }
 
+export function CursorIcon(props: IconSvgProps, className: string) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={className}
+            {...props}
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10.446 17.184 8.098 10.656c-.573-1.593.967-3.133 2.559-2.56l6.528 2.35c1.934.697 1.686 3.508-.34 3.854l-.776.133a1.5 1.5 0 0 0-1.232 1.232l-.133.776c-.346 2.026-3.157 2.275-3.854.34Z"
+            />
+            <path
+                d="M10 4V3"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M4 10H3"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M4 4L6 6"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+}
 export function KeyIcon(props: IconSvgProps, className: string) {
     return (
         <svg
