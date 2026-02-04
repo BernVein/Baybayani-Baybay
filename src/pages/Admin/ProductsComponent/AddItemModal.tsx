@@ -173,11 +173,9 @@ export function AddItemModal({
                                 >
                                     {isSubmitted && selectedCount === 0
                                         ? "Photo is required"
-                                        : "Add Photos"}{" "}
+                                        : "Add Photos"}
                                     {selectedCount > 0 && `(${selectedCount})`}
-                                    {isSubmitted && selectedCount === 0 && (
-                                        <span className="text-red-500">*</span>
-                                    )}
+                                    <span className="text-red-500">*</span>{" "}
                                 </Button>
 
                                 {(itemHasVariant ||
