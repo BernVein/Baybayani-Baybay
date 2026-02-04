@@ -85,6 +85,29 @@ export function AddItemModal({
         setImages([null, null, null, null]);
     }, [isOpen]);
 
+    const isItemPristine = () => {
+        const defaultItem: ItemDB = {
+            name: "",
+            categoryId: "",
+            shortDescription: "",
+            unitOfMeasure: "",
+            tagId: "",
+            variants: [],
+        };
+
+        const isDefaultItem =
+            item.name === defaultItem.name &&
+            item.categoryId === defaultItem.categoryId &&
+            item.shortDescription === defaultItem.shortDescription &&
+            item.unitOfMeasure === defaultItem.unitOfMeasure &&
+            item.tagId === defaultItem.tagId &&
+            item.variants.length === 0;
+
+        const noImages = images.every((img) => img === null);
+
+        return isDefaultItem && noImages;
+    };
+
     return (
         <>
             <Modal
@@ -92,7 +115,7 @@ export function AddItemModal({
                 isOpen={isOpen}
                 onOpenChange={(open) => {
                     if (!open) {
-                        if (item.variants.length > 0) {
+                        if (!isItemPristine()) {
                             onOpenWarning();
                         } else {
                             onOpenChange(false);
@@ -201,8 +224,7 @@ export function AddItemModal({
                                     color="danger"
                                     variant="light"
                                     onPress={() => {
-                                        if (item.variants.length > 0)
-                                            onOpenWarning();
+                                        if (!isItemPristine()) onOpenWarning();
                                         else onOpenChange(false);
                                     }}
                                 >
@@ -242,15 +264,13 @@ export function AddItemModal({
                     }))
                 }
             />
-            {item.variants.length > 0 && (
-                <CloseWarningModal
-                    isOpenWarning={isOpenWarning}
-                    onOpenChangeWarning={onOpenChangeWarning}
-                    onConfirmClose={() => {
-                        onOpenChange(false);
-                    }}
-                />
-            )}
+            <CloseWarningModal
+                isOpenWarning={isOpenWarning}
+                onOpenChangeWarning={onOpenChangeWarning}
+                onConfirmClose={() => {
+                    onOpenChange(false);
+                }}
+            />
             <AddPhotoModal
                 isOpen={isOpenPhoto}
                 onOpenChange={onOpenChangePhoto}
