@@ -92,7 +92,7 @@ export function ManageCatTagModal({
                             <ModalBody className="flex flex-row gap-2 items-start">
                                 <div className="flex flex-col gap-2 items-center">
                                     <div className="flex flex-row gap-2">
-                                        <Input placeholder="Category" />
+                                        <Input placeholder="Add a Category" />
                                         <Button
                                             isIconOnly
                                             color="success"
@@ -167,7 +167,7 @@ export function ManageCatTagModal({
 
                                 <div className="flex flex-col gap-2 items-center">
                                     <div className="flex flex-row gap-2">
-                                        <Input placeholder="Tags" />
+                                        <Input placeholder="Add a Tag" />
                                         <Button
                                             isIconOnly
                                             color="success"

@@ -83,7 +83,7 @@ export function EditCatModal({
                 {(onClose) => (
                     <>
                         <ModalHeader className="flex flex-col gap-1">
-                            Edit Category
+                            Edit Category Name
                         </ModalHeader>
                         <ModalBody>
                             <Input

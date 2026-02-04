@@ -82,7 +82,7 @@ export function EditTagModal({
             <ModalContent>
                 {(onClose) => (
                     <>
-                        <ModalHeader>Edit Tag</ModalHeader>
+                        <ModalHeader>Edit Tag Name</ModalHeader>
                         <ModalBody>
                             <Input
                                 placeholder="Edit Tag Name"
