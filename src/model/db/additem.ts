@@ -16,5 +16,6 @@ export interface ItemDB {
     shortDescription: string | null;
     unitOfMeasure: string;
     tagId: string | null;
+    itemImages: (File | null)[];
     variants: VariantDB[]; // array of variants (even if itemHasVariant === false, it can be one-item array)
 }

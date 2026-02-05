@@ -51,18 +51,13 @@ export function AddItemModal({
         shortDescription: "",
         unitOfMeasure: "",
         tagId: "",
+        itemImages: [null, null, null, null],
         variants: [],
     });
 
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [images, setImages] = useState<(File | null)[]>([
-        null,
-        null,
-        null,
-        null,
-    ]);
 
-    const selectedCount = images.filter(Boolean).length;
+    const selectedCount = item.itemImages.filter(Boolean).length;
 
     function validate(): boolean {
         if (!item.name.trim()) return false;
@@ -80,9 +75,9 @@ export function AddItemModal({
             shortDescription: "",
             unitOfMeasure: "",
             tagId: "",
+            itemImages: [null, null, null, null],
             variants: [],
         });
-        setImages([null, null, null, null]);
     }, [isOpen]);
 
     const isItemPristine = () => {
@@ -92,6 +87,7 @@ export function AddItemModal({
             shortDescription: "",
             unitOfMeasure: "",
             tagId: "",
+            itemImages: [null, null, null, null],
             variants: [],
         };
 
@@ -103,7 +99,7 @@ export function AddItemModal({
             item.tagId === defaultItem.tagId &&
             item.variants.length === 0;
 
-        const noImages = images.every((img) => img === null);
+        const noImages = item.itemImages.every((img) => img === null);
 
         return isDefaultItem && noImages;
     };
@@ -274,8 +270,19 @@ export function AddItemModal({
             <AddPhotoModal
                 isOpen={isOpenPhoto}
                 onOpenChange={onOpenChangePhoto}
-                images={images}
-                setImages={setImages}
+                images={item.itemImages}
+                setImages={(newImages) => {
+                    // if newImages is a function (SetStateAction), resolve it
+                    const resolved =
+                        typeof newImages === "function"
+                            ? newImages(item.itemImages)
+                            : newImages;
+
+                    setItem((prev) => ({
+                        ...prev,
+                        itemImages: resolved,
+                    }));
+                }}
             />
         </>
     );
