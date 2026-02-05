@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 
@@ -7,52 +7,49 @@ export const useFetchProductsUI = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchItems = async () => {
-            setLoading(true);
-            setError(null);
+    const fetchItems = useCallback(async () => {
+        setLoading(true);
+        setError(null);
 
+        try {
             const { data, error } = await supabase
                 .from("Item")
                 .select(
                     `
-                    item_id,
-                    item_sold_by,
-                    item_title,
-                    Category (
-                        category_name
-                    ),
-                    Tag (
-                        tag_name
-                    ),
-                    Variant (
-                        variant_id,
-                        variant_price_retail,
-                        variant_price_wholesale,
-                        variant_stocks
-                    ),
-                    Item_Image (
-                        item_image_url
-                    )
-                `,
+          item_id,
+          item_sold_by,
+          item_title,
+          Category ( category_name ),
+          Tag ( tag_name ),
+          Variant (
+            variant_id,
+            variant_price_retail,
+            variant_price_wholesale,
+            StockMovement ( effective_stocks )
+          ),
+          Item_Image ( item_image_url )
+        `,
                 )
-                .eq("is_soft_deleted", false)
-                .order("created_at", {
-                    foreignTable: "Item_Image",
-                    ascending: true,
-                })
-                .limit(1, { foreignTable: "Item_Image" });
+                .eq("is_soft_deleted", false);
 
-            if (error) {
-                setError(error.message);
-                setLoading(false);
-                return;
-            }
+            if (error) throw error;
 
             const formatted: ItemTableRow[] = (data ?? []).map((item: any) => {
                 const variants = item.Variant ?? [];
 
-                const prices = variants.flatMap((v: any) =>
+                // Compute current stock per variant by summing effective_stocks
+                const variantStocks = variants.map((v: any) => {
+                    const movements = v.StockMovement ?? [];
+                    const stock = movements.reduce(
+                        (sum: number, m: any) =>
+                            sum + (m.effective_stocks ?? 0),
+                        0,
+                    );
+                    return { ...v, currentStock: stock };
+                });
+
+                // Get all prices
+                const prices = variantStocks.flatMap((v: any) =>
                     [v.variant_price_retail, v.variant_price_wholesale].filter(
                         (p) => typeof p === "number",
                     ),
@@ -64,8 +61,8 @@ export const useFetchProductsUI = () => {
                     item_min_price: prices.length ? Math.min(...prices) : 0,
                     item_sold_by: item.item_sold_by,
                     item_name: item.item_title,
-                    variant_stock: variants.reduce(
-                        (sum: number, v: any) => sum + (v.variant_stocks ?? 0),
+                    variant_stock: variantStocks.reduce(
+                        (sum: number, v: any) => sum + (v.currentStock ?? 0),
                         0,
                     ),
                     item_img_url: item.Item_Image?.[0]?.item_image_url ?? "",
@@ -76,15 +73,21 @@ export const useFetchProductsUI = () => {
             });
 
             setItems(formatted);
+        } catch (err: any) {
+            setError(err.message || JSON.stringify(err));
+        } finally {
             setLoading(false);
-        };
-
-        fetchItems();
+        }
     }, []);
+
+    useEffect(() => {
+        fetchItems();
+    }, [fetchItems]);
 
     return {
         items,
         loading,
         error,
+        refetch: fetchItems,
     };
 };

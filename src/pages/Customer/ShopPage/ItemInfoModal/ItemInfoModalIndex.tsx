@@ -41,6 +41,12 @@ export default function ItemInfoModal({
             setSelectedItemVariant(item.item_variants?.[0] || null);
             setQuantity(null);
             setPriceVariant("Retail");
+        } else {
+            // Reset states when item is null (loading new item)
+            setMainImg("");
+            setSelectedItemVariant(null);
+            setQuantity(null);
+            setPriceVariant("Retail");
         }
     }, [item]);
 

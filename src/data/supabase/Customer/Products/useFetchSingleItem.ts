@@ -14,7 +14,9 @@ export const useFetchItemById = (itemId: string | number | null) => {
         const fetchItem = async () => {
             setLoading(true);
             setError(null);
+            setItem(null); // Reset item state to prevent stale data display
 
+            // Fetch item with variants
             const { data, error } = await supabase
                 .from("Item")
                 .select(`*, Item_Image(item_image_url), Variant(*)`)
@@ -22,11 +24,10 @@ export const useFetchItemById = (itemId: string | number | null) => {
                 .eq("is_soft_deleted", false)
                 .single();
 
-            setLoading(false);
-
             if (error) {
                 console.error("Supabase error:", error);
                 setError(error.message);
+                setLoading(false);
                 return;
             }
 
@@ -35,44 +36,68 @@ export const useFetchItemById = (itemId: string | number | null) => {
                 return;
             }
 
-            // map variants + filter stock
-            const variants = (data.Variant || [])
-                .map((v: Variant) => ({
-                    variant_id: v.variant_id,
-                    variant_name: v.variant_name,
-                    variant_price_retail: Number(v.variant_price_retail),
-                    variant_price_wholesale:
-                        v.variant_price_wholesale === null
-                            ? null
-                            : Number(v.variant_price_wholesale),
-                    variant_wholesale_item:
-                        v.variant_wholesale_item === null
-                            ? null
-                            : Number(v.variant_wholesale_item),
-                    variant_stocks: Number(
-                        v.variant_stocks ?? v.variant_stocks ?? 0,
-                    ),
-                    variant_last_updated_stock: v.variant_last_updated_stock,
-                    variant_last_updated_price_retail:
-                        v.variant_last_updated_price_retail ?? null,
-                    variant_last_price_retail:
-                        v.variant_last_price_retail === null
-                            ? undefined
-                            : Number(v.variant_last_price_retail),
-                    variant_last_updated_price_wholesale:
-                        v.variant_last_updated_price_wholesale ?? null,
-                    variant_last_price_wholesale:
-                        v.variant_last_price_wholesale === null
-                            ? null
-                            : Number(v.variant_last_price_wholesale),
-                    last_updated: v.last_updated,
-                    is_soft_deleted: v.is_soft_deleted,
-                    created_at: v.created_at,
-                }))
-                .filter((v: Variant) => v.variant_stocks > 0);
+            const variantsRaw = data.Variant || [];
 
-            if (variants.length === 0) {
+            // For each variant, get the latest stock from StockMovement
+            const variants = await Promise.all(
+                variantsRaw.map(async (v: Variant) => {
+                    const { data: stockData, error: stockError } =
+                        await supabase
+                            .from("StockMovement")
+                            .select("effective_stocks")
+                            .eq("variant_id", v.variant_id)
+                            .eq("is_soft_deleted", false)
+                            .order("created_at", { ascending: false })
+                            .limit(1)
+                            .single();
+
+                    if (stockError) {
+                        console.error("Stock fetch error:", stockError);
+                    }
+
+                    const effectiveStocks = stockData?.effective_stocks ?? 0;
+
+                    return {
+                        variant_id: v.variant_id,
+                        variant_name: v.variant_name,
+                        variant_price_retail: Number(v.variant_price_retail),
+                        variant_price_wholesale:
+                            v.variant_price_wholesale === null
+                                ? null
+                                : Number(v.variant_price_wholesale),
+                        variant_wholesale_item:
+                            v.variant_wholesale_item === null
+                                ? null
+                                : Number(v.variant_wholesale_item),
+                        variant_stocks: Number(effectiveStocks),
+                        variant_last_updated_stock:
+                            v.variant_last_updated_stock,
+                        variant_last_updated_price_retail:
+                            v.variant_last_updated_price_retail ?? null,
+                        variant_last_price_retail:
+                            v.variant_last_price_retail === null
+                                ? undefined
+                                : Number(v.variant_last_price_retail),
+                        variant_last_updated_price_wholesale:
+                            v.variant_last_updated_price_wholesale ?? null,
+                        variant_last_price_wholesale:
+                            v.variant_last_price_wholesale === null
+                                ? null
+                                : Number(v.variant_last_price_wholesale),
+                        last_updated: v.last_updated,
+                        is_soft_deleted: v.is_soft_deleted,
+                        created_at: v.created_at,
+                    };
+                }),
+            );
+
+            // Filter variants with zero stock
+            const variantsInStock = variants.filter(
+                (v) => v.variant_stocks > 0,
+            );
+            if (variantsInStock.length === 0) {
                 setItem(null);
+                setLoading(false);
                 return;
             }
 
@@ -90,8 +115,9 @@ export const useFetchItemById = (itemId: string | number | null) => {
                 is_soft_deleted: data.is_soft_deleted,
                 last_updated: data.last_updated,
                 created_at: data.created_at,
-                item_variants: variants,
+                item_variants: variantsInStock,
             });
+            setLoading(false);
         };
 
         fetchItem();
