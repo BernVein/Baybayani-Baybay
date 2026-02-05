@@ -214,51 +214,42 @@ export function AddEditVariantModal({
                                 </span>
                                 <div className="flex flex-col gap-2 items-center">
                                     <Input
-                                        label="Low Stock Alert Threshold"
-                                        isRequired
+                                        label="Wholesale Minimum Quantity"
                                         type="text"
                                         inputMode="decimal"
-                                        endContent={
-                                            <div className="pointer-events-none flex items-center">
-                                                <span className="text-default-400 text-small">
-                                                    {itemUnitOfMeasure}
-                                                </span>
-                                            </div>
+                                        isRequired={!!variant.wholesalePrice}
+                                        isDisabled={!variant.wholesalePrice}
+                                        isInvalid={
+                                            isSubmitted &&
+                                            variant.wholesalePrice != null &&
+                                            (variant.wholesaleMinQty == null ||
+                                                variant.wholesaleMinQty <= 0)
                                         }
-                                        description="Notification will trigger when the stock level reaches this threshold"
+                                        errorMessage="Wholesale minimum quantity is required."
                                         value={
-                                            variant.lowStockThreshold !==
-                                            undefined
-                                                ? String(
-                                                      variant.lowStockThreshold,
-                                                  )
-                                                : ""
+                                            variant.wholesalePrice == null
+                                                ? ""
+                                                : (variant.wholesaleMinQty?.toString() ??
+                                                  "")
                                         }
                                         onValueChange={(v) => {
                                             if (v === "") {
-                                                setVariant({
-                                                    ...variant,
-                                                    lowStockThreshold:
-                                                        undefined,
-                                                });
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    wholesaleMinQty: undefined,
+                                                }));
                                                 return;
                                             }
 
                                             const num = Number(v);
                                             if (Number.isNaN(num)) return;
 
-                                            setVariant({
-                                                ...variant,
-                                                lowStockThreshold: num,
-                                            });
+                                            setVariant((prev) => ({
+                                                ...prev,
+                                                wholesaleMinQty: num,
+                                            }));
                                         }}
-                                        isInvalid={
-                                            isSubmitted &&
-                                            (variant.lowStockThreshold ==
-                                                null ||
-                                                variant.lowStockThreshold <= 0)
-                                        }
-                                        errorMessage="Low stock threshold is required"
+                                        description="Enter the minimum quantity required for wholesale purchase"
                                     />
                                 </div>
                             </>

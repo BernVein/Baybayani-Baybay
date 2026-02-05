@@ -30,7 +30,6 @@ export async function addItem(item: ItemDB) {
                 .insert({
                     item_id: itemId,
                     variant_name: variant.name ?? "Default",
-                    variant_stocks: 0, // will be deprecated, stocks handled in StockMovement
                     variant_price_retail: variant.retailPrice ?? 0,
                     variant_price_wholesale: variant.wholesalePrice ?? null,
                     variant_wholesale_item: variant.wholesaleMinQty ?? null,
@@ -83,7 +82,7 @@ export async function addItem(item: ItemDB) {
                 item_image_url: publicUrl,
             });
         }
-
+        window.dispatchEvent(new Event("baybayani:items-updated"));
         return { success: true, itemId };
     } catch (error) {
         const message =

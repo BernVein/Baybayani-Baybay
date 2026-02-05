@@ -10,9 +10,17 @@ import {
 import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableMobile";
 import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableDesktop";
 import { useFetchProductsUI } from "@/data/supabase/Admin/Products/useFetchProductsUI";
+import { useEffect } from "react";
 
 export function ProductTable() {
-    const { items, loading } = useFetchProductsUI();
+    const { items, loading, refetch } = useFetchProductsUI();
+    useEffect(() => {
+        const handler = () => refetch();
+
+        window.addEventListener("baybayani:items-updated", handler);
+        return () =>
+            window.removeEventListener("baybayani:items-updated", handler);
+    }, [refetch]);
 
     if (loading) {
         return (
