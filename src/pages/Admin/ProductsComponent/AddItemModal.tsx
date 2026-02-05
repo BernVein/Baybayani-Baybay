@@ -8,6 +8,7 @@ import {
     ModalFooter,
     useDisclosure,
     Divider,
+    addToast,
 } from "@heroui/react";
 import { ItemInitialDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemInitialDetail";
 import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddEditVariantModal";
@@ -17,6 +18,7 @@ import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableCompone
 import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/CloseWarningModal";
 import { AddVariantButton } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantButton";
 import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddPhotoModal";
+import { addItem } from "@/data/supabase/Admin/Products/addItem";
 
 export function AddItemModal({
     itemHasVariant,
@@ -64,6 +66,7 @@ export function AddItemModal({
         if (!item.categoryId) return false;
         if (!item.unitOfMeasure.trim()) return false;
         if (selectedCount === 0) return false;
+
         return true;
     }
 
@@ -102,6 +105,50 @@ export function AddItemModal({
         const noImages = item.itemImages.every((img) => img === null);
 
         return isDefaultItem && noImages;
+    };
+    const [isLoading, setIsLoading] = useState(false);
+    const handleAddItem = async () => {
+        setIsSubmitted(true);
+        setIsLoading(true);
+        if (!validate()) {
+            setIsLoading(false);
+            addToast({
+                title: "Invalid",
+                description: "Please fill in all required fields.",
+                timeout: 3000,
+                severity: "danger",
+                color: "danger",
+                shouldShowTimeoutProgress: true,
+            });
+            return;
+        }
+
+        const result = await addItem(item);
+
+        if (result.success) {
+            addToast({
+                title: "Item Added",
+                description: `Item ${item.name} has been successfully added.`,
+                timeout: 3000,
+                severity: "success",
+                color: "success",
+                shouldShowTimeoutProgress: true,
+            });
+            onOpenChange(false);
+            setIsLoading(false);
+        } else {
+            addToast({
+                title: "Invalid",
+                description:
+                    String(result.error) ||
+                    "An error occurred while adding the item.",
+                timeout: 3000,
+                severity: "danger",
+                color: "danger",
+                shouldShowTimeoutProgress: true,
+            });
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -227,10 +274,9 @@ export function AddItemModal({
                                 </Button>
                                 <Button
                                     color="success"
-                                    isDisabled={
-                                        itemHasVariant &&
-                                        item.variants.length < 2
-                                    }
+                                    isDisabled={!validate()}
+                                    isLoading={isLoading}
+                                    onPress={handleAddItem}
                                 >
                                     Add Item
                                 </Button>
