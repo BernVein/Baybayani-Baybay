@@ -15,7 +15,8 @@ export function ItemPricingDetail({
             <div className="flex flex-row gap-2 items-center">
                 <Input
                     label="Retail Price"
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     isRequired
                     className="w-1/2"
                     startContent={
@@ -26,24 +27,41 @@ export function ItemPricingDetail({
                         </div>
                     }
                     description="Starting price"
-                    value={variant.retailPrice?.toString()}
-                    onValueChange={(v) =>
+                    value={
+                        variant.retailPrice !== undefined
+                            ? String(variant.retailPrice)
+                            : ""
+                    }
+                    onValueChange={(v) => {
+                        if (v === "") {
+                            setVariant({
+                                ...variant,
+                                retailPrice: undefined,
+                            });
+                            return;
+                        }
+
+                        const num = Number(v);
+
+                        if (Number.isNaN(num)) return;
+
                         setVariant({
                             ...variant,
-                            retailPrice: Math.max(Number(v), 1),
-                        })
-                    }
+                            retailPrice: num,
+                        });
+                    }}
                     isInvalid={
                         isSubmitted &&
                         (variant.retailPrice == null ||
-                            variant.retailPrice <= 0 ||
-                            !Number.isFinite(variant.retailPrice))
+                            variant.retailPrice <= 0)
                     }
                     errorMessage="Retail price is required"
                 />
+
                 <Input
                     label="Wholesale Price"
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     className="w-1/2"
                     startContent={
                         <div className="pointer-events-none flex items-center">
