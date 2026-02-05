@@ -33,14 +33,14 @@ export const useFetchCartItems = (
             .from("CartItemUser")
             .select(
                 `
-                    *,
-                    Item (
-                    *,
-                    Item_Image ( item_image_url ),
-                    Variant ( * )
-                    ),
-                    VariantSnapshot ( * )
-                `,
+        *,
+        Item (
+          *,
+          Item_Image ( item_image_url ),
+          Variant ( *, StockMovement(effective_stocks, created_at) )
+        ),
+        VariantSnapshot ( * )
+      `,
             )
             .in("cart_item_user_id", normalizedIds)
             .eq("is_soft_deleted", false);
@@ -71,33 +71,46 @@ export const useFetchCartItems = (
                           last_updated: row.Item.last_updated,
                           created_at: String(row.Item.created_at || ""),
                           item_variants:
-                              row.Item.Variant?.map((v: Variant) => ({
-                                  variant_id: v.variant_id,
-                                  variant_name: v.variant_name,
-                                  variant_price_retail: Number(
-                                      v.variant_price_retail,
-                                  ),
-                                  variant_price_wholesale:
-                                      v.variant_price_wholesale ?? null,
-                                  variant_wholesale_item:
-                                      v.variant_wholesale_item ?? null,
-                                  variant_stocks: Number(v.variant_stocks ?? 0),
-                                  variant_last_updated_stock:
-                                      v.variant_last_updated_stock ?? "",
-                                  variant_last_updated_price_retail:
-                                      v.variant_last_updated_price_retail ??
-                                      null,
-                                  variant_last_price_retail:
-                                      v.variant_last_price_retail ?? undefined,
-                                  variant_last_updated_price_wholesale:
-                                      v.variant_last_updated_price_wholesale ??
-                                      null,
-                                  variant_last_price_wholesale:
-                                      v.variant_last_price_wholesale ?? null,
-                                  last_updated: v.last_updated ?? "",
-                                  is_soft_deleted: v.is_soft_deleted ?? false,
-                                  created_at: v.created_at ?? "",
-                              })) ?? [],
+                              row.Item.Variant?.map((v: Variant & any) => {
+                                  const movements = v.StockMovement ?? [];
+                                  const latestMovement = movements.sort(
+                                      (a: any, b: any) =>
+                                          new Date(b.created_at).getTime() -
+                                          new Date(a.created_at).getTime(),
+                                  )[0];
+
+                                  return {
+                                      variant_id: v.variant_id,
+                                      variant_name: v.variant_name,
+                                      variant_price_retail: Number(
+                                          v.variant_price_retail,
+                                      ),
+                                      variant_price_wholesale:
+                                          v.variant_price_wholesale ?? null,
+                                      variant_wholesale_item:
+                                          v.variant_wholesale_item ?? null,
+                                      variant_stocks:
+                                          latestMovement?.effective_stocks ?? 0,
+                                      variant_last_updated_stock:
+                                          latestMovement?.created_at ?? null,
+                                      variant_last_updated_price_retail:
+                                          v.variant_last_updated_price_retail ??
+                                          null,
+                                      variant_last_price_retail:
+                                          v.variant_last_price_retail ??
+                                          undefined,
+                                      variant_last_updated_price_wholesale:
+                                          v.variant_last_updated_price_wholesale ??
+                                          null,
+                                      variant_last_price_wholesale:
+                                          v.variant_last_price_wholesale ??
+                                          null,
+                                      last_updated: v.last_updated ?? "",
+                                      is_soft_deleted:
+                                          v.is_soft_deleted ?? false,
+                                      created_at: v.created_at ?? "",
+                                  };
+                              }) ?? [],
                       }
                     : {
                           item_id: "",
