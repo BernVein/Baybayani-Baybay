@@ -1,8 +1,6 @@
 import { supabase } from "@/config/supabaseclient";
 
 export async function deleteMultipleCartItems(cartItemUserIds: string[]) {
-    if (cartItemUserIds.length === 0) return true;
-
     const { error } = await supabase
         .from("CartItemUser")
         .delete()

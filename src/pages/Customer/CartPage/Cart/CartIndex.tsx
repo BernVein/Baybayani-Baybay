@@ -14,13 +14,21 @@ import useIsMobile from "@/lib/isMobile";
 import { AddToCart, CartIcon, BaybayaniLogo } from "@/components/icons";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
 import CheckoutModalIndex from "@/pages/Customer/CartPage/CheckoutModal/CheckoutModalIndex";
+import DeleteMultipleCartItemsModal from "@/pages/Customer/CartPage/DeleteCartItemModal/DeleteMultipleCartItemsModal";
 import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
+import { TrashIcon } from "@/components/icons";
 export default function Cart() {
     const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
     const {
         isOpen: checkoutModalIsOpen,
         onOpen: checkoutModalOnOpen,
         onOpenChange: checkoutModalOnOpenChange,
+    } = useDisclosure();
+
+    const {
+        isOpen: deleteMultipleModalIsOpen,
+        onOpen: deleteMultipleModalOnOpen,
+        onOpenChange: deleteMultipleModalOnOpenChange,
     } = useDisclosure();
 
     const isMobile = useIsMobile();
@@ -123,18 +131,31 @@ export default function Cart() {
             ) : (
                 <div className="flex flex-col sm:flex-row gap-3 w-full md:w-3/4 md:mx-auto p-5">
                     <div className="sm:w-3/4">
-                        <Checkbox
-                            isSelected={isAllSelected}
-                            isIndeterminate={isIndeterminate}
-                            onValueChange={(checked) => {
-                                setSelectedItemsId(checked ? allIds : []);
-                            }}
-                            isDisabled={allIds.length === 0}
-                            className="mb-2"
-                            color="success"
-                        >
-                            Select All
-                        </Checkbox>
+                        <div className="flex justify-between items-center mb-2">
+                            <Checkbox
+                                isSelected={isAllSelected}
+                                isIndeterminate={isIndeterminate}
+                                onValueChange={(checked) => {
+                                    setSelectedItemsId(checked ? allIds : []);
+                                }}
+                                isDisabled={allIds.length === 0}
+                                color="success"
+                            >
+                                Select All
+                            </Checkbox>
+
+                            <Button
+                                color="danger"
+                                startContent={<TrashIcon className="size-4" />}
+                                onPress={deleteMultipleModalOnOpen}
+                                isDisabled={selectedItemsId.length === 0}
+                            >
+                                Remove Selected{" "}
+                                {selectedItemsId.length === 0
+                                    ? ""
+                                    : `(${selectedItemsId.length})`}
+                            </Button>
+                        </div>
 
                         {/* Left side: cart list or skeletons */}
                         <CheckboxGroup
@@ -241,6 +262,15 @@ export default function Cart() {
                 checkoutModalOnOpenChange={checkoutModalOnOpenChange}
                 selectedItemsId={selectedItemsId}
                 selectedSubtotal={selectedSubtotal}
+            />
+            <DeleteMultipleCartItemsModal
+                isOpen={deleteMultipleModalIsOpen}
+                onOpenChange={deleteMultipleModalOnOpenChange}
+                selectedItemsId={selectedItemsId}
+                onDeleted={() => {
+                    refetch();
+                    setSelectedItemsId([]);
+                }}
             />
         </>
     );
