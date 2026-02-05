@@ -9,7 +9,7 @@ import {
 } from "@heroui/react";
 import { ExclamationCircle } from "@/components/icons";
 import { Tag } from "@/data/supabase/useFetchTags";
-import { deleteTag } from "@/data/supabase/Customer/Products/deleteTag";
+import { deleteTag } from "@/data/supabase/Admin/Products/deleteTag";
 import { useState } from "react";
 
 export function DeleteTagModal({

@@ -17,9 +17,9 @@ export function ProductTable() {
     useEffect(() => {
         const handler = () => refetch();
 
-        window.addEventListener("baybayani:items-updated", handler);
+        window.addEventListener("baybayani:update-table", handler);
         return () =>
-            window.removeEventListener("baybayani:items-updated", handler);
+            window.removeEventListener("baybayani:update-table", handler);
     }, [refetch]);
 
     if (loading) {

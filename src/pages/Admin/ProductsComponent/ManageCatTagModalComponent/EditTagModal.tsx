@@ -9,7 +9,7 @@ import {
     addToast,
 } from "@heroui/react";
 import { Tag } from "@/data/supabase/useFetchTags";
-import { updateTag } from "@/data/supabase/Customer/Products/updateTag";
+import { updateTag } from "@/data/supabase/Admin/Products/updateTag";
 import { useState, useEffect } from "react";
 
 export function EditTagModal({

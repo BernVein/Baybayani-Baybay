@@ -1,12 +1,12 @@
 import { supabase } from "@/config/supabaseclient";
 
-export async function deleteTag(tagId: string) {
+export async function deleteCategory(categoryId: string) {
     try {
-        // Check if any items are using this tag
+        // Check if any items are using this category
         const { count, error: countError } = await supabase
             .from("Item")
             .select("item_id", { count: "exact", head: true })
-            .eq("tag_id", tagId)
+            .eq("category_id", categoryId)
             .eq("is_soft_deleted", false);
 
         if (countError) {
@@ -14,19 +14,19 @@ export async function deleteTag(tagId: string) {
         }
 
         if (count && count > 0) {
-            return { success: false, error: "TAG_IN_USE", count };
+            return { success: false, error: "CATEGORY_IN_USE", count };
         }
 
-        // Soft-delete the tag
+        // Soft-delete the category
         const { error: deleteError } = await supabase
-            .from("Tag")
+            .from("Category")
             .update({ is_soft_deleted: true })
-            .eq("tag_id", tagId);
+            .eq("category_id", categoryId);
 
         if (deleteError) {
             return { success: false, error: deleteError.message };
         }
-
+        window.dispatchEvent(new Event("baybayani:update-table"));
         return { success: true };
     } catch (err: any) {
         return { success: false, error: err.message || "UNKNOWN_ERROR" };

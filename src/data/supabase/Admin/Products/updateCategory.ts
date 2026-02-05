@@ -1,16 +1,17 @@
 import { supabase } from "@/config/supabaseclient";
-import { Tag } from "@/data/supabase/useFetchTags";
+import { Category } from "@/data/supabase/useFetchCategories";
 
-export async function updateTag(tag: Tag) {
+export async function updateCategory(category: Category) {
     try {
         const { error } = await supabase
-            .from("Tag")
-            .update({ tag_name: tag.tag_name })
-            .eq("tag_id", tag.tag_id);
+            .from("Category")
+            .update({ category_name: category.category_name })
+            .eq("category_id", category.category_id);
 
         if (error) {
             return { success: false, error: error.message };
         }
+        window.dispatchEvent(new Event("baybayani:update-table"));
 
         return { success: true };
     } catch (err: any) {

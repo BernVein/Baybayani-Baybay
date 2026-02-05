@@ -9,7 +9,7 @@ import {
 } from "@heroui/react";
 import { ExclamationCircle } from "@/components/icons";
 import { Category } from "@/data/supabase/useFetchCategories";
-import { deleteCategory } from "@/data/supabase/Customer/Products/deleteCat";
+import { deleteCategory } from "@/data/supabase/Admin/Products/deleteCat";
 import { useState } from "react";
 
 export function DeleteCatModal({

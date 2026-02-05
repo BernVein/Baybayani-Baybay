@@ -10,7 +10,7 @@ import {
 } from "@heroui/react";
 import { Category } from "@/data/supabase/useFetchCategories";
 import { useState, useEffect } from "react";
-import { updateCategory } from "@/data/supabase/Customer/Products/updateCategory";
+import { updateCategory } from "@/data/supabase/Admin/Products/updateCategory";
 export function EditCatModal({
     isOpenEditCat,
     onOpenChangeEditCat,

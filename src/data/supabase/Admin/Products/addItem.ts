@@ -82,7 +82,7 @@ export async function addItem(item: ItemDB) {
                 item_image_url: publicUrl,
             });
         }
-        window.dispatchEvent(new Event("baybayani:items-updated"));
+        window.dispatchEvent(new Event("baybayani:update-table"));
         return { success: true, itemId };
     } catch (error) {
         const message =
