@@ -106,9 +106,11 @@ export default function EditDetailInfoModal({
                                         "Variant Error"}{" "}
                                     Details
                                 </span>
-                                <span className="text-default-500 font-medium text-base">
-                                    - {item.item_title || "Name Error"}
-                                </span>
+                                {item.item_has_variant && (
+                                    <span className="text-default-500 font-medium text-base">
+                                        - {item.item_title || "Name Error"}
+                                    </span>
+                                )}
                             </h2>
                         </ModalHeader>
 

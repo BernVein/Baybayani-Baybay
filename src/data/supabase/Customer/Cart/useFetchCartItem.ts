@@ -33,14 +33,14 @@ export const useFetchCartItems = (
             .from("CartItemUser")
             .select(
                 `
-        *,
-        Item (
-          *,
-          Item_Image ( item_image_url ),
-          Variant ( *, StockMovement(effective_stocks, created_at) )
-        ),
-        VariantSnapshot ( * )
-      `,
+                    *,
+                    Item (
+                    *,
+                    Item_Image ( item_image_url ),
+                    Variant ( *, StockMovement(effective_stocks, created_at) )
+                    ),
+                    VariantSnapshot ( * )
+                `,
             )
             .in("cart_item_user_id", normalizedIds)
             .eq("is_soft_deleted", false);
@@ -66,6 +66,7 @@ export const useFetchCartItems = (
                               ) ?? [],
                           item_sold_by: row.Item.item_sold_by,
                           item_description: row.Item.item_description,
+                          item_has_variant: row.Item.item_has_variant,
                           item_tag: row.Item.item_tag ?? null,
                           is_soft_deleted: row.Item.is_soft_deleted,
                           last_updated: row.Item.last_updated,

@@ -8,6 +8,7 @@ import {
     useDisclosure,
     Button,
     Chip,
+    Skeleton,
 } from "@heroui/react";
 import { TrashIcon } from "@/components/icons";
 import EditDetailInfoModal from "@/pages/Customer/CartPage/EditDetailModal/EditDetailModalIndex";
@@ -37,11 +38,22 @@ export default function CartItem({
         onOpenChange: onOpenChangeDeleteModal,
     } = useDisclosure();
 
-    const { cartItems } = useFetchCartItems(cartItemUserId);
+    const { cartItems, loading } = useFetchCartItems(cartItemUserId);
     const cartItemUser = cartItems[0];
 
-    if (!cartItemUser) {
-        return null;
+    if (loading || !cartItemUser) {
+        return (
+            <div className="relative w-full shadow-sm border border-default-200 rounded-lg p-3">
+                <div className="flex flex-row gap-3">
+                    <Skeleton className="w-[100px] sm:w-[150px] h-[90px] rounded-sm" />
+                    <div className="flex flex-col flex-1 gap-2">
+                        <Skeleton className="h-4 w-3/4 rounded-md" />
+                        <Skeleton className="h-3 w-1/2 rounded-md" />
+                        <Skeleton className="h-3 w-full rounded-md mt-2" />
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     // Frozen snapshot of the variant when added to cart
@@ -132,9 +144,11 @@ export default function CartItem({
                                 <span className="text-sm sm:text-base text-default-700">
                                     {variant_snapshot?.variant_snapshot_name}
                                 </span>
-                                <span className="text-xs sm:text-sm text-default-500">
-                                    {item.item_title}
-                                </span>
+                                {item.item_has_variant && (
+                                    <span className="text-xs sm:text-sm text-default-500">
+                                        {item.item_title}
+                                    </span>
+                                )}
                             </div>
 
                             <Divider className="my-3 sm:my-2" />

@@ -107,9 +107,9 @@ export default function InformationSection({
                             </div>
                         </PopoverContent>
                     </Popover>
+                    <Divider />
                 </>
             )}
-            <Divider />
             {/* Product Info Section */}
             <div className="flex flex-col gap-3">
                 <div className="flex flex-col items-start gap-2">
