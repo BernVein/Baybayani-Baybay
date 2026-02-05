@@ -95,9 +95,7 @@ export default function InformationSection({
 
                 {/* Current Retail Price */}
                 <div className="gap-2 flex flex-row justify-between">
-                    <span className="text-base text-default-500">
-                        Retail Price:
-                    </span>
+                    <span className="text-sm font-semibold">Retail Price:</span>
                     <span className="text-base text-default-700 font-bold">
                         ₱
                         {selectedItemVariant?.variant_price_retail?.toFixed(
@@ -107,7 +105,7 @@ export default function InformationSection({
                     </span>
                 </div>
                 <div className="gap-2 flex flex-row justify-between">
-                    <span className="text-base text-default-500">
+                    <span className="text-sm font-semibold">
                         Wholesale Price:
                     </span>
 
