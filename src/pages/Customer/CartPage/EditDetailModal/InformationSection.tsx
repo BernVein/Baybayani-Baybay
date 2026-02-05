@@ -51,10 +51,17 @@ export default function InformationSection({
             selectedItemVariant.variant_stocks;
     return (
         <>
-            <p className="text-sm">{item.item_description}</p>
-            {item.item_variants?.length > 1 && (
+            {item.item_description ? (
+                <p className="text-sm">{item.item_description}</p>
+            ) : (
+                <p className="text-sm text-default-500 italic">
+                    No description available
+                </p>
+            )}
+            <Divider />
+
+            {item.item_has_variant && (
                 <>
-                    <Divider />
                     <Popover showArrow>
                         <PopoverTrigger>
                             <div className="cursor-pointer active:opacity-70 transition-all duration-200 ease-in-out">

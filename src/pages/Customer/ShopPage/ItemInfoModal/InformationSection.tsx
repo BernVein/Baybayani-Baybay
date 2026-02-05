@@ -48,10 +48,15 @@ export default function InformationSection({
 
     return (
         <>
-            <div className="flex flex-col gap-2 items-start">
-                <span className="text-sm">{item.item_description}</span>
-            </div>
-            {item.item_variants?.length > 1 && (
+            {item.item_description ? (
+                <p className="text-sm">{item.item_description}</p>
+            ) : (
+                <p className="text-sm text-default-500 italic">
+                    No description available
+                </p>
+            )}
+            <Divider />
+            {item.item_has_variant && (
                 <>
                     <Divider />
                     <RadioGroup
