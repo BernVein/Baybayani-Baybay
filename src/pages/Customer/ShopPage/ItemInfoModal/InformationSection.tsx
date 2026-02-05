@@ -58,7 +58,6 @@ export default function InformationSection({
             <Divider />
             {item.item_has_variant && (
                 <>
-                    <Divider />
                     <RadioGroup
                         label="Product Variants"
                         color="success"
