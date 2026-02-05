@@ -59,6 +59,15 @@ export function AddEditVariantModal({
         });
     }, [isOpenAddVar, defaultVariant]);
 
+    useEffect(() => {
+        if (variant.wholesalePrice == null && variant.wholesaleMinQty != null) {
+            setVariant((prev) => ({
+                ...prev,
+                wholesaleMinQty: undefined,
+            }));
+        }
+    }, [variant.wholesalePrice, variant.wholesaleMinQty, setVariant]);
+
     function validateVariant(): boolean {
         if (itemHasVariant && !variant.name?.trim()) return false;
         if (variant.stocks == null || variant.stocks == 0) return false;
@@ -189,38 +198,40 @@ export function AddEditVariantModal({
                                 <div className="flex flex-col gap-2 items-center">
                                     <Input
                                         label="Wholesale Minimum Quantity"
-                                        isRequired={!!variant.wholesalePrice}
                                         type="number"
+                                        isRequired={!!variant.wholesalePrice}
+                                        isDisabled={!variant.wholesalePrice}
                                         isInvalid={
                                             isSubmitted &&
+                                            variant.wholesalePrice != null &&
                                             (variant.wholesaleMinQty == null ||
-                                                variant.wholesaleMinQty ===
-                                                    0) &&
-                                            variant.wholesalePrice != null
+                                                variant.wholesaleMinQty === 0)
                                         }
                                         errorMessage="Wholesale minimum quantity is required."
-                                        isDisabled={!variant.wholesalePrice}
-                                        endContent={
-                                            <div className="pointer-events-none flex items-center">
-                                                <span className="text-default-400 text-small">
-                                                    {itemUnitOfMeasure}
-                                                </span>
-                                            </div>
-                                        }
                                         value={
-                                            variant.wholesaleMinQty
-                                                ? variant.wholesaleMinQty.toString()
-                                                : undefined
+                                            variant.wholesalePrice == null
+                                                ? ""
+                                                : (variant.wholesaleMinQty?.toString() ??
+                                                  "")
                                         }
-                                        onValueChange={(v) =>
-                                            setVariant({
-                                                ...variant,
-                                                wholesaleMinQty: Math.max(
-                                                    Number(v),
-                                                    1,
-                                                ),
-                                            })
-                                        }
+                                        onValueChange={(v) => {
+                                            if (v === "") {
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    wholesaleMinQty: undefined,
+                                                }));
+                                                return;
+                                            }
+
+                                            const num = Number(v);
+                                            if (Number.isNaN(num) || num < 1)
+                                                return;
+
+                                            setVariant((prev) => ({
+                                                ...prev,
+                                                wholesaleMinQty: num,
+                                            }));
+                                        }}
                                         description="Enter the minimum quantity required for wholesale purchase"
                                     />
                                 </div>

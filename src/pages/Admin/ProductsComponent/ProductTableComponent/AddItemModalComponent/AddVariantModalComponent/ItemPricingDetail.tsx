@@ -36,7 +36,8 @@ export function ItemPricingDetail({
                     isInvalid={
                         isSubmitted &&
                         (variant.retailPrice == null ||
-                            variant.retailPrice == 0)
+                            variant.retailPrice <= 0 ||
+                            !Number.isFinite(variant.retailPrice))
                     }
                     errorMessage="Retail price is required"
                 />
@@ -53,16 +54,28 @@ export function ItemPricingDetail({
                     }
                     description="For bulk purchase"
                     value={
-                        variant.wholesalePrice
-                            ? variant.wholesalePrice.toString()
-                            : undefined
+                        variant.wholesalePrice !== undefined
+                            ? String(variant.wholesalePrice)
+                            : ""
                     }
-                    onValueChange={(v) =>
+                    onValueChange={(v) => {
+                        if (v === "") {
+                            setVariant({
+                                ...variant,
+                                wholesalePrice: undefined,
+                            });
+                            return;
+                        }
+
+                        const num = Number(v);
+
+                        if (Number.isNaN(num) || num <= 0) return;
+
                         setVariant({
                             ...variant,
-                            wholesalePrice: Math.max(Number(v), 1),
-                        })
-                    }
+                            wholesalePrice: num,
+                        });
+                    }}
                 />
             </div>
         </>
