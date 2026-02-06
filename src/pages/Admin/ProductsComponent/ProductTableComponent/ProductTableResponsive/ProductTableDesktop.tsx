@@ -48,7 +48,7 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                         <span className="text-sm italic text-default-500">
                                             {item.item_variant_count > 1
                                                 ? `${item.item_variant_count} variants`
-                                                : "No variants"}
+                                                : "No variant"}
                                         </span>
                                     </div>
                                 </div>

@@ -41,7 +41,7 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                                         <span className="text-sm italic text-default-500">
                                             {item.item_variant_count > 1
                                                 ? `${item.item_variant_count} variants`
-                                                : "No variants"}
+                                                : "No variant"}
                                         </span>
 
                                         <span className="text-default-500 italic text-xs">
