@@ -9,20 +9,18 @@ import {
 } from "@heroui/react";
 import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableMobile";
 import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableDesktop";
-import { useFetchProductsUI } from "@/data/supabase/Admin/Products/useFetchProductsUI";
 import { useEffect } from "react";
+import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 
 export function ProductTable({
-    searchQuery,
-    selectedCategories,
+    items,
+    loading,
+    refetch,
 }: {
-    searchQuery: string;
-    selectedCategories: string[];
+    items: ItemTableRow[];
+    loading: boolean;
+    refetch: () => Promise<void>;
 }) {
-    const { items, loading, refetch } = useFetchProductsUI(
-        searchQuery,
-        selectedCategories,
-    );
     useEffect(() => {
         const handler = () => refetch();
 

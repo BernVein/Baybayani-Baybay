@@ -3,10 +3,16 @@ import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
 import { FilterSection } from "@/pages/Admin/ProductsComponent/FilterSection";
 import { ProductTable } from "@/pages/Admin/ProductsComponent/ProductTable";
 import { useState, useEffect } from "react";
+import { useFetchProductsUI } from "@/data/supabase/Admin/Products/useFetchProductsUI";
 
 export default function Products() {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+    const { items, allItems, loading, refetch } = useFetchProductsUI(
+        searchQuery,
+        selectedCategories,
+    );
 
     useEffect(() => {
         console.log("Products page rendered with searchQuery:", searchQuery);
@@ -31,7 +37,7 @@ export default function Products() {
                 </div>
             </div>
             <div className="hidden sm:block shrink-0">
-                <ProductSummary />
+                <ProductSummary items={allItems} />
             </div>
 
             <div className="flex flex-row items-center justify-between shrink-0">
@@ -44,8 +50,9 @@ export default function Products() {
             </div>
             <div className="flex-1 min-h-0">
                 <ProductTable
-                    searchQuery={searchQuery}
-                    selectedCategories={selectedCategories}
+                    items={items}
+                    loading={loading}
+                    refetch={refetch}
                 />
             </div>
         </div>

@@ -6,9 +6,20 @@ import {
     ProductIconWithX,
 } from "@/components/icons";
 import { ManageCatTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModal";
+import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 
-export function ProductSummary() {
+export function ProductSummary({ items }: { items: ItemTableRow[] }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    const totalItems = items.length;
+    const totalInventory = items.reduce(
+        (sum, item) => sum + (item.variant_stock ?? 0),
+        0,
+    );
+    const totalCategories = new Set(
+        items.map((item) => item.item_category_id).filter(Boolean),
+    ).size;
+
     return (
         <>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -19,7 +30,7 @@ export function ProductSummary() {
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex flex-row items-center">
                                     <span className="text-3xl font-bold">
-                                        21
+                                        {totalItems}
                                     </span>
                                 </div>
 
@@ -43,7 +54,7 @@ export function ProductSummary() {
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex flex-row items-center gap-2">
                                     <span className="text-3xl font-bold">
-                                        322
+                                        {totalInventory}
                                     </span>
                                 </div>
 
@@ -67,9 +78,10 @@ export function ProductSummary() {
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex flex-row items-center gap-2">
                                     <span className="text-3xl font-bold">
-                                        3
+                                        {totalCategories}
                                     </span>
                                 </div>
+
                                 <div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
                                     <ProductIconWithX className="w-6 h-6 text-white" />
                                 </div>
