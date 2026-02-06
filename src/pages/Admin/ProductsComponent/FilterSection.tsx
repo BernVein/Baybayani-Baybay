@@ -17,18 +17,34 @@ import { AddItemModal } from "@/pages/Admin/ProductsComponent/AddItemModal";
 import { useState } from "react";
 import { useFetchCategories } from "@/data/supabase/useFetchCategories";
 
-export function FilterSection() {
+export function FilterSection({
+    setSearchQuery,
+    setSelectedCategories,
+    searchQuery,
+    selectedCategories,
+}: {
+    setSearchQuery: (query: string) => void;
+    setSelectedCategories: (categories: string[]) => void;
+    searchQuery: string;
+    selectedCategories: string[];
+}) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
     const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
     const isMobile = useIsMobile();
     const { categories, loading: catLoading } = useFetchCategories();
+
+    // keep dropdown selection in sync with selectedCategories
+    const selectedCategoryKeys = new Set<string>(selectedCategories);
+
     return (
         <div className="flex flex-row justify-between w-full">
             <Input
                 placeholder="Search item / variant"
                 className="w-1/2 sm:w-1/4"
                 startContent={<SearchIcon />}
+                value={searchQuery}
+                onValueChange={setSearchQuery}
             />
             <div className="flex flex-row gap-2 justify-end">
                 <ModalAwareSelect
@@ -39,7 +55,6 @@ export function FilterSection() {
                     selectionMode="single"
                     selectedKeys={selectKeys}
                     onSelectionChange={(keys) => {
-                        console.log(itemHasVariant);
                         const key = Array.from(keys)[0] as string | undefined;
                         if (!key) return;
                         setItemHasVariant(key === "with-variant");
@@ -50,6 +65,7 @@ export function FilterSection() {
                     <SelectItem key="no-variant">No Variant</SelectItem>
                     <SelectItem key="with-variant">With Variant</SelectItem>
                 </ModalAwareSelect>
+
                 <Dropdown>
                     <DropdownTrigger>
                         <Button
@@ -63,13 +79,27 @@ export function FilterSection() {
                             }
                             isIconOnly={isMobile}
                             isDisabled={catLoading}
+                            color={
+                                selectedCategories.length > 0
+                                    ? "success"
+                                    : "default"
+                            }
                         >
-                            {isMobile ? "" : "Categories"}
+                            {isMobile
+                                ? ""
+                                : `Categories ${selectedCategories.length > 0 ? `(${selectedCategories.length})` : ""}`}
                         </Button>
                     </DropdownTrigger>
+
                     <DropdownMenu
                         closeOnSelect={false}
                         selectionMode="multiple"
+                        selectedKeys={selectedCategoryKeys}
+                        onSelectionChange={(keys) => {
+                            // keys is a Set<React.Key>
+                            const values = Array.from(keys).map(String);
+                            setSelectedCategories(values);
+                        }}
                     >
                         <DropdownSection title="Categories" showDivider>
                             {categories.map((cat) => (
@@ -96,6 +126,7 @@ export function FilterSection() {
                     </DropdownMenu>
                 </Dropdown>
             </div>
+
             <AddItemModal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}

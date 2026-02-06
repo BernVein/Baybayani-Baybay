@@ -12,8 +12,17 @@ import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTabl
 import { useFetchProductsUI } from "@/data/supabase/Admin/Products/useFetchProductsUI";
 import { useEffect } from "react";
 
-export function ProductTable() {
-    const { items, loading, refetch } = useFetchProductsUI();
+export function ProductTable({
+    searchQuery,
+    selectedCategories,
+}: {
+    searchQuery: string;
+    selectedCategories: string[];
+}) {
+    const { items, loading, refetch } = useFetchProductsUI(
+        searchQuery,
+        selectedCategories,
+    );
     useEffect(() => {
         const handler = () => refetch();
 

@@ -2,8 +2,20 @@ import { ProductIcon } from "@/components/icons";
 import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
 import { FilterSection } from "@/pages/Admin/ProductsComponent/FilterSection";
 import { ProductTable } from "@/pages/Admin/ProductsComponent/ProductTable";
+import { useState, useEffect } from "react";
 
 export default function Products() {
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log("Products page rendered with searchQuery:", searchQuery);
+        console.log(
+            "Products page rendered with selectedCategories:",
+            selectedCategories,
+        );
+    }, [searchQuery, selectedCategories]);
+
     return (
         <div className="flex flex-col gap-8 p-4 h-full">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
@@ -23,10 +35,18 @@ export default function Products() {
             </div>
 
             <div className="flex flex-row items-center justify-between shrink-0">
-                <FilterSection />
+                <FilterSection
+                    setSearchQuery={setSearchQuery}
+                    setSelectedCategories={setSelectedCategories}
+                    searchQuery={searchQuery}
+                    selectedCategories={selectedCategories}
+                />
             </div>
             <div className="flex-1 min-h-0">
-                <ProductTable />
+                <ProductTable
+                    searchQuery={searchQuery}
+                    selectedCategories={selectedCategories}
+                />
             </div>
         </div>
     );

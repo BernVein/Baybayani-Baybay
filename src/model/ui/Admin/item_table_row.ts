@@ -7,5 +7,7 @@ export interface ItemTableRow {
     item_sold_by: string;
     variant_stock: number;
     item_category: string;
+    item_category_id: string | null; // for filtering purposes
+    item_has_variant: boolean; // for filtering purposes
     item_tag?: string;
 }

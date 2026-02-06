@@ -25,7 +25,6 @@ export function EditTagModal({
 }) {
     const [tagName, setTagName] = useState(selectedTag?.tag_name || "");
     const [loading, setLoading] = useState(false);
-    console.log(tagName, typeof tagName);
     useEffect(() => {
         setTagName(selectedTag?.tag_name || "");
     }, [selectedTag]);
