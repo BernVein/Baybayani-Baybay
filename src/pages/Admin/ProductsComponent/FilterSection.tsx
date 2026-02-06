@@ -33,6 +33,7 @@ export function FilterSection({
     const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
     const isMobile = useIsMobile();
     const { categories, loading: catLoading } = useFetchCategories();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     // keep dropdown selection in sync with selectedCategories
     const selectedCategoryKeys = new Set<string>(selectedCategories);
@@ -66,7 +67,10 @@ export function FilterSection({
                     <SelectItem key="with-variant">With Variant</SelectItem>
                 </ModalAwareSelect>
 
-                <Dropdown>
+                <Dropdown
+                    isOpen={isDropdownOpen}
+                    onOpenChange={setIsDropdownOpen}
+                >
                     <DropdownTrigger>
                         <Button
                             className="capitalize w-full"
@@ -111,7 +115,7 @@ export function FilterSection({
                             ))}
                         </DropdownSection>
 
-                        <DropdownSection title="Item Type">
+                        <DropdownSection title="Item Type" showDivider>
                             <DropdownItem key="no-variant">
                                 <div className="flex items-center gap-2">
                                     <span>No Variant</span>
@@ -120,6 +124,20 @@ export function FilterSection({
                             <DropdownItem key="with-variant">
                                 <div className="flex items-center gap-2">
                                     <span>With Variant</span>
+                                </div>
+                            </DropdownItem>
+                        </DropdownSection>
+                        <DropdownSection title="Reset">
+                            <DropdownItem
+                                color="danger"
+                                key="reset"
+                                onClick={() => {
+                                    setSelectedCategories([]);
+                                    setIsDropdownOpen(false);
+                                }}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <span>Reset Filters</span>
                                 </div>
                             </DropdownItem>
                         </DropdownSection>
