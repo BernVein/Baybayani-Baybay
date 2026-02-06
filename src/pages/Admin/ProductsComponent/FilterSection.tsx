@@ -8,18 +8,21 @@ import {
     Input,
     useDisclosure,
     SelectItem,
+    DropdownSection,
+    Spinner,
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
 import { AddItemModal } from "@/pages/Admin/ProductsComponent/AddItemModal";
 import { useState } from "react";
+import { useFetchCategories } from "@/data/supabase/useFetchCategories";
 
 export function FilterSection() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
     const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
     const isMobile = useIsMobile();
-
+    const { categories, loading: catLoading } = useFetchCategories();
     return (
         <div className="flex flex-row justify-between w-full">
             <Input
@@ -52,9 +55,14 @@ export function FilterSection() {
                         <Button
                             className="capitalize w-full"
                             startContent={
-                                <FilterIcon className="w-4 shrink-0" />
+                                catLoading ? (
+                                    <Spinner color="success" size="sm" />
+                                ) : (
+                                    <FilterIcon className="w-4 shrink-0" />
+                                )
                             }
                             isIconOnly={isMobile}
+                            isDisabled={catLoading}
                         >
                             {isMobile ? "" : "Categories"}
                         </Button>
@@ -63,31 +71,28 @@ export function FilterSection() {
                         closeOnSelect={false}
                         selectionMode="multiple"
                     >
-                        <DropdownItem key="vegetable">
-                            <div className="flex items-center gap-2">
-                                <span>Vegetable</span>
-                            </div>
-                        </DropdownItem>
-                        <DropdownItem key="grain">
-                            <div className="flex items-center gap-2">
-                                <span>Grain</span>
-                            </div>
-                        </DropdownItem>
-                        <DropdownItem key="fruit">
-                            <div className="flex items-center gap-2">
-                                <span>Fruit</span>
-                            </div>
-                        </DropdownItem>
-                        <DropdownItem key="poultry">
-                            <div className="flex items-center gap-2">
-                                <span>Poultry</span>
-                            </div>
-                        </DropdownItem>
-                        <DropdownItem key="spice">
-                            <div className="flex items-center gap-2">
-                                <span>Spice</span>
-                            </div>
-                        </DropdownItem>
+                        <DropdownSection title="Categories" showDivider>
+                            {categories.map((cat) => (
+                                <DropdownItem key={cat.category_id}>
+                                    <div className="flex items-center gap-2">
+                                        <span>{cat.category_name}</span>
+                                    </div>
+                                </DropdownItem>
+                            ))}
+                        </DropdownSection>
+
+                        <DropdownSection title="Item Type">
+                            <DropdownItem key="no-variant">
+                                <div className="flex items-center gap-2">
+                                    <span>No Variant</span>
+                                </div>
+                            </DropdownItem>
+                            <DropdownItem key="with-variant">
+                                <div className="flex items-center gap-2">
+                                    <span>With Variant</span>
+                                </div>
+                            </DropdownItem>
+                        </DropdownSection>
                     </DropdownMenu>
                 </Dropdown>
             </div>
