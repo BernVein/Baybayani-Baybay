@@ -13,7 +13,7 @@ import {
 } from "@heroui/react";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
-import { AddItemModal } from "@/pages/Admin/ProductsComponent/AddItemModal";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
 import { useState } from "react";
 import { useFetchCategories } from "@/data/supabase/useFetchCategories";
 
@@ -145,7 +145,8 @@ export function FilterSection({
                 </Dropdown>
             </div>
 
-            <AddItemModal
+            <AddEditItemModal
+                selectedItemId={null}
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 itemHasVariant={itemHasVariant}

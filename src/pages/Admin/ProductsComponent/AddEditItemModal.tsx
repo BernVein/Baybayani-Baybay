@@ -20,15 +20,18 @@ import { AddVariantButton } from "@/pages/Admin/ProductsComponent/ProductTableCo
 import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddPhotoModal";
 import { addItem } from "@/data/supabase/Admin/Products/addItem";
 
-export function AddItemModal({
+export function AddEditItemModal({
+    selectedItemId,
     itemHasVariant,
     isOpen,
     onOpenChange,
 }: {
+    selectedItemId: string | null;
     itemHasVariant: boolean;
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
 }) {
+    console.log(selectedItemId);
     const {
         isOpen: isOpenAddVar,
         onOpen: onOpenAddVar,
@@ -318,7 +321,6 @@ export function AddItemModal({
                 onOpenChange={onOpenChangePhoto}
                 images={item.itemImages}
                 setImages={(newImages) => {
-                    // if newImages is a function (SetStateAction), resolve it
                     const resolved =
                         typeof newImages === "function"
                             ? newImages(item.itemImages)

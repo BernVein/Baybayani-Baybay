@@ -11,13 +11,18 @@ import {
     Chip,
     useDisclosure,
 } from "@heroui/react";
-import { EditItemModal } from "@/pages/Admin/ProductsComponent/EditItemModal";
 import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { useState } from "react";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
 export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
+    const {
+        isOpen: isOpenEditItem,
+        onOpen: onOpenEditItem,
+        onOpenChange: onOpenChangeEditItem,
+    } = useDisclosure();
     const {
         isOpen: isOpenDeleteItem,
         onOpen: onOpenDeleteItem,
@@ -111,8 +116,11 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                                         variant="light"
                                         isIconOnly
                                         onPress={() => {
+                                            setItemHasVariant(
+                                                item.item_variant_count > 1,
+                                            );
                                             setSelectedItemId(item.item_id);
-                                            onOpen();
+                                            onOpenEditItem();
                                         }}
                                     >
                                         <PencilIcon className="w-5" />
@@ -133,11 +141,13 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
                 </TableBody>
             </Table>
 
-            <EditItemModal
-                item_id={selectedItemId ?? ""}
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
+            <AddEditItemModal
+                selectedItemId={selectedItemId}
+                isOpen={isOpenEditItem}
+                onOpenChange={onOpenChangeEditItem}
+                itemHasVariant={itemHasVariant}
             />
+
             <DeleteItemModal
                 isOpenDeleteItem={isOpenDeleteItem}
                 onOpenChangeDeleteItem={onOpenChangeDeleteItem}

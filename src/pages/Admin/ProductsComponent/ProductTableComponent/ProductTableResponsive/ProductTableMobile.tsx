@@ -14,11 +14,23 @@ import {
     DropdownSection,
     useDisclosure,
 } from "@heroui/react";
-import { EditItemModal } from "@/pages/Admin/ProductsComponent/EditItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { useState } from "react";
+import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
+import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
+
 export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const {
+        isOpen: isOpenEditItem,
+        onOpen: onOpenEditItem,
+        onOpenChange: onOpenChangeEditItem,
+    } = useDisclosure();
+    const {
+        isOpen: isOpenDeleteItem,
+        onOpen: onOpenDeleteItem,
+        onOpenChange: onOpenChangeDeleteItem,
+    } = useDisclosure();
+    const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     return (
         <div className="sm:hidden flex-1 min-h-0 flex flex-col">
@@ -94,10 +106,14 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                                                     <PencilIcon className="w-5" />
                                                 }
                                                 onClick={() => {
+                                                    setItemHasVariant(
+                                                        item.item_variant_count >
+                                                            1,
+                                                    );
                                                     setSelectedItemId(
                                                         item.item_id,
                                                     );
-                                                    onOpen();
+                                                    onOpenEditItem();
                                                 }}
                                             >
                                                 <div className="flex items-center gap-2">
@@ -110,6 +126,7 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                                                 startContent={
                                                     <TrashIcon className="w-5 text-danger-300" />
                                                 }
+                                                onPress={onOpenDeleteItem}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-danger">
@@ -125,10 +142,17 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
                     ))}
                 </TableBody>
             </Table>
-            <EditItemModal
-                item_id={selectedItemId ?? ""}
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
+
+            <AddEditItemModal
+                selectedItemId={selectedItemId}
+                isOpen={isOpenEditItem}
+                onOpenChange={onOpenChangeEditItem}
+                itemHasVariant={itemHasVariant}
+            />
+
+            <DeleteItemModal
+                isOpenDeleteItem={isOpenDeleteItem}
+                onOpenChangeDeleteItem={onOpenChangeDeleteItem}
             />
         </div>
     );
