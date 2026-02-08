@@ -3,7 +3,7 @@ export interface Item {
     item_id: string;
     item_category: string;
     item_title: string;
-    item_img: string[]; // Join in db, this column doenst exist
+    item_img: string[] | File | null; // Join in db, this column doenst exist
     item_sold_by: string;
     item_description: string;
     item_tag?: string | null;
