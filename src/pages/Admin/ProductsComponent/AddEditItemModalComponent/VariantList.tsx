@@ -9,8 +9,8 @@ import {
     useDisclosure,
 } from "@heroui/react";
 import { useState } from "react";
-import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/VariantListComponent/DeleteVariantModal";
-import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddEditVariantModal";
+import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantListComponent/DeleteVariantModal";
+import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
 
 export function VariantList({
     itemHasVariant,

@@ -10,14 +10,14 @@ import {
     Divider,
     addToast,
 } from "@heroui/react";
-import { ItemInitialDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemInitialDetail";
-import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddEditVariantModal";
+import { ItemInitialDetail } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModalComponent/ItemInitialDetail";
+import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
 import { useState, useEffect } from "react";
 import { ItemDB } from "@/model/db/additem";
-import { VariantList } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/VariantList";
-import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/CloseWarningModal";
-import { AddVariantButton } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantButton";
-import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddPhotoModal";
+import { VariantList } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantList";
+import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/CloseWarningModal";
+import { AddVariantButton } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddVariantButton";
+import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddPhotoModal";
 import { addItem } from "@/data/supabase/Admin/Products/addItem";
 
 export function AddEditItemModal({

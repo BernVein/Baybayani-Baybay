@@ -12,8 +12,8 @@ import {
 } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { today } from "@internationalized/date";
-import { ItemStockDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemStockDetail";
-import { ItemPricingDetail } from "@/pages/Admin/ProductsComponent/ProductTableComponent/AddItemModalComponent/AddVariantModalComponent/ItemPricingDetail";
+import { ItemStockDetail } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModalComponent/ItemStockDetail";
+import { ItemPricingDetail } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModalComponent/ItemPricingDetail";
 
 export function AddEditVariantModal({
     itemUnitOfMeasure,
