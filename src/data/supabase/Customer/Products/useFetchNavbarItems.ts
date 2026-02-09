@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 
 export interface NavbarItem {
@@ -30,7 +31,6 @@ export const useFetchNavbarItems = () => {
 
                 setItems(mapped);
             } catch (err: any) {
-                console.error(err);
                 setError(err.message);
             } finally {
                 setLoading(false);

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
 import { Variant } from "@/model/variant";
-
+import { StockMovement } from "@/model/stockMovement";
 export const useFetchItemById = (itemId: string | number | null) => {
     const [item, setItem] = useState<Item | null>(null);
     const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ export const useFetchItemById = (itemId: string | number | null) => {
         const fetchItem = async () => {
             setLoading(true);
             setError(null);
-            setItem(null); // Reset item state to prevent stale data display
+            setItem(null);
 
             // Fetch item with variants
             const { data, error } = await supabase
@@ -25,37 +26,30 @@ export const useFetchItemById = (itemId: string | number | null) => {
                 .single();
 
             if (error) {
-                console.error("Supabase error:", error);
                 setError(error.message);
                 setLoading(false);
+
                 return;
             }
 
             if (!data) {
                 setItem(null);
+
                 return;
             }
-
             const variantsRaw = data.Variant || [];
 
             // For each variant, get the latest stock from StockMovement
             const variants = await Promise.all(
                 variantsRaw.map(async (v: Variant) => {
-                    const { data: stockData, error: stockError } =
-                        await supabase
-                            .from("StockMovement")
-                            .select("effective_stocks")
-                            .eq("variant_id", v.variant_id)
-                            .eq("is_soft_deleted", false)
-                            .order("created_at", { ascending: false })
-                            .limit(1)
-                            .single();
-
-                    if (stockError) {
-                        console.error("Stock fetch error:", stockError);
-                    }
-
-                    const effectiveStocks = stockData?.effective_stocks ?? 0;
+                    const { data: stockData } = await supabase
+                        .from("StockMovement")
+                        .select("effective_stocks")
+                        .eq("variant_id", v.variant_id)
+                        .eq("is_soft_deleted", false)
+                        .order("created_at", { ascending: false })
+                        .limit(1)
+                        .single();
 
                     return {
                         variant_id: v.variant_id,
@@ -69,7 +63,8 @@ export const useFetchItemById = (itemId: string | number | null) => {
                             v.variant_wholesale_item === null
                                 ? null
                                 : Number(v.variant_wholesale_item),
-                        variant_stocks: Number(effectiveStocks),
+                        variant_stock_latest_movement:
+                            stockData as StockMovement,
                         variant_last_updated_stock:
                             v.variant_last_updated_stock,
                         variant_last_updated_price_retail:
@@ -87,17 +82,19 @@ export const useFetchItemById = (itemId: string | number | null) => {
                         last_updated: v.last_updated,
                         is_soft_deleted: v.is_soft_deleted,
                         created_at: v.created_at,
-                    };
+                    } satisfies Variant;
                 }),
             );
-
             // Filter variants with zero stock
             const variantsInStock = variants.filter(
-                (v) => v.variant_stocks > 0,
+                (v) =>
+                    v.variant_stock_latest_movement?.effective_stocks ?? 0 > 0,
             );
+
             if (variantsInStock.length === 0) {
                 setItem(null);
                 setLoading(false);
+
                 return;
             }
 

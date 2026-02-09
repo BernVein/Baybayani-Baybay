@@ -1,19 +1,20 @@
-import { PhotoIcon } from "@/components/icons";
 import {
-    Button,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    useDisclosure,
-    Divider,
-    addToast,
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  Divider,
+  addToast,
 } from "@heroui/react";
+import { useState, useEffect } from "react";
+
+import { PhotoIcon } from "@/components/icons";
 import { ItemInitialDetail } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModalComponent/ItemInitialDetail";
 import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
-import { useState, useEffect } from "react";
-import { ItemDB } from "@/model/db/additem";
+import { Item } from "@/model/Item";
 import { VariantList } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantList";
 import { CloseWarningModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/CloseWarningModal";
 import { AddVariantButton } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddVariantButton";
@@ -21,317 +22,315 @@ import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalC
 import { addItem } from "@/data/supabase/Admin/Products/addItem";
 
 export function AddEditItemModal({
-    selectedItemId,
-    itemHasVariant,
-    isOpen,
-    onOpenChange,
+  selectedItemId,
+  itemHasVariant,
+  isOpen,
+  onOpenChange,
 }: {
-    selectedItemId: string | null;
-    itemHasVariant: boolean;
-    isOpen: boolean;
-    onOpenChange: (open: boolean) => void;
+  selectedItemId: string | null;
+  itemHasVariant: boolean;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-    console.log(selectedItemId);
-    const {
-        isOpen: isOpenAddVar,
-        onOpen: onOpenAddVar,
-        onOpenChange: onOpenChangeAddVar,
-    } = useDisclosure();
+  const {
+    isOpen: isOpenAddVar,
+    onOpen: onOpenAddVar,
+    onOpenChange: onOpenChangeAddVar,
+  } = useDisclosure();
 
-    const {
-        isOpen: isOpenWarning,
-        onOpen: onOpenWarning,
-        onOpenChange: onOpenChangeWarning,
-    } = useDisclosure();
+  console.log(selectedItemId);
+  const {
+    isOpen: isOpenWarning,
+    onOpen: onOpenWarning,
+    onOpenChange: onOpenChangeWarning,
+  } = useDisclosure();
 
-    const {
-        isOpen: isOpenPhoto,
-        onOpen: onOpenPhoto,
-        onOpenChange: onOpenChangePhoto,
-    } = useDisclosure();
+  const {
+    isOpen: isOpenPhoto,
+    onOpen: onOpenPhoto,
+    onOpenChange: onOpenChangePhoto,
+  } = useDisclosure();
 
-    const [item, setItem] = useState<ItemDB>({
-        name: "",
-        categoryId: "",
-        shortDescription: "",
-        unitOfMeasure: "",
-        tagId: "",
-        itemImages: [null, null, null, null],
-        variants: [],
+  const [item, setItem] = useState<Item>({
+    item_title: "",
+    item_category_id: "",
+    item_description: "",
+    item_sold_by: "",
+    item_tag_id: "",
+    item_img: [null, null, null, null],
+    item_has_variant: itemHasVariant,
+    item_variants: [],
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const selectedCount = item.item_img.filter(Boolean).length;
+
+  function validate(): boolean {
+    if (!item.item_title.trim()) return false;
+    if (!item.item_category_id?.trim()) return false;
+    if (!item.item_sold_by.trim()) return false;
+    if (selectedCount === 0) return false;
+
+    return true;
+  }
+
+  useEffect(() => {
+    setIsSubmitted(false);
+    setItem({
+      item_title: "",
+      item_category_id: "",
+      item_description: "",
+      item_sold_by: "",
+      item_tag_id: "",
+      item_img: [null, null, null, null],
+      item_variants: [],
     });
+  }, [isOpen]);
 
-    const [isSubmitted, setIsSubmitted] = useState(false);
+  const isItemPristine = () => {
+    const defaultItem: Item = {
+      item_title: "",
+      item_category_id: "",
+      item_description: "",
+      item_sold_by: "",
+      item_tag_id: "",
+      item_img: [null, null, null, null],
+      item_variants: [],
+    };
 
-    const selectedCount = item.itemImages.filter(Boolean).length;
+    const isDefaultItem =
+      item.item_title === defaultItem.item_title &&
+      item.item_category_id === defaultItem.item_category_id &&
+      item.item_description === defaultItem.item_description &&
+      item.item_sold_by === defaultItem.item_sold_by &&
+      item.item_tag_id === defaultItem.item_tag_id &&
+      item.item_variants.length === 0;
 
-    function validate(): boolean {
-        if (!item.name.trim()) return false;
-        if (!item.categoryId) return false;
-        if (!item.unitOfMeasure.trim()) return false;
-        if (selectedCount === 0) return false;
+    const noImages = item.item_img.every((img) => img === null);
 
-        return true;
+    return isDefaultItem && noImages;
+  };
+  const [isLoading, setIsLoading] = useState(false);
+  const handleAddItem = async () => {
+    setIsSubmitted(true);
+    setIsLoading(true);
+    if (!validate()) {
+      setIsLoading(false);
+      addToast({
+        title: "Invalid",
+        description: "Please fill in all required fields.",
+        timeout: 3000,
+        severity: "danger",
+        color: "danger",
+        shouldShowTimeoutProgress: true,
+      });
+
+      return;
     }
 
-    useEffect(() => {
-        setIsSubmitted(false);
-        setItem({
-            name: "",
-            categoryId: "",
-            shortDescription: "",
-            unitOfMeasure: "",
-            tagId: "",
-            itemImages: [null, null, null, null],
-            variants: [],
-        });
-    }, [isOpen]);
+    const result = await addItem(item);
 
-    const isItemPristine = () => {
-        const defaultItem: ItemDB = {
-            name: "",
-            categoryId: "",
-            shortDescription: "",
-            unitOfMeasure: "",
-            tagId: "",
-            itemImages: [null, null, null, null],
-            variants: [],
-        };
+    if (result.success) {
+      addToast({
+        title: "Item Added",
+        description: `Item ${item.item_title} has been successfully added.`,
+        timeout: 3000,
+        severity: "success",
+        color: "success",
+        shouldShowTimeoutProgress: true,
+      });
+      onOpenChange(false);
+      setIsLoading(false);
+    } else {
+      addToast({
+        title: "Invalid",
+        description:
+          String(result.error) || "An error occurred while adding the item.",
+        timeout: 3000,
+        severity: "danger",
+        color: "danger",
+        shouldShowTimeoutProgress: true,
+      });
+      setIsLoading(false);
+    }
+  };
 
-        const isDefaultItem =
-            item.name === defaultItem.name &&
-            item.categoryId === defaultItem.categoryId &&
-            item.shortDescription === defaultItem.shortDescription &&
-            item.unitOfMeasure === defaultItem.unitOfMeasure &&
-            item.tagId === defaultItem.tagId &&
-            item.variants.length === 0;
+  const normalizedImages: (File | null)[] = item.item_img.map((img) => {
+    if (img instanceof File) return img;
 
-        const noImages = item.itemImages.every((img) => img === null);
+    return null;
+  });
 
-        return isDefaultItem && noImages;
-    };
-    const [isLoading, setIsLoading] = useState(false);
-    const handleAddItem = async () => {
-        setIsSubmitted(true);
-        setIsLoading(true);
-        if (!validate()) {
-            setIsLoading(false);
-            addToast({
-                title: "Invalid",
-                description: "Please fill in all required fields.",
-                timeout: 3000,
-                severity: "danger",
-                color: "danger",
-                shouldShowTimeoutProgress: true,
-            });
-            return;
+  return (
+    <>
+      <Modal
+        disableAnimation
+        isDismissable={false}
+        isOpen={isOpen}
+        scrollBehavior="inside"
+        size="xl"
+        onOpenChange={(open) => {
+          if (!open) {
+            if (!isItemPristine()) {
+              onOpenWarning();
+            } else {
+              onOpenChange(false);
+            }
+          } else {
+            onOpenChange(true);
+          }
+        }}
+      >
+        <ModalContent>
+          <>
+            <ModalHeader className="flex flex-col gap-1">
+              <div className="flex flex-col gap-2">
+                <span className="text-lg font-semibold">
+                  Add Item{" "}
+                  <span className="font-extrabold">
+                    {itemHasVariant ? "with variant" : "without variant"}
+                  </span>
+                </span>
+                <span className="text-sm text-default-500 italic">
+                  Changes here are temporary. The item will be officially added
+                  only when you click the{" "}
+                  <span className="text-success-500 font-semibold">
+                    Add Item
+                  </span>{" "}
+                  button below.
+                </span>
+              </div>
+            </ModalHeader>
+            <ModalBody>
+              <span className="text-lg font-semibold">Set Item Details</span>
+
+              <ItemInitialDetail
+                isSubmitted={isSubmitted}
+                item={item}
+                setItem={setItem}
+              />
+
+              <div className="flex flex-col gap-3 mt-2">
+                <Button
+                  className="w-full gap-1"
+                  color={
+                    isSubmitted && selectedCount === 0 ? "danger" : "default"
+                  }
+                  startContent={<PhotoIcon className="w-5" />}
+                  onPress={onOpenPhoto}
+                >
+                  {isSubmitted && selectedCount === 0
+                    ? "Photo is required"
+                    : "Add Photos"}
+                  {selectedCount > 0 && `(${selectedCount})`}
+                  <span className="text-red-500">*</span>{" "}
+                </Button>
+
+                {(itemHasVariant || item.item_variants.length === 0) && (
+                  <AddVariantButton
+                    item={item}
+                    itemHasVariant={itemHasVariant}
+                    setIsSubmitted={setIsSubmitted}
+                    validate={validate}
+                    onOpenAddVar={onOpenAddVar}
+                  />
+                )}
+              </div>
+              <div>
+                {itemHasVariant && (
+                  <>
+                    <Divider className="my-4" />
+                    <p className="text-base font-semibold mb-2">
+                      Variant List{" "}
+                      {item.item_variants.length
+                        ? `(${item.item_variants.length})`
+                        : ""}
+                    </p>
+                  </>
+                )}
+
+                <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+                  <VariantList
+                    item={item}
+                    itemHasVariant={itemHasVariant}
+                    setItem={setItem}
+                  />
+                </div>
+              </div>
+            </ModalBody>
+            <ModalFooter className="justify-between items-center">
+              <span className="text-sm text-default-500 italic">
+                <span className="text-red-500">*</span> Required field
+              </span>
+
+              <div className="flex gap-2">
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={() => {
+                    if (!isItemPristine()) onOpenWarning();
+                    else onOpenChange(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  color="success"
+                  isDisabled={!validate()}
+                  isLoading={isLoading}
+                  onPress={handleAddItem}
+                >
+                  Add Item
+                </Button>
+              </div>
+            </ModalFooter>
+          </>
+        </ModalContent>
+      </Modal>
+      <AddEditVariantModal
+        defaultVariant={null}
+        isOpenAddVar={isOpenAddVar}
+        itemHasVariant={itemHasVariant}
+        itemUnitOfMeasure={item.item_sold_by}
+        onAddEditVariant={(newVariant) =>
+          setItem((prev) => ({
+            ...prev,
+            item_variants: [
+              ...prev.item_variants,
+              {
+                ...newVariant,
+                variant_name: itemHasVariant
+                  ? newVariant.variant_name
+                  : prev.item_title,
+              },
+            ],
+          }))
         }
+        onOpenChangeAddVar={onOpenChangeAddVar}
+      />
+      <CloseWarningModal
+        isOpenWarning={isOpenWarning}
+        onConfirmClose={() => {
+          onOpenChange(false);
+        }}
+        onOpenChangeWarning={onOpenChangeWarning}
+      />
+      <AddPhotoModal
+        images={normalizedImages}
+        isOpen={isOpenPhoto}
+        setImages={(newImages) => {
+          const resolved =
+            typeof newImages === "function"
+              ? newImages(normalizedImages)
+              : newImages;
 
-        const result = await addItem(item);
-
-        if (result.success) {
-            addToast({
-                title: "Item Added",
-                description: `Item ${item.name} has been successfully added.`,
-                timeout: 3000,
-                severity: "success",
-                color: "success",
-                shouldShowTimeoutProgress: true,
-            });
-            onOpenChange(false);
-            setIsLoading(false);
-        } else {
-            addToast({
-                title: "Invalid",
-                description:
-                    String(result.error) ||
-                    "An error occurred while adding the item.",
-                timeout: 3000,
-                severity: "danger",
-                color: "danger",
-                shouldShowTimeoutProgress: true,
-            });
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <>
-            <Modal
-                isDismissable={false}
-                isOpen={isOpen}
-                onOpenChange={(open) => {
-                    if (!open) {
-                        if (!isItemPristine()) {
-                            onOpenWarning();
-                        } else {
-                            onOpenChange(false);
-                        }
-                    } else {
-                        onOpenChange(true);
-                    }
-                }}
-                size="xl"
-                scrollBehavior="inside"
-                disableAnimation
-            >
-                <ModalContent>
-                    <>
-                        <ModalHeader className="flex flex-col gap-1">
-                            <div className="flex flex-col gap-2">
-                                <span className="text-lg font-semibold">
-                                    Add Item{" "}
-                                    <span className="font-extrabold">
-                                        {itemHasVariant
-                                            ? "with variant"
-                                            : "without variant"}
-                                    </span>
-                                </span>
-                                <span className="text-sm text-default-500 italic">
-                                    Changes here are temporary. The item will be
-                                    officially added only when you click the{" "}
-                                    <span className="text-success-500 font-semibold">
-                                        Add Item
-                                    </span>{" "}
-                                    button below.
-                                </span>
-                            </div>
-                        </ModalHeader>
-                        <ModalBody>
-                            <span className="text-lg font-semibold">
-                                Set Item Details
-                            </span>
-
-                            <ItemInitialDetail
-                                item={item}
-                                setItem={setItem}
-                                isSubmitted={isSubmitted}
-                            />
-
-                            <div className="flex flex-col gap-3 mt-2">
-                                <Button
-                                    startContent={<PhotoIcon className="w-5" />}
-                                    className="w-full gap-1"
-                                    onPress={onOpenPhoto}
-                                    color={
-                                        isSubmitted && selectedCount === 0
-                                            ? "danger"
-                                            : "default"
-                                    }
-                                >
-                                    {isSubmitted && selectedCount === 0
-                                        ? "Photo is required"
-                                        : "Add Photos"}
-                                    {selectedCount > 0 && `(${selectedCount})`}
-                                    <span className="text-red-500">*</span>{" "}
-                                </Button>
-
-                                {(itemHasVariant ||
-                                    item.variants.length === 0) && (
-                                    <AddVariantButton
-                                        itemHasVariant={itemHasVariant}
-                                        item={item}
-                                        onOpenAddVar={onOpenAddVar}
-                                        setIsSubmitted={setIsSubmitted}
-                                        validate={validate}
-                                    />
-                                )}
-                            </div>
-                            <div>
-                                {itemHasVariant && (
-                                    <>
-                                        <Divider className="my-4" />
-                                        <p className="text-base font-semibold mb-2">
-                                            Variant List{" "}
-                                            {item.variants.length
-                                                ? `(${item.variants.length})`
-                                                : ""}
-                                        </p>
-                                    </>
-                                )}
-
-                                <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
-                                    <VariantList
-                                        itemHasVariant={itemHasVariant}
-                                        item={item}
-                                        setItem={setItem}
-                                    />
-                                </div>
-                            </div>
-                        </ModalBody>
-                        <ModalFooter className="justify-between items-center">
-                            <span className="text-sm text-default-500 italic">
-                                <span className="text-red-500">*</span> Required
-                                field
-                            </span>
-
-                            <div className="flex gap-2">
-                                <Button
-                                    color="danger"
-                                    variant="light"
-                                    onPress={() => {
-                                        if (!isItemPristine()) onOpenWarning();
-                                        else onOpenChange(false);
-                                    }}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    color="success"
-                                    isDisabled={!validate()}
-                                    isLoading={isLoading}
-                                    onPress={handleAddItem}
-                                >
-                                    Add Item
-                                </Button>
-                            </div>
-                        </ModalFooter>
-                    </>
-                </ModalContent>
-            </Modal>
-            <AddEditVariantModal
-                isOpenAddVar={isOpenAddVar}
-                onOpenChangeAddVar={onOpenChangeAddVar}
-                itemHasVariant={itemHasVariant}
-                itemUnitOfMeasure={item.unitOfMeasure}
-                onAddEditVariant={(newVariant) =>
-                    setItem((prev) => ({
-                        ...prev,
-                        variants: [
-                            ...prev.variants,
-                            {
-                                ...newVariant,
-                                name: itemHasVariant
-                                    ? newVariant.name
-                                    : prev.name,
-                            },
-                        ],
-                    }))
-                }
-                defaultVariant={null}
-            />
-            <CloseWarningModal
-                isOpenWarning={isOpenWarning}
-                onOpenChangeWarning={onOpenChangeWarning}
-                onConfirmClose={() => {
-                    onOpenChange(false);
-                }}
-            />
-            <AddPhotoModal
-                isOpen={isOpenPhoto}
-                onOpenChange={onOpenChangePhoto}
-                images={item.itemImages}
-                setImages={(newImages) => {
-                    const resolved =
-                        typeof newImages === "function"
-                            ? newImages(item.itemImages)
-                            : newImages;
-
-                    setItem((prev) => ({
-                        ...prev,
-                        itemImages: resolved,
-                    }));
-                }}
-            />
-        </>
-    );
+          setItem((prev) => ({
+            ...prev,
+            item_img: resolved as Item["item_img"],
+          }));
+        }}
+        onOpenChange={onOpenChangePhoto}
+      />
+    </>
+  );
 }

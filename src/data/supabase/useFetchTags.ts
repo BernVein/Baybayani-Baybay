@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 
 export interface Tag {
@@ -33,7 +34,6 @@ export const useFetchTags = () => {
 
             setTags(newTags);
         } catch (err: any) {
-            console.error(err);
             setError(err.message);
         } finally {
             setLoading(false);

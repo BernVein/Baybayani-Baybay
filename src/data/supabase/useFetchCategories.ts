@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 
 export interface Category {
@@ -41,7 +42,6 @@ export const useFetchCategories = () => {
 
             setCategories(newCategories);
         } catch (err: any) {
-            console.error(err);
             setError(err.message);
         } finally {
             setLoading(false);

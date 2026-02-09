@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 import { CartItemUser } from "@/model/cartItemUser";
 
@@ -9,6 +10,7 @@ export const useRealtimeUserCart = (userId: string | null) => {
     const fetchCartItems = useCallback(async () => {
         if (!userId) {
             setCartItems([]);
+
             return;
         }
 
@@ -27,7 +29,6 @@ export const useRealtimeUserCart = (userId: string | null) => {
             .eq("is_soft_deleted", false);
 
         if (error) {
-            console.error("Failed to fetch cart items:", error);
             setCartItems([]);
         } else {
             setCartItems(data ?? []);
@@ -57,6 +58,7 @@ export const useRealtimeUserCart = (userId: string | null) => {
             .subscribe();
 
         const handleManualUpdate = () => fetchCartItems();
+
         window.addEventListener("baybayani:cart-updated", handleManualUpdate);
 
         return () => {

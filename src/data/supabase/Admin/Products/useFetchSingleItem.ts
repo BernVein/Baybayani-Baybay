@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
 
@@ -25,13 +26,14 @@ export const useFetchSingleItem = (item_id: string) => {
         setLoading(false);
 
         if (error) {
-            console.error("Supabase error fetching item:", error);
             setFetchError(error.message || "Failed to fetch item.");
+
             return;
         }
 
         if (!data) {
             setItem(null);
+
             return;
         }
 

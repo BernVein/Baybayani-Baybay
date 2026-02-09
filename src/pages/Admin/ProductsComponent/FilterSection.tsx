@@ -1,156 +1,152 @@
-import { SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import {
-    Dropdown,
-    DropdownTrigger,
-    DropdownMenu,
-    DropdownItem,
-    Button,
-    Input,
-    useDisclosure,
-    SelectItem,
-    DropdownSection,
-    Spinner,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+  Input,
+  useDisclosure,
+  SelectItem,
+  DropdownSection,
+  Spinner,
 } from "@heroui/react";
+import { useState } from "react";
+
+import { SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
 import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
-import { useState } from "react";
 import { useFetchCategories } from "@/data/supabase/useFetchCategories";
 
 export function FilterSection({
-    setSearchQuery,
-    setSelectedCategories,
-    searchQuery,
-    selectedCategories,
+  setSearchQuery,
+  setSelectedCategories,
+  searchQuery,
+  selectedCategories,
 }: {
-    setSearchQuery: (query: string) => void;
-    setSelectedCategories: (categories: string[]) => void;
-    searchQuery: string;
-    selectedCategories: string[];
+  setSearchQuery: (query: string) => void;
+  setSelectedCategories: (categories: string[]) => void;
+  searchQuery: string;
+  selectedCategories: string[];
 }) {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
-    const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
-    const isMobile = useIsMobile();
-    const { categories, loading: catLoading } = useFetchCategories();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
+  const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
+  const isMobile = useIsMobile();
+  const { categories, loading: catLoading } = useFetchCategories();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    // keep dropdown selection in sync with selectedCategories
-    const selectedCategoryKeys = new Set<string>(selectedCategories);
+  // keep dropdown selection in sync with selectedCategories
+  const selectedCategoryKeys = new Set<string>(selectedCategories);
 
-    return (
-        <div className="flex flex-row justify-between w-full">
-            <Input
-                placeholder="Search item / variant"
-                className="w-1/2 sm:w-1/4"
-                startContent={<SearchIcon />}
-                value={searchQuery}
-                onValueChange={setSearchQuery}
-            />
-            <div className="flex flex-row gap-2 justify-end">
-                <ModalAwareSelect
-                    placeholder="Add Item"
-                    startContent={<PlusIcon className="w-5 shrink-0" />}
-                    className="w-full"
-                    classNames={{ innerWrapper: "w-full pr-6" }}
-                    selectionMode="single"
-                    selectedKeys={selectKeys}
-                    onSelectionChange={(keys) => {
-                        const key = Array.from(keys)[0] as string | undefined;
-                        if (!key) return;
-                        setItemHasVariant(key === "with-variant");
-                        onOpen();
-                        setSelectKeys(new Set());
-                    }}
-                >
-                    <SelectItem key="no-variant">No Variant</SelectItem>
-                    <SelectItem key="with-variant">With Variant</SelectItem>
-                </ModalAwareSelect>
+  return (
+    <div className="flex flex-row justify-between w-full">
+      <Input
+        className="w-1/2 sm:w-1/4"
+        placeholder="Search item / variant"
+        startContent={<SearchIcon />}
+        value={searchQuery}
+        onValueChange={setSearchQuery}
+      />
+      <div className="flex flex-row gap-2 justify-end">
+        <ModalAwareSelect
+          className="w-full"
+          classNames={{ innerWrapper: "w-full pr-6" }}
+          placeholder="Add Item"
+          selectedKeys={selectKeys}
+          selectionMode="single"
+          startContent={<PlusIcon className="w-5 shrink-0" />}
+          onSelectionChange={(keys) => {
+            const key = Array.from(keys)[0] as string | undefined;
 
-                <Dropdown
-                    isOpen={isDropdownOpen}
-                    onOpenChange={setIsDropdownOpen}
-                >
-                    <DropdownTrigger>
-                        <Button
-                            className="capitalize w-full"
-                            startContent={
-                                catLoading ? (
-                                    <Spinner color="success" size="sm" />
-                                ) : (
-                                    <FilterIcon className="w-4 shrink-0" />
-                                )
-                            }
-                            isIconOnly={isMobile}
-                            isDisabled={catLoading}
-                            color={
-                                selectedCategories.length > 0
-                                    ? "success"
-                                    : "default"
-                            }
-                        >
-                            {isMobile
-                                ? ""
-                                : `Categories ${selectedCategories.length > 0 ? `(${selectedCategories.length})` : ""}`}
-                        </Button>
-                    </DropdownTrigger>
+            if (!key) return;
+            setItemHasVariant(key === "with-variant");
+            onOpen();
+            setSelectKeys(new Set());
+          }}
+        >
+          <SelectItem key="no-variant">No Variant</SelectItem>
+          <SelectItem key="with-variant">With Variant</SelectItem>
+        </ModalAwareSelect>
 
-                    <DropdownMenu
-                        closeOnSelect={false}
-                        selectionMode="multiple"
-                        selectedKeys={selectedCategoryKeys}
-                        onSelectionChange={(keys) => {
-                            // keys is a Set<React.Key>
-                            const values = Array.from(keys).map(String);
-                            setSelectedCategories(values);
-                        }}
-                    >
-                        <DropdownSection title="Categories" showDivider>
-                            {categories.map((cat) => (
-                                <DropdownItem key={cat.category_id}>
-                                    <div className="flex items-center gap-2">
-                                        <span>{cat.category_name}</span>
-                                    </div>
-                                </DropdownItem>
-                            ))}
-                        </DropdownSection>
+        <Dropdown isOpen={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+          <DropdownTrigger>
+            <Button
+              className="capitalize w-full"
+              color={selectedCategories.length > 0 ? "success" : "default"}
+              isDisabled={catLoading}
+              isIconOnly={isMobile}
+              startContent={
+                catLoading ? (
+                  <Spinner color="success" size="sm" />
+                ) : (
+                  <FilterIcon className="w-4 shrink-0" />
+                )
+              }
+            >
+              {isMobile
+                ? ""
+                : `Categories ${selectedCategories.length > 0 ? `(${selectedCategories.length})` : ""}`}
+            </Button>
+          </DropdownTrigger>
 
-                        <DropdownSection title="Item Type" showDivider>
-                            <DropdownItem key="no-variant">
-                                <div className="flex items-center gap-2">
-                                    <span>No Variant</span>
-                                </div>
-                            </DropdownItem>
-                            <DropdownItem key="with-variant">
-                                <div className="flex items-center gap-2">
-                                    <span>With Variant</span>
-                                </div>
-                            </DropdownItem>
-                        </DropdownSection>
-                        <DropdownSection title="Reset">
-                            <DropdownItem
-                                color="danger"
-                                key="reset"
-                                onClick={() => {
-                                    setSelectedCategories([]);
-                                    setIsDropdownOpen(false);
-                                }}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <span>Reset Filters</span>
-                                </div>
-                            </DropdownItem>
-                        </DropdownSection>
-                    </DropdownMenu>
-                </Dropdown>
-            </div>
+          <DropdownMenu
+            closeOnSelect={false}
+            selectedKeys={selectedCategoryKeys}
+            selectionMode="multiple"
+            onSelectionChange={(keys) => {
+              // keys is a Set<React.Key>
+              const values = Array.from(keys).map(String);
 
-            <AddEditItemModal
-                selectedItemId={null}
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                itemHasVariant={itemHasVariant}
-            />
-        </div>
-    );
+              setSelectedCategories(values);
+            }}
+          >
+            <DropdownSection showDivider title="Categories">
+              {categories.map((cat) => (
+                <DropdownItem key={cat.category_id}>
+                  <div className="flex items-center gap-2">
+                    <span>{cat.category_name}</span>
+                  </div>
+                </DropdownItem>
+              ))}
+            </DropdownSection>
+
+            <DropdownSection showDivider title="Item Type">
+              <DropdownItem key="no-variant">
+                <div className="flex items-center gap-2">
+                  <span>No Variant</span>
+                </div>
+              </DropdownItem>
+              <DropdownItem key="with-variant">
+                <div className="flex items-center gap-2">
+                  <span>With Variant</span>
+                </div>
+              </DropdownItem>
+            </DropdownSection>
+            <DropdownSection title="Reset">
+              <DropdownItem
+                key="reset"
+                color="danger"
+                onClick={() => {
+                  setSelectedCategories([]);
+                  setIsDropdownOpen(false);
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <span>Reset Filters</span>
+                </div>
+              </DropdownItem>
+            </DropdownSection>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
+
+      <AddEditItemModal
+        isOpen={isOpen}
+        itemHasVariant={itemHasVariant}
+        selectedItemId={null}
+        onOpenChange={onOpenChange}
+      />
+    </div>
+  );
 }

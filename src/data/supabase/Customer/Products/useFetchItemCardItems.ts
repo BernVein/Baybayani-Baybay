@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 import { ItemCard } from "@/model/ui/Customer/item_card";
 
@@ -24,6 +25,7 @@ export const useFetchItemCardItems = (
             try {
                 // Step 1: Get category IDs if activeCategories are specified
                 let categoryIds: string[] = [];
+
                 if (activeCategories.length > 0) {
                     const { data: categories, error: catError } = await supabase
                         .from("Category")
@@ -71,6 +73,7 @@ export const useFetchItemCardItems = (
                 const mapped: ItemCard[] = (data ?? [])
                     .map((row: any) => {
                         const firstVariant = row.Variant?.[0];
+
                         if (!firstVariant?.variant_price_retail) return null;
 
                         return {
@@ -96,7 +99,6 @@ export const useFetchItemCardItems = (
                     setItems((prev) => [...prev, ...mapped]);
                 }
             } catch (err: any) {
-                console.error(err);
                 setError(err.message);
             } finally {
                 setLoading(false);
@@ -116,6 +118,7 @@ export const useFetchItemCardItems = (
     const loadMore = async () => {
         if (loading || !hasMore) return;
         const nextPage = page + 1;
+
         setPage(nextPage);
         await fetchItems(nextPage);
     };

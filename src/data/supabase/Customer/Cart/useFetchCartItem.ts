@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
+
 import { supabase } from "@/config/supabaseclient";
 import { CartItemUser } from "@/model/cartItemUser";
 import { Item } from "@/model/Item";
@@ -23,6 +24,7 @@ export const useFetchCartItems = (
     const fetchCartItems = useCallback(async () => {
         if (normalizedIds.length === 0) {
             setCartItems([]);
+
             return;
         }
 
@@ -35,30 +37,42 @@ export const useFetchCartItems = (
                 `
                     *,
                     Item (
-                    *,
-                    Item_Image ( item_image_url ),
-                    Variant ( *, StockMovement(effective_stocks, created_at) )
+                        *,
+                        Category ( category_name ),
+                        Tag ( tag_name ),
+                        Item_Image ( item_image_url ),
+                        Variant (
+                            *,
+                            StockMovement (*)
+                        )
                     ),
                     VariantSnapshot ( * )
                 `,
             )
             .in("cart_item_user_id", normalizedIds)
-            .eq("is_soft_deleted", false);
+            .eq("is_soft_deleted", false)
+            .order("created_at", {
+                foreignTable: "Item.Variant.StockMovement",
+                ascending: false,
+            })
+            .limit(1, { foreignTable: "Item.Variant.StockMovement" });
 
         if (error) {
             setErrorMsg(error.message);
             setLoading(false);
+
             return;
         }
 
         const mapped: CartItemUser[] =
             data?.map((row: any) => ({
                 cart_item_user_id: row.cart_item_user_id,
-
                 item: (row.Item
                     ? {
                           item_id: row.Item.item_id,
-                          item_category: String(row.Item.item_category || ""),
+                          item_category: String(
+                              row.Item.Category?.category_name || "",
+                          ),
                           item_title: row.Item.item_title,
                           item_img:
                               row.Item.Item_Image?.map(
@@ -67,18 +81,16 @@ export const useFetchCartItems = (
                           item_sold_by: row.Item.item_sold_by,
                           item_description: row.Item.item_description,
                           item_has_variant: row.Item.item_has_variant,
-                          item_tag: row.Item.item_tag ?? null,
+                          item_tag: row.Item.Tag?.tag_name ?? null,
                           is_soft_deleted: row.Item.is_soft_deleted,
                           last_updated: row.Item.last_updated,
                           created_at: String(row.Item.created_at || ""),
                           item_variants:
-                              row.Item.Variant?.map((v: Variant & any) => {
-                                  const movements = v.StockMovement ?? [];
-                                  const latestMovement = movements.sort(
-                                      (a: any, b: any) =>
-                                          new Date(b.created_at).getTime() -
-                                          new Date(a.created_at).getTime(),
-                                  )[0];
+                              row.Item.Variant?.map((v: any) => {
+                                  const latestStock = v.StockMovement?.[0] ?? {
+                                      effective_stocks: 0,
+                                      created_at: "",
+                                  };
 
                                   return {
                                       variant_id: v.variant_id,
@@ -90,10 +102,11 @@ export const useFetchCartItems = (
                                           v.variant_price_wholesale ?? null,
                                       variant_wholesale_item:
                                           v.variant_wholesale_item ?? null,
-                                      variant_stocks:
-                                          latestMovement?.effective_stocks ?? 0,
+                                      variant_stock_latest_movement:
+                                          latestStock,
                                       variant_last_updated_stock:
-                                          latestMovement?.created_at ?? null,
+                                          v.variant_stock_latest_movement
+                                              ?.created_at ?? null,
                                       variant_last_updated_price_retail:
                                           v.variant_last_updated_price_retail ??
                                           null,
@@ -110,7 +123,7 @@ export const useFetchCartItems = (
                                       is_soft_deleted:
                                           v.is_soft_deleted ?? false,
                                       created_at: v.created_at ?? "",
-                                  };
+                                  } as Variant;
                               }) ?? [],
                       }
                     : {
@@ -189,7 +202,9 @@ export const useFetchCartItems = (
 
     useEffect(() => {
         const handleCartUpdate = () => fetchCartItems();
+
         window.addEventListener("baybayani:cart-updated", handleCartUpdate);
+
         return () => {
             window.removeEventListener(
                 "baybayani:cart-updated",

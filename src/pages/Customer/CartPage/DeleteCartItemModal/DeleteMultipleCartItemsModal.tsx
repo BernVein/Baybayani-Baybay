@@ -7,9 +7,10 @@ import {
     Button,
     addToast,
 } from "@heroui/react";
+import { useState } from "react";
+
 import { ExclamationCircle } from "@/components/icons";
 import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMultipleCartItems";
-import { useState } from "react";
 
 export default function DeleteMultipleCartItemsModal({
     selectedItemsId,
@@ -38,7 +39,6 @@ export default function DeleteMultipleCartItemsModal({
             });
             onClose();
         } catch (err) {
-            console.error(err);
             addToast({
                 title: "Error",
                 description: "Failed to remove items from cart.",
@@ -51,10 +51,10 @@ export default function DeleteMultipleCartItemsModal({
 
     return (
         <Modal
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            size="sm"
             disableAnimation
+            isOpen={isOpen}
+            size="sm"
+            onOpenChange={onOpenChange}
         >
             <ModalContent>
                 {(onClose) => (
@@ -83,20 +83,20 @@ export default function DeleteMultipleCartItemsModal({
 
                         <ModalFooter className="flex justify-center gap-3 pt-4">
                             <Button
-                                variant="flat"
-                                color="default"
                                 className="px-6"
+                                color="default"
+                                variant="flat"
                                 onPress={onClose}
                             >
                                 Cancel
                             </Button>
                             <Button
-                                color="danger"
                                 className="px-6 font-semibold"
+                                color="danger"
+                                isLoading={isLoading}
                                 onPress={() => {
                                     handleDelete(onClose);
                                 }}
-                                isLoading={isLoading}
                             >
                                 Delete All
                             </Button>

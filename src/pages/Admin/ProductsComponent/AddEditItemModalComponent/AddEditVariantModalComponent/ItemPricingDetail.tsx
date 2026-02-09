@@ -1,101 +1,100 @@
 import { Input } from "@heroui/react";
-import { VariantDB } from "@/model/db/additem";
+
+import { Variant } from "@/model/variant";
 
 export function ItemPricingDetail({
-    variant,
-    setVariant,
-    isSubmitted,
+  variant,
+  setVariant,
+  isSubmitted,
 }: {
-    variant: VariantDB;
-    setVariant: React.Dispatch<React.SetStateAction<VariantDB>>;
-    isSubmitted: boolean;
+  variant: Variant;
+  setVariant: React.Dispatch<React.SetStateAction<Variant>>;
+  isSubmitted: boolean;
 }) {
-    return (
-        <>
-            <div className="flex flex-row gap-2 items-center">
-                <Input
-                    label="Retail Price"
-                    type="text"
-                    inputMode="decimal"
-                    isRequired
-                    className="w-1/2"
-                    startContent={
-                        <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">
-                                ₱
-                            </span>
-                        </div>
-                    }
-                    description="Starting price"
-                    value={
-                        variant.retailPrice !== undefined
-                            ? String(variant.retailPrice)
-                            : ""
-                    }
-                    onValueChange={(v) => {
-                        if (v === "") {
-                            setVariant({
-                                ...variant,
-                                retailPrice: undefined,
-                            });
-                            return;
-                        }
-
-                        const num = Number(v);
-
-                        if (Number.isNaN(num)) return;
-
-                        setVariant({
-                            ...variant,
-                            retailPrice: num,
-                        });
-                    }}
-                    isInvalid={
-                        isSubmitted &&
-                        (variant.retailPrice == null ||
-                            variant.retailPrice <= 0)
-                    }
-                    errorMessage="Retail price is required"
-                />
-
-                <Input
-                    label="Wholesale Price"
-                    type="text"
-                    inputMode="decimal"
-                    className="w-1/2"
-                    startContent={
-                        <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">
-                                ₱
-                            </span>
-                        </div>
-                    }
-                    description="For bulk purchase"
-                    value={
-                        variant.wholesalePrice !== undefined
-                            ? String(variant.wholesalePrice)
-                            : ""
-                    }
-                    onValueChange={(v) => {
-                        if (v === "") {
-                            setVariant({
-                                ...variant,
-                                wholesalePrice: undefined,
-                            });
-                            return;
-                        }
-
-                        const num = Number(v);
-
-                        if (Number.isNaN(num) || num <= 0) return;
-
-                        setVariant({
-                            ...variant,
-                            wholesalePrice: num,
-                        });
-                    }}
-                />
+  return (
+    <>
+      <div className="flex flex-row gap-2 items-center">
+        <Input
+          isRequired
+          className="w-1/2"
+          description="Starting price"
+          errorMessage="Retail price is required"
+          inputMode="decimal"
+          isInvalid={
+            isSubmitted &&
+            (variant.variant_price_retail == null ||
+              variant.variant_price_retail <= 0)
+          }
+          label="Retail Price"
+          startContent={
+            <div className="pointer-events-none flex items-center">
+              <span className="text-default-400 text-small">₱</span>
             </div>
-        </>
-    );
+          }
+          type="text"
+          value={
+            variant.variant_price_retail !== undefined
+              ? String(variant.variant_price_retail)
+              : ""
+          }
+          onValueChange={(v) => {
+            if (v === "") {
+              setVariant({
+                ...variant,
+                variant_price_retail: undefined,
+              });
+
+              return;
+            }
+
+            const num = Number(v);
+
+            if (Number.isNaN(num)) return;
+
+            setVariant({
+              ...variant,
+              variant_price_retail: num,
+            });
+          }}
+        />
+
+        <Input
+          className="w-1/2"
+          description="For bulk purchase"
+          inputMode="decimal"
+          label="Wholesale Price"
+          startContent={
+            <div className="pointer-events-none flex items-center">
+              <span className="text-default-400 text-small">₱</span>
+            </div>
+          }
+          type="text"
+          value={
+            variant.variant_price_wholesale !== undefined
+              ? String(variant.variant_price_wholesale)
+              : ""
+          }
+          onValueChange={(v) => {
+            if (v === "") {
+              setVariant({
+                ...variant,
+                variant_price_wholesale: undefined,
+              });
+
+              return;
+            }
+
+            const num = Number(v);
+
+            if (Number.isNaN(num) || num <= 0) return;
+
+            setVariant({
+              ...variant,
+              variant_price_wholesale: num,
+            });
+          }}
+        />
+      </div>
+    </>
+  );
 }

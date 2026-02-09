@@ -1,15 +1,17 @@
 import { Variant } from "@/model/variant";
 export interface Item {
-    item_id: string;
-    item_category: string;
-    item_title: string;
-    item_img: string[] | File | null; // Join in db, this column doenst exist
-    item_sold_by: string;
-    item_description: string;
-    item_tag?: string | null;
-    item_has_variant: boolean;
-    is_soft_deleted: boolean;
-    last_updated: string; // timestamptz
-    created_at?: string; // timestamptz
-    item_variants: Variant[]; // Join in db, this column doenst exist
+  item_id?: string;
+  item_category_id?: string;
+  item_category?: string;
+  item_title: string;
+  item_img: string[] | File[] | null[]; // Join in db, this column doenst exist
+  item_sold_by: string;
+  item_description: string;
+  item_tag_id?: string;
+  item_tag?: string | null;
+  item_has_variant?: boolean;
+  is_soft_deleted?: boolean;
+  last_updated?: string; // timestamptz
+  created_at?: string; // timestamptz
+  item_variants: Variant[]; // Join in db, this column doenst exist
 }

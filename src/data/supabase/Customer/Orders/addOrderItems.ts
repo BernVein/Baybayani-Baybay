@@ -22,7 +22,6 @@ export async function addOrderItems(
         .insert(orderItems);
 
     if (insertError) {
-        console.error("Failed to add order items:", insertError);
         throw insertError;
     }
 
@@ -33,10 +32,6 @@ export async function addOrderItems(
         .in("cart_item_user_id", cartItemIds);
 
     if (deleteError) {
-        console.error(
-            "Failed to delete cart items after adding order:",
-            deleteError,
-        );
         throw deleteError;
     }
 

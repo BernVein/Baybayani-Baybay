@@ -1,75 +1,69 @@
 import {
-	Card,
-	CardHeader,
-	CardBody,
-	Button,
-	Input,
-	Listbox,
-	ListboxItem,
-	Avatar,
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Input,
+  Listbox,
+  ListboxItem,
+  Avatar,
 } from "@heroui/react";
+
 import { SearchIcon, SoloUserIcon, GroupUserIcon } from "@/components/icons";
 export function MessageList({
-	onSelect,
-	className,
+  onSelect,
+  className,
 }: {
-	onSelect?: () => void;
-	className?: string;
+  onSelect?: () => void;
+  className?: string;
 }) {
-	return (
-		<Card className={`w-full h-[68vh] sm:h-[88vh] ${className || ""}`}>
-			<CardHeader className="flex gap-3">
-				<div className="flex flex-col gap-2 items-center w-full">
-					<Input
-						placeholder="Search for a user"
-						className="w-full"
-						startContent={<SearchIcon />}
-					/>
-					<div className="flex flex-row items-center gap-2">
-						<Button
-							variant="light"
-							startContent={<SoloUserIcon className="w-5" />}
-						>
-							Individual
-						</Button>
-						<Button
-							variant="light"
-							startContent={<GroupUserIcon className="w-5" />}
-						>
-							Cooperative
-						</Button>
-					</div>
-				</div>
-			</CardHeader>
-			<CardBody>
-				<Listbox aria-label="Actions">
-					{Array.from({ length: 20 }).map((_, i) => (
-						<ListboxItem
-							key={i}
-							className="w-full mb-2"
-							onPress={onSelect}
-						>
-							<div className="flex flex-row gap-2 items-center w-full">
-								<Avatar className="shrink-0" />
-								<div className="flex flex-col items-start w-full">
-									<span className="font-semibold text-base">
-										User {i + 1}
-									</span>
-									<div className="flex flex-row justify-between w-full gap-2">
-										<span className="line-clamp-1">
-											Admin 2: Admin response to user
-											question
-										</span>
-										<span className="shrink-0 text-sm text-default-500">
-											2 days ago
-										</span>
-									</div>
-								</div>
-							</div>
-						</ListboxItem>
-					))}
-				</Listbox>
-			</CardBody>
-		</Card>
-	);
+  return (
+    <Card className={`w-full h-[68vh] sm:h-[88vh] ${className || ""}`}>
+      <CardHeader className="flex gap-3">
+        <div className="flex flex-col gap-2 items-center w-full">
+          <Input
+            className="w-full"
+            placeholder="Search for a user"
+            startContent={<SearchIcon />}
+          />
+          <div className="flex flex-row items-center gap-2">
+            <Button
+              startContent={<SoloUserIcon className="w-5" />}
+              variant="light"
+            >
+              Individual
+            </Button>
+            <Button
+              startContent={<GroupUserIcon className="w-5" />}
+              variant="light"
+            >
+              Cooperative
+            </Button>
+          </div>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <Listbox aria-label="Actions">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <ListboxItem key={i} className="w-full mb-2" onPress={onSelect}>
+              <div className="flex flex-row gap-2 items-center w-full">
+                <Avatar className="shrink-0" />
+                <div className="flex flex-col items-start w-full">
+                  <span className="font-semibold text-base">User {i + 1}</span>
+                  <div className="flex flex-row justify-between w-full gap-2">
+                    <span className="line-clamp-1">
+                      Admin 2: Admin response to user question
+                    </span>
+                    <span className="shrink-0 text-sm text-default-500">
+                      2 days ago
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ListboxItem>
+          ))}
+        </Listbox>
+      </CardBody>
+    </Card>
+  );
 }

@@ -1,138 +1,177 @@
 import { Input, DatePicker } from "@heroui/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { VariantDB } from "@/model/db/additem";
+
+import { Variant } from "@/model/variant";
 
 export function ItemStockDetail({
-    itemUnitOfMeasure,
-    variant,
-    setVariant,
-    isSubmitted,
+  itemUnitOfMeasure,
+  variant,
+  setVariant,
+  isSubmitted,
 }: {
-    itemUnitOfMeasure: string;
-    variant: VariantDB;
-    setVariant: React.Dispatch<React.SetStateAction<VariantDB>>;
-    isSubmitted: boolean;
+  itemUnitOfMeasure: string;
+  variant: Variant;
+  setVariant: React.Dispatch<React.SetStateAction<Variant>>;
+  isSubmitted: boolean;
 }) {
-    return (
-        <>
-            <div className="flex flex-row gap-2 items-center">
-                {/* Acquired Stocks */}
-                <Input
-                    label="Acquired Stocks"
-                    isRequired
-                    type="text"
-                    inputMode="decimal"
-                    description="For stock display"
-                    className="w-1/2"
-                    endContent={
-                        <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">
-                                {itemUnitOfMeasure}
-                            </span>
-                        </div>
-                    }
-                    value={
-                        variant.stocks !== undefined
-                            ? String(variant.stocks)
-                            : ""
-                    }
-                    onValueChange={(v) => {
-                        if (v === "") {
-                            setVariant({ ...variant, stocks: undefined });
-                            return;
-                        }
-
-                        const num = Number(v);
-                        if (Number.isNaN(num)) return;
-
-                        setVariant({ ...variant, stocks: num });
-                    }}
-                    isInvalid={
-                        isSubmitted &&
-                        (variant.stocks == null || variant.stocks <= 0)
-                    }
-                    errorMessage="Acquired stock is required"
-                />
-
-                {/* Date Delivered */}
-                <DatePicker
-                    className="w-1/2"
-                    label="Date Delivered"
-                    isRequired
-                    defaultValue={today("UTC")}
-                    description="Date the stock was acquired"
-                    onChange={(v) =>
-                        setVariant({
-                            ...variant,
-                            dateDelivered: v
-                                ? v.toDate(getLocalTimeZone()).toISOString()
-                                : "",
-                        })
-                    }
-                />
+  return (
+    <>
+      <div className="flex flex-row gap-2 items-center">
+        {/* Acquired Stocks */}
+        <Input
+          isRequired
+          className="w-1/2"
+          description="For stock display"
+          endContent={
+            <div className="pointer-events-none flex items-center">
+              <span className="text-default-400 text-small">
+                {itemUnitOfMeasure}
+              </span>
             </div>
+          }
+          errorMessage="Acquired stock is required"
+          inputMode="decimal"
+          isInvalid={
+            isSubmitted &&
+            (variant.variant_stock_latest_movement?.effective_stocks == null ||
+              variant.variant_stock_latest_movement?.effective_stocks <= 0)
+          }
+          label="Acquired Stocks"
+          type="text"
+          value={
+            variant.variant_stock_latest_movement.effective_stocks !== undefined
+              ? String(variant.variant_stock_latest_movement.effective_stocks)
+              : ""
+          }
+          onValueChange={(v) => {
+            if (v === "") {
+              setVariant({
+                ...variant,
+                variant_stock_latest_movement: {
+                  ...variant.variant_stock_latest_movement,
+                  effective_stocks: undefined,
+                },
+              });
 
-            <div className="flex flex-row gap-2 items-center">
-                {/* Supplier */}
-                <Input
-                    label="Supplier"
-                    isRequired
-                    isClearable
-                    description="Stock supplier name"
-                    className="w-1/2"
-                    value={variant.supplier ?? ""}
-                    onValueChange={(v) =>
-                        setVariant({ ...variant, supplier: v })
-                    }
-                    isInvalid={isSubmitted && !variant.supplier?.trim()}
-                    errorMessage="Supplier is required"
-                />
+              return;
+            }
 
-                {/* Total Buying Price */}
-                <Input
-                    label="Total Buying Price"
-                    isRequired
-                    type="text"
-                    inputMode="decimal"
-                    description="Total ₱ on purchase"
-                    className="w-1/2"
-                    value={
-                        variant.totalBuyingPrice !== undefined
-                            ? String(variant.totalBuyingPrice)
-                            : ""
-                    }
-                    onValueChange={(v) => {
-                        if (v === "") {
-                            setVariant({
-                                ...variant,
-                                totalBuyingPrice: undefined,
-                            });
-                            return;
-                        }
+            const num = Number(v);
 
-                        const num = Number(v);
-                        if (Number.isNaN(num)) return;
+            if (Number.isNaN(num)) return;
 
-                        setVariant({
-                            ...variant,
-                            totalBuyingPrice: num,
-                        });
-                    }}
-                    startContent={
-                        <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">
-                                ₱
-                            </span>
-                        </div>
-                    }
-                    isInvalid={
-                        isSubmitted &&
-                        (variant.totalBuyingPrice == null ||
-                            variant.totalBuyingPrice <= 0)
-                    }
-                    errorMessage="Total buying price is required"
-                />
+            setVariant({
+              ...variant,
+              variant_stock_latest_movement: {
+                ...variant.variant_stock_latest_movement,
+                effective_stocks: num,
+              },
+            });
+          }}
+        />
+
+        {/* Date Delivered */}
+        <DatePicker
+          isRequired
+          className="w-1/2"
+          defaultValue={today("UTC")}
+          description="Date the stock was acquired"
+          label="Date Delivered"
+          onChange={(v) =>
+            setVariant({
+              ...variant,
+              variant_stock_latest_movement: {
+                ...variant.variant_stock_latest_movement,
+                stock_delivery_date: v
+                  ? v.toDate(getLocalTimeZone()).toISOString()
+                  : "",
+              },
+            })
+          }
+        />
+      </div>
+
+      <div className="flex flex-row gap-2 items-center">
+        {/* Supplier */}
+        <Input
+          isClearable
+          isRequired
+          className="w-1/2"
+          description="Stock supplier name"
+          errorMessage="Supplier is required"
+          isInvalid={
+            isSubmitted &&
+            !variant.variant_stock_latest_movement.stock_supplier?.trim()
+          }
+          label="Supplier"
+          value={variant.variant_stock_latest_movement.stock_supplier ?? ""}
+          onValueChange={(v) =>
+            setVariant({
+              ...variant,
+              variant_stock_latest_movement: {
+                ...variant.variant_stock_latest_movement,
+                stock_supplier: v,
+              },
+            })
+          }
+        />
+
+        {/* Total Buying Price */}
+        <Input
+          isRequired
+          className="w-1/2"
+          description="Total ₱ on purchase"
+          errorMessage="Total buying price is required"
+          inputMode="decimal"
+          isInvalid={
+            isSubmitted &&
+            (variant.variant_stock_latest_movement.stock_adjustment_amount ==
+              null ||
+              variant.variant_stock_latest_movement.stock_adjustment_amount <=
+                0)
+          }
+          label="Total Buying Price"
+          startContent={
+            <div className="pointer-events-none flex items-center">
+              <span className="text-default-400 text-small">₱</span>
             </div>
-        </>
-    );
+          }
+          type="text"
+          value={
+            variant.variant_stock_latest_movement.stock_adjustment_amount !==
+            undefined
+              ? String(
+                  variant.variant_stock_latest_movement.stock_adjustment_amount,
+                )
+              : ""
+          }
+          onValueChange={(v) => {
+            if (v === "") {
+              setVariant({
+                ...variant,
+                variant_stock_latest_movement: {
+                  ...variant.variant_stock_latest_movement,
+                  stock_adjustment_amount: undefined,
+                },
+              });
+
+              return;
+            }
+
+            const num = Number(v);
+
+            if (Number.isNaN(num)) return;
+
+            setVariant({
+              ...variant,
+              variant_stock_latest_movement: {
+                ...variant.variant_stock_latest_movement,
+                stock_adjustment_amount: num,
+              },
+            });
+          }}
+        />
+      </div>
+    </>
+  );
 }
