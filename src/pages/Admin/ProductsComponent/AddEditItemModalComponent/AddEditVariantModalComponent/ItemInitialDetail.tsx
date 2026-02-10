@@ -130,7 +130,7 @@ export function ItemInitialDetail({
 
                         setItem({
                             ...item,
-                            item_tag: key ?? "",
+                            item_tag_id: key ?? "",
                         });
                     }}
                 >
