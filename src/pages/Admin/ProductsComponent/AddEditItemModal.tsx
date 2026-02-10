@@ -8,6 +8,7 @@ import {
     useDisclosure,
     Divider,
     addToast,
+    Skeleton,
 } from "@heroui/react";
 import { useState, useEffect } from "react";
 
@@ -227,64 +228,133 @@ export function AddEditItemModal({
                             <span className="text-lg font-semibold">
                                 Set Item Details
                             </span>
+                            {isFetchingItem ? (
+                                <div className="flex flex-col gap-4">
+                                    {/* Item Details Skeleton */}
+                                    <div className="flex flex-col gap-3 mt-4">
+                                        <div className="flex w-full gap-3">
+                                            <Skeleton className="h-13 w-1/2 rounded-lg" />
+                                            <Skeleton className="h-13 w-1/2 rounded-lg" />
+                                        </div>
 
-                            <ItemInitialDetail
-                                isSubmitted={isSubmitted}
-                                item={item}
-                                setItem={setItem}
-                            />
+                                        <Skeleton className="h-13 w-full rounded-lg" />
 
-                            <div className="flex flex-col gap-3 mt-2">
-                                <Button
-                                    className="w-full gap-1"
-                                    color={
-                                        isSubmitted && selectedCount === 0
-                                            ? "danger"
-                                            : "default"
-                                    }
-                                    startContent={<PhotoIcon className="w-5" />}
-                                    onPress={onOpenPhoto}
-                                >
-                                    {isSubmitted && selectedCount === 0
-                                        ? "Photo is required"
-                                        : "Add Photos"}
-                                    {selectedCount > 0 && `(${selectedCount})`}
-                                    <span className="text-red-500">*</span>{" "}
-                                </Button>
+                                        <div className="flex w-full gap-3">
+                                            <Skeleton className="h-13 w-1/2 rounded-lg" />
+                                            <Skeleton className="h-13 w-1/2 rounded-lg" />
+                                        </div>
+                                    </div>
 
-                                {(itemHasVariant ||
-                                    item.item_variants.length === 0) && (
-                                    <AddVariantButton
+                                    {/* Photo Button Skeleton */}
+                                    <Skeleton className="h-12 w-full mt-2 rounded-lg" />
+                                    {itemHasVariant && (
+                                        // Variant List Skeleton
+                                        <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+                                            {Array.from({ length: 2 }).map(
+                                                (_, index) => (
+                                                    <div key={index}>
+                                                        {/* Card Header Skeleton */}
+                                                        <div className="flex justify-between items-start p-3">
+                                                            <div className="flex flex-col gap-1 w-full">
+                                                                <Skeleton className="h-5 w-1/3" />
+                                                                <Skeleton className="h-3 w-1/4" />
+                                                            </div>
+                                                            <div className="flex gap-2 ml-auto">
+                                                                <Skeleton className="h-8 w-8 rounded-full" />
+                                                                <Skeleton className="h-8 w-8 rounded-full" />
+                                                            </div>
+                                                        </div>
+
+                                                        <Divider />
+
+                                                        {/* Card Body Skeleton */}
+                                                        <div className="py-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                                                            <Skeleton className="h-4 w-full" />
+                                                            <Skeleton className="h-4 w-full" />
+                                                            <Skeleton className="h-4 w-full" />
+                                                            <Skeleton className="h-4 w-full" />
+                                                            <Skeleton className="h-4 w-full" />
+                                                            <Skeleton className="h-4 w-full" />
+                                                            <Skeleton className="h-4 w-full" />
+                                                            <Skeleton className="h-4 w-full" />
+                                                        </div>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col">
+                                    <ItemInitialDetail
+                                        isSubmitted={isSubmitted}
                                         item={item}
-                                        itemHasVariant={itemHasVariant}
-                                        setIsSubmitted={setIsSubmitted}
-                                        validate={validate}
-                                        onOpenAddVar={onOpenAddVar}
-                                    />
-                                )}
-                            </div>
-                            <div>
-                                {itemHasVariant && (
-                                    <>
-                                        <Divider className="my-4" />
-                                        <p className="text-base font-semibold mb-2">
-                                            Variant List{" "}
-                                            {item.item_variants.length
-                                                ? `(${item.item_variants.length})`
-                                                : ""}
-                                        </p>
-                                    </>
-                                )}
-
-                                <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
-                                    <VariantList
-                                        isFetchingItem={isFetchingItem}
-                                        item={item}
-                                        itemHasVariant={itemHasVariant}
                                         setItem={setItem}
                                     />
+
+                                    <div className="flex flex-col gap-3 mt-2">
+                                        <Button
+                                            className="w-full gap-1"
+                                            color={
+                                                isSubmitted &&
+                                                selectedCount === 0
+                                                    ? "danger"
+                                                    : "default"
+                                            }
+                                            startContent={
+                                                <PhotoIcon className="w-5" />
+                                            }
+                                            onPress={onOpenPhoto}
+                                        >
+                                            {isSubmitted && selectedCount === 0
+                                                ? "Photo is required"
+                                                : "Add Photos"}
+                                            {selectedCount > 0 &&
+                                                `(${selectedCount})`}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
+                                        </Button>
+
+                                        {(itemHasVariant ||
+                                            item.item_variants.length ===
+                                                0) && (
+                                            <AddVariantButton
+                                                item={item}
+                                                itemHasVariant={itemHasVariant}
+                                                setIsSubmitted={setIsSubmitted}
+                                                validate={validate}
+                                                onOpenAddVar={onOpenAddVar}
+                                            />
+                                        )}
+                                    </div>
+
+                                    {itemHasVariant && (
+                                        <>
+                                            <Divider className="my-4" />
+                                            <p className="text-base font-semibold mb-2">
+                                                Variant List{" "}
+                                                {item.item_variants.length
+                                                    ? `(${item.item_variants.length})`
+                                                    : ""}
+                                            </p>
+
+                                            <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+                                                <VariantList
+                                                    isFetchingItem={
+                                                        isFetchingItem
+                                                    }
+                                                    item={item}
+                                                    itemHasVariant={
+                                                        itemHasVariant
+                                                    }
+                                                    setItem={setItem}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
-                            </div>
+                            )}
                         </ModalBody>
                         <ModalFooter className="justify-between items-center">
                             <span className="text-sm text-default-500 italic">
