@@ -14,10 +14,12 @@ import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemM
 import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
 
 export function VariantList({
+    isFetchingItem,
     itemHasVariant,
     item,
     setItem,
 }: {
+    isFetchingItem: boolean;
     itemHasVariant: boolean;
     item: Item;
     setItem: React.Dispatch<React.SetStateAction<Item>>;
@@ -68,6 +70,7 @@ export function VariantList({
                                     isIconOnly
                                     className="ml-auto"
                                     size="sm"
+                                    isLoading={isFetchingItem}
                                     startContent={
                                         <PencilIcon className="w-5" />
                                     }

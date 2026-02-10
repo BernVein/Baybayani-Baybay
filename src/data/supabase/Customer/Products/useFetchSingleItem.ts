@@ -4,7 +4,7 @@ import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
 import { Variant } from "@/model/variant";
 import { StockMovement } from "@/model/stockMovement";
-export const useFetchItemById = (itemId: string | number | null) => {
+export const useFetchItemById = (itemId: string | null) => {
     const [item, setItem] = useState<Item | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -116,7 +116,6 @@ export const useFetchItemById = (itemId: string | number | null) => {
             });
             setLoading(false);
         };
-
         fetchItem();
     }, [itemId]);
 
