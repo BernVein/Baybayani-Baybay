@@ -21,7 +21,7 @@ export const useFetchItemById = (itemId: string | null) => {
             const { data, error } = await supabase
                 .from("Item")
                 .select(
-                    `*, Category(category_id), Tag(tag_id), Item_Image(item_image_url), Variant(*, StockMovement(*))`,
+                    `*, Category(category_id, category_name), Tag(tag_id, tag_name), Item_Image(item_image_url), Variant(*, StockMovement(*))`,
                 )
                 .eq("item_id", itemId)
                 .eq("is_soft_deleted", false)
@@ -39,7 +39,6 @@ export const useFetchItemById = (itemId: string | null) => {
 
                 return;
             }
-            console.log(data);
             const variantsRaw = data.Variant || [];
 
             // For each variant, get the latest stock from StockMovement
@@ -101,20 +100,22 @@ export const useFetchItemById = (itemId: string | null) => {
 
             setItem({
                 item_id: data.item_id,
-                item_category: data.item_category,
+                item_category: data.Category.category_name,
+                item_category_id: data.Category.category_id,
                 item_title: data.item_title,
                 item_img:
                     data.Item_Image?.map((img: any) => img.item_image_url) ||
                     [],
                 item_sold_by: data.item_sold_by,
                 item_description: data.item_description,
-                item_tag: data.item_tag ?? null,
+                item_tag: data.Tag?.tag_name ?? null,
+                item_tag_id: data.Tag?.tag_id ?? null,
                 item_has_variant: data.item_has_variant,
                 is_soft_deleted: data.is_soft_deleted,
                 last_updated: data.last_updated,
                 created_at: data.created_at,
                 item_variants: variantsInStock,
-            });
+            } as Item);
             setLoading(false);
         };
         fetchItem();

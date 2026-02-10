@@ -64,7 +64,7 @@ export function AddEditItemModal({
 
     const { item: fetchedItem, loading: isFetchingItem } =
         useFetchItemById(selectedItemId);
-
+    console.log("Items: ", fetchedItem);
     useEffect(() => {
         if (!selectedItemId) return;
         if (!fetchedItem) return;
