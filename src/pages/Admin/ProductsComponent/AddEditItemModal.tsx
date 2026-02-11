@@ -24,11 +24,13 @@ import { addItem } from "@/data/supabase/Admin/Products/addItem";
 import { useFetchItemById } from "@/data/supabase/Customer/Products/useFetchSingleItem";
 
 export function AddEditItemModal({
+    isEditDBItem = false,
     selectedItemId,
     itemHasVariant,
     isOpen,
     onOpenChange,
 }: {
+    isEditDBItem?: boolean;
     selectedItemId: string | null;
     itemHasVariant: boolean;
     isOpen: boolean;
@@ -65,7 +67,7 @@ export function AddEditItemModal({
 
     const { item: fetchedItem, loading: isFetchingItem } =
         useFetchItemById(selectedItemId);
-    console.log("Items: ", fetchedItem);
+
     useEffect(() => {
         if (!selectedItemId) return;
         if (!fetchedItem) return;
@@ -177,11 +179,11 @@ export function AddEditItemModal({
         }
     };
 
-    const normalizedImages: (File | null)[] = item.item_img.map((img) => {
-        if (img instanceof File) return img;
+    const normalizedImages: (File | string | null)[] = [
+        ...item.item_img,
+        ...Array(4 - item.item_img.length).fill(null),
+    ].slice(0, 4);
 
-        return null;
-    });
     return (
         <>
             <Modal
@@ -338,21 +340,16 @@ export function AddEditItemModal({
                                                     ? `(${item.item_variants.length})`
                                                     : ""}
                                             </p>
-
-                                            <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
-                                                <VariantList
-                                                    isFetchingItem={
-                                                        isFetchingItem
-                                                    }
-                                                    item={item}
-                                                    itemHasVariant={
-                                                        itemHasVariant
-                                                    }
-                                                    setItem={setItem}
-                                                />
-                                            </div>
                                         </>
                                     )}
+                                    <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+                                        <VariantList
+                                            isFetchingItem={isFetchingItem}
+                                            item={item}
+                                            itemHasVariant={itemHasVariant}
+                                            setItem={setItem}
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </ModalBody>
@@ -379,7 +376,7 @@ export function AddEditItemModal({
                                     isLoading={isLoading}
                                     onPress={handleAddItem}
                                 >
-                                    Add Item
+                                    {isEditDBItem ? "Update Item" : "Add Item"}
                                 </Button>
                             </div>
                         </ModalFooter>
@@ -418,15 +415,20 @@ export function AddEditItemModal({
                 images={normalizedImages}
                 isOpen={isOpenPhoto}
                 setImages={(newImages) => {
-                    const resolved =
-                        typeof newImages === "function"
-                            ? newImages(normalizedImages)
-                            : newImages;
+                    setItem((prev) => {
+                        const resolved =
+                            typeof newImages === "function"
+                                ? newImages(prev.item_img)
+                                : newImages;
 
-                    setItem((prev) => ({
-                        ...prev,
-                        item_img: resolved as Item["item_img"],
-                    }));
+                        return {
+                            ...prev,
+                            item_img: [
+                                ...resolved,
+                                ...Array(4 - resolved.length).fill(null),
+                            ].slice(0, 4) as Item["item_img"],
+                        };
+                    });
                 }}
                 onOpenChange={onOpenChangePhoto}
             />
