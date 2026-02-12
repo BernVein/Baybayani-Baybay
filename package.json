@@ -25,6 +25,7 @@
 		"@heroui/theme": "2.4.22",
 		"@heroui/use-theme": "2.1.10",
 		"@iconify/react": "^6.0.2",
+		"@internationalized/date": "^3.11.0",
 		"@react-aria/visually-hidden": "3.8.27",
 		"@react-types/shared": "3.32.0",
 		"@supabase/supabase-js": "^2.75.1",
