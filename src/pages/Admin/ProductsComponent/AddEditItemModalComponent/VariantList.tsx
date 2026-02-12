@@ -63,7 +63,15 @@ export function VariantList({
 											</p>
 										</>
 									) : (
-										<>Item Additional Info</>
+										<>
+											Item Additional Info
+											{isEditDB && (
+												<p className="text-tiny text-default-400 italic">
+													Stocks details is edited in
+													separate fields
+												</p>
+											)}
+										</>
 									)}
 								</h4>
 							</div>
