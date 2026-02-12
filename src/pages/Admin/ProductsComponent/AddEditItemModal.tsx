@@ -239,7 +239,7 @@ export function AddEditItemModal({
 						<ModalHeader className="flex flex-col gap-1">
 							<div className="flex flex-col gap-2">
 								<span className="text-lg font-semibold">
-									Add Item{" "}
+									{selectedItemId ? "Edit Item" : "Add Item"}{" "}
 									<span className="font-extrabold">
 										{itemHasVariant
 											? "with variant"
@@ -248,9 +248,13 @@ export function AddEditItemModal({
 								</span>
 								<span className="text-sm text-default-500 italic">
 									Changes here are temporary. The item will be
-									officially added only when you click the{" "}
+									officially{" "}
+									{selectedItemId ? "updated" : "added"} only
+									when you click the{" "}
 									<span className="text-success-500 font-semibold">
-										Add Item
+										{selectedItemId
+											? "Update Item"
+											: "Add Item"}
 									</span>{" "}
 									button below.
 								</span>
@@ -374,6 +378,9 @@ export function AddEditItemModal({
 									)}
 									<div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
 										<VariantList
+											isEditDB={
+												selectedItemId ? true : false
+											}
 											isFetchingItem={isFetchingItem}
 											item={item}
 											itemHasVariant={itemHasVariant}
@@ -424,6 +431,7 @@ export function AddEditItemModal({
 				</ModalContent>
 			</Modal>
 			<AddEditVariantModal
+				isEditDB={selectedItemId ? true : false}
 				defaultVariant={null}
 				isOpenAddVar={isOpenAddVar}
 				itemHasVariant={itemHasVariant}
