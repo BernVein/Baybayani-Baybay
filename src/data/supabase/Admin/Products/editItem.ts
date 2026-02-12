@@ -1,8 +1,10 @@
 import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
+import { Variant } from "framer-motion";
 
 export async function editItem(itemId: string, item: Item) {
 	try {
+		if (itemId.trim() == "") throw new Error("Item ID is required");
 		// Item
 		const { error: itemError } = await supabase
 			.from("Item")
@@ -41,7 +43,9 @@ export async function editItem(itemId: string, item: Item) {
 							variant.variant_price_wholesale ?? null,
 						variant_wholesale_item:
 							variant.variant_wholesale_item ?? null,
-					})
+						variant_low_stock_threshold:
+							variant.variant_low_stock_threshold ?? null,
+					} as Variant)
 					.eq("variant_id", variant.variant_id);
 
 				if (error) throw error;
@@ -59,8 +63,10 @@ export async function editItem(itemId: string, item: Item) {
 							variant.variant_price_wholesale ?? null,
 						variant_wholesale_item:
 							variant.variant_wholesale_item ?? null,
+						variant_low_stock_threshold:
+							variant.variant_low_stock_threshold ?? null,
 						is_soft_deleted: false, // revive softdeleted variant
-					})
+					} as Variant)
 					.select("*")
 					.single();
 
