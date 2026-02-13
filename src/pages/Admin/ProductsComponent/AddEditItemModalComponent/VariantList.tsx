@@ -5,6 +5,11 @@ import {
 	Divider,
 	Button,
 	useDisclosure,
+	Dropdown,
+	DropdownTrigger,
+	DropdownItem,
+	DropdownMenu,
+	DropdownSection,
 } from "@heroui/react";
 import { useState } from "react";
 
@@ -76,22 +81,47 @@ export function VariantList({
 								</h4>
 							</div>
 							<div className="ml-auto flex flex-row gap-2">
-								<Button
-									isIconOnly
-									className="ml-auto"
-									size="sm"
-									isLoading={isFetchingItem}
-									startContent={
-										<PencilIcon className="w-5" />
-									}
-									onPress={() => {
-										setSelectedVarIndex(index);
-										setSelectedVarName(
-											v.variant_name ?? null,
-										);
-										onOpenAddVar();
-									}}
-								/>
+								<Dropdown>
+									<DropdownTrigger>
+										<Button
+											isIconOnly
+											className="ml-auto"
+											size="sm"
+											isLoading={isFetchingItem}
+											startContent={
+												<PencilIcon className="w-5" />
+											}
+										/>
+									</DropdownTrigger>
+									<DropdownMenu aria-label="Static Actions">
+										<DropdownSection
+											showDivider
+											title="Stock Details"
+										>
+											<DropdownItem key="edit-stock">
+												Stock Gain
+											</DropdownItem>
+											<DropdownItem key="edit-stock">
+												Stock Loss
+											</DropdownItem>
+										</DropdownSection>
+										<DropdownSection title="Variant Details">
+											<DropdownItem
+												key="edit-variant"
+												onPress={() => {
+													setSelectedVarIndex(index);
+													setSelectedVarName(
+														v.variant_name ?? null,
+													);
+													onOpenAddVar();
+												}}
+											>
+												Edit Variant
+											</DropdownItem>
+										</DropdownSection>
+									</DropdownMenu>
+								</Dropdown>
+
 								<Button
 									isIconOnly
 									className="ml-auto"
