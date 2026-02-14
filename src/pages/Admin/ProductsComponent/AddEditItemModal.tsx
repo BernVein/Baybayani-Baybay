@@ -66,7 +66,6 @@ export function AddEditItemModal({
 
 	const { item: fetchedItem, loading: isFetchingItem } =
 		useFetchItemById(selectedItemId);
-
 	useEffect(() => {
 		if (!selectedItemId) return;
 		if (!fetchedItem) return;
@@ -246,18 +245,17 @@ export function AddEditItemModal({
 											: "without variant"}
 									</span>
 								</span>
-								<span className="text-sm text-default-500 italic">
-									Changes here are temporary. The item will be
-									officially{" "}
-									{selectedItemId ? "updated" : "added"} only
-									when you click the{" "}
-									<span className="text-success-500 font-semibold">
-										{selectedItemId
-											? "Update Item"
-											: "Add Item"}
-									</span>{" "}
-									button below.
-								</span>
+								{!selectedItemId && (
+									<span className="text-sm text-default-500 italic">
+										Changes here are temporary. The item
+										will be officially added only when you
+										click the{" "}
+										<span className="text-success-500 font-semibold">
+											Add Item
+										</span>{" "}
+										button below.
+									</span>
+								)}
 							</div>
 						</ModalHeader>
 						<ModalBody>

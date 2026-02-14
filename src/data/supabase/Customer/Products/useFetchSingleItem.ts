@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-
 import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
 import { Variant } from "@/model/variant";
 import { StockMovement } from "@/model/stockMovement";
+
 export const useFetchItemById = (itemId: string | null) => {
 	const [item, setItem] = useState<Item | null>(null);
 	const [loading, setLoading] = useState(false);
@@ -17,107 +17,120 @@ export const useFetchItemById = (itemId: string | null) => {
 			setError(null);
 			setItem(null);
 
-			// Fetch item with variants
-			const { data, error } = await supabase
-				.from("Item")
-				.select(
-					`*, Category(category_id, category_name), Tag(tag_id, tag_name), Item_Image(item_image_url), Variant(*, StockMovement(*))`,
-				)
-				.eq("item_id", itemId)
-				.eq("is_soft_deleted", false)
-				.single();
+			try {
+				// Fetch item + variants (no stock movements yet)
+				const { data, error } = await supabase
+					.from("Item")
+					.select(
+						`*, Category(category_id, category_name), Tag(tag_id, tag_name), Item_Image(item_image_url), Variant(*)`,
+					)
+					.eq("item_id", itemId)
+					.eq("is_soft_deleted", false)
+					.single();
 
-			if (error) {
-				setError(error.message);
+				if (error) throw error;
+				if (!data) {
+					setItem(null);
+					setLoading(false);
+					return;
+				}
+
+				const variantsRaw = data.Variant || [];
+
+				// Fetch latest 2 stock movements per variant
+				const variants: Variant[] = await Promise.all(
+					variantsRaw.map(async (v: any) => {
+						const { data: stockMovementsRaw } = await supabase
+							.from("StockMovement")
+							.select("*")
+							.eq("variant_id", v.variant_id)
+							.eq("is_soft_deleted", false)
+							.order("created_at", { ascending: false })
+							.limit(2);
+
+						const stockMovements: StockMovement[] =
+							stockMovementsRaw ?? [];
+
+						const latestStock = stockMovements[0] ?? null;
+
+						return {
+							variant_id: v.variant_id,
+							variant_name: v.variant_name,
+							variant_price_retail: Number(
+								v.variant_price_retail,
+							),
+							variant_price_wholesale:
+								v.variant_price_wholesale === null
+									? null
+									: Number(v.variant_price_wholesale),
+							variant_wholesale_item:
+								v.variant_wholesale_item === null
+									? null
+									: Number(v.variant_wholesale_item),
+							variant_stock_latest_movement: latestStock,
+							variant_low_stock_threshold:
+								v.variant_low_stock_threshold,
+							variant_last_updated_stock:
+								v.variant_last_updated_stock,
+							variant_last_updated_price_retail:
+								v.variant_last_updated_price_retail ?? null,
+							variant_stock_movements: stockMovements,
+							variant_last_price_retail:
+								v.variant_last_price_retail === null
+									? undefined
+									: Number(v.variant_last_price_retail),
+							variant_last_updated_price_wholesale:
+								v.variant_last_updated_price_wholesale ?? null,
+							variant_last_price_wholesale:
+								v.variant_last_price_wholesale === null
+									? null
+									: Number(v.variant_last_price_wholesale),
+							last_updated: v.last_updated,
+							is_soft_deleted: v.is_soft_deleted,
+							created_at: v.created_at,
+						};
+					}),
+				);
+
+				// Filter variants with zero stock
+				const variantsInStock = variants.filter(
+					(v) =>
+						(v.variant_stock_latest_movement?.effective_stocks ??
+							0) > 0,
+				);
+
+				// Set item or null if no variants in stock
+				if (variantsInStock.length === 0) {
+					setItem(null);
+				} else {
+					setItem({
+						item_id: data.item_id,
+						item_category: data.Category.category_name,
+						item_category_id: data.Category.category_id,
+						item_title: data.item_title,
+						item_img:
+							data.Item_Image?.map(
+								(img: any) => img.item_image_url,
+							) ?? [],
+						item_sold_by: data.item_sold_by,
+						item_description: data.item_description,
+						item_tag: data.Tag?.tag_name ?? null,
+						item_tag_id: data.Tag?.tag_id ?? null,
+						item_has_variant: data.item_has_variant,
+						is_soft_deleted: data.is_soft_deleted,
+						last_updated: data.last_updated,
+						created_at: data.created_at,
+						item_variants: variantsInStock,
+					} as Item);
+				}
+
 				setLoading(false);
-
-				return;
-			}
-
-			if (!data) {
-				setItem(null);
-
-				return;
-			}
-			const variantsRaw = data.Variant || [];
-
-			// For each variant, get the latest stock from StockMovement
-			const variants: Variant[] = variantsRaw.map((v: any) => {
-				const latestStock: StockMovement | undefined =
-					v.StockMovement?.filter(
-						(s: StockMovement) => !s.is_soft_deleted,
-					)?.sort(
-						(a: StockMovement, b: StockMovement) =>
-							new Date(b.created_at ?? "").getTime() -
-							new Date(a.created_at ?? "").getTime(),
-					)[0];
-
-				return {
-					variant_id: v.variant_id,
-					variant_name: v.variant_name,
-					variant_price_retail: Number(v.variant_price_retail),
-					variant_price_wholesale:
-						v.variant_price_wholesale === null
-							? null
-							: Number(v.variant_price_wholesale),
-					variant_wholesale_item:
-						v.variant_wholesale_item === null
-							? null
-							: Number(v.variant_wholesale_item),
-					variant_stock_latest_movement: latestStock,
-					variant_low_stock_threshold: v.variant_low_stock_threshold,
-					variant_last_updated_stock: v.variant_last_updated_stock,
-					variant_last_updated_price_retail:
-						v.variant_last_updated_price_retail ?? null,
-					variant_last_price_retail:
-						v.variant_last_price_retail === null
-							? undefined
-							: Number(v.variant_last_price_retail),
-					variant_last_updated_price_wholesale:
-						v.variant_last_updated_price_wholesale ?? null,
-					variant_last_price_wholesale:
-						v.variant_last_price_wholesale === null
-							? null
-							: Number(v.variant_last_price_wholesale),
-					last_updated: v.last_updated,
-					is_soft_deleted: v.is_soft_deleted,
-					created_at: v.created_at,
-				};
-			});
-
-			// Filter variants with zero stock
-			const variantsInStock = variants.filter(
-				(v) =>
-					v.variant_stock_latest_movement?.effective_stocks ?? 0 > 0,
-			);
-
-			if (variantsInStock.length === 0) {
-				setItem(null);
+			} catch (err: any) {
+				setError(err.message || "Something went wrong");
 				setLoading(false);
-
-				return;
 			}
-
-			setItem({
-				item_id: data.item_id,
-				item_category: data.Category.category_name,
-				item_category_id: data.Category.category_id,
-				item_title: data.item_title,
-				item_img:
-					data.Item_Image?.map((img: any) => img.item_image_url) ||
-					[],
-				item_sold_by: data.item_sold_by,
-				item_description: data.item_description,
-				item_tag: data.Tag?.tag_name ?? null,
-				item_tag_id: data.Tag?.tag_id ?? null,
-				item_has_variant: data.item_has_variant,
-				is_soft_deleted: data.is_soft_deleted,
-				last_updated: data.last_updated,
-				created_at: data.created_at,
-				item_variants: variantsInStock,
-			} as Item);
-			setLoading(false);
 		};
+
 		fetchItem();
 	}, [itemId]);
 

@@ -199,29 +199,41 @@ export function VariantList({
 						<Divider />
 						<CardBody>
 							<span className="text-default-500 text-sm italic">
-								Latest Stock Modification:{" "}
-								<span className="font-bold">
-									{v.variant_stock_latest_movement
-										.stock_adjustment_type === "Loss" ? (
-										<span className="text-danger">
-											Deducted{" "}
-											{
-												v.variant_stock_latest_movement
-													.stock_change_count
-											}{" "}
-											{item.item_sold_by}s
+								{isEditDB && (
+									<>
+										<span>Latest Stock Modification: </span>
+										<span className="font-bold">
+											{v.variant_stock_movements
+												?.length === 1 ? (
+												<span className="text-default-400 italic font-normal">
+													No change since
+												</span>
+											) : v.variant_stock_latest_movement
+													.stock_adjustment_type ===
+											  "Loss" ? (
+												<span className="text-danger">
+													Deducted{" "}
+													{
+														v
+															.variant_stock_latest_movement
+															.stock_change_count
+													}{" "}
+													{item.item_sold_by}s
+												</span>
+											) : (
+												<span className="text-success">
+													Added{" "}
+													{
+														v
+															.variant_stock_latest_movement
+															.stock_change_count
+													}{" "}
+													{item.item_sold_by}s
+												</span>
+											)}
 										</span>
-									) : (
-										<span className="text-success">
-											Added{" "}
-											{
-												v.variant_stock_latest_movement
-													.stock_change_count
-											}{" "}
-											{item.item_sold_by}s
-										</span>
-									)}
-								</span>
+									</>
+								)}
 							</span>
 							<div className="py-2 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
 								<div className="flex justify-between">
