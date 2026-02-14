@@ -17,6 +17,7 @@ import { PencilIcon, TrashIcon } from "@/components/icons";
 import { Item } from "@/model/Item";
 import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantListComponent/DeleteVariantModal";
 import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
+import { EditStockDetailModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/EditStockDetailModal";
 
 export function VariantList({
 	isEditDB,
@@ -41,10 +42,18 @@ export function VariantList({
 		onOpen: onOpenAddVar,
 		onOpenChange: onOpenChangeAddVar,
 	} = useDisclosure();
+	const {
+		isOpen: isOpenEditStock,
+		onOpen: onOpenEditStock,
+		onOpenChange: onOpenChangeEditStock,
+	} = useDisclosure();
 
 	const [selectedVarIndex, setSelectedVarIndex] = useState<number | null>(
 		null,
 	);
+	const [editStockKey, setEditStockKey] = useState<
+		"edit-stock-gain" | "edit-stock-loss" | null
+	>(null);
 	const [selectedVarName, setSelectedVarName] = useState<string | null>(null);
 
 	return (
@@ -69,7 +78,10 @@ export function VariantList({
 										</>
 									) : (
 										<>
-											Item Additional Info
+											{isEditDB
+												? "Latest Item Info"
+												: "Item Additional Info"}
+
 											{isEditDB && (
 												<p className="text-tiny text-default-400 italic">
 													Stocks details is edited in
@@ -81,46 +93,92 @@ export function VariantList({
 								</h4>
 							</div>
 							<div className="ml-auto flex flex-row gap-2">
-								<Dropdown>
-									<DropdownTrigger>
-										<Button
-											isIconOnly
-											className="ml-auto"
-											size="sm"
-											isLoading={isFetchingItem}
-											startContent={
-												<PencilIcon className="w-5" />
-											}
-										/>
-									</DropdownTrigger>
-									<DropdownMenu aria-label="Static Actions">
-										<DropdownSection
-											showDivider
-											title="Stock Details"
-										>
-											<DropdownItem key="edit-stock">
-												Stock Gain
-											</DropdownItem>
-											<DropdownItem key="edit-stock">
-												Stock Loss
-											</DropdownItem>
-										</DropdownSection>
-										<DropdownSection title="Variant Details">
-											<DropdownItem
-												key="edit-variant"
-												onPress={() => {
-													setSelectedVarIndex(index);
-													setSelectedVarName(
-														v.variant_name ?? null,
-													);
-													onOpenAddVar();
-												}}
+								{!isEditDB && (
+									<Button
+										isIconOnly
+										className="ml-auto"
+										size="sm"
+										isLoading={isFetchingItem}
+										startContent={
+											<PencilIcon className="w-5" />
+										}
+										onPress={() => {
+											setSelectedVarIndex(index);
+											setSelectedVarName(
+												v.variant_name ?? null,
+											);
+											onOpenAddVar();
+										}}
+									/>
+								)}
+
+								{isEditDB && (
+									<Dropdown>
+										<DropdownTrigger>
+											<Button
+												isIconOnly
+												className="ml-auto"
+												size="sm"
+												isLoading={isFetchingItem}
+												startContent={
+													<PencilIcon className="w-5" />
+												}
+											/>
+										</DropdownTrigger>
+										<DropdownMenu aria-label="Static Actions">
+											<DropdownSection
+												showDivider
+												title="Stock Details"
 											>
-												Edit Variant
-											</DropdownItem>
-										</DropdownSection>
-									</DropdownMenu>
-								</Dropdown>
+												<DropdownItem
+													key="edit-stock-gain"
+													onClick={() => {
+														setSelectedVarIndex(
+															index,
+														);
+														setEditStockKey(
+															"edit-stock-gain",
+														);
+														onOpenEditStock();
+													}}
+												>
+													Stock Gain
+												</DropdownItem>
+												<DropdownItem
+													key="edit-stock-loss"
+													onClick={() => {
+														setSelectedVarIndex(
+															index,
+														);
+														setEditStockKey(
+															"edit-stock-loss",
+														);
+														onOpenEditStock();
+													}}
+												>
+													Stock Loss
+												</DropdownItem>
+											</DropdownSection>
+											<DropdownSection title="Variant Details">
+												<DropdownItem
+													key="edit-variant"
+													onPress={() => {
+														setSelectedVarIndex(
+															index,
+														);
+														setSelectedVarName(
+															v.variant_name ??
+																null,
+														);
+														onOpenAddVar();
+													}}
+												>
+													Edit Variant
+												</DropdownItem>
+											</DropdownSection>
+										</DropdownMenu>
+									</Dropdown>
+								)}
 
 								<Button
 									isIconOnly
@@ -139,129 +197,200 @@ export function VariantList({
 							</div>
 						</CardHeader>
 						<Divider />
-						<CardBody className="py-2 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Stocks:
-								</span>
-								<span className="font-medium">
+						<CardBody>
+							<span className="text-default-500 text-sm italic">
+								Latest Stock Modification:{" "}
+								<span className="font-bold">
 									{v.variant_stock_latest_movement
-										.effective_stocks != null
-										? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
-										: "0"}{" "}
-									{item.item_sold_by}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Date Delivered:
-								</span>
-								<span className="font-medium">
-									{v.variant_stock_latest_movement
-										.stock_delivery_date
-										? new Date(
-												v.variant_stock_latest_movement.stock_delivery_date,
-											).toLocaleDateString("en-US", {
-												month: "short",
-												day: "2-digit",
-												year: "numeric",
-											})
-										: "N/A"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Total Buying Price:
-								</span>
-								<span className="font-medium">
-									{v.variant_stock_latest_movement
-										.stock_adjustment_amount != null
-										? `₱${v.variant_stock_latest_movement.stock_adjustment_amount.toLocaleString(
-												"en-PH",
-												{
-													minimumFractionDigits: 2,
-													maximumFractionDigits: 2,
-												},
-											)}`
-										: "N/A"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Retail Price:
-								</span>
-								<span className="font-medium">
-									{v.variant_price_retail != null
-										? `₱${v.variant_price_retail.toLocaleString(
-												"en-PH",
-												{
-													minimumFractionDigits: 2,
-													maximumFractionDigits: 2,
-												},
-											)}`
-										: "N/A"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Low Stock Alert:
-								</span>
-								<span className="font-medium">
-									{v.variant_low_stock_threshold?.toLocaleString()}{" "}
-									{item.item_sold_by}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Wholesale Price:
-								</span>
-
-								{v.variant_price_wholesale != null &&
-								v.variant_price_wholesale > 0 ? (
-									<span className="font-medium">
-										₱
-										{v.variant_price_wholesale.toLocaleString(
-											"en-PH",
+										.stock_adjustment_type === "Loss" ? (
+										<span className="text-danger">
+											Deducted{" "}
 											{
-												minimumFractionDigits: 2,
-												maximumFractionDigits: 2,
-											},
-										)}
+												v.variant_stock_latest_movement
+													.stock_change_count
+											}{" "}
+											{item.item_sold_by}
+										</span>
+									) : (
+										<span className="text-success">
+											Added{" "}
+											{
+												v.variant_stock_latest_movement
+													.stock_change_count
+											}{" "}
+											{item.item_sold_by}
+										</span>
+									)}
+								</span>
+							</span>
+							<div className="py-2 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{isEditDB ? "Current Stocks" : "Stocks"}
+										:
 									</span>
-								) : (
-									<span className="text-xs italic text-default-400">
-										N/A
-									</span>
-								)}
-							</div>
-
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Supplier:
-								</span>
-								<span className="font-medium truncate ml-2">
-									{
-										v.variant_stock_latest_movement
-											.stock_supplier
-									}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-default-500">
-									Wholesale Min Qty:
-								</span>
-
-								{v.variant_wholesale_item != null &&
-								v.variant_wholesale_item > 0 ? (
-									<span className="font-medium truncate ml-2">
-										{v.variant_wholesale_item.toLocaleString()}{" "}
+									<span className="font-medium">
+										{v.variant_stock_latest_movement
+											.effective_stocks != null
+											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
+											: "0"}{" "}
 										{item.item_sold_by}
 									</span>
-								) : (
-									<span className="text-xs italic text-default-400 ml-2">
-										N/A
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? "Stock Loss Date"
+											: "Date Delivered"}
 									</span>
-								)}
+									<span className="font-medium">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? v.variant_stock_latest_movement
+													.stock_change_date
+												? new Date(
+														v.variant_stock_latest_movement.stock_change_date,
+													).toLocaleDateString(
+														"en-US",
+														{
+															month: "short",
+															day: "2-digit",
+															year: "numeric",
+														},
+													)
+												: "N/A"
+											: v.variant_stock_latest_movement
+														.stock_delivery_date
+												? new Date(
+														v.variant_stock_latest_movement.stock_delivery_date,
+													).toLocaleDateString(
+														"en-US",
+														{
+															month: "short",
+															day: "2-digit",
+															year: "numeric",
+														},
+													)
+												: "N/A"}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? "Total Amount Loss"
+											: "Total Buying Price"}
+									</span>
+									<span className="font-medium">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_amount != null
+											? `₱${v.variant_stock_latest_movement.stock_adjustment_amount.toLocaleString(
+													"en-PH",
+													{
+														minimumFractionDigits: 2,
+														maximumFractionDigits: 2,
+													},
+												)}`
+											: "N/A"}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Retail Price:
+									</span>
+									<span className="font-medium">
+										{v.variant_price_retail != null
+											? `₱${v.variant_price_retail.toLocaleString(
+													"en-PH",
+													{
+														minimumFractionDigits: 2,
+														maximumFractionDigits: 2,
+													},
+												)}`
+											: "N/A"}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Low Stock Alert:
+									</span>
+									<span className="font-medium">
+										{v.variant_low_stock_threshold?.toLocaleString()}{" "}
+										{item.item_sold_by}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Wholesale Price:
+									</span>
+
+									{v.variant_price_wholesale != null &&
+									v.variant_price_wholesale > 0 ? (
+										<span className="font-medium">
+											₱
+											{v.variant_price_wholesale.toLocaleString(
+												"en-PH",
+												{
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2,
+												},
+											)}
+										</span>
+									) : (
+										<span className="text-xs italic text-default-400">
+											N/A
+										</span>
+									)}
+								</div>
+
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? "Reason for Loss"
+											: "Supplier"}
+									</span>
+									<span
+										className="font-medium truncate w-1/2 text-right"
+										title={
+											v.variant_stock_latest_movement
+												.stock_adjustment_type ===
+											"Loss"
+												? v
+														.variant_stock_latest_movement
+														.stock_loss_reason
+												: v
+														.variant_stock_latest_movement
+														.stock_supplier
+										}
+									>
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? v.variant_stock_latest_movement
+													.stock_loss_reason
+											: v.variant_stock_latest_movement
+													.stock_supplier}
+									</span>
+								</div>
+
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Wholesale Min Qty:
+									</span>
+
+									{v.variant_wholesale_item != null &&
+									v.variant_wholesale_item > 0 ? (
+										<span className="font-medium truncate ml-2">
+											{v.variant_wholesale_item.toLocaleString()}{" "}
+											{item.item_sold_by}
+										</span>
+									) : (
+										<span className="text-xs italic text-default-400 ml-2">
+											N/A
+										</span>
+									)}
+								</div>
 							</div>
 						</CardBody>
 					</Card>
@@ -276,6 +405,35 @@ export function VariantList({
 				setSelectedVarIndex={setSelectedVarIndex}
 				onOpenChangeDeleteVar={onOpenChangeDeleteVar}
 			/>
+			{isOpenEditStock &&
+				selectedVarIndex !== null &&
+				editStockKey !== null && (
+					<EditStockDetailModal
+						editKey={editStockKey}
+						itemUnitOfMeasure={item.item_sold_by}
+						variant={item.item_variants[selectedVarIndex]}
+						isOpenEditStock={isOpenEditStock}
+						onOpenChangeEditStock={onOpenChangeEditStock}
+						onUpdateLastestStockMovement={(updatedMovement) => {
+							if (selectedVarIndex === null) return;
+
+							setItem((prev) => {
+								const updatedVariants = [...prev.item_variants];
+
+								updatedVariants[selectedVarIndex] = {
+									...updatedVariants[selectedVarIndex],
+									variant_stock_latest_movement:
+										updatedMovement,
+								};
+
+								return {
+									...prev,
+									item_variants: updatedVariants,
+								};
+							});
+						}}
+					/>
+				)}
 			<AddEditVariantModal
 				isEditDB={isEditDB}
 				defaultVariant={

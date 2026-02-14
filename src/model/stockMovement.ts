@@ -1,12 +1,14 @@
 export interface StockMovement {
-  stock_movement_id?: string;
-  stock_change_count?: number;
-  stock_adjustment_amount?: number;
-  stock_adjustment_type?: "Loss" | "Acquisition" | "Sale" | "From Cancel";
-  stock_supplier?: string;
-  stock_delivery_date?: string;
-  effective_stocks?: number;
-  last_updated: string; // timestamptz
-  is_soft_deleted: boolean;
-  created_at: string; // timestamptz
+	stock_movement_id?: string;
+	stock_change_count?: number;
+	stock_adjustment_amount?: number;
+	stock_adjustment_type?: "Loss" | "Acquisition" | "Sale" | "From Cancel";
+	stock_supplier?: string;
+	stock_delivery_date?: string;
+	effective_stocks?: number;
+	stock_change_date?: string;
+	stock_loss_reason?: string;
+	last_updated?: string; // timestamptz
+	is_soft_deleted?: boolean;
+	created_at?: string; // timestamptz
 }
