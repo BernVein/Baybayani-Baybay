@@ -75,6 +75,23 @@ export function VariantList({
 											<p className="text-tiny text-default-400">
 												Variant {index + 1}
 											</p>
+											<div className="flex gap-1">
+												<span className="text-default-500 text-sm">
+													{isEditDB
+														? "Current Stocks"
+														: "Stocks"}
+													:
+												</span>
+												<span className="text-default-500 text-sm">
+													{v
+														.variant_stock_latest_movement
+														.effective_stocks !=
+													null
+														? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
+														: "0"}{" "}
+													{item.item_sold_by}s
+												</span>
+											</div>
 										</>
 									) : (
 										<>
@@ -205,14 +222,10 @@ export function VariantList({
 							>
 								<div className="flex justify-between">
 									<span className="text-default-500">
-										{isEditDB ? "Current Stocks" : "Stocks"}
-										:
+										Low Stock Alert:
 									</span>
 									<span className="font-medium">
-										{v.variant_stock_latest_movement
-											.effective_stocks != null
-											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
-											: "0"}{" "}
+										{v.variant_low_stock_threshold?.toLocaleString()}{" "}
 										{item.item_sold_by}s
 									</span>
 								</div>
@@ -275,46 +288,12 @@ export function VariantList({
 							</div>
 							{isEditDB && (
 								<div>
-									<span>Latest Stock Modification: </span>
-									<span className="font-bold">
-										{v.variant_stock_movements?.length ===
-										1 ? (
-											<span className="text-default-400 italic font-normal">
-												{itemHasVariant
-													? "Variant "
-													: "Item "}
-												just added
-											</span>
-										) : v.variant_stock_latest_movement
-												.stock_adjustment_type ===
-										  "Loss" ? (
-											<span className="text-danger">
-												Deducted{" "}
-												{
-													v
-														.variant_stock_latest_movement
-														.stock_change_count
-												}{" "}
-												{item.item_sold_by}s
-											</span>
-										) : (
-											<span className="text-success">
-												Added{" "}
-												{
-													v
-														.variant_stock_latest_movement
-														.stock_change_count
-												}{" "}
-												{item.item_sold_by}s
-											</span>
-										)}
-									</span>
-									<p className="text-sm text-default-500 italic">
+									<p className="text-base text-default-600 italic">
 										Latest Stock Modification Details:
 									</p>
 								</div>
 							)}
-							<div className="py-2 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+							<div className="py-1 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
 								<div className="flex justify-between">
 									<span className="text-default-500">
 										{v.variant_stock_latest_movement
@@ -373,14 +352,25 @@ export function VariantList({
 											: "N/A"}
 									</span>
 								</div>
-
 								<div className="flex justify-between">
 									<span className="text-default-500">
-										Low Stock Alert:
+										{v.variant_stock_latest_movement
+											?.stock_adjustment_type === "Loss"
+											? "Deducted Stocks:"
+											: "Added Stocks:"}
 									</span>
-									<span className="font-medium">
-										{v.variant_low_stock_threshold?.toLocaleString()}{" "}
-										{item.item_sold_by}s
+									<span className="font-medium truncate">
+										{v.variant_stock_movements?.length ===
+										1 ? (
+											<span className="italic text-default-500">
+												Recently Added
+											</span>
+										) : v.variant_stock_latest_movement
+												?.stock_change_count != null ? (
+											`${v.variant_stock_latest_movement.stock_change_count} ${item.item_sold_by}${v.variant_stock_latest_movement.stock_change_count > 1 ? "s" : ""}`
+										) : (
+											"N/A"
+										)}
 									</span>
 								</div>
 
