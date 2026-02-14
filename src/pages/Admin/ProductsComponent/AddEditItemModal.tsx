@@ -284,8 +284,8 @@ export function AddEditItemModal({
 									{/* Photo Button Skeleton */}
 									<Skeleton className="h-12 w-full mt-2 rounded-lg" />
 									{itemHasVariant && (
-										// Variant List Skeleton
-										<div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+										/* Variant List Skeleton */
+										<div className="flex flex-col gap-3 pr-2">
 											{Array.from({ length: 2 }).map(
 												(_, index) => (
 													<div key={index}>
@@ -376,7 +376,7 @@ export function AddEditItemModal({
 											</p>
 										</>
 									)}
-									<div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
+									<div className="flex flex-col gap-3 pr-2">
 										<VariantList
 											isEditDB={
 												selectedItemId ? true : false

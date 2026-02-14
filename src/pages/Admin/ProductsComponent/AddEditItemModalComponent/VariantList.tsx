@@ -351,20 +351,7 @@ export function VariantList({
 											? "Reason for Loss"
 											: "Supplier"}
 									</span>
-									<span
-										className="font-medium truncate w-1/2 text-right"
-										title={
-											v.variant_stock_latest_movement
-												.stock_adjustment_type ===
-											"Loss"
-												? v
-														.variant_stock_latest_movement
-														.stock_loss_reason
-												: v
-														.variant_stock_latest_movement
-														.stock_supplier
-										}
-									>
+									<span className="font-medium text-right">
 										{v.variant_stock_latest_movement
 											.stock_adjustment_type === "Loss"
 											? v.variant_stock_latest_movement
