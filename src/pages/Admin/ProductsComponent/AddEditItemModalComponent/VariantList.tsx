@@ -125,7 +125,7 @@ export function VariantList({
 								)}
 
 								{isEditDB && (
-									<Dropdown>
+									<Dropdown autoFocus={false}>
 										<DropdownTrigger>
 											<Button
 												isIconOnly
