@@ -209,7 +209,7 @@ export function VariantList({
 												v.variant_stock_latest_movement
 													.stock_change_count
 											}{" "}
-											{item.item_sold_by}
+											{item.item_sold_by}s
 										</span>
 									) : (
 										<span className="text-success">
@@ -218,7 +218,7 @@ export function VariantList({
 												v.variant_stock_latest_movement
 													.stock_change_count
 											}{" "}
-											{item.item_sold_by}
+											{item.item_sold_by}s
 										</span>
 									)}
 								</span>
@@ -234,7 +234,7 @@ export function VariantList({
 											.effective_stocks != null
 											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
 											: "0"}{" "}
-										{item.item_sold_by}
+										{item.item_sold_by}s
 									</span>
 								</div>
 								<div className="flex justify-between">
@@ -317,7 +317,7 @@ export function VariantList({
 									</span>
 									<span className="font-medium">
 										{v.variant_low_stock_threshold?.toLocaleString()}{" "}
-										{item.item_sold_by}
+										{item.item_sold_by}s
 									</span>
 								</div>
 								<div className="flex justify-between">
@@ -383,7 +383,7 @@ export function VariantList({
 									v.variant_wholesale_item > 0 ? (
 										<span className="font-medium truncate ml-2">
 											{v.variant_wholesale_item.toLocaleString()}{" "}
-											{item.item_sold_by}
+											{item.item_sold_by}s
 										</span>
 									) : (
 										<span className="text-xs italic text-default-400 ml-2">
