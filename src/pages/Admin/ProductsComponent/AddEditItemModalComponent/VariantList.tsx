@@ -75,23 +75,7 @@ export function VariantList({
 											<p className="text-tiny text-default-400">
 												Variant {index + 1}
 											</p>
-											<div className="flex gap-1">
-												<span className="text-default-500 text-sm">
-													{isEditDB
-														? "Current Stocks"
-														: "Stocks"}
-													:
-												</span>
-												<span className="text-default-500 text-sm">
-													{v
-														.variant_stock_latest_movement
-														.effective_stocks !=
-													null
-														? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
-														: "0"}{" "}
-													{item.item_sold_by}s
-												</span>
-											</div>
+											<div className="flex gap-1"></div>
 										</>
 									) : (
 										<>
@@ -107,6 +91,17 @@ export function VariantList({
 											)}
 										</>
 									)}
+									<span className="text-default-500 text-sm">
+										{isEditDB ? "Current Stocks" : "Stocks"}
+										:{" "}
+									</span>
+									<span className="text-default-500 text-sm">
+										{v.variant_stock_latest_movement
+											.effective_stocks != null
+											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
+											: "0"}{" "}
+										{item.item_sold_by}s
+									</span>
 								</h4>
 							</div>
 							<div className="ml-auto flex flex-row gap-2">
@@ -149,7 +144,7 @@ export function VariantList({
 											>
 												<DropdownItem
 													key="edit-stock-gain"
-													onClick={() => {
+													onPress={() => {
 														setSelectedVarIndex(
 															index,
 														);
@@ -163,7 +158,7 @@ export function VariantList({
 												</DropdownItem>
 												<DropdownItem
 													key="edit-stock-loss"
-													onClick={() => {
+													onPress={() => {
 														setSelectedVarIndex(
 															index,
 														);
@@ -404,6 +399,7 @@ export function VariantList({
 				setSelectedVarIndex={setSelectedVarIndex}
 				onOpenChangeDeleteVar={onOpenChangeDeleteVar}
 			/>
+
 			{isOpenEditStock &&
 				selectedVarIndex !== null &&
 				editStockKey !== null && (
