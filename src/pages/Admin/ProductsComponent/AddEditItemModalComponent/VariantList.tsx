@@ -198,44 +198,11 @@ export function VariantList({
 						</CardHeader>
 						<Divider />
 						<CardBody>
-							<span className="text-default-500 text-sm italic">
-								{isEditDB && (
-									<>
-										<span>Latest Stock Modification: </span>
-										<span className="font-bold">
-											{v.variant_stock_movements
-												?.length === 1 ? (
-												<span className="text-default-400 italic font-normal">
-													No change since
-												</span>
-											) : v.variant_stock_latest_movement
-													.stock_adjustment_type ===
-											  "Loss" ? (
-												<span className="text-danger">
-													Deducted{" "}
-													{
-														v
-															.variant_stock_latest_movement
-															.stock_change_count
-													}{" "}
-													{item.item_sold_by}s
-												</span>
-											) : (
-												<span className="text-success">
-													Added{" "}
-													{
-														v
-															.variant_stock_latest_movement
-															.stock_change_count
-													}{" "}
-													{item.item_sold_by}s
-												</span>
-											)}
-										</span>
-									</>
-								)}
-							</span>
-							<div className="py-2 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+							<div
+								className={`text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 ${
+									isEditDB ? "mb-3" : ""
+								}`}
+							>
 								<div className="flex justify-between">
 									<span className="text-default-500">
 										{isEditDB ? "Current Stocks" : "Stocks"}
@@ -249,6 +216,105 @@ export function VariantList({
 										{item.item_sold_by}s
 									</span>
 								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Retail Price:
+									</span>
+									<span className="font-medium">
+										{v.variant_price_retail != null
+											? `₱${v.variant_price_retail.toLocaleString(
+													"en-PH",
+													{
+														minimumFractionDigits: 2,
+														maximumFractionDigits: 2,
+													},
+												)}`
+											: "N/A"}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Wholesale Price:
+									</span>
+
+									{v.variant_price_wholesale != null &&
+									v.variant_price_wholesale > 0 ? (
+										<span className="font-medium">
+											₱
+											{v.variant_price_wholesale.toLocaleString(
+												"en-PH",
+												{
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2,
+												},
+											)}
+										</span>
+									) : (
+										<span className="text-xs italic text-default-400">
+											N/A
+										</span>
+									)}
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Wholesale Min Qty:
+									</span>
+
+									{v.variant_wholesale_item != null &&
+									v.variant_wholesale_item > 0 ? (
+										<span className="font-medium truncate ml-2">
+											{v.variant_wholesale_item.toLocaleString()}{" "}
+											{item.item_sold_by}s
+										</span>
+									) : (
+										<span className="text-xs italic text-default-400 ml-2">
+											N/A
+										</span>
+									)}
+								</div>
+							</div>
+							{isEditDB && (
+								<div>
+									<span>Latest Stock Modification: </span>
+									<span className="font-bold">
+										{v.variant_stock_movements?.length ===
+										1 ? (
+											<span className="text-default-400 italic font-normal">
+												{itemHasVariant
+													? "Variant "
+													: "Item "}
+												just added
+											</span>
+										) : v.variant_stock_latest_movement
+												.stock_adjustment_type ===
+										  "Loss" ? (
+											<span className="text-danger">
+												Deducted{" "}
+												{
+													v
+														.variant_stock_latest_movement
+														.stock_change_count
+												}{" "}
+												{item.item_sold_by}s
+											</span>
+										) : (
+											<span className="text-success">
+												Added{" "}
+												{
+													v
+														.variant_stock_latest_movement
+														.stock_change_count
+												}{" "}
+												{item.item_sold_by}s
+											</span>
+										)}
+									</span>
+									<p className="text-sm text-default-500 italic">
+										Latest Stock Modification Details:
+									</p>
+								</div>
+							)}
+							<div className="py-2 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
 								<div className="flex justify-between">
 									<span className="text-default-500">
 										{v.variant_stock_latest_movement
@@ -307,22 +373,7 @@ export function VariantList({
 											: "N/A"}
 									</span>
 								</div>
-								<div className="flex justify-between">
-									<span className="text-default-500">
-										Retail Price:
-									</span>
-									<span className="font-medium">
-										{v.variant_price_retail != null
-											? `₱${v.variant_price_retail.toLocaleString(
-													"en-PH",
-													{
-														minimumFractionDigits: 2,
-														maximumFractionDigits: 2,
-													},
-												)}`
-											: "N/A"}
-									</span>
-								</div>
+
 								<div className="flex justify-between">
 									<span className="text-default-500">
 										Low Stock Alert:
@@ -331,29 +382,6 @@ export function VariantList({
 										{v.variant_low_stock_threshold?.toLocaleString()}{" "}
 										{item.item_sold_by}s
 									</span>
-								</div>
-								<div className="flex justify-between">
-									<span className="text-default-500">
-										Wholesale Price:
-									</span>
-
-									{v.variant_price_wholesale != null &&
-									v.variant_price_wholesale > 0 ? (
-										<span className="font-medium">
-											₱
-											{v.variant_price_wholesale.toLocaleString(
-												"en-PH",
-												{
-													minimumFractionDigits: 2,
-													maximumFractionDigits: 2,
-												},
-											)}
-										</span>
-									) : (
-										<span className="text-xs italic text-default-400">
-											N/A
-										</span>
-									)}
 								</div>
 
 								<div className="flex justify-between">
@@ -371,24 +399,6 @@ export function VariantList({
 											: v.variant_stock_latest_movement
 													.stock_supplier}
 									</span>
-								</div>
-
-								<div className="flex justify-between">
-									<span className="text-default-500">
-										Wholesale Min Qty:
-									</span>
-
-									{v.variant_wholesale_item != null &&
-									v.variant_wholesale_item > 0 ? (
-										<span className="font-medium truncate ml-2">
-											{v.variant_wholesale_item.toLocaleString()}{" "}
-											{item.item_sold_by}s
-										</span>
-									) : (
-										<span className="text-xs italic text-default-400 ml-2">
-											N/A
-										</span>
-									)}
 								</div>
 							</div>
 						</CardBody>
