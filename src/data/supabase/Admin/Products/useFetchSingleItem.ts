@@ -17,11 +17,17 @@ export const useFetchSingleItem = (item_id: string) => {
 		const { data, error } = await supabase
 			.from("Item")
 			.select(
-				`*, Item_Image(item_image_url), Variant(*), Tag(tag_name), Category(category_name)`,
+				`*, 
+		 Item_Image(item_image_url), 
+		 Variant(*), 
+		 Tag(tag_name), 
+		 Category(category_name)
+		`,
 			)
 			.eq("item_id", item_id)
 			.eq("is_soft_deleted", false)
-			.single(); // only one row expected
+			.eq("Variant.is_soft_deleted", false)
+			.single();
 
 		setLoading(false);
 
@@ -38,38 +44,36 @@ export const useFetchSingleItem = (item_id: string) => {
 		}
 
 		// map variants and filter out soft-deleted ones
-		const variants = (data.Variant || [])
-			.map((v: any) => ({
-				variant_id: v.variant_id,
-				variant_name: v.variant_name,
-				variant_price_retail: Number(v.variant_price_retail),
-				variant_price_wholesale:
-					v.variant_price_wholesale === null
-						? null
-						: Number(v.variant_price_wholesale),
-				variant_wholesale_item:
-					v.variant_wholesale_item === null
-						? null
-						: Number(v.variant_wholesale_item),
-				variant_stocks: Number(v.variant_stocks ?? 0),
-				variant_last_updated_stock: v.variant_last_updated_stock,
-				variant_last_updated_price_retail:
-					v.variant_last_updated_price_retail ?? null,
-				variant_last_price_retail:
-					v.variant_last_price_retail === null
-						? undefined
-						: Number(v.variant_last_price_retail),
-				variant_last_updated_price_wholesale:
-					v.variant_last_updated_price_wholesale ?? null,
-				variant_last_price_wholesale:
-					v.variant_last_price_wholesale === null
-						? null
-						: Number(v.variant_last_price_wholesale),
-				last_updated: v.last_updated,
-				is_soft_deleted: v.is_soft_deleted,
-				created_at: v.created_at,
-			}))
-			.filter((v: any) => !v.is_soft_deleted);
+		const variants = (data.Variant || []).map((v: any) => ({
+			variant_id: v.variant_id,
+			variant_name: v.variant_name,
+			variant_price_retail: Number(v.variant_price_retail),
+			variant_price_wholesale:
+				v.variant_price_wholesale === null
+					? null
+					: Number(v.variant_price_wholesale),
+			variant_wholesale_item:
+				v.variant_wholesale_item === null
+					? null
+					: Number(v.variant_wholesale_item),
+			variant_stocks: Number(v.variant_stocks ?? 0),
+			variant_last_updated_stock: v.variant_last_updated_stock,
+			variant_last_updated_price_retail:
+				v.variant_last_updated_price_retail ?? null,
+			variant_last_price_retail:
+				v.variant_last_price_retail === null
+					? undefined
+					: Number(v.variant_last_price_retail),
+			variant_last_updated_price_wholesale:
+				v.variant_last_updated_price_wholesale ?? null,
+			variant_last_price_wholesale:
+				v.variant_last_price_wholesale === null
+					? null
+					: Number(v.variant_last_price_wholesale),
+			last_updated: v.last_updated,
+			is_soft_deleted: v.is_soft_deleted,
+			created_at: v.created_at,
+		}));
 
 		// map the final item
 		const mappedItem: Item = {
