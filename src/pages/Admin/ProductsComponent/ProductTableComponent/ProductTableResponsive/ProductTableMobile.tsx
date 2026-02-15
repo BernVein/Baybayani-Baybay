@@ -88,10 +88,16 @@ export function ProductTableMobile({
 											per {item.item_sold_by}
 										</span>
 
-										<span className="text-default-500 text-xs italic">
-											{item.variant_stock.toLocaleString()}{" "}
-											{item.item_sold_by}s left
-										</span>
+										{item.variant_stock > 0 ? (
+											<span className="text-base font-bold">
+												{item.variant_stock.toLocaleString()}{" "}
+												{item.item_sold_by}s left
+											</span>
+										) : (
+											<span className="text-base font-bold text-danger-500">
+												Out of stock
+											</span>
+										)}
 									</div>
 								</div>
 							</TableCell>

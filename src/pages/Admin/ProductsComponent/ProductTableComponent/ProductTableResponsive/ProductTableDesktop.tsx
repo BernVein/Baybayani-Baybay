@@ -84,10 +84,16 @@ export function ProductTableDesktop({
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-col items-start">
-									<span className="text-base font-bold">
-										{item.variant_stock.toLocaleString()}{" "}
-										{item.item_sold_by}s left
-									</span>
+									{item.variant_stock > 0 ? (
+										<span className="text-base font-bold">
+											{item.variant_stock.toLocaleString()}{" "}
+											{item.item_sold_by}s left
+										</span>
+									) : (
+										<span className="text-base font-bold text-danger-500">
+											Out of stock
+										</span>
+									)}
 
 									{item.item_variant_count > 1 && (
 										<span className="text-sm italic text-default-500">
