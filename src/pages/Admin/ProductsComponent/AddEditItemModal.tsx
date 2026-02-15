@@ -23,6 +23,12 @@ import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalC
 import { addItem } from "@/data/supabase/Admin/Products/addItem";
 import { useFetchItemById } from "@/data/supabase/Customer/Products/useFetchSingleItem";
 import { editItemInfo } from "@/data/supabase/Admin/Products/editItemInfo";
+import {
+	UpdateConfirmationModal,
+	ChangeDetail,
+} from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/UpdateConfirmationModal";
+import { useFetchCategories } from "@/data/supabase/useFetchCategories";
+import { useFetchTags } from "@/data/supabase/useFetchTags";
 
 export function AddEditItemModal({
 	selectedItemId,
@@ -53,6 +59,18 @@ export function AddEditItemModal({
 		onOpenChange: onOpenChangePhoto,
 	} = useDisclosure();
 
+	const {
+		isOpen: isOpenUpdateConfirm,
+		onOpen: onOpenUpdateConfirm,
+		onOpenChange: onOpenChangeUpdateConfirm,
+	} = useDisclosure();
+
+	const { categories } = useFetchCategories();
+	const { tags } = useFetchTags();
+
+	const [changes, setChanges] = useState<ChangeDetail[]>([]);
+	const [localBaseline, setLocalBaseline] = useState<Item | null>(null);
+
 	const [item, setItem] = useState<Item>({
 		item_title: "",
 		item_category_id: "",
@@ -70,10 +88,13 @@ export function AddEditItemModal({
 		if (!selectedItemId) return;
 		if (!fetchedItem) return;
 
-		setItem({
+		const initializedItem = {
 			...fetchedItem,
 			item_has_variant: itemHasVariant,
-		});
+		};
+
+		setItem(initializedItem);
+		setLocalBaseline(initializedItem);
 	}, [selectedItemId, fetchedItem, itemHasVariant]);
 
 	const [isSubmitted, setIsSubmitted] = useState(false);
@@ -139,6 +160,117 @@ export function AddEditItemModal({
 			return;
 		}
 
+		if (!validate()) {
+			addToast({
+				title: "Invalid",
+				description: "Please fill in all required fields.",
+				timeout: 3000,
+				severity: "danger",
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+			});
+			return;
+		}
+
+		const newChanges: ChangeDetail[] = [];
+
+		if (fetchedItem) {
+			if (item.item_title !== fetchedItem.item_title) {
+				newChanges.push({
+					field: "Item Name",
+					oldValue: fetchedItem.item_title,
+					newValue: item.item_title,
+				});
+			}
+
+			if (item.item_category_id !== fetchedItem.item_category_id) {
+				const oldCat = categories.find(
+					(c) => c.category_id === fetchedItem.item_category_id,
+				)?.category_name;
+				const newCat = categories.find(
+					(c) => c.category_id === item.item_category_id,
+				)?.category_name;
+
+				newChanges.push({
+					field: "Category",
+					oldValue: oldCat || "N/A",
+					newValue: newCat || "N/A",
+				});
+			}
+
+			if (item.item_description !== fetchedItem.item_description) {
+				newChanges.push({
+					field: "Description",
+					oldValue: fetchedItem.item_description || "N/A",
+					newValue: item.item_description || "N/A",
+				});
+			}
+
+			if (item.item_sold_by !== fetchedItem.item_sold_by) {
+				newChanges.push({
+					field: "Unit of Measure",
+					oldValue: fetchedItem.item_sold_by,
+					newValue: item.item_sold_by,
+				});
+			}
+
+			if (item.item_tag_id !== fetchedItem.item_tag_id) {
+				const oldTag = tags.find(
+					(t) => t.tag_id === fetchedItem.item_tag_id,
+				)?.tag_name;
+				const newTag = tags.find(
+					(t) => t.tag_id === item.item_tag_id,
+				)?.tag_name;
+
+				newChanges.push({
+					field: "Tag",
+					oldValue: oldTag || "None",
+					newValue: newTag || "None",
+				});
+			}
+
+			// For images and variants, we can show a simplified diff
+			if (
+				JSON.stringify(item.item_img) !==
+				JSON.stringify(fetchedItem.item_img)
+			) {
+				newChanges.push({
+					field: "Photos",
+					oldValue: "Original photos",
+					newValue: "Updated photos",
+				});
+			}
+		}
+
+		setChanges(newChanges);
+		onOpenUpdateConfirm();
+	};
+
+	const isItemChanged = (): boolean => {
+		if (!localBaseline) return false;
+
+		// Basic fields
+		if (item.item_title !== localBaseline.item_title) return true;
+		if (item.item_category_id !== localBaseline.item_category_id)
+			return true;
+		if (item.item_description !== localBaseline.item_description)
+			return true;
+		if (item.item_sold_by !== localBaseline.item_sold_by) return true;
+		if (item.item_tag_id !== localBaseline.item_tag_id) return true;
+
+		// Images
+		if (
+			JSON.stringify(item.item_img) !==
+			JSON.stringify(localBaseline.item_img)
+		)
+			return true;
+
+		return false;
+	};
+
+	const onConfirmUpdate = async () => {
+		if (!item.item_id) return;
+
 		setIsUpdateLoading(true);
 		const result = await editItemInfo(item.item_id, item);
 
@@ -151,6 +283,8 @@ export function AddEditItemModal({
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
+			setLocalBaseline(item);
+			onOpenChangeUpdateConfirm();
 		} else {
 			addToast({
 				title: "Error",
@@ -354,7 +488,10 @@ export function AddEditItemModal({
 										{selectedItemId && (
 											<Button
 												color="success"
-												isDisabled={!validate()}
+												isDisabled={
+													!validate() ||
+													!isItemChanged()
+												}
 												isLoading={
 													selectedItemId
 														? isUpdateLoading
@@ -499,6 +636,13 @@ export function AddEditItemModal({
 					});
 				}}
 				onOpenChange={onOpenChangePhoto}
+			/>
+			<UpdateConfirmationModal
+				changes={changes}
+				isLoading={isUpdateLoading}
+				isOpen={isOpenUpdateConfirm}
+				onConfirm={onConfirmUpdate}
+				onOpenChange={onOpenChangeUpdateConfirm}
 			/>
 		</>
 	);
