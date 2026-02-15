@@ -92,14 +92,13 @@ export const useFetchItemById = (
 			);
 
 			// Filter variants with zero stock or soft deleted if requested
-			const filteredVariants = options.showAllVariants
-				? variants
-				: variants.filter(
-						(v) =>
-							!v.is_soft_deleted &&
-							(v.variant_stock_latest_movement
-								?.effective_stocks ?? 0) > 0,
-					);
+			const filteredVariants = variants.filter((v) => {
+				if (v.is_soft_deleted) return false;
+				if (options.showAllVariants) return true;
+				return (
+					(v.variant_stock_latest_movement?.effective_stocks ?? 0) > 0
+				);
+			});
 
 			// Set item or null if no variants in stock (unless showAllVariants is true)
 			if (filteredVariants.length === 0 && !options.showAllVariants) {

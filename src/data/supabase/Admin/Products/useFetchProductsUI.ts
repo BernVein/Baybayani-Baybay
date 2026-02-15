@@ -46,7 +46,6 @@ export const useFetchProductsUI = (
 				});
 
 			if (error) throw error;
-
 			const formatted: ItemTableRow[] = (data ?? []).map((item: any) => {
 				// Only include variants that are not soft-deleted
 				const variants = (item.Variant ?? []).filter(
@@ -54,7 +53,7 @@ export const useFetchProductsUI = (
 				);
 
 				const variantStocks = variants.map((v: any) => {
-					// Since we ordered StockMovement by created_at desc, the first one is the latest
+					// Ordered StockMovement by created_at desc, the first one is the latest
 					const latestMovement = v.StockMovement?.[0] ?? null;
 					const stock = latestMovement?.effective_stocks ?? 0;
 
@@ -66,7 +65,7 @@ export const useFetchProductsUI = (
 						(p) => typeof p === "number",
 					),
 				);
-
+				console.log(variants);
 				return {
 					item_id: item.item_id,
 					item_variant_count: variants.length,
