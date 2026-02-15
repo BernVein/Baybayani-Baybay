@@ -144,6 +144,18 @@ export const useFetchItemCardItems = (
 		fetchItems(0, true);
 	}, [activeCategories, searchTerm, fetchItems]);
 
+	useEffect(() => {
+		const handler = () => {
+			fetchItems(0, true);
+		};
+
+		window.addEventListener("baybayani:update-table", handler);
+
+		return () => {
+			window.removeEventListener("baybayani:update-table", handler);
+		};
+	}, [fetchItems]);
+
 	const loadMore = async () => {
 		if (loading || !hasMore) return;
 		const nextPage = page + 1;

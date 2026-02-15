@@ -7,7 +7,6 @@ import {
 	TableCell,
 	Skeleton,
 } from "@heroui/react";
-import { useEffect } from "react";
 
 import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableMobile";
 import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableDesktop";
@@ -26,15 +25,6 @@ export function ProductTable({
 	loading: boolean;
 	refetch: () => Promise<void>;
 }) {
-	useEffect(() => {
-		const handler = () => refetch();
-
-		window.addEventListener("baybayani:update-table", handler);
-
-		return () =>
-			window.removeEventListener("baybayani:update-table", handler);
-	}, [refetch]);
-
 	const {
 		isOpen: isOpenDeleteConfirm,
 		onOpen: onOpenDeleteConfirm,

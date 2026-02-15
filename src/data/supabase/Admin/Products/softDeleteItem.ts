@@ -19,7 +19,7 @@ export async function softDeleteItem(itemId: string) {
 		if (variantError) throw variantError;
 
 		// Dispatch refresh event
-		window.dispatchEvent(new Event("refresh-products"));
+		window.dispatchEvent(new Event("baybayani:update-table"));
 
 		return { success: true };
 	} catch (error: any) {

@@ -97,6 +97,18 @@ export const useFetchProductsUI = (
 		fetchItems();
 	}, [fetchItems]);
 
+	useEffect(() => {
+		const handler = () => {
+			fetchItems();
+		};
+
+		window.addEventListener("baybayani:update-table", handler);
+
+		return () => {
+			window.removeEventListener("baybayani:update-table", handler);
+		};
+	}, [fetchItems]);
+
 	// --- CLIENT-SIDE FILTERING ---
 	const items = useMemo(() => {
 		return allItems.filter((item) => {
