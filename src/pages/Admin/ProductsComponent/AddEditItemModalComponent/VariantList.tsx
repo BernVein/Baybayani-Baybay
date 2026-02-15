@@ -390,7 +390,16 @@ export function VariantList({
 											? "Deducted Stocks:"
 											: "Added Stocks:"}
 									</span>
-									<span className="font-medium truncate">
+
+									<span
+										className={`font-medium truncate ${
+											v.variant_stock_latest_movement
+												?.stock_adjustment_type ===
+											"Loss"
+												? "text-danger"
+												: "text-success"
+										}`}
+									>
 										{v.variant_stock_movements?.length ===
 										1 ? (
 											<span className="italic text-default-500">
@@ -398,7 +407,14 @@ export function VariantList({
 											</span>
 										) : v.variant_stock_latest_movement
 												?.stock_change_count != null ? (
-											`${v.variant_stock_latest_movement.stock_change_count} ${item.item_sold_by}${v.variant_stock_latest_movement.stock_change_count > 1 ? "s" : ""}`
+											`${v.variant_stock_latest_movement.stock_change_count} ${
+												item.item_sold_by
+											}${
+												v.variant_stock_latest_movement
+													.stock_change_count > 1
+													? "s"
+													: ""
+											}`
 										) : (
 											"N/A"
 										)}
