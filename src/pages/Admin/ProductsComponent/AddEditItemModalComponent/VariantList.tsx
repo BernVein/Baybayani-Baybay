@@ -5,15 +5,10 @@ import {
 	Divider,
 	Button,
 	useDisclosure,
-	Dropdown,
-	DropdownTrigger,
-	DropdownItem,
-	DropdownMenu,
-	DropdownSection,
 } from "@heroui/react";
 import { useState } from "react";
 
-import { PencilIcon, TrashIcon } from "@/components/icons";
+import { PencilIcon, TrashIcon, PlusIcon, MinusIcon } from "@/components/icons";
 import { Item } from "@/model/Item";
 import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantListComponent/DeleteVariantModal";
 import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
@@ -67,7 +62,7 @@ export function VariantList({
 					<Card key={index} className="shadow-sm">
 						<CardHeader className="flex flex-row justify-between items-start">
 							<div className="flex flex-col">
-								<h4 className="text-large font-bold">
+								<h4 className="text-large font-bold flex flex-col">
 									{itemHasVariant ? (
 										<>
 											{v.variant_name ||
@@ -82,20 +77,11 @@ export function VariantList({
 											{isEditDB
 												? "Latest Item Info"
 												: "Item Additional Info"}
-
-											{isEditDB && (
-												<p className="text-tiny text-default-400 italic">
-													Stocks details is edited in
-													separate fields
-												</p>
-											)}
 										</>
 									)}
 									<span className="text-default-500 text-sm">
 										{isEditDB ? "Current Stocks" : "Stocks"}
 										:{" "}
-									</span>
-									<span className="text-default-500 text-sm">
 										{v.variant_stock_latest_movement
 											.effective_stocks != null
 											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
@@ -125,70 +111,53 @@ export function VariantList({
 								)}
 
 								{isEditDB && (
-									<Dropdown disableAnimation>
-										<DropdownTrigger>
-											<Button
-												isIconOnly
-												className="ml-auto"
-												size="sm"
-												type="button"
-											>
+									<>
+										<Button
+											isIconOnly
+											className="ml-auto"
+											size="sm"
+											startContent={
+												<PlusIcon className="w-5" />
+											}
+											onPress={() => {
+												setSelectedVarIndex(index);
+												setEditStockKey(
+													"edit-stock-gain",
+												);
+												onOpenEditStock();
+											}}
+										/>
+										<Button
+											isIconOnly
+											className="ml-auto"
+											size="sm"
+											startContent={
+												<MinusIcon className="w-5" />
+											}
+											onPress={() => {
+												setSelectedVarIndex(index);
+												setEditStockKey(
+													"edit-stock-loss",
+												);
+												onOpenEditStock();
+											}}
+										/>
+										<Button
+											isIconOnly
+											className="ml-auto"
+											size="sm"
+											startContent={
 												<PencilIcon className="w-5" />
-											</Button>
-										</DropdownTrigger>
-										<DropdownMenu aria-label="Static Actions">
-											<DropdownSection
-												showDivider
-												title="Stock Details"
-											>
-												<DropdownItem
-													key="edit-stock-gain"
-													onPress={() => {
-														setSelectedVarIndex(
-															index,
-														);
-														setEditStockKey(
-															"edit-stock-gain",
-														);
-														onOpenEditStock();
-													}}
-												>
-													Stock Gain
-												</DropdownItem>
-												<DropdownItem
-													key="edit-stock-loss"
-													onPress={() => {
-														setSelectedVarIndex(
-															index,
-														);
-														setEditStockKey(
-															"edit-stock-loss",
-														);
-														onOpenEditStock();
-													}}
-												>
-													Stock Loss
-												</DropdownItem>
-											</DropdownSection>
-											<DropdownSection title="Variant Details">
-												<DropdownItem
-													key="edit-variant"
-													onPress={() => {
-														setSelectedVarIndex(
-															index,
-														);
-														setSelectedVarName(
-															v.variant_name ??
-																null,
-														);
-														onOpenAddVar();
-													}}
-												>
-													Edit Variant
-												</DropdownItem>
-											</DropdownSection>
-										</DropdownMenu>
-									</Dropdown>
+											}
+											onPress={() => {
+												setSelectedVarIndex(index);
+												setSelectedVarName(
+													v.variant_name ?? null,
+												);
+												onOpenAddVar();
+											}}
+										/>
+									</>
 								)}
 
 								<Button
