@@ -9,6 +9,7 @@ import {
 	ModalFooter,
 	Button,
 	addToast,
+	useDisclosure,
 } from "@heroui/react";
 import {
 	getLocalTimeZone,
@@ -18,6 +19,8 @@ import {
 } from "@internationalized/date";
 import { Variant } from "@/model/variant";
 import { StockMovement } from "@/model/stockMovement";
+import { StockAdjustmentConfirmationModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/StockAdjustmentConfirmationModal";
+import { recordStockAdjustment } from "@/data/supabase/Admin/Products/recordStockAdjustment";
 
 export function EditStockDetailModal({
 	editKey,
@@ -47,14 +50,80 @@ export function EditStockDetailModal({
 		stock_delivery_date: today(getLocalTimeZone()).toString(),
 		stock_loss_reason: undefined,
 	});
-	console.log(stockMovement);
+
+	const {
+		isOpen: isOpenConfirm,
+		onOpen: onOpenConfirm,
+		onOpenChange: onOpenChangeConfirm,
+	} = useDisclosure();
+	const [isLoading, setIsLoading] = useState(false);
+
+	const currentStock =
+		variant?.variant_stock_latest_movement?.effective_stocks ?? 0;
+	const changeCount = stockMovement.stock_change_count ?? 0;
+	const newEffectiveStock =
+		editKey === "edit-stock-gain"
+			? currentStock + changeCount
+			: currentStock - changeCount;
+
+	const handleAction = () => {
+		setIsSubmitted(true);
+		if (!validateMovement()) {
+			addToast({
+				title: "Empty Required Fields.",
+				description:
+					"Please fill in all required fields and ensure all inputs are valid.",
+				timeout: 3000,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+			});
+			return;
+		}
+		onOpenConfirm();
+	};
+
+	const onConfirmStockChange = async () => {
+		if (!variant.variant_id) return;
+		setIsLoading(true);
+
+		const finalStockMovement = {
+			...stockMovement,
+			effective_stocks: newEffectiveStock,
+		};
+
+		const result = await recordStockAdjustment(
+			variant.variant_id,
+			finalStockMovement,
+		);
+
+		if (result.success) {
+			addToast({
+				title: "Success",
+				description: "Stock details updated successfully.",
+				timeout: 3000,
+				color: "success",
+				shouldShowTimeoutProgress: true,
+			});
+			onUpdateLastestStockMovement(finalStockMovement);
+			onOpenChangeEditStock();
+		} else {
+			addToast({
+				title: "Error",
+				description: result.error || "Failed to update stock details.",
+				timeout: 3000,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+			});
+		}
+		setIsLoading(false);
+	};
+
 	function validateMovement(): boolean {
 		if (
 			stockMovement.stock_change_count === undefined ||
 			stockMovement.stock_change_count <= 0 ||
 			(editKey === "edit-stock-loss" &&
-				(stockMovement.stock_change_count ?? 0) >
-					(stockMovement.effective_stocks ?? 0))
+				(stockMovement.stock_change_count ?? 0) > currentStock)
 		)
 			return false;
 
@@ -140,8 +209,9 @@ export function EditStockDetailModal({
 											editKey === "edit-stock-loss" &&
 											(stockMovement.stock_change_count ??
 												0) >
-												(stockMovement.effective_stocks ??
-													0)
+												(variant
+													?.variant_stock_latest_movement
+													?.effective_stocks ?? 0)
 												? "Exceeds current stock"
 												: "Stock change is required"
 										}
@@ -156,7 +226,9 @@ export function EditStockDetailModal({
 													"edit-stock-loss" &&
 													(stockMovement.stock_change_count ??
 														0) >
-														(stockMovement.effective_stocks ??
+														(variant
+															?.variant_stock_latest_movement
+															?.effective_stocks ??
 															0)))
 										}
 										label={
@@ -358,25 +430,7 @@ export function EditStockDetailModal({
 									</Button>
 									<Button
 										color="success"
-										onPress={() => {
-											setIsSubmitted(true);
-											if (!validateMovement()) {
-												addToast({
-													title: "Empty Required Fields.",
-													description:
-														"Please fill in all required fields and ensure all inputs are valid.",
-													timeout: 3000,
-													color: "danger",
-													shouldShowTimeoutProgress:
-														true,
-												});
-											} else {
-												onUpdateLastestStockMovement(
-													stockMovement,
-												);
-												onClose();
-											}
-										}}
+										onPress={handleAction}
 									>
 										Update Stock Details
 									</Button>
@@ -386,6 +440,19 @@ export function EditStockDetailModal({
 					)}
 				</ModalContent>
 			</Modal>
+			<StockAdjustmentConfirmationModal
+				adjustmentAmount={changeCount}
+				adjustmentType={
+					editKey === "edit-stock-loss" ? "Loss" : "Acquisition"
+				}
+				currentStock={currentStock}
+				isLoading={isLoading}
+				isOpen={isOpenConfirm}
+				itemUnitOfMeasure={itemUnitOfMeasure}
+				newStock={newEffectiveStock}
+				onConfirm={onConfirmStockChange}
+				onOpenChange={onOpenChangeConfirm}
+			/>
 		</>
 	);
 }

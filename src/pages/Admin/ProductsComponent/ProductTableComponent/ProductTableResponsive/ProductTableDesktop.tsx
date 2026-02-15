@@ -13,21 +13,24 @@ import {
 import { useState } from "react";
 
 import { TrashIcon, PencilIcon } from "@/components/icons";
-import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
-export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
+
+export function ProductTableDesktop({
+	items,
+	onOpenDeleteConfirm,
+	setSelectedDeleteItem,
+}: {
+	items: ItemTableRow[];
+	onOpenDeleteConfirm: () => void;
+	setSelectedDeleteItem: (item: { id: string; name: string }) => void;
+}) {
 	const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 	const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
 	const {
 		isOpen: isOpenEditItem,
 		onOpen: onOpenEditItem,
 		onOpenChange: onOpenChangeEditItem,
-	} = useDisclosure();
-	const {
-		isOpen: isOpenDeleteItem,
-		onOpen: onOpenDeleteItem,
-		onOpenChange: onOpenChangeDeleteItem,
 	} = useDisclosure();
 
 	return (
@@ -132,7 +135,13 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
 										isIconOnly
 										size="sm"
 										variant="light"
-										onPress={onOpenDeleteItem}
+										onPress={() => {
+											setSelectedDeleteItem({
+												id: item.item_id,
+												name: item.item_name,
+											});
+											onOpenDeleteConfirm();
+										}}
 									>
 										<TrashIcon className="w-5 text-danger-300" />
 									</Button>
@@ -148,11 +157,6 @@ export function ProductTableDesktop({ items }: { items: ItemTableRow[] }) {
 				itemHasVariant={itemHasVariant}
 				selectedItemId={selectedItemId}
 				onOpenChange={onOpenChangeEditItem}
-			/>
-
-			<DeleteItemModal
-				isOpenDeleteItem={isOpenDeleteItem}
-				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
 			/>
 		</div>
 	);

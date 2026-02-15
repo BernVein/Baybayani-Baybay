@@ -12,6 +12,10 @@ import { useEffect } from "react";
 import { ProductTableMobile } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableMobile";
 import { ProductTableDesktop } from "@/pages/Admin/ProductsComponent/ProductTableComponent/ProductTableResponsive/ProductTableDesktop";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
+import { useState } from "react";
+import { useDisclosure, addToast } from "@heroui/react";
+import { softDeleteItem } from "@/data/supabase/Admin/Products/softDeleteItem";
+import { SoftDeleteConfirmationModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/SoftDeleteConfirmationModal";
 
 export function ProductTable({
 	items,
@@ -30,6 +34,43 @@ export function ProductTable({
 		return () =>
 			window.removeEventListener("baybayani:update-table", handler);
 	}, [refetch]);
+
+	const {
+		isOpen: isOpenDeleteConfirm,
+		onOpen: onOpenDeleteConfirm,
+		onOpenChange: onOpenChangeDeleteConfirm,
+	} = useDisclosure();
+	const [selectedDeleteItem, setSelectedDeleteItem] = useState<{
+		id: string;
+		name: string;
+	} | null>(null);
+	const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+	const onConfirmDeleteItem = async () => {
+		if (!selectedDeleteItem?.id) return;
+		setIsDeleteLoading(true);
+		const result = await softDeleteItem(selectedDeleteItem.id);
+		if (result.success) {
+			addToast({
+				title: "Success",
+				description: "Item deleted successfully.",
+				timeout: 3000,
+				color: "success",
+				shouldShowTimeoutProgress: true,
+			});
+			refetch();
+			onOpenChangeDeleteConfirm();
+		} else {
+			addToast({
+				title: "Error",
+				description: result.error || "Failed to delete item.",
+				timeout: 3000,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+			});
+		}
+		setIsDeleteLoading(false);
+	};
 
 	if (loading && items.length === 0) {
 		return (
@@ -128,8 +169,25 @@ export function ProductTable({
 
 	return (
 		<div className="h-full flex flex-col">
-			<ProductTableMobile items={items} />
-			<ProductTableDesktop items={items} />
+			<ProductTableMobile
+				items={items}
+				onOpenDeleteConfirm={onOpenDeleteConfirm}
+				setSelectedDeleteItem={setSelectedDeleteItem}
+			/>
+			<ProductTableDesktop
+				items={items}
+				onOpenDeleteConfirm={onOpenDeleteConfirm}
+				setSelectedDeleteItem={setSelectedDeleteItem}
+			/>
+			<SoftDeleteConfirmationModal
+				isLoading={isDeleteLoading}
+				isOpen={isOpenDeleteConfirm}
+				name={selectedDeleteItem?.name || "this item"}
+				title="Delete Item"
+				type="Item"
+				onConfirm={onConfirmDeleteItem}
+				onOpenChange={onOpenChangeDeleteConfirm}
+			/>
 		</div>
 	);
 }

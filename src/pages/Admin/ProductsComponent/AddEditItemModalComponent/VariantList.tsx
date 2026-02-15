@@ -8,11 +8,14 @@ import {
 } from "@heroui/react";
 import { useState } from "react";
 
-import { PencilIcon, TrashIcon, PlusIcon, MinusIcon } from "@/components/icons";
+import { TrashIcon, PlusIcon, MinusIcon, PencilIcon } from "@/components/icons";
 import { Item } from "@/model/Item";
 import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantListComponent/DeleteVariantModal";
 import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
 import { EditStockDetailModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/EditStockDetailModal";
+import { SoftDeleteConfirmationModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/SoftDeleteConfirmationModal";
+import { softDeleteVariant } from "@/data/supabase/Admin/Products/softDeleteVariant";
+import { addToast } from "@heroui/react";
 
 export function VariantList({
 	isEditDB,
@@ -50,6 +53,46 @@ export function VariantList({
 		"edit-stock-gain" | "edit-stock-loss" | null
 	>(null);
 	const [selectedVarName, setSelectedVarName] = useState<string | null>(null);
+
+	const {
+		isOpen: isOpenSoftDeleteConfirm,
+		onOpen: onOpenSoftDeleteConfirm,
+		onOpenChange: onOpenChangeSoftDeleteConfirm,
+	} = useDisclosure();
+	const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+	const onConfirmDeleteVariant = async () => {
+		if (selectedVarIndex === null) return;
+		const variant = item.item_variants[selectedVarIndex];
+		if (!variant.variant_id) return;
+
+		setIsDeleteLoading(true);
+		const result = await softDeleteVariant(variant.variant_id);
+		if (result.success) {
+			addToast({
+				title: "Success",
+				description: "Variant deleted successfully.",
+				timeout: 3000,
+				color: "success",
+				shouldShowTimeoutProgress: true,
+			});
+			setItem((prev) => {
+				const variants = [...prev.item_variants];
+				variants.splice(selectedVarIndex, 1);
+				return { ...prev, item_variants: variants };
+			});
+		} else {
+			addToast({
+				title: "Error",
+				description: result.error || "Failed to delete variant.",
+				timeout: 3000,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+			});
+		}
+		setIsDeleteLoading(false);
+		onOpenChangeSoftDeleteConfirm();
+	};
 
 	return (
 		<>
@@ -161,21 +204,28 @@ export function VariantList({
 										/>
 									</>
 								)}
-
-								<Button
-									isIconOnly
-									className="ml-auto"
-									color="danger"
-									size="sm"
-									startContent={<TrashIcon className="w-5" />}
-									onPress={() => {
-										setSelectedVarIndex(index);
-										setSelectedVarName(
-											v.variant_name ?? null,
-										);
-										onOpenDeleteVar();
-									}}
-								/>
+								{item.item_variants.length > 2 && (
+									<Button
+										isIconOnly
+										className="ml-auto"
+										color="danger"
+										size="sm"
+										startContent={
+											<TrashIcon className="w-5" />
+										}
+										onPress={() => {
+											setSelectedVarIndex(index);
+											setSelectedVarName(
+												v.variant_name ?? null,
+											);
+											if (isEditDB) {
+												onOpenSoftDeleteConfirm();
+											} else {
+												onOpenDeleteVar();
+											}
+										}}
+									/>
+								)}
 							</div>
 						</CardHeader>
 						<Divider />
@@ -366,6 +416,15 @@ export function VariantList({
 				setItem={setItem}
 				setSelectedVarIndex={setSelectedVarIndex}
 				onOpenChangeDeleteVar={onOpenChangeDeleteVar}
+			/>
+			<SoftDeleteConfirmationModal
+				isLoading={isDeleteLoading}
+				isOpen={isOpenSoftDeleteConfirm}
+				name={selectedVarName || "Variant"}
+				title="Delete Variant"
+				type="Variant"
+				onConfirm={onConfirmDeleteVariant}
+				onOpenChange={onOpenChangeSoftDeleteConfirm}
 			/>
 
 			{isOpenEditStock &&

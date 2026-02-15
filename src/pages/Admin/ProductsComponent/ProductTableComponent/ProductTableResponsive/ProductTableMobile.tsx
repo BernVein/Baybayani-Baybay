@@ -18,18 +18,20 @@ import { useState } from "react";
 import { MoreIconVertical, PencilIcon, TrashIcon } from "@/components/icons";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
-import { DeleteItemModal } from "@/pages/Admin/ProductsComponent/ProductTableComponent/DeleteItemModal";
 
-export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
+export function ProductTableMobile({
+	items,
+	onOpenDeleteConfirm,
+	setSelectedDeleteItem,
+}: {
+	items: ItemTableRow[];
+	onOpenDeleteConfirm: () => void;
+	setSelectedDeleteItem: (item: { id: string; name: string }) => void;
+}) {
 	const {
 		isOpen: isOpenEditItem,
 		onOpen: onOpenEditItem,
 		onOpenChange: onOpenChangeEditItem,
-	} = useDisclosure();
-	const {
-		isOpen: isOpenDeleteItem,
-		onOpen: onOpenDeleteItem,
-		onOpenChange: onOpenChangeDeleteItem,
 	} = useDisclosure();
 	const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
 	const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -128,7 +130,13 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
 												startContent={
 													<TrashIcon className="w-5 text-danger-300" />
 												}
-												onPress={onOpenDeleteItem}
+												onPress={() => {
+													setSelectedDeleteItem({
+														id: item.item_id,
+														name: item.item_name,
+													});
+													onOpenDeleteConfirm();
+												}}
 											>
 												<div className="flex items-center gap-2">
 													<span className="text-danger">
@@ -150,11 +158,6 @@ export function ProductTableMobile({ items }: { items: ItemTableRow[] }) {
 				itemHasVariant={itemHasVariant}
 				selectedItemId={selectedItemId}
 				onOpenChange={onOpenChangeEditItem}
-			/>
-
-			<DeleteItemModal
-				isOpenDeleteItem={isOpenDeleteItem}
-				onOpenChangeDeleteItem={onOpenChangeDeleteItem}
 			/>
 		</div>
 	);

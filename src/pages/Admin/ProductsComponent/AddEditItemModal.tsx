@@ -279,7 +279,6 @@ export function AddEditItemModal({
 				title: "Success",
 				description: "Item has been successfully updated.",
 				timeout: 3000,
-				severity: "success",
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
@@ -308,7 +307,6 @@ export function AddEditItemModal({
 				title: "Invalid",
 				description: "Please fill in all required fields.",
 				timeout: 3000,
-				severity: "danger",
 				color: "danger",
 				shouldShowTimeoutProgress: true,
 			});
@@ -323,7 +321,6 @@ export function AddEditItemModal({
 				title: "Item Added",
 				description: `Item ${item.item_title} has been successfully added.`,
 				timeout: 3000,
-				severity: "success",
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
@@ -336,7 +333,6 @@ export function AddEditItemModal({
 					String(result.error) ||
 					"An error occurred while adding the item.",
 				timeout: 3000,
-				severity: "danger",
 				color: "danger",
 				shouldShowTimeoutProgress: true,
 			});
