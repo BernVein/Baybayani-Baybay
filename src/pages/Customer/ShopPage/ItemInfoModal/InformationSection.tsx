@@ -78,6 +78,7 @@ export default function InformationSection({
 						{item.item_variants
 							.filter(
 								(v) =>
+									!v.is_soft_deleted &&
 									(v.variant_stock_latest_movement
 										?.effective_stocks ?? 0) > 0,
 							)

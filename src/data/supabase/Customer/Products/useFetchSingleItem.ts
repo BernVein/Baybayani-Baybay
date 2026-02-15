@@ -91,11 +91,12 @@ export const useFetchItemById = (
 				}),
 			);
 
-			// Filter variants with zero stock if requested
+			// Filter variants with zero stock or soft deleted if requested
 			const filteredVariants = options.showAllVariants
 				? variants
 				: variants.filter(
 						(v) =>
+							!v.is_soft_deleted &&
 							(v.variant_stock_latest_movement
 								?.effective_stocks ?? 0) > 0,
 					);

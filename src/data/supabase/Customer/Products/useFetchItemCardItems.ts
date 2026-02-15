@@ -50,6 +50,7 @@ export const useFetchItemCardItems = (
                         Item_Image(item_image_url),
                         Variant(
                             variant_price_retail,
+                            is_soft_deleted,
                             StockMovement ( 
                                 effective_stocks,
                                 created_at
@@ -81,7 +82,9 @@ export const useFetchItemCardItems = (
 				// Step 5: Map result to ItemCard and filter by stock
 				const mapped: ItemCard[] = (data ?? [])
 					.map((row: any) => {
-						const variants = row.Variant ?? [];
+						const variants = (row.Variant ?? []).filter(
+							(v: any) => !v.is_soft_deleted,
+						);
 
 						// Calculate total stock for this item
 						const totalStock = variants.reduce(
