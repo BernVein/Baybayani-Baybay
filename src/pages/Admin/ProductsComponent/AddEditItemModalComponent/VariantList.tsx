@@ -125,17 +125,16 @@ export function VariantList({
 								)}
 
 								{isEditDB && (
-									<Dropdown autoFocus={false}>
+									<Dropdown disableAnimation>
 										<DropdownTrigger>
 											<Button
 												isIconOnly
 												className="ml-auto"
 												size="sm"
-												isLoading={isFetchingItem}
-												startContent={
-													<PencilIcon className="w-5" />
-												}
-											/>
+												type="button"
+											>
+												<PencilIcon className="w-5" />
+											</Button>
 										</DropdownTrigger>
 										<DropdownMenu aria-label="Static Actions">
 											<DropdownSection
