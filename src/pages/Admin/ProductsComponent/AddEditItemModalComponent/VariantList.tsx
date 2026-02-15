@@ -62,16 +62,18 @@ export function VariantList({
 					<Card key={index} className="shadow-sm">
 						<CardHeader className="flex flex-row justify-between items-start">
 							<div className="flex flex-col">
-								<h4 className="text-large font-bold flex flex-col">
+								<h4 className="text-large font-bold flex flex-col min-w-0">
 									{itemHasVariant ? (
-										<>
-											{v.variant_name ||
-												"Default Variant"}
-											<p className="text-tiny text-default-400">
+										<div className="flex flex-col min-w-0">
+											<span className="truncate block">
+												{v.variant_name ||
+													"Default Variant"}
+											</span>
+											<p className="text-tiny text-default-400 truncate">
 												Variant {index + 1}
 											</p>
 											<div className="flex gap-1"></div>
-										</>
+										</div>
 									) : (
 										<>
 											{isEditDB
@@ -79,7 +81,7 @@ export function VariantList({
 												: "Item Additional Info"}
 										</>
 									)}
-									<span className="text-default-500 text-sm">
+									<span className="text-default-500 text-sm truncate">
 										{isEditDB ? "Current Stocks" : "Stocks"}
 										:{" "}
 										{v.variant_stock_latest_movement
@@ -183,20 +185,20 @@ export function VariantList({
 									isEditDB ? "mb-3" : ""
 								}`}
 							>
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										Low Stock Alert:
 									</span>
-									<span className="font-medium">
+									<span className="font-medium truncate">
 										{v.variant_low_stock_threshold?.toLocaleString()}{" "}
 										{item.item_sold_by}s
 									</span>
 								</div>
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										Retail Price:
 									</span>
-									<span className="font-medium">
+									<span className="font-medium truncate">
 										{v.variant_price_retail != null
 											? `₱${v.variant_price_retail.toLocaleString(
 													"en-PH",
@@ -208,14 +210,13 @@ export function VariantList({
 											: "N/A"}
 									</span>
 								</div>
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										Wholesale Price:
 									</span>
-
 									{v.variant_price_wholesale != null &&
 									v.variant_price_wholesale > 0 ? (
-										<span className="font-medium">
+										<span className="font-medium truncate">
 											₱
 											{v.variant_price_wholesale.toLocaleString(
 												"en-PH",
@@ -226,24 +227,23 @@ export function VariantList({
 											)}
 										</span>
 									) : (
-										<span className="text-xs italic text-default-400">
+										<span className="text-xs italic text-default-400 whitespace-nowrap">
 											N/A
 										</span>
 									)}
 								</div>
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										Wholesale Min Qty:
 									</span>
-
 									{v.variant_wholesale_item != null &&
 									v.variant_wholesale_item > 0 ? (
-										<span className="font-medium truncate ml-2">
+										<span className="font-medium truncate">
 											{v.variant_wholesale_item.toLocaleString()}{" "}
 											{item.item_sold_by}s
 										</span>
 									) : (
-										<span className="text-xs italic text-default-400 ml-2">
+										<span className="text-xs italic text-default-400 whitespace-nowrap">
 											N/A
 										</span>
 									)}
@@ -257,14 +257,14 @@ export function VariantList({
 								</div>
 							)}
 							<div className="py-1 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										{v.variant_stock_latest_movement
 											.stock_adjustment_type === "Loss"
 											? "Stock Loss Date"
 											: "Date Delivered"}
 									</span>
-									<span className="font-medium">
+									<span className="font-medium truncate">
 										{v.variant_stock_latest_movement
 											.stock_adjustment_type === "Loss"
 											? v.variant_stock_latest_movement
@@ -295,14 +295,14 @@ export function VariantList({
 												: "N/A"}
 									</span>
 								</div>
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										{v.variant_stock_latest_movement
 											.stock_adjustment_type === "Loss"
 											? "Total Amount Loss"
 											: "Total Buying Price"}
 									</span>
-									<span className="font-medium">
+									<span className="font-medium truncate">
 										{v.variant_stock_latest_movement
 											.stock_adjustment_amount != null
 											? `₱${v.variant_stock_latest_movement.stock_adjustment_amount.toLocaleString(
@@ -315,8 +315,8 @@ export function VariantList({
 											: "N/A"}
 									</span>
 								</div>
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										{v.variant_stock_latest_movement
 											?.stock_adjustment_type === "Loss"
 											? "Deducted Stocks:"
@@ -337,14 +337,14 @@ export function VariantList({
 									</span>
 								</div>
 
-								<div className="flex justify-between">
-									<span className="text-default-500">
+								<div className="flex justify-between items-center gap-2 min-w-0">
+									<span className="text-default-500 whitespace-nowrap">
 										{v.variant_stock_latest_movement
 											.stock_adjustment_type === "Loss"
 											? "Reason for Loss"
 											: "Supplier"}
 									</span>
-									<span className="font-medium text-right">
+									<span className="font-medium truncate text-right">
 										{v.variant_stock_latest_movement
 											.stock_adjustment_type === "Loss"
 											? v.variant_stock_latest_movement
