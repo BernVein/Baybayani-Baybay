@@ -1,8 +1,7 @@
 import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
-import { Variant } from "framer-motion";
 
-export async function editItem(itemId: string, item: Item) {
+export async function editItemInfo(itemId: string, item: Item) {
 	try {
 		if (itemId.trim() == "") throw new Error("Item ID is required");
 		// Item
@@ -19,77 +18,6 @@ export async function editItem(itemId: string, item: Item) {
 			.eq("item_id", itemId);
 
 		if (itemError) throw itemError;
-
-		// Variants
-		const { data: existingVariants } = await supabase
-			.from("Variant")
-			.select("variant_id")
-			.eq("item_id", itemId);
-
-		const existingVariantIds =
-			existingVariants?.map((v) => v.variant_id) ?? [];
-
-		const updatedVariantIds: string[] = [];
-
-		for (const variant of item.item_variants) {
-			if (variant.variant_id) {
-				// Update existing
-				const { error } = await supabase
-					.from("Variant")
-					.update({
-						variant_name: variant.variant_name ?? "Default",
-						variant_price_retail: variant.variant_price_retail ?? 0,
-						variant_price_wholesale:
-							variant.variant_price_wholesale ?? null,
-						variant_wholesale_item:
-							variant.variant_wholesale_item ?? null,
-						variant_low_stock_threshold:
-							variant.variant_low_stock_threshold ?? null,
-					} as Variant)
-					.eq("variant_id", variant.variant_id);
-
-				if (error) throw error;
-
-				updatedVariantIds.push(variant.variant_id);
-			} else {
-				// Insert new
-				const { data: newVariant, error } = await supabase
-					.from("Variant")
-					.insert({
-						item_id: itemId,
-						variant_name: variant.variant_name ?? "Default",
-						variant_price_retail: variant.variant_price_retail ?? 0,
-						variant_price_wholesale:
-							variant.variant_price_wholesale ?? null,
-						variant_wholesale_item:
-							variant.variant_wholesale_item ?? null,
-						variant_low_stock_threshold:
-							variant.variant_low_stock_threshold ?? null,
-						is_soft_deleted: false, // revive softdeleted variant
-					} as Variant)
-					.select("*")
-					.single();
-
-				if (error || !newVariant)
-					throw error || new Error("Variant insert failed");
-
-				updatedVariantIds.push(newVariant.variant_id);
-			}
-		}
-
-		// Delete removed variants
-		const variantsToSoftDelete = existingVariantIds.filter(
-			(id) => !updatedVariantIds.includes(id),
-		);
-
-		if (variantsToSoftDelete.length > 0) {
-			const { error: softDeleteError } = await supabase
-				.from("Variant")
-				.update({ is_soft_deleted: true })
-				.in("variant_id", variantsToSoftDelete);
-
-			if (softDeleteError) throw softDeleteError;
-		}
 
 		// Fetch existing images from DB
 		const { data: existingImages } = await supabase

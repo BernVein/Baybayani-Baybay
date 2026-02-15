@@ -22,7 +22,7 @@ import { AddVariantButton } from "@/pages/Admin/ProductsComponent/AddEditItemMod
 import { AddPhotoModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddPhotoModal";
 import { addItem } from "@/data/supabase/Admin/Products/addItem";
 import { useFetchItemById } from "@/data/supabase/Customer/Products/useFetchSingleItem";
-import { editItem } from "@/data/supabase/Admin/Products/editItem";
+import { editItemInfo } from "@/data/supabase/Admin/Products/editItemInfo";
 
 export function AddEditItemModal({
 	selectedItemId,
@@ -138,8 +138,10 @@ export function AddEditItemModal({
 			console.error("Item ID is missing");
 			return;
 		}
+
 		setIsUpdateLoading(true);
-		const result = await editItem(item.item_id, item);
+		const result = await editItemInfo(item.item_id, item);
+
 		if (result.success) {
 			addToast({
 				title: "Success",
@@ -149,7 +151,6 @@ export function AddEditItemModal({
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
-			setIsUpdateLoading(false);
 		} else {
 			addToast({
 				title: "Error",
@@ -159,8 +160,9 @@ export function AddEditItemModal({
 				color: "danger",
 				shouldShowTimeoutProgress: true,
 			});
-			setIsUpdateLoading(false);
 		}
+
+		setIsUpdateLoading(false);
 	};
 
 	const handleAddItem = async () => {
@@ -260,7 +262,7 @@ export function AddEditItemModal({
 						</ModalHeader>
 						<ModalBody>
 							<span className="text-lg font-semibold">
-								Set Item Details
+								{selectedItemId ? "Edit" : "Add"} Item Details
 							</span>
 							{isFetchingItem ? (
 								<div className="flex flex-col gap-4">
@@ -349,6 +351,24 @@ export function AddEditItemModal({
 												*
 											</span>
 										</Button>
+										{selectedItemId && (
+											<Button
+												color="success"
+												isDisabled={!validate()}
+												isLoading={
+													selectedItemId
+														? isUpdateLoading
+														: isAddLoading
+												}
+												onPress={
+													selectedItemId
+														? handleUpdateItem
+														: handleAddItem
+												}
+											>
+												Update Item Details
+											</Button>
+										)}
 
 										{(itemHasVariant ||
 											item.item_variants.length ===
@@ -405,24 +425,26 @@ export function AddEditItemModal({
 								>
 									Cancel
 								</Button>
-								<Button
-									color="success"
-									isDisabled={!validate()}
-									isLoading={
-										selectedItemId
-											? isUpdateLoading
-											: isAddLoading
-									}
-									onPress={
-										selectedItemId
-											? handleUpdateItem
-											: handleAddItem
-									}
-								>
-									{selectedItemId
-										? "Update Item"
-										: "Add Item"}
-								</Button>
+								{!selectedItemId && (
+									<Button
+										color="success"
+										isDisabled={!validate()}
+										isLoading={
+											selectedItemId
+												? isUpdateLoading
+												: isAddLoading
+										}
+										onPress={
+											selectedItemId
+												? handleUpdateItem
+												: handleAddItem
+										}
+									>
+										{selectedItemId
+											? "Update Item"
+											: "Add Item"}
+									</Button>
+								)}
 							</div>
 						</ModalFooter>
 					</>
