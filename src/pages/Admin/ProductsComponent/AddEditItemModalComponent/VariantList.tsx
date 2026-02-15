@@ -15,7 +15,6 @@ import { useState } from "react";
 
 import { PencilIcon, TrashIcon } from "@/components/icons";
 import { Item } from "@/model/Item";
-import { Variant } from "@/model/variant";
 import { DeleteVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantListComponent/DeleteVariantModal";
 import { AddEditVariantModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/AddEditVariantModal";
 import { EditStockDetailModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/EditStockDetailModal";
@@ -65,21 +64,329 @@ export function VariantList({
 				</p>
 			) : (
 				item.item_variants.map((v, index) => (
-					<VariantItem
-						key={index}
-						v={v}
-						index={index}
-						isEditDB={isEditDB}
-						itemHasVariant={itemHasVariant}
-						isFetchingItem={isFetchingItem}
-						item={item}
-						onOpenDeleteVar={onOpenDeleteVar}
-						onOpenAddVar={onOpenAddVar}
-						onOpenEditStock={onOpenEditStock}
-						setSelectedVarIndex={setSelectedVarIndex}
-						setSelectedVarName={setSelectedVarName}
-						setEditStockKey={setEditStockKey}
-					/>
+					<Card key={index} className="shadow-sm">
+						<CardHeader className="flex flex-row justify-between items-start">
+							<div className="flex flex-col">
+								<h4 className="text-large font-bold">
+									{itemHasVariant ? (
+										<>
+											{v.variant_name ||
+												"Default Variant"}
+											<p className="text-tiny text-default-400">
+												Variant {index + 1}
+											</p>
+											<div className="flex gap-1"></div>
+										</>
+									) : (
+										<>
+											{isEditDB
+												? "Latest Item Info"
+												: "Item Additional Info"}
+
+											{isEditDB && (
+												<p className="text-tiny text-default-400 italic">
+													Stocks details is edited in
+													separate fields
+												</p>
+											)}
+										</>
+									)}
+									<span className="text-default-500 text-sm">
+										{isEditDB ? "Current Stocks" : "Stocks"}
+										:{" "}
+									</span>
+									<span className="text-default-500 text-sm">
+										{v.variant_stock_latest_movement
+											.effective_stocks != null
+											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
+											: "0"}{" "}
+										{item.item_sold_by}s
+									</span>
+								</h4>
+							</div>
+							<div className="ml-auto flex flex-row gap-2">
+								{!isEditDB && (
+									<Button
+										isIconOnly
+										className="ml-auto"
+										size="sm"
+										isLoading={isFetchingItem}
+										startContent={
+											<PencilIcon className="w-5" />
+										}
+										onPress={() => {
+											setSelectedVarIndex(index);
+											setSelectedVarName(
+												v.variant_name ?? null,
+											);
+											onOpenAddVar();
+										}}
+									/>
+								)}
+
+								{isEditDB && (
+									<Dropdown disableAnimation>
+										<DropdownTrigger>
+											<Button
+												isIconOnly
+												className="ml-auto"
+												size="sm"
+												type="button"
+											>
+												<PencilIcon className="w-5" />
+											</Button>
+										</DropdownTrigger>
+										<DropdownMenu aria-label="Static Actions">
+											<DropdownSection
+												showDivider
+												title="Stock Details"
+											>
+												<DropdownItem
+													key="edit-stock-gain"
+													onPress={() => {
+														setSelectedVarIndex(
+															index,
+														);
+														setEditStockKey(
+															"edit-stock-gain",
+														);
+														onOpenEditStock();
+													}}
+												>
+													Stock Gain
+												</DropdownItem>
+												<DropdownItem
+													key="edit-stock-loss"
+													onPress={() => {
+														setSelectedVarIndex(
+															index,
+														);
+														setEditStockKey(
+															"edit-stock-loss",
+														);
+														onOpenEditStock();
+													}}
+												>
+													Stock Loss
+												</DropdownItem>
+											</DropdownSection>
+											<DropdownSection title="Variant Details">
+												<DropdownItem
+													key="edit-variant"
+													onPress={() => {
+														setSelectedVarIndex(
+															index,
+														);
+														setSelectedVarName(
+															v.variant_name ??
+																null,
+														);
+														onOpenAddVar();
+													}}
+												>
+													Edit Variant
+												</DropdownItem>
+											</DropdownSection>
+										</DropdownMenu>
+									</Dropdown>
+								)}
+
+								<Button
+									isIconOnly
+									className="ml-auto"
+									color="danger"
+									size="sm"
+									startContent={<TrashIcon className="w-5" />}
+									onPress={() => {
+										setSelectedVarIndex(index);
+										setSelectedVarName(
+											v.variant_name ?? null,
+										);
+										onOpenDeleteVar();
+									}}
+								/>
+							</div>
+						</CardHeader>
+						<Divider />
+						<CardBody>
+							<div
+								className={`text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 ${
+									isEditDB ? "mb-3" : ""
+								}`}
+							>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Low Stock Alert:
+									</span>
+									<span className="font-medium">
+										{v.variant_low_stock_threshold?.toLocaleString()}{" "}
+										{item.item_sold_by}s
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Retail Price:
+									</span>
+									<span className="font-medium">
+										{v.variant_price_retail != null
+											? `₱${v.variant_price_retail.toLocaleString(
+													"en-PH",
+													{
+														minimumFractionDigits: 2,
+														maximumFractionDigits: 2,
+													},
+												)}`
+											: "N/A"}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Wholesale Price:
+									</span>
+
+									{v.variant_price_wholesale != null &&
+									v.variant_price_wholesale > 0 ? (
+										<span className="font-medium">
+											₱
+											{v.variant_price_wholesale.toLocaleString(
+												"en-PH",
+												{
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2,
+												},
+											)}
+										</span>
+									) : (
+										<span className="text-xs italic text-default-400">
+											N/A
+										</span>
+									)}
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										Wholesale Min Qty:
+									</span>
+
+									{v.variant_wholesale_item != null &&
+									v.variant_wholesale_item > 0 ? (
+										<span className="font-medium truncate ml-2">
+											{v.variant_wholesale_item.toLocaleString()}{" "}
+											{item.item_sold_by}s
+										</span>
+									) : (
+										<span className="text-xs italic text-default-400 ml-2">
+											N/A
+										</span>
+									)}
+								</div>
+							</div>
+							{isEditDB && (
+								<div>
+									<p className="text-base text-default-600 italic">
+										Latest Stock Modification Details:
+									</p>
+								</div>
+							)}
+							<div className="py-1 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? "Stock Loss Date"
+											: "Date Delivered"}
+									</span>
+									<span className="font-medium">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? v.variant_stock_latest_movement
+													.stock_change_date
+												? new Date(
+														v.variant_stock_latest_movement.stock_change_date,
+													).toLocaleDateString(
+														"en-US",
+														{
+															month: "short",
+															day: "2-digit",
+															year: "numeric",
+														},
+													)
+												: "N/A"
+											: v.variant_stock_latest_movement
+														.stock_delivery_date
+												? new Date(
+														v.variant_stock_latest_movement.stock_delivery_date,
+													).toLocaleDateString(
+														"en-US",
+														{
+															month: "short",
+															day: "2-digit",
+															year: "numeric",
+														},
+													)
+												: "N/A"}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? "Total Amount Loss"
+											: "Total Buying Price"}
+									</span>
+									<span className="font-medium">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_amount != null
+											? `₱${v.variant_stock_latest_movement.stock_adjustment_amount.toLocaleString(
+													"en-PH",
+													{
+														minimumFractionDigits: 2,
+														maximumFractionDigits: 2,
+													},
+												)}`
+											: "N/A"}
+									</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{v.variant_stock_latest_movement
+											?.stock_adjustment_type === "Loss"
+											? "Deducted Stocks:"
+											: "Added Stocks:"}
+									</span>
+									<span className="font-medium truncate">
+										{v.variant_stock_movements?.length ===
+										1 ? (
+											<span className="italic text-default-500">
+												Recently Added
+											</span>
+										) : v.variant_stock_latest_movement
+												?.stock_change_count != null ? (
+											`${v.variant_stock_latest_movement.stock_change_count} ${item.item_sold_by}${v.variant_stock_latest_movement.stock_change_count > 1 ? "s" : ""}`
+										) : (
+											"N/A"
+										)}
+									</span>
+								</div>
+
+								<div className="flex justify-between">
+									<span className="text-default-500">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? "Reason for Loss"
+											: "Supplier"}
+									</span>
+									<span className="font-medium text-right">
+										{v.variant_stock_latest_movement
+											.stock_adjustment_type === "Loss"
+											? v.variant_stock_latest_movement
+													.stock_loss_reason
+											: v.variant_stock_latest_movement
+													.stock_supplier}
+									</span>
+								</div>
+							</div>
+						</CardBody>
+					</Card>
 				))
 			)}
 			<DeleteVariantModal
@@ -160,339 +467,5 @@ export function VariantList({
 				onOpenChangeAddVar={onOpenChangeAddVar}
 			/>
 		</>
-	);
-}
-
-function VariantItem({
-	v,
-	index,
-	isEditDB,
-	itemHasVariant,
-	isFetchingItem,
-	item,
-	onOpenDeleteVar,
-	onOpenAddVar,
-	onOpenEditStock,
-	setSelectedVarIndex,
-	setSelectedVarName,
-	setEditStockKey,
-}: {
-	v: Variant;
-	index: number;
-	isEditDB?: boolean;
-	itemHasVariant: boolean;
-	isFetchingItem: boolean;
-	item: Item;
-	onOpenDeleteVar: () => void;
-	onOpenAddVar: () => void;
-	onOpenEditStock: () => void;
-	setSelectedVarIndex: (index: number | null) => void;
-	setSelectedVarName: (name: string | null) => void;
-	setEditStockKey: (
-		key: "edit-stock-gain" | "edit-stock-loss" | null,
-	) => void;
-}) {
-	const { isOpen, onOpenChange } = useDisclosure();
-
-	return (
-		<Card className="shadow-sm">
-			<CardHeader className="flex flex-row justify-between items-start">
-				<div className="flex flex-col">
-					<h4 className="text-large font-bold">
-						{itemHasVariant ? (
-							<>
-								{v.variant_name || "Default Variant"}
-								<p className="text-tiny text-default-400">
-									Variant {index + 1}
-								</p>
-								<div className="flex gap-1"></div>
-							</>
-						) : (
-							<>
-								{isEditDB
-									? "Latest Item Info"
-									: "Item Additional Info"}
-
-								{isEditDB && (
-									<p className="text-tiny text-default-400 italic">
-										Stocks details is edited in separate
-										fields
-									</p>
-								)}
-							</>
-						)}
-						<span className="text-default-500 text-sm">
-							{isEditDB ? "Current Stocks" : "Stocks"}:{" "}
-						</span>
-						<span className="text-default-500 text-sm">
-							{v.variant_stock_latest_movement.effective_stocks !=
-							null
-								? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
-								: "0"}{" "}
-							{item.item_sold_by}s
-						</span>
-					</h4>
-				</div>
-				<div className="ml-auto flex flex-row gap-2">
-					{!isEditDB && (
-						<Button
-							isIconOnly
-							className="ml-auto"
-							size="sm"
-							isLoading={isFetchingItem}
-							onPress={() => {
-								setSelectedVarIndex(index);
-								setSelectedVarName(v.variant_name ?? null);
-								onOpenAddVar();
-							}}
-						>
-							<PencilIcon className="w-5" />
-						</Button>
-					)}
-
-					{isEditDB && (
-						<Dropdown
-							disableAnimation
-							isOpen={isOpen}
-							onOpenChange={onOpenChange}
-						>
-							<DropdownTrigger>
-								<Button isIconOnly size="sm" type="button">
-									<PencilIcon className="w-5" />
-								</Button>
-							</DropdownTrigger>
-							<DropdownMenu
-								aria-label="Static Actions"
-								autoFocus={false}
-							>
-								<DropdownSection
-									showDivider
-									title="Stock Details"
-								>
-									<DropdownItem
-										key="edit-stock-gain"
-										onPress={() => {
-											setSelectedVarIndex(index);
-											setEditStockKey("edit-stock-gain");
-											onOpenEditStock();
-										}}
-									>
-										Stock Gain
-									</DropdownItem>
-									<DropdownItem
-										key="edit-stock-loss"
-										onPress={() => {
-											setSelectedVarIndex(index);
-											setEditStockKey("edit-stock-loss");
-											onOpenEditStock();
-										}}
-									>
-										Stock Loss
-									</DropdownItem>
-								</DropdownSection>
-								<DropdownSection title="Variant Details">
-									<DropdownItem
-										key="edit-variant"
-										onPress={() => {
-											setSelectedVarIndex(index);
-											setSelectedVarName(
-												v.variant_name ?? null,
-											);
-											onOpenAddVar();
-										}}
-									>
-										Edit Variant
-									</DropdownItem>
-								</DropdownSection>
-							</DropdownMenu>
-						</Dropdown>
-					)}
-
-					<Button
-						isIconOnly
-						className="ml-auto"
-						color="danger"
-						size="sm"
-						onPress={() => {
-							setSelectedVarIndex(index);
-							setSelectedVarName(v.variant_name ?? null);
-							onOpenDeleteVar();
-						}}
-					>
-						<TrashIcon className="w-5" />
-					</Button>
-				</div>
-			</CardHeader>
-			<Divider />
-			<CardBody>
-				<div
-					className={`text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 ${
-						isEditDB ? "mb-3" : ""
-					}`}
-				>
-					<div className="flex justify-between">
-						<span className="text-default-500">
-							Low Stock Alert:
-						</span>
-						<span className="font-medium">
-							{v.variant_low_stock_threshold?.toLocaleString()}{" "}
-							{item.item_sold_by}s
-						</span>
-					</div>
-					<div className="flex justify-between">
-						<span className="text-default-500">Retail Price:</span>
-						<span className="font-medium">
-							{v.variant_price_retail != null
-								? `₱${v.variant_price_retail.toLocaleString(
-										"en-PH",
-										{
-											minimumFractionDigits: 2,
-											maximumFractionDigits: 2,
-										},
-									)}`
-								: "N/A"}
-						</span>
-					</div>
-					<div className="flex justify-between">
-						<span className="text-default-500">
-							Wholesale Price:
-						</span>
-
-						{v.variant_price_wholesale != null &&
-						v.variant_price_wholesale > 0 ? (
-							<span className="font-medium">
-								₱
-								{v.variant_price_wholesale.toLocaleString(
-									"en-PH",
-									{
-										minimumFractionDigits: 2,
-										maximumFractionDigits: 2,
-									},
-								)}
-							</span>
-						) : (
-							<span className="text-xs italic text-default-400">
-								N/A
-							</span>
-						)}
-					</div>
-					<div className="flex justify-between">
-						<span className="text-default-500">
-							Wholesale Min Qty:
-						</span>
-
-						{v.variant_wholesale_item != null &&
-						v.variant_wholesale_item > 0 ? (
-							<span className="font-medium truncate ml-2">
-								{v.variant_wholesale_item.toLocaleString()}{" "}
-								{item.item_sold_by}s
-							</span>
-						) : (
-							<span className="text-xs italic text-default-400 ml-2">
-								N/A
-							</span>
-						)}
-					</div>
-				</div>
-				{isEditDB && (
-					<div>
-						<p className="text-base text-default-600 italic">
-							Latest Stock Modification Details:
-						</p>
-					</div>
-				)}
-				<div className="py-1 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
-					<div className="flex justify-between">
-						<span className="text-default-500">
-							{v.variant_stock_latest_movement
-								.stock_adjustment_type === "Loss"
-								? "Stock Loss Date"
-								: "Date Delivered"}
-						</span>
-						<span className="font-medium">
-							{v.variant_stock_latest_movement
-								.stock_adjustment_type === "Loss"
-								? v.variant_stock_latest_movement
-										.stock_change_date
-									? new Date(
-											v.variant_stock_latest_movement.stock_change_date,
-										).toLocaleDateString("en-US", {
-											month: "short",
-											day: "2-digit",
-											year: "numeric",
-										})
-									: "N/A"
-								: v.variant_stock_latest_movement
-											.stock_delivery_date
-									? new Date(
-											v.variant_stock_latest_movement.stock_delivery_date,
-										).toLocaleDateString("en-US", {
-											month: "short",
-											day: "2-digit",
-											year: "numeric",
-										})
-									: "N/A"}
-						</span>
-					</div>
-					<div className="flex justify-between">
-						<span className="text-default-500">
-							{v.variant_stock_latest_movement
-								.stock_adjustment_type === "Loss"
-								? "Total Amount Loss"
-								: "Total Buying Price"}
-						</span>
-						<span className="font-medium">
-							{v.variant_stock_latest_movement
-								.stock_adjustment_amount != null
-								? `₱${v.variant_stock_latest_movement.stock_adjustment_amount.toLocaleString(
-										"en-PH",
-										{
-											minimumFractionDigits: 2,
-											maximumFractionDigits: 2,
-										},
-									)}`
-								: "N/A"}
-						</span>
-					</div>
-					<div className="flex justify-between">
-						<span className="text-default-500">
-							{v.variant_stock_latest_movement
-								?.stock_adjustment_type === "Loss"
-								? "Deducted Stocks:"
-								: "Added Stocks:"}
-						</span>
-						<span className="font-medium truncate">
-							{v.variant_stock_movements?.length === 1 ? (
-								<span className="italic text-default-500">
-									Recently Added
-								</span>
-							) : v.variant_stock_latest_movement
-									?.stock_change_count != null ? (
-								`${v.variant_stock_latest_movement.stock_change_count} ${item.item_sold_by}${v.variant_stock_latest_movement.stock_change_count > 1 ? "s" : ""}`
-							) : (
-								"N/A"
-							)}
-						</span>
-					</div>
-
-					<div className="flex justify-between">
-						<span className="text-default-500">
-							{v.variant_stock_latest_movement
-								.stock_adjustment_type === "Loss"
-								? "Reason for Loss"
-								: "Supplier"}
-						</span>
-						<span className="font-medium text-right">
-							{v.variant_stock_latest_movement
-								.stock_adjustment_type === "Loss"
-								? v.variant_stock_latest_movement
-										.stock_loss_reason
-								: v.variant_stock_latest_movement
-										.stock_supplier}
-						</span>
-					</div>
-				</div>
-			</CardBody>
-		</Card>
 	);
 }
