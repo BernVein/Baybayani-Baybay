@@ -23,12 +23,14 @@ export function VariantList({
 	itemHasVariant,
 	item,
 	setItem,
+	onRefetchVariants,
 }: {
 	isEditDB?: boolean;
 	isFetchingItem: boolean;
 	itemHasVariant: boolean;
 	item: Item;
 	setItem: React.Dispatch<React.SetStateAction<Item>>;
+	onRefetchVariants?: () => void;
 }) {
 	const {
 		isOpen: isOpenDeleteVar,
@@ -131,7 +133,7 @@ export function VariantList({
 											.effective_stocks != null
 											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
 											: "0"}{" "}
-										{item.item_sold_by}s
+										{item.item_sold_by}s{" "}
 									</span>
 								</h4>
 							</div>
@@ -453,6 +455,8 @@ export function VariantList({
 									item_variants: updatedVariants,
 								};
 							});
+
+							if (onRefetchVariants) onRefetchVariants();
 						}}
 					/>
 				)}

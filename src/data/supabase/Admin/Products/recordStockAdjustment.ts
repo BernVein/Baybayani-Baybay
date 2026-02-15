@@ -26,7 +26,7 @@ export async function recordStockAdjustment(
 		if (movementError) throw movementError;
 
 		// Dispatch refresh event
-		window.dispatchEvent(new Event("refresh-products"));
+		window.dispatchEvent(new Event("baybayani:update-table"));
 
 		return { success: true, movementId: movementData.stock_movement_id };
 	} catch (error: any) {

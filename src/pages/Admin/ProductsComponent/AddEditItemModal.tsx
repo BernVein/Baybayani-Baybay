@@ -82,8 +82,11 @@ export function AddEditItemModal({
 		item_variants: [],
 	});
 
-	const { item: fetchedItem, loading: isFetchingItem } =
-		useFetchItemById(selectedItemId);
+	const {
+		item: fetchedItem,
+		loading: isFetchingItem,
+		refetch,
+	} = useFetchItemById(selectedItemId, { showAllVariants: true });
 	useEffect(() => {
 		if (!selectedItemId) return;
 		if (!fetchedItem) return;
@@ -484,6 +487,7 @@ export function AddEditItemModal({
 											item={item}
 											itemHasVariant={itemHasVariant}
 											setItem={setItem}
+											onRefetchVariants={refetch}
 										/>
 									</div>
 								</div>
