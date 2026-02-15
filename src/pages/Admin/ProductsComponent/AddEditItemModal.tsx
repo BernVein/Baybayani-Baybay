@@ -539,6 +539,7 @@ export function AddEditItemModal({
 				isEditDB={selectedItemId ? true : false}
 				defaultVariant={null}
 				isOpenAddVar={isOpenAddVar}
+				itemId={item.item_id}
 				itemHasVariant={itemHasVariant}
 				itemUnitOfMeasure={item.item_sold_by}
 				onAddEditVariant={(newVariant) =>
