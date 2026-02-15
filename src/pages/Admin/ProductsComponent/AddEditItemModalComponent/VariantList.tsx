@@ -126,14 +126,30 @@ export function VariantList({
 												: "Item Additional Info"}
 										</>
 									)}
-									<span className="text-default-500 text-sm truncate">
-										{isEditDB ? "Current Stocks" : "Stocks"}
-										:{" "}
+									<span
+										className={`text-sm truncate ${
+											v.variant_stock_latest_movement
+												.effective_stocks === 0
+												? "text-danger"
+												: "text-default-500"
+										}`}
+									>
 										{v.variant_stock_latest_movement
-											.effective_stocks != null
-											? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
-											: "0"}{" "}
-										{item.item_sold_by}s{" "}
+											.effective_stocks === 0 ? (
+											"Out of stock"
+										) : (
+											<>
+												{isEditDB
+													? "Current Stocks"
+													: "Stocks"}
+												:{" "}
+												{v.variant_stock_latest_movement
+													.effective_stocks != null
+													? v.variant_stock_latest_movement.effective_stocks.toLocaleString()
+													: "0"}{" "}
+												{item.item_sold_by}s
+											</>
+										)}
 									</span>
 								</h4>
 							</div>
