@@ -358,7 +358,7 @@ export function AddEditItemModal({
 				size="xl"
 				onOpenChange={(open) => {
 					if (!open) {
-						if (!isItemPristine()) {
+						if (!isItemPristine() && !selectedItemId) {
 							onOpenWarning();
 						} else {
 							onOpenChange(false);
