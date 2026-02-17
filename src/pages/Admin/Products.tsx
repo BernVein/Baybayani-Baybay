@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { ProductIcon } from "@/components/icons";
 import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
@@ -14,14 +14,6 @@ export default function Products() {
 		searchQuery,
 		selectedCategories,
 	);
-
-	useEffect(() => {
-		console.log("Products page rendered with searchQuery:", searchQuery);
-		console.log(
-			"Products page rendered with selectedCategories:",
-			selectedCategories,
-		);
-	}, [searchQuery, selectedCategories]);
 
 	return (
 		<div className="flex flex-col gap-8 p-4 h-full">

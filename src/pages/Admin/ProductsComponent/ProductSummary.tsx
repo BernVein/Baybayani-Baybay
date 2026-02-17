@@ -7,6 +7,7 @@ import {
 } from "@/components/icons";
 import { ManageCatTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModal";
 import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
+import { fetchProductStats } from "@/data/supabase/Admin/Products/fetchProductStats";
 
 export function ProductSummary({
 	items,
@@ -16,7 +17,11 @@ export function ProductSummary({
 	isLoading: boolean;
 }) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+	const {
+		lastItemDate,
+		lowStockCount,
+		loading: isStatLoading,
+	} = fetchProductStats();
 	const totalItems = items.length;
 	const totalInventory = items.reduce(
 		(sum, item) => sum + (item.variant_stock ?? 0),
@@ -50,11 +55,13 @@ export function ProductSummary({
 								</div>
 							</div>
 							<Skeleton
-								isLoaded={!isLoading}
+								isLoaded={!isStatLoading}
 								className="rounded-lg w-3/5"
 							>
 								<span className="text-default-500">
-									+3 vs last month
+									{lowStockCount != null
+										? `${lowStockCount} variants low in stock`
+										: "No low-stock variants"}
 								</span>
 							</Skeleton>
 						</div>
@@ -85,10 +92,12 @@ export function ProductSummary({
 							</div>
 							<Skeleton
 								className="rounded-lg w-3/5"
-								isLoaded={!isLoading}
+								isLoaded={!isStatLoading}
 							>
 								<span className="text-default-500">
-									last item added on Nov 23, 2025
+									{lastItemDate
+										? `last item added on ${new Date(lastItemDate).toLocaleDateString()}`
+										: "no items yet"}
 								</span>
 							</Skeleton>
 						</div>
