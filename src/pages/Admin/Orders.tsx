@@ -7,7 +7,7 @@ import {
 	useDisclosure,
 	Input,
 } from "@heroui/react";
-
+import { useEffect } from "react";
 import { CartIcon, SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
@@ -22,6 +22,10 @@ export default function Orders() {
 		onOpen: onOpenAddOrder,
 		onOpenChange: onOpenChangeAddOrder,
 	} = useDisclosure();
+
+	useEffect(() => {
+		document.title = "Baybayani | Admin | Orders";
+	}, []);
 
 	const { orderItems, loading, refetch } = useFetchOrderItems();
 	return (

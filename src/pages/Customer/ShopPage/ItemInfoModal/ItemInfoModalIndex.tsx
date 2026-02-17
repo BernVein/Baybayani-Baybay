@@ -16,10 +16,12 @@ import Footer from "@/pages/Customer/ShopPage/ItemInfoModal/Footer";
 import { useFetchItemById } from "@/data/supabase/Customer/Products/useFetchSingleItem";
 
 export default function ItemInfoModal({
+	isAdmin,
 	isOpen,
 	onOpenChange,
 	itemId,
 }: {
+	isAdmin?: boolean | null;
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	itemId: string | null;
@@ -76,11 +78,18 @@ export default function ItemInfoModal({
 
 	// Update document title
 	useEffect(() => {
-		document.title =
-			isOpen && item
-				? `Baybayani | Shop | ${item.item_title}`
-				: "Baybayani | Shop";
-	}, [isOpen, item]);
+		if (isAdmin) {
+			document.title =
+				isOpen && item
+					? `Baybayani | Admin | Shop | ${item.item_title}`
+					: "Baybayani | Admin | Shop";
+		} else {
+			document.title =
+				isOpen && item
+					? `Baybayani | Shop | ${item.item_title}`
+					: "Baybayani | Shop";
+		}
+	}, [isOpen, item, onOpenChange]);
 
 	return (
 		<Modal
