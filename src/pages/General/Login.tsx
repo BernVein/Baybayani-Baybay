@@ -46,7 +46,7 @@ export default function Login() {
 									</span>
 								</div>
 							</div>
-							<ThemeSwitcher />
+							<ThemeSwitcher isIconOnly />
 						</CardHeader>
 						<CardBody className="gap-2 p-5 items-center justify-center">
 							<p className="self-start text-sm text-default-500">
