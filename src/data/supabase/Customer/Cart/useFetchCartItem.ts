@@ -7,34 +7,34 @@ import { Variant } from "@/model/variant";
 import { VariantSnapshot } from "@/model/variantSnapshot";
 
 export const useFetchCartItems = (
-    cartItemUserIds: string | string[] | null,
+	cartItemUserIds: string | string[] | null,
 ) => {
-    const [cartItems, setCartItems] = useState<CartItemUser[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+	const [cartItems, setCartItems] = useState<CartItemUser[]>([]);
+	const [loading, setLoading] = useState(false);
+	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const normalizedIds = useMemo(() => {
-        return Array.isArray(cartItemUserIds)
-            ? cartItemUserIds
-            : cartItemUserIds
-              ? [cartItemUserIds]
-              : [];
-    }, [cartItemUserIds]);
+	const normalizedIds = useMemo(() => {
+		return Array.isArray(cartItemUserIds)
+			? cartItemUserIds
+			: cartItemUserIds
+				? [cartItemUserIds]
+				: [];
+	}, [cartItemUserIds]);
 
-    const fetchCartItems = useCallback(async () => {
-        if (normalizedIds.length === 0) {
-            setCartItems([]);
+	const fetchCartItems = useCallback(async () => {
+		if (normalizedIds.length === 0) {
+			setCartItems([]);
 
-            return;
-        }
+			return;
+		}
 
-        setLoading(true);
-        setErrorMsg(null);
+		setLoading(true);
+		setErrorMsg(null);
 
-        const { data, error } = await supabase
-            .from("CartItemUser")
-            .select(
-                `
+		const { data, error } = await supabase
+			.from("CartItemUser")
+			.select(
+				`
                     *,
                     Item (
                         *,
@@ -48,175 +48,179 @@ export const useFetchCartItems = (
                     ),
                     VariantSnapshot ( * )
                 `,
-            )
-            .in("cart_item_user_id", normalizedIds)
-            .eq("is_soft_deleted", false)
-            .order("created_at", {
-                foreignTable: "Item.Variant.StockMovement",
-                ascending: false,
-            })
-            .limit(1, { foreignTable: "Item.Variant.StockMovement" });
+			)
+			.in("cart_item_user_id", normalizedIds)
+			.eq("Item.Variant.is_soft_deleted", false)
+			.eq("is_soft_deleted", false)
+			.order("created_at", {
+				foreignTable: "Item.Variant.StockMovement",
+				ascending: false,
+			})
+			.limit(1, { foreignTable: "Item.Variant.StockMovement" });
 
-        if (error) {
-            setErrorMsg(error.message);
-            setLoading(false);
+		if (error) {
+			setErrorMsg(error.message);
+			setLoading(false);
 
-            return;
-        }
+			return;
+		}
 
-        const mapped: CartItemUser[] =
-            data?.map((row: any) => ({
-                cart_item_user_id: row.cart_item_user_id,
-                item: (row.Item
-                    ? {
-                          item_id: row.Item.item_id,
-                          item_category: String(
-                              row.Item.Category?.category_name || "",
-                          ),
-                          item_title: row.Item.item_title,
-                          item_img:
-                              row.Item.Item_Image?.map(
-                                  (img: any) => img.item_image_url,
-                              ) ?? [],
-                          item_sold_by: row.Item.item_sold_by,
-                          item_description: row.Item.item_description,
-                          item_has_variant: row.Item.item_has_variant,
-                          item_tag: row.Item.Tag?.tag_name ?? null,
-                          is_soft_deleted: row.Item.is_soft_deleted,
-                          last_updated: row.Item.last_updated,
-                          created_at: String(row.Item.created_at || ""),
-                          item_variants:
-                              row.Item.Variant?.map((v: any) => {
-                                  const latestStock = v.StockMovement?.[0] ?? {
-                                      effective_stocks: 0,
-                                      created_at: "",
-                                  };
+		const mapped: CartItemUser[] =
+			data?.map((row: any) => ({
+				cart_item_user_id: row.cart_item_user_id,
+				item: (row.Item
+					? {
+							item_id: row.Item.item_id,
+							item_category: String(
+								row.Item.Category?.category_name || "",
+							),
+							item_title: row.Item.item_title,
+							item_img:
+								row.Item.Item_Image?.map(
+									(img: any) => img.item_image_url,
+								) ?? [],
+							item_sold_by: row.Item.item_sold_by,
+							item_description: row.Item.item_description,
+							item_has_variant: row.Item.item_has_variant,
+							item_tag: row.Item.Tag?.tag_name ?? null,
+							is_soft_deleted: row.Item.is_soft_deleted,
+							last_updated: row.Item.last_updated,
+							created_at: String(row.Item.created_at || ""),
+							item_variants:
+								row.Item.Variant?.map((v: any) => {
+									const latestStock = v
+										.StockMovement?.[0] ?? {
+										effective_stocks: 0,
+										created_at: "",
+									};
 
-                                  return {
-                                      variant_id: v.variant_id,
-                                      variant_name: v.variant_name,
-                                      variant_price_retail: Number(
-                                          v.variant_price_retail,
-                                      ),
-                                      variant_price_wholesale:
-                                          v.variant_price_wholesale ?? null,
-                                      variant_wholesale_item:
-                                          v.variant_wholesale_item ?? null,
-                                      variant_stock_latest_movement:
-                                          latestStock,
-                                      variant_last_updated_stock:
-                                          v.variant_stock_latest_movement
-                                              ?.created_at ?? null,
-                                      variant_last_updated_price_retail:
-                                          v.variant_last_updated_price_retail ??
-                                          null,
-                                      variant_last_price_retail:
-                                          v.variant_last_price_retail ??
-                                          undefined,
-                                      variant_last_updated_price_wholesale:
-                                          v.variant_last_updated_price_wholesale ??
-                                          null,
-                                      variant_last_price_wholesale:
-                                          v.variant_last_price_wholesale ??
-                                          null,
-                                      last_updated: v.last_updated ?? "",
-                                      is_soft_deleted:
-                                          v.is_soft_deleted ?? false,
-                                      created_at: v.created_at ?? "",
-                                  } as Variant;
-                              }) ?? [],
-                      }
-                    : {
-                          item_id: "",
-                          item_category: "",
-                          item_title: "",
-                          item_img: [],
-                          item_sold_by: "",
-                          item_description: "",
-                          item_tag: null,
-                          is_soft_deleted: false,
-                          last_updated: "",
-                          created_at: "",
-                          item_variants: [],
-                      }) as Item,
+									return {
+										variant_id: v.variant_id,
+										variant_name: v.variant_name,
+										variant_price_retail: Number(
+											v.variant_price_retail,
+										),
+										variant_price_wholesale:
+											v.variant_price_wholesale ?? null,
+										variant_wholesale_item:
+											v.variant_wholesale_item ?? null,
+										variant_stock_latest_movement:
+											latestStock,
+										variant_last_updated_stock:
+											v.variant_stock_latest_movement
+												?.created_at ?? null,
+										variant_last_updated_price_retail:
+											v.variant_last_updated_price_retail ??
+											null,
+										variant_last_price_retail:
+											v.variant_last_price_retail ??
+											undefined,
+										variant_last_updated_price_wholesale:
+											v.variant_last_updated_price_wholesale ??
+											null,
+										variant_last_price_wholesale:
+											v.variant_last_price_wholesale ??
+											null,
+										last_updated: v.last_updated ?? "",
+										is_soft_deleted:
+											v.is_soft_deleted ?? false,
+										created_at: v.created_at ?? "",
+									} as Variant;
+								}) ?? [],
+						}
+					: {
+							item_id: "",
+							item_category: "",
+							item_title: "",
+							item_img: [],
+							item_sold_by: "",
+							item_description: "",
+							item_tag: null,
+							is_soft_deleted: false,
+							last_updated: "",
+							created_at: "",
+							item_variants: [],
+						}) as Item,
 
-                variant_snapshot: (row.VariantSnapshot
-                    ? {
-                          variant_snapshot_id:
-                              row.VariantSnapshot.variant_snapshot_id,
-                          variant_copy_snapshot_id:
-                              row.VariantSnapshot.variant_copy_snapshot_id,
-                          variant_snapshot_name:
-                              row.VariantSnapshot.variant_snapshot_name,
-                          variant_snapshot_price_retail: Number(
-                              row.VariantSnapshot.variant_snapshot_price_retail,
-                          ),
-                          variant_snapshot_price_wholesale:
-                              row.VariantSnapshot
-                                  .variant_snapshot_price_wholesale !== null
-                                  ? Number(
-                                        row.VariantSnapshot
-                                            .variant_snapshot_price_wholesale,
-                                    )
-                                  : null,
-                          variant_snapshot_wholesale_item:
-                              row.VariantSnapshot
-                                  .variant_snapshot_wholesale_item !== null
-                                  ? Number(
-                                        row.VariantSnapshot
-                                            .variant_snapshot_wholesale_item,
-                                    )
-                                  : null,
-                          last_updated: row.VariantSnapshot.last_updated ?? "",
-                          is_soft_deleted:
-                              row.VariantSnapshot.is_soft_deleted ?? false,
-                          created_at: row.VariantSnapshot.created_at ?? "",
-                      }
-                    : {
-                          variant_snapshot_id: "",
-                          variant_copy_snapshot_id: "",
-                          variant_snapshot_name: "",
-                          variant_snapshot_price_retail: 0,
-                          variant_snapshot_price_wholesale: null,
-                          variant_snapshot_wholesale_item: null,
-                          last_updated: "",
-                          is_soft_deleted: false,
-                          created_at: "",
-                      }) as VariantSnapshot,
+				variant_snapshot: (row.VariantSnapshot
+					? {
+							variant_snapshot_id:
+								row.VariantSnapshot.variant_snapshot_id,
+							variant_copy_snapshot_id:
+								row.VariantSnapshot.variant_copy_snapshot_id,
+							variant_snapshot_name:
+								row.VariantSnapshot.variant_snapshot_name,
+							variant_snapshot_price_retail: Number(
+								row.VariantSnapshot
+									.variant_snapshot_price_retail,
+							),
+							variant_snapshot_price_wholesale:
+								row.VariantSnapshot
+									.variant_snapshot_price_wholesale !== null
+									? Number(
+											row.VariantSnapshot
+												.variant_snapshot_price_wholesale,
+										)
+									: null,
+							variant_snapshot_wholesale_item:
+								row.VariantSnapshot
+									.variant_snapshot_wholesale_item !== null
+									? Number(
+											row.VariantSnapshot
+												.variant_snapshot_wholesale_item,
+										)
+									: null,
+							last_updated:
+								row.VariantSnapshot.last_updated ?? "",
+							is_soft_deleted:
+								row.VariantSnapshot.is_soft_deleted ?? false,
+							created_at: row.VariantSnapshot.created_at ?? "",
+						}
+					: {
+							variant_snapshot_id: "",
+							variant_copy_snapshot_id: "",
+							variant_snapshot_name: "",
+							variant_snapshot_price_retail: 0,
+							variant_snapshot_price_wholesale: null,
+							variant_snapshot_wholesale_item: null,
+							last_updated: "",
+							is_soft_deleted: false,
+							created_at: "",
+						}) as VariantSnapshot,
 
-                price_variant: String(row.price_variant ?? ""),
-                quantity: Number(row.quantity ?? 0),
-                subtotal: Number(row.subtotal ?? 0),
-                is_soft_deleted: row.is_soft_deleted,
-                created_at: row.created_at ?? "",
-                updated_at: row.updated_at ?? "",
-            })) ?? [];
+				price_variant: String(row.price_variant ?? ""),
+				quantity: Number(row.quantity ?? 0),
+				subtotal: Number(row.subtotal ?? 0),
+				is_soft_deleted: row.is_soft_deleted,
+				created_at: row.created_at ?? "",
+				updated_at: row.updated_at ?? "",
+			})) ?? [];
 
-        setCartItems(mapped);
-        setLoading(false);
-    }, [normalizedIds]);
+		setCartItems(mapped);
+		setLoading(false);
+	}, [normalizedIds]);
 
-    useEffect(() => {
-        fetchCartItems();
-    }, [fetchCartItems]);
+	useEffect(() => {
+		fetchCartItems();
+	}, [fetchCartItems]);
 
-    useEffect(() => {
-        const handleCartUpdate = () => fetchCartItems();
+	useEffect(() => {
+		const handleCartUpdate = () => fetchCartItems();
 
-        window.addEventListener("baybayani:cart-updated", handleCartUpdate);
+		window.addEventListener("baybayani:cart-updated", handleCartUpdate);
 
-        return () => {
-            window.removeEventListener(
-                "baybayani:cart-updated",
-                handleCartUpdate,
-            );
-        };
-    }, [fetchCartItems]);
+		return () => {
+			window.removeEventListener(
+				"baybayani:cart-updated",
+				handleCartUpdate,
+			);
+		};
+	}, [fetchCartItems]);
 
-    return {
-        cartItems,
-        loading,
-        errorMsg,
-        refetch: fetchCartItems,
-    };
+	return {
+		cartItems,
+		loading,
+		errorMsg,
+		refetch: fetchCartItems,
+	};
 };
