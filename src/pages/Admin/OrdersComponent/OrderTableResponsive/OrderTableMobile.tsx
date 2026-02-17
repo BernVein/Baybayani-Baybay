@@ -71,7 +71,22 @@ export function OrderTableMobile({ orders }: { orders: OrderTableRow[] }) {
 											{order.price_variant}
 										</span>
 										<div className="flex flex-row items-center gap-1">
-											<span className="w-2 h-2 rounded-full bg-green-400" />
+											<span
+												className={`w-2 h-2 rounded-full ${
+													order.status === "Pending"
+														? "bg-yellow-400"
+														: order.status ===
+															  "Ready"
+															? "bg-blue-400"
+															: order.status ===
+																  "Completed"
+																? "bg-green-400"
+																: order.status ===
+																	  "Cancel"
+																	? "bg-red-400"
+																	: "bg-gray-400"
+												}`}
+											/>
 											<span className="text-default-500 italic text-xs">
 												{order.status}
 											</span>
@@ -87,7 +102,10 @@ export function OrderTableMobile({ orders }: { orders: OrderTableRow[] }) {
 										</Button>
 									</DropdownTrigger>
 									<DropdownMenu aria-label="Static Actions">
-										<DropdownSection title="Set Status">
+										<DropdownSection
+											title="Set Status"
+											showDivider
+										>
 											<DropdownItem key="pending">
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-yellow-400" />
@@ -115,6 +133,18 @@ export function OrderTableMobile({ orders }: { orders: OrderTableRow[] }) {
 													<span className="text-danger">
 														Cancel
 													</span>
+												</div>
+											</DropdownItem>
+										</DropdownSection>
+										<DropdownSection title="Edit">
+											<DropdownItem key="subtotal">
+												<div className="flex items-center gap-2">
+													<span>Subtotal</span>
+												</div>
+											</DropdownItem>
+											<DropdownItem key="quantity">
+												<div className="flex items-center gap-2">
+													<span>Quantity</span>
 												</div>
 											</DropdownItem>
 										</DropdownSection>

@@ -113,7 +113,20 @@ export function OrderTableDesktop({ orders }: { orders: OrderTableRow[] }) {
 								</div>
 							</TableCell>
 							<TableCell>
-								<Chip color="success" variant="flat">
+								<Chip
+									color={
+										order.status === "Pending"
+											? "warning"
+											: order.status === "Ready"
+												? "primary"
+												: order.status === "Completed"
+													? "success"
+													: order.status === "Cancel"
+														? "danger"
+														: "default"
+									}
+									variant="flat"
+								>
 									{order.status}
 								</Chip>
 							</TableCell>
@@ -125,7 +138,10 @@ export function OrderTableDesktop({ orders }: { orders: OrderTableRow[] }) {
 										</Button>
 									</DropdownTrigger>
 									<DropdownMenu aria-label="Static Actions">
-										<DropdownSection title="Set Status">
+										<DropdownSection
+											title="Set Status"
+											showDivider
+										>
 											<DropdownItem key="pending">
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-yellow-400" />
@@ -153,6 +169,18 @@ export function OrderTableDesktop({ orders }: { orders: OrderTableRow[] }) {
 													<span className="text-danger">
 														Cancel
 													</span>
+												</div>
+											</DropdownItem>
+										</DropdownSection>
+										<DropdownSection title="Edit">
+											<DropdownItem key="subtotal">
+												<div className="flex items-center gap-2">
+													<span>Subtotal</span>
+												</div>
+											</DropdownItem>
+											<DropdownItem key="quantity">
+												<div className="flex items-center gap-2">
+													<span>Quantity</span>
 												</div>
 											</DropdownItem>
 										</DropdownSection>
