@@ -357,15 +357,11 @@ export function AddEditItemModal({
 				scrollBehavior="inside"
 				size="xl"
 				onOpenChange={(open) => {
-					if (!open) {
-						if (!isItemPristine() && !selectedItemId) {
-							onOpenWarning();
-						} else {
-							onOpenChange(false);
-						}
-					} else {
-						onOpenChange(true);
+					if (!open && !selectedItemId) {
+						onOpenWarning();
+						return;
 					}
+					onOpenChange(false);
 				}}
 			>
 				<ModalContent>
@@ -504,7 +500,11 @@ export function AddEditItemModal({
 									color="danger"
 									variant="light"
 									onPress={() => {
-										if (!isItemPristine()) onOpenWarning();
+										if (
+											!isItemPristine() &&
+											!selectedItemId
+										)
+											onOpenWarning();
 										else onOpenChange(false);
 									}}
 								>
