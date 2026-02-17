@@ -10,10 +10,10 @@ import {
 
 import { CartIcon, SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
-import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableMobile";
-import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableDesktop";
+import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
 import useIsMobile from "@/lib/isMobile";
 import { AddOrderModal } from "@/pages/Admin/OrdersComponent/AddOrderModal";
+import { OrderTable } from "./OrdersComponent/OrderTable";
 
 export default function Orders() {
 	const isMobile = useIsMobile();
@@ -23,6 +23,7 @@ export default function Orders() {
 		onOpenChange: onOpenChangeAddOrder,
 	} = useDisclosure();
 
+	const { orderItems, loading, refetch } = useFetchOrderItems();
 	return (
 		<>
 			<div className="flex flex-col gap-8 p-4 h-full">
@@ -110,8 +111,11 @@ export default function Orders() {
 
 				{/* TABLE ROW */}
 				<div className="flex-1 min-h-0 flex flex-col">
-					<OrderTableMobile />
-					<OrderTableDesktop />
+					<OrderTable
+						orders={orderItems}
+						loading={loading}
+						refetch={refetch}
+					/>
 				</div>
 			</div>
 			<AddOrderModal

@@ -21,15 +21,13 @@ export const useFetchOrderItems = () => {
 				subtotal,
 				status,
 				created_at,
-				User(user_role, user_name),
-                Item(item_title, VariantSnapshot(variant_snapshot_name)), 
-                Item_Image(item_image_url), 
-                Tag(tag_name), 
-                Category(category_name)
+				User(user_role, user_name, user_profile_img_url),
+                Item(item_title, item_sold_by, Item_Image(item_image_url), Tag(tag_name), Category(category_name)),
+				VariantSnapshot(variant_snapshot_name)          
                 `,
 			)
 			.eq("is_soft_deleted", false);
-
+		console.log("Data: ", data);
 		setLoading(false);
 
 		if (error) {
@@ -53,11 +51,15 @@ export const useFetchOrderItems = () => {
 					date_ordered: orderItem.created_at,
 					item_name: orderItem.Item.item_title,
 					item_variant_name:
-						orderItem.Item.VariantSnapshot.variant_snapshot_name,
+						orderItem.VariantSnapshot.variant_snapshot_name,
 					item_quantity: orderItem.quantity,
 					subtotal: orderItem.subtotal,
 					price_variant: orderItem.price_variant,
 					status: orderItem.status,
+					item_first_img_url:
+						orderItem.Item.Item_Image[0].item_image_url,
+					user_profile_img_url: orderItem.User.user_profile_img_url,
+					item_sold_by: orderItem.Item.item_sold_by,
 				}) as OrderTableRow,
 		);
 

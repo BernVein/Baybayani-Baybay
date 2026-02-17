@@ -1,131 +1,168 @@
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Avatar,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-  DropdownSection,
-  Chip,
+	Table,
+	TableHeader,
+	TableColumn,
+	TableBody,
+	TableRow,
+	TableCell,
+	Avatar,
+	Dropdown,
+	DropdownTrigger,
+	DropdownMenu,
+	DropdownItem,
+	Button,
+	DropdownSection,
+	Chip,
 } from "@heroui/react";
 
 import { MoreIconVertical } from "@/components/icons";
+import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 
-export function OrderTableDesktop() {
-  return (
-    <div className="hidden sm:flex flex-1 min-h-0 flex-col">
-      <Table isHeaderSticky className="overflow-y-auto h-full w-full">
-        <TableHeader>
-          <TableColumn>CUSTOMER</TableColumn>
-          <TableColumn>DATE</TableColumn>
-          <TableColumn>ITEM</TableColumn>
-          <TableColumn>QUANTITY</TableColumn>
-          <TableColumn>SUBTOTAL</TableColumn>
-          <TableColumn>STATUS</TableColumn>
-          <TableColumn>ACTIONS</TableColumn>
-        </TableHeader>
+export function OrderTableDesktop({ orders }: { orders: OrderTableRow[] }) {
+	return (
+		<div className="hidden sm:flex flex-1 min-h-0 flex-col">
+			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
+				<TableHeader>
+					<TableColumn>CUSTOMER</TableColumn>
+					<TableColumn>DATE</TableColumn>
+					<TableColumn>ITEM</TableColumn>
+					<TableColumn>QUANTITY</TableColumn>
+					<TableColumn>SUBTOTAL</TableColumn>
+					<TableColumn>STATUS</TableColumn>
+					<TableColumn>ACTIONS</TableColumn>
+				</TableHeader>
 
-        <TableBody emptyContent={"No orders found."}>
-          {Array.from({ length: 20 }).map((_, i) => (
-            <TableRow key={i + 1}>
-              <TableCell>
-                <div className="flex flex-row items-center gap-2">
-                  <Avatar size="md" />
-                  <div className="flex flex-col items-start">
-                    <span className="text-base font-bold">User {i + 1}</span>
-                    <span className="text-sm text-default-500 italic">
-                      Cooperative
-                    </span>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-col items-start">
-                  <span className="text-base font-bold">Jan 12, 2025</span>
-                  <span className="text-sm text-default-500">10:12 AM</span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-row gap-2 items-center">
-                  <Avatar />
-                  <div className="flex flex-col items-start">
-                    <span className="text-base font-bold">
-                      Item123123as{i + 1}
-                    </span>
-                    <span className="text-sm text-default-500 italic">
-                      Banana
-                    </span>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-col gap-2 items-start">
-                  <span className="text-base font-bold">5 kg</span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-col items-start">
-                  <span className="text-base font-bold">₱21,223.20</span>
-                  <span className="text-sm text-default-500 italic">
-                    Wholesale
-                  </span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <Chip color="success" variant="flat">
-                  Completed
-                </Chip>
-              </TableCell>
-              <TableCell>
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Button size="sm" variant="light">
-                      <MoreIconVertical className="w-5" />
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu aria-label="Static Actions">
-                    <DropdownSection title="Set Status">
-                      <DropdownItem key="pending">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-yellow-400" />
-                          <span>Pending</span>
-                        </div>
-                      </DropdownItem>
+				<TableBody emptyContent={"No orders found."}>
+					{orders.map((order) => (
+						<TableRow key={order.order_id}>
+							<TableCell>
+								<div className="flex flex-row items-center gap-2">
+									<Avatar
+										size="md"
+										src={order.user_profile_img_url}
+									/>
+									<div className="flex flex-col items-start">
+										<span className="text-base font-bold">
+											{order.user_name}
+										</span>
+										<span className="text-sm text-default-500 italic">
+											{order.user_role}
+										</span>
+									</div>
+								</div>
+							</TableCell>
+							<TableCell>
+								<div className="flex flex-col items-start">
+									<span className="text-base font-bold">
+										{new Date(
+											order.date_ordered,
+										).toLocaleDateString("en-US", {
+											month: "short",
+											day: "2-digit",
+											year: "numeric",
+										})}
+									</span>
+									<span className="text-sm text-default-500">
+										{new Date(
+											order.date_ordered,
+										).toLocaleTimeString("en-US", {
+											hour: "2-digit",
+											minute: "2-digit",
+											hour12: true,
+										})}
+									</span>
+								</div>
+							</TableCell>
+							<TableCell>
+								<div className="flex flex-row gap-2 items-center">
+									<Avatar />
+									<div className="flex flex-col items-start">
+										<span className="text-base font-bold">
+											{order.item_variant_name}
+										</span>
+										<span className="text-sm text-default-500 italic">
+											{order.item_name}
+										</span>
+									</div>
+								</div>
+							</TableCell>
+							<TableCell>
+								<div className="flex flex-col gap-2 items-start">
+									<span className="text-base font-bold">
+										{order.item_quantity}{" "}
+										{order.item_sold_by}
+									</span>
+								</div>
+							</TableCell>
+							<TableCell>
+								<div className="flex flex-col items-start">
+									<span className="text-base font-bold">
+										₱
+										{order.subtotal.toLocaleString(
+											"en-PH",
+											{
+												minimumFractionDigits: 2,
+												maximumFractionDigits: 2,
+											},
+										)}
+									</span>
 
-                      <DropdownItem key="ready">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-400" />
-                          <span>Ready</span>
-                        </div>
-                      </DropdownItem>
+									<span className="text-sm text-default-500 italic">
+										{order.price_variant}
+									</span>
+								</div>
+							</TableCell>
+							<TableCell>
+								<Chip color="success" variant="flat">
+									{order.status}
+								</Chip>
+							</TableCell>
+							<TableCell>
+								<Dropdown>
+									<DropdownTrigger>
+										<Button size="sm" variant="light">
+											<MoreIconVertical className="w-5" />
+										</Button>
+									</DropdownTrigger>
+									<DropdownMenu aria-label="Static Actions">
+										<DropdownSection title="Set Status">
+											<DropdownItem key="pending">
+												<div className="flex items-center gap-2">
+													<span className="w-2 h-2 rounded-full bg-yellow-400" />
+													<span>Pending</span>
+												</div>
+											</DropdownItem>
 
-                      <DropdownItem key="completed">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-green-400" />
-                          <span>Completed</span>
-                        </div>
-                      </DropdownItem>
+											<DropdownItem key="ready">
+												<div className="flex items-center gap-2">
+													<span className="w-2 h-2 rounded-full bg-blue-400" />
+													<span>Ready</span>
+												</div>
+											</DropdownItem>
 
-                      <DropdownItem key="cancel">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-red-300" />
-                          <span className="text-danger">Cancel</span>
-                        </div>
-                      </DropdownItem>
-                    </DropdownSection>
-                  </DropdownMenu>
-                </Dropdown>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
+											<DropdownItem key="completed">
+												<div className="flex items-center gap-2">
+													<span className="w-2 h-2 rounded-full bg-green-400" />
+													<span>Completed</span>
+												</div>
+											</DropdownItem>
+
+											<DropdownItem key="cancel">
+												<div className="flex items-center gap-2">
+													<span className="w-2 h-2 rounded-full bg-red-300" />
+													<span className="text-danger">
+														Cancel
+													</span>
+												</div>
+											</DropdownItem>
+										</DropdownSection>
+									</DropdownMenu>
+								</Dropdown>
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		</div>
+	);
 }
