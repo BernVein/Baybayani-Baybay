@@ -18,11 +18,11 @@ export const useFetchSingleItem = (item_id: string) => {
 			.from("Item")
 			.select(
 				`*, 
-		 Item_Image(item_image_url), 
-		 Variant(*), 
-		 Tag(tag_name), 
-		 Category(category_name)
-		`,
+				Item_Image(item_image_url), 
+				Variant(*), 
+				Tag(tag_name), 
+				Category(category_name)
+				`,
 			)
 			.eq("item_id", item_id)
 			.eq("is_soft_deleted", false)
