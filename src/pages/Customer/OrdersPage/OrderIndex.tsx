@@ -13,7 +13,7 @@ export default function OrderIndex() {
 		totalPages,
 		loading,
 		initialLoading,
-	} = useFetchOrderCards("cb20faec-72c0-4c22-b9d4-4c50bfb9e66f", page);
+	} = useFetchOrderCards("a1dfb44e-2079-4810-bc12-a5c901b72437", page);
 
 	useEffect(() => {
 		document.title = "Baybayani | Orders";

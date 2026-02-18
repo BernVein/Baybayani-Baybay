@@ -19,7 +19,7 @@ import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUs
 export function NavbarMobile() {
 	const [active, setActive] = useState("");
 	const navigate = useNavigate();
-	const userId = "cb20faec-72c0-4c22-b9d4-4c50bfb9e66f";
+	const userId = "a1dfb44e-2079-4810-bc12-a5c901b72437";
 	const { cartItems } = useRealtimeUserCart(userId);
 	const cartCount = cartItems.length;
 
