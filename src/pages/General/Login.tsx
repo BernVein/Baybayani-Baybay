@@ -6,11 +6,61 @@ import {
 	CardHeader,
 	Checkbox,
 	Button,
+	addToast,
 } from "@heroui/react";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { BaybayaniLogo } from "@/components/icons";
+import { useState } from "react";
+import { supabase } from "@/config/supabaseclient";
+import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 
 export default function Login() {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [loading, setLoading] = useState(false);
+	const [isVisible, setIsVisible] = useState(false);
+
+	const toggleVisibility = () => setIsVisible(!isVisible);
+
+	const validate = () => {
+		if (!email.trim() || !password.trim()) {
+			return false;
+		}
+		return true;
+	};
+
+	const handleLogin = async () => {
+		setLoading(true);
+
+		const { data, error } = await supabase.auth.signInWithPassword({
+			email: email + "@baybayani.baybay",
+			password,
+		});
+
+		if (error) {
+			addToast({
+				title: "Login Failed",
+				description: error.message,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+			setLoading(false);
+			return;
+		}
+		addToast({
+			title: "Success",
+			description: "Logged in successfully",
+			color: "success",
+			shouldShowTimeoutProgress: true,
+			timeout: 5000,
+		});
+		console.log("User:", data.user);
+		// navigate("/dashboard");
+
+		setLoading(false);
+	};
+
 	return (
 		<div className="relative min-h-screen flex">
 			{/* Top-left welcome heading */}
@@ -52,11 +102,33 @@ export default function Login() {
 							<p className="self-start text-sm text-default-500">
 								Username
 							</p>
-							<Input />
+							<Input
+								value={email}
+								onValueChange={setEmail}
+								placeholder="Enter your username"
+							/>
 							<p className="self-start text-sm text-default-500 mt-5">
 								Password
 							</p>
-							<Input />
+							<Input
+								value={password}
+								onValueChange={setPassword}
+								type={isVisible ? "text" : "password"}
+								placeholder="Enter your password"
+								endContent={
+									<button
+										aria-label="toggle password visibility"
+										className="focus:outline-solid outline-transparent"
+										onClick={toggleVisibility}
+									>
+										{isVisible ? (
+											<EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+										) : (
+											<EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+										)}
+									</button>
+								}
+							/>
 							<div className="flex justify-between items-center mt-5 w-full">
 								<div className="flex items-center gap-2">
 									<Checkbox
@@ -72,7 +144,14 @@ export default function Login() {
 									Forgot Password?
 								</p>
 							</div>
-							<Button fullWidth color="success" className="mt-5">
+							<Button
+								fullWidth
+								color="success"
+								className="mt-5"
+								onPress={handleLogin}
+								isLoading={loading}
+								isDisabled={!validate()}
+							>
 								Sign in
 							</Button>
 							<div className="flex flex-row gap-2 mt-5 items-center">
