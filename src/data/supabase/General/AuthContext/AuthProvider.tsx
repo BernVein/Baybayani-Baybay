@@ -14,17 +14,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
-
+			console.log(user);
 			if (user) {
 				setUser(user);
 
 				const { data: profile } = await supabase
-					.from("users")
-					.select("role")
-					.eq("id", user.id)
+					.from("User")
+					.select("user_role")
+					.eq("user_id", user.id)
 					.single();
 
-				setRole(profile?.role ?? null);
+				setRole(profile?.user_role ?? null);
 			}
 
 			setLoading(false);

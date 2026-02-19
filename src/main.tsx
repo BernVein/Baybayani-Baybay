@@ -6,14 +6,18 @@ import App from "./App.tsx";
 import { Provider } from "./provider.tsx";
 import "@/styles/globals.css";
 
+import { AuthProvider } from "@/data/supabase/General/AuthContext/AuthProvider";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Provider>
-        <main className="text-foreground bg-background">
-          <App />
-        </main>
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>,
+	<React.StrictMode>
+		<BrowserRouter>
+			<Provider>
+				<AuthProvider>
+					<main className="text-foreground bg-background">
+						<App />
+					</main>
+				</AuthProvider>
+			</Provider>
+		</BrowserRouter>
+	</React.StrictMode>,
 );

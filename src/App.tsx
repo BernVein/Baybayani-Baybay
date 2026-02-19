@@ -7,6 +7,8 @@ import { useLocation } from "react-router-dom";
 import CustomerLayout from "@/layouts/CustomerLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
+import RequireRole from "@/data/supabase/General/RequireRole";
+
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
 const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
 const Shop = lazy(() => import("@/pages/Customer/ShopPage/ShopIndex"));
@@ -47,8 +49,18 @@ function App() {
 			<ScrollToTop />
 			<Routes>
 				{/* CUSTOMER ROUTES */}
-				<Route element={<CustomerLayout />}>
-					<Route element={<Shop />} path="/" />
+				<Route
+					path="/"
+					element={
+						<RequireRole
+							allowedRoles={["Individual", "Cooperative"]}
+						>
+							<CustomerLayout />
+						</RequireRole>
+					}
+				>
+					<Route index element={<Shop />} />
+					<Route element={<Shop />} path="/shop" />
 					<Route element={<Cart />} path="/cart" />
 					<Route element={<Orders />} path="/orders" />
 					<Route element={<Profile />} path="/profile" />
@@ -59,7 +71,14 @@ function App() {
 				<Route element={<LoginPage />} path="/login" />
 
 				{/* ADMIN ROUTES */}
-				<Route element={<AdminLayout />} path="/admin">
+				<Route
+					path="/admin"
+					element={
+						<RequireRole allowedRoles={["Admin"]}>
+							<AdminLayout />
+						</RequireRole>
+					}
+				>
 					<Route element={<Dashboard />} path="dashboard" />
 					<Route element={<AdminOrders />} path="orders" />
 					<Route element={<AdminProducts />} path="products" />
