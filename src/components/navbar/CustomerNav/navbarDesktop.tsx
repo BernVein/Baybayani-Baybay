@@ -28,8 +28,12 @@ import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 
 export function Navbar({
+	user,
+	profile,
 	setSearchTerm,
 }: {
+	user: any | null;
+	profile: any | null;
 	setSearchTerm: (val: string) => void;
 }) {
 	const [active, setActive] = useState("");
@@ -37,8 +41,7 @@ export function Navbar({
 	const [showSuggestions, setShowSuggestions] = useState(true);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const userId = "a1dfb44e-2079-4810-bc12-a5c901b72437";
-	const { cartItems } = useRealtimeUserCart(userId);
+	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
 
 	const { items: fetchedItems, loading } = useFetchNavbarItems();
@@ -219,9 +222,9 @@ export function Navbar({
 							as="button"
 							className="transition-transform"
 							color="success"
-							name="Bern Vein Balermo"
+							name={profile?.user_name}
 							size="sm"
-							src="https://picsum.photos/300/300?random=45"
+							src={profile?.user_profile_img_url}
 						/>
 					</DropdownTrigger>
 					<DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -232,7 +235,7 @@ export function Navbar({
 						>
 							<p className="font-semibold">Signed in as</p>
 							<p className="font-semibold">
-								realbernvein@gmail.com
+								{user?.email.split("@")[0]}
 							</p>
 						</DropdownItem>
 						<DropdownItem key="theme">

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Variant } from "@/model/variant";
 import { CartIcon } from "@/components/icons";
 import { addToCart } from "@/data/supabase/Customer/Cart/addToCart";
+import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
 
 export default function Footer({
 	item_id,
@@ -21,10 +22,11 @@ export default function Footer({
 	onClose: () => void;
 }) {
 	const [isLoading, setIsLoading] = useState(false);
+	const { user } = useAuth();
 
 	async function addToCartHandler() {
 		setIsLoading(true);
-		const userId = "a1dfb44e-2079-4810-bc12-a5c901b72437";
+		const userId = user?.id;
 
 		if (!selectedItemVariant) {
 			addToast({

@@ -18,6 +18,7 @@ import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMul
 import { OrderCartItems } from "@/pages/Admin/OrdersComponent/AddOrderModalComponent/OrderCartItems";
 import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItem";
 import { addOrderItems } from "@/data/supabase/Customer/Orders/addOrderItems";
+import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
 
 export function AddOrderModal({
 	isOpenAddOrder,
@@ -30,6 +31,7 @@ export function AddOrderModal({
 	const [itemId, setItemId] = useState<string>("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
+	const { user } = useAuth();
 
 	useEffect(() => {
 		document.title = isOpenAddOrder
@@ -67,10 +69,7 @@ export function AddOrderModal({
 	const handleCheckout = async (onClose: () => void) => {
 		try {
 			setIsAddToCartLoading(true);
-			await addOrderItems(
-				"a1dfb44e-2079-4810-bc12-a5c901b72437",
-				cartItems,
-			);
+			await addOrderItems(user?.id ?? "", cartItems);
 
 			addToast({
 				title: "Order Placed",

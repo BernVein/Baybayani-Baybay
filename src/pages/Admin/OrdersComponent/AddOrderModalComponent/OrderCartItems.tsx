@@ -5,6 +5,7 @@ import { TrashIcon } from "@/components/icons";
 import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMultipleCartItems";
 import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
+import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
 
 export function OrderCartItems({
 	selectedCartItem,
@@ -14,9 +15,8 @@ export function OrderCartItems({
 	setSelectedCartItem: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
 	const [isDeleting, setIsDeleting] = useState(false);
-	const { items, loading, refetch } = useFetchCartItemsUI(
-		"a1dfb44e-2079-4810-bc12-a5c901b72437",
-	);
+	const { user } = useAuth();
+	const { items, loading, refetch } = useFetchCartItemsUI(user?.id ?? "");
 	const totalSubtotal = useMemo(
 		() =>
 			items

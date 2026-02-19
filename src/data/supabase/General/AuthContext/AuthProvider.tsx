@@ -6,6 +6,7 @@ const AuthContext = createContext<any>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const [user, setUser] = useState<any>(null);
+	const [profile, setProfile] = useState<any>(null);
 	const [role, setRole] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 
@@ -14,16 +15,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
-			console.log(user);
 			if (user) {
 				setUser(user);
 
 				const { data: profile } = await supabase
 					.from("User")
-					.select("user_role")
+					.select("user_name, user_profile_img_url, user_role")
 					.eq("user_id", user.id)
 					.single();
 
+				setProfile(profile);
 				setRole(profile?.user_role ?? null);
 			}
 
@@ -42,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ user, role, loading }}>
+		<AuthContext.Provider value={{ user, profile, role, loading }}>
 			{children}
 		</AuthContext.Provider>
 	);

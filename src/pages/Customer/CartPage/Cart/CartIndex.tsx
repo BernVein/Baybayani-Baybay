@@ -18,6 +18,7 @@ import CheckoutModalIndex from "@/pages/Customer/CartPage/CheckoutModal/Checkout
 import DeleteMultipleCartItemsModal from "@/pages/Customer/CartPage/DeleteCartItemModal/DeleteMultipleCartItemsModal";
 import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import { TrashIcon } from "@/components/icons";
+import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
 export default function Cart() {
 	const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
 	const {
@@ -33,8 +34,9 @@ export default function Cart() {
 	} = useDisclosure();
 
 	const isMobile = useIsMobile();
+	const { user } = useAuth();
 	const { items, loading, errorMsg, refetch } = useFetchCartItemsUI(
-		"a1dfb44e-2079-4810-bc12-a5c901b72437",
+		user?.id ?? "",
 	);
 
 	useEffect(() => {

@@ -27,6 +27,8 @@ const AdminMessages = lazy(() => import("@/pages/Admin/Messages"));
 
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 
+import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+
 function App() {
 	function ScrollToTop() {
 		const { pathname } = useLocation();
@@ -37,6 +39,7 @@ function App() {
 
 		return null;
 	}
+	const { user, profile } = useAuth();
 
 	return (
 		<Suspense
@@ -55,7 +58,7 @@ function App() {
 						<RequireRole
 							allowedRoles={["Individual", "Cooperative"]}
 						>
-							<CustomerLayout />
+							<CustomerLayout user={user} profile={profile} />
 						</RequireRole>
 					}
 				>

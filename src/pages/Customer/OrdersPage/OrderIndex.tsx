@@ -5,15 +5,17 @@ import OrderItem from "./OrderItem";
 
 import { BaybayaniLogo, CartIcon } from "@/components/icons";
 import { useFetchOrderCards } from "@/data/supabase/Customer/Orders/useFetchOrderItems";
+import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
 export default function OrderIndex() {
 	const [page, setPage] = useState(1);
+	const { user } = useAuth();
 	const {
 		data: orderItems,
 		error,
 		totalPages,
 		loading,
 		initialLoading,
-	} = useFetchOrderCards("a1dfb44e-2079-4810-bc12-a5c901b72437", page);
+	} = useFetchOrderCards(user?.id, page);
 
 	useEffect(() => {
 		document.title = "Baybayani | Orders";
