@@ -1,74 +1,74 @@
 import { useState, useEffect, useCallback } from "react";
-
 import { supabase } from "@/config/supabaseclient";
 import { CartItemUser } from "@/model/cartItemUser";
 
 export const useRealtimeUserCart = (userId: string | null) => {
-    const [cartItems, setCartItems] = useState<CartItemUser[]>([]);
-    const [loading, setLoading] = useState(false);
+	const [cartItems, setCartItems] = useState<CartItemUser[]>([]);
+	const [loading, setLoading] = useState(false);
 
-    const fetchCartItems = useCallback(async () => {
-        if (!userId) {
-            setCartItems([]);
+	const fetchCartItems = useCallback(async () => {
+		if (!userId) {
+			setCartItems([]);
+			setLoading(false);
+			return;
+		}
 
-            return;
-        }
+		setLoading(true);
 
-        setLoading(true);
+		const { data, error } = await supabase
+			.from("CartItemUser")
+			.select(
+				`
+        *,
+        parentCart:cart_id(user_id)
+      `,
+			)
+			.eq("parentCart.user_id", userId)
+			.eq("is_soft_deleted", false);
 
-        // Join Cart to filter by user_id
-        const { data, error } = await supabase
-            .from("CartItemUser")
-            .select(
-                `
-                *,
-                parentCart:cart_id(user_id)
-            `,
-            )
-            .eq("parentCart.user_id", userId)
-            .eq("is_soft_deleted", false);
+		if (!error) {
+			setCartItems(data ?? []);
+		} else {
+			setCartItems([]);
+		}
 
-        if (error) {
-            setCartItems([]);
-        } else {
-            setCartItems(data ?? []);
-        }
+		setLoading(false);
+	}, [userId]);
 
-        setLoading(false);
-    }, [userId]);
+	useEffect(() => {
+		fetchCartItems();
+	}, [fetchCartItems]);
 
-    useEffect(() => {
-        fetchCartItems();
-    }, [fetchCartItems]);
+	useEffect(() => {
+		if (!userId) return;
 
-    useEffect(() => {
-        if (!userId) return;
+		const channel = supabase
+			.channel(`cart-items-${userId}`)
+			.on(
+				"postgres_changes",
+				{
+					event: "*",
+					schema: "public",
+					table: "CartItemUser",
+				},
+				async () => {
+					// debounce-style protection to prevent rapid double fetch
+					await fetchCartItems();
+				},
+			)
+			.subscribe();
 
-        const channel = supabase
-            .channel(`cart-items-${userId}`)
-            .on(
-                "postgres_changes",
-                {
-                    event: "*",
-                    schema: "public",
-                    table: "CartItemUser",
-                },
-                () => fetchCartItems(),
-            )
-            .subscribe();
+		const handleManualUpdate = () => fetchCartItems();
+		window.addEventListener("baybayani:cart-updated", handleManualUpdate);
 
-        const handleManualUpdate = () => fetchCartItems();
+		return () => {
+			supabase.removeChannel(channel);
+			window.removeEventListener(
+				"baybayani:cart-updated",
+				handleManualUpdate,
+			);
+		};
+	}, [userId, fetchCartItems]);
 
-        window.addEventListener("baybayani:cart-updated", handleManualUpdate);
-
-        return () => {
-            supabase.removeChannel(channel);
-            window.removeEventListener(
-                "baybayani:cart-updated",
-                handleManualUpdate,
-            );
-        };
-    }, [userId, fetchCartItems]);
-
-    return { cartItems, loading, refetch: fetchCartItems };
+	return { cartItems, loading, refetch: fetchCartItems };
 };

@@ -19,20 +19,18 @@ export default function Login() {
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
+	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
 
-	const validate = () => {
-		if (!email.trim() || !password.trim()) {
-			return false;
-		}
-		return true;
+	const isValid = () => {
+		return email.trim() !== "" && password.trim() !== "";
 	};
 
 	const handleLogin = async () => {
 		setLoading(true);
 
-		const { data, error } = await supabase.auth.signInWithPassword({
+		const { error } = await supabase.auth.signInWithPassword({
 			email: email + "@baybayani.baybay",
 			password,
 		});
@@ -55,7 +53,6 @@ export default function Login() {
 			shouldShowTimeoutProgress: true,
 			timeout: 5000,
 		});
-		console.log("User:", data.user);
 		// navigate("/dashboard");
 
 		setLoading(false);
@@ -106,6 +103,8 @@ export default function Login() {
 								value={email}
 								onValueChange={setEmail}
 								placeholder="Enter your username"
+								isInvalid={isSubmitted && !email.trim()}
+								errorMessage="Please enter your username"
 							/>
 							<p className="self-start text-sm text-default-500 mt-5">
 								Password
@@ -115,6 +114,8 @@ export default function Login() {
 								onValueChange={setPassword}
 								type={isVisible ? "text" : "password"}
 								placeholder="Enter your password"
+								isInvalid={isSubmitted && !password.trim()}
+								errorMessage="Please enter your password"
 								endContent={
 									<button
 										aria-label="toggle password visibility"
@@ -148,9 +149,24 @@ export default function Login() {
 								fullWidth
 								color="success"
 								className="mt-5"
-								onPress={handleLogin}
+								onPress={() => {
+									setIsSubmitted(true);
+
+									if (isValid()) {
+										handleLogin();
+									} else {
+										addToast({
+											title: "Error",
+											description:
+												"Please enter valid login details",
+											color: "danger",
+											shouldShowTimeoutProgress: true,
+											timeout: 5000,
+										});
+										return;
+									}
+								}}
 								isLoading={loading}
-								isDisabled={!validate()}
 							>
 								Sign in
 							</Button>
