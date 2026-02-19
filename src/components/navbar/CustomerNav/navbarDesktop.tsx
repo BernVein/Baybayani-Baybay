@@ -13,6 +13,7 @@ import {
 	AutocompleteItem,
 	Badge,
 	Spinner,
+	Button,
 } from "@heroui/react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -26,6 +27,7 @@ import {
 import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
+import { useLoginModal } from "@/context/LoginModalContext";
 
 export function Navbar({
 	user,
@@ -45,6 +47,7 @@ export function Navbar({
 	const location = useLocation();
 	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
+	const { openLoginModal } = useLoginModal();
 
 	const { items: fetchedItems, loading } = useFetchNavbarItems();
 	const searchItems = fetchedItems.map((i, index) => ({
@@ -164,6 +167,10 @@ export function Navbar({
 						href="/messages"
 						onClick={(e) => {
 							e.preventDefault();
+							if (!user) {
+								openLoginModal();
+								return;
+							}
 							setActive("Messages");
 							navigate("/messages");
 						}}
@@ -193,6 +200,10 @@ export function Navbar({
 						href="/cart"
 						onClick={(e) => {
 							e.preventDefault();
+							if (!user) {
+								openLoginModal();
+								return;
+							}
 							setActive("Cart");
 							navigate("/cart");
 						}}
@@ -217,56 +228,72 @@ export function Navbar({
 					</Link>
 				</NavbarItem>
 
-				<Dropdown placement="bottom-end">
-					<DropdownTrigger>
-						<Avatar
-							isBordered
-							as="button"
-							className="transition-transform"
-							color="success"
-							name={profile?.user_name}
-							size="sm"
-							src={profile?.user_profile_img_url}
-						/>
-					</DropdownTrigger>
-					<DropdownMenu aria-label="Profile Actions" variant="flat">
-						<DropdownItem
-							key="profile"
-							className="h-14 gap-2"
-							onPress={() => navigate("/profile")}
+				{user ? (
+					<Dropdown placement="bottom-end">
+						<DropdownTrigger>
+							<Avatar
+								isBordered
+								as="button"
+								className="transition-transform"
+								color="success"
+								name={profile?.user_name}
+								size="sm"
+								src={profile?.user_profile_img_url}
+							/>
+						</DropdownTrigger>
+						<DropdownMenu
+							aria-label="Profile Actions"
+							variant="flat"
 						>
-							<p className="font-semibold">Signed in as</p>
-							<p className="font-semibold">
-								{user?.email.split("@")[0]}
-							</p>
-						</DropdownItem>
-						<DropdownItem key="theme">
-							<div className="flex flex-row w-full justify-between">
-								<span className="font-semibold">Dark mode</span>
-								<ThemeSwitcher />
-							</div>
-						</DropdownItem>
-						<DropdownItem
-							key="orders"
-							onPress={() => navigate("/orders")}
-						>
-							Orders
-						</DropdownItem>
-						<DropdownItem
-							key="settings"
-							onPress={() => navigate("/settings")}
-						>
-							Settings
-						</DropdownItem>
-						<DropdownItem
-							key="logout"
-							color="danger"
-							onPress={handleSignOut}
-						>
-							Log Out
-						</DropdownItem>
-					</DropdownMenu>
-				</Dropdown>
+							<DropdownItem
+								key="profile"
+								className="h-14 gap-2"
+								onPress={() => navigate("/profile")}
+							>
+								<p className="font-semibold">Signed in as</p>
+								<p className="font-semibold">
+									{user?.email.split("@")[0]}
+								</p>
+							</DropdownItem>
+							<DropdownItem key="theme">
+								<div className="flex flex-row w-full justify-between">
+									<span className="font-semibold">
+										Dark mode
+									</span>
+									<ThemeSwitcher />
+								</div>
+							</DropdownItem>
+							<DropdownItem
+								key="orders"
+								onPress={() => navigate("/orders")}
+							>
+								Orders
+							</DropdownItem>
+							<DropdownItem
+								key="settings"
+								onPress={() => navigate("/settings")}
+							>
+								Settings
+							</DropdownItem>
+							<DropdownItem
+								key="logout"
+								color="danger"
+								onPress={handleSignOut}
+							>
+								Log Out
+							</DropdownItem>
+						</DropdownMenu>
+					</Dropdown>
+				) : (
+					<Button
+						color="success"
+						variant="flat"
+						size="sm"
+						onPress={openLoginModal}
+					>
+						Log In
+					</Button>
+				)}
 			</NavbarContent>
 		</HeroNavBar>
 	);

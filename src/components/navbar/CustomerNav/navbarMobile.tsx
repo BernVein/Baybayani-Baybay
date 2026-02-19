@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { BaybayaniLogo, CartIcon, MessageIcon } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
+import { useLoginModal } from "@/context/LoginModalContext";
+import { SoloUserIcon } from "@/components/icons";
 
 export function NavbarMobile({
 	user,
@@ -30,6 +32,7 @@ export function NavbarMobile({
 	const navigate = useNavigate();
 	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
+	const { openLoginModal } = useLoginModal();
 
 	return (
 		<HeroNavBar
@@ -71,6 +74,10 @@ export function NavbarMobile({
 					href="/messages"
 					onClick={(e) => {
 						e.preventDefault();
+						if (!user) {
+							openLoginModal();
+							return;
+						}
 						setActive("Messages");
 						navigate("/messages");
 					}}
@@ -103,6 +110,10 @@ export function NavbarMobile({
 					href="/cart"
 					onClick={(e) => {
 						e.preventDefault();
+						if (!user) {
+							openLoginModal();
+							return;
+						}
 						setActive("Cart");
 						navigate("/cart");
 					}}
@@ -129,64 +140,81 @@ export function NavbarMobile({
 
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
 
-			{/* Profile */}
+			{/* Profile / Log In */}
 			<NavbarItem className="flex flex-col items-center">
-				<Dropdown placement="bottom-end">
-					<DropdownTrigger>
-						<div className="flex flex-col items-center cursor-pointer">
-							<div className="w-8 h-8 flex items-center justify-center">
-								<Avatar
-									isBordered
-									as="button"
-									color="success"
-									size="sm"
-									src={profile.user_profile_img_url}
-								/>
+				{user ? (
+					<Dropdown placement="bottom-end">
+						<DropdownTrigger>
+							<div className="flex flex-col items-center cursor-pointer">
+								<div className="w-8 h-8 flex items-center justify-center">
+									<Avatar
+										isBordered
+										as="button"
+										color="success"
+										size="sm"
+										src={profile?.user_profile_img_url}
+									/>
+								</div>
+								<span className="text-sm font-light mt-1">
+									Profile
+								</span>
 							</div>
-							<span className="text-sm font-light mt-1">
-								Profile
-							</span>
-						</div>
-					</DropdownTrigger>
+						</DropdownTrigger>
 
-					<DropdownMenu aria-label="Profile Actions" variant="flat">
-						<DropdownItem
-							key="profile"
-							className="h-14 gap-2"
-							onPress={() => navigate("/profile")}
+						<DropdownMenu
+							aria-label="Profile Actions"
+							variant="flat"
 						>
-							<p className="font-semibold">Signed in as</p>
-							<p className="font-semibold">
-								{user?.email.split("@")[0]}
-							</p>
-						</DropdownItem>
-						<DropdownItem key="theme">
-							<div className="flex flex-row w-full justify-between">
-								<span className="font-semibold">Dark mode</span>
-								<ThemeSwitcher />
-							</div>
-						</DropdownItem>
-						<DropdownItem
-							key="orders"
-							onPress={() => navigate("/orders")}
-						>
-							Orders
-						</DropdownItem>
-						<DropdownItem
-							key="settings"
-							onPress={() => navigate("/settings")}
-						>
-							Settings
-						</DropdownItem>
-						<DropdownItem
-							key="logout"
-							color="danger"
-							onPress={handleSignOut}
-						>
-							Log Out
-						</DropdownItem>
-					</DropdownMenu>
-				</Dropdown>
+							<DropdownItem
+								key="profile"
+								className="h-14 gap-2"
+								onPress={() => navigate("/profile")}
+							>
+								<p className="font-semibold">Signed in as</p>
+								<p className="font-semibold">
+									{user?.email.split("@")[0]}
+								</p>
+							</DropdownItem>
+							<DropdownItem key="theme">
+								<div className="flex flex-row w-full justify-between">
+									<span className="font-semibold">
+										Dark mode
+									</span>
+									<ThemeSwitcher />
+								</div>
+							</DropdownItem>
+							<DropdownItem
+								key="orders"
+								onPress={() => navigate("/orders")}
+							>
+								Orders
+							</DropdownItem>
+							<DropdownItem
+								key="settings"
+								onPress={() => navigate("/settings")}
+							>
+								Settings
+							</DropdownItem>
+							<DropdownItem
+								key="logout"
+								color="danger"
+								onPress={handleSignOut}
+							>
+								Log Out
+							</DropdownItem>
+						</DropdownMenu>
+					</Dropdown>
+				) : (
+					<div
+						className="flex flex-col items-center cursor-pointer"
+						onClick={openLoginModal}
+					>
+						<div className="w-8 h-8 flex items-center justify-center">
+							<SoloUserIcon className="w-6 h-6" />
+						</div>
+						<span className="text-sm font-light mt-1">Log In</span>
+					</div>
+				)}
 			</NavbarItem>
 		</HeroNavBar>
 	);

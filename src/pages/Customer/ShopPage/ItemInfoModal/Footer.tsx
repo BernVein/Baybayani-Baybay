@@ -5,6 +5,7 @@ import { Variant } from "@/model/variant";
 import { CartIcon } from "@/components/icons";
 import { addToCart } from "@/data/supabase/Customer/Cart/addToCart";
 import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useLoginModal } from "@/context/LoginModalContext";
 
 export default function Footer({
 	item_id,
@@ -23,10 +24,14 @@ export default function Footer({
 }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { user } = useAuth();
+	const { openLoginModal } = useLoginModal();
 
 	async function addToCartHandler() {
+		if (!user) {
+			openLoginModal();
+			return;
+		}
 		setIsLoading(true);
-		const userId = user?.id;
 
 		if (!selectedItemVariant) {
 			addToast({
@@ -53,7 +58,7 @@ export default function Footer({
 			return;
 		}
 		const result = await addToCart(
-			userId,
+			user.id,
 			item_id,
 			item_sold_by,
 			selectedItemVariant,

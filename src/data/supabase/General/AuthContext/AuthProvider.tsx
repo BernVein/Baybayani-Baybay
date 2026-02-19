@@ -26,6 +26,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 				setProfile(profile);
 				setRole(profile?.user_role ?? null);
+			} else {
+				setUser(null);
+				setProfile(null);
+				setRole(null);
 			}
 
 			setLoading(false);

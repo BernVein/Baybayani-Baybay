@@ -9,6 +9,9 @@ import CustomerLayout from "@/layouts/CustomerLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
 import RequireRole from "@/data/supabase/General/RequireRole";
+import RequireAuth from "@/data/supabase/General/RequireAuth";
+import { LoginModalProvider } from "@/context/LoginModalContext";
+import LoginModal from "@/components/modals/LoginModal";
 
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
 const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
@@ -66,58 +69,92 @@ function App() {
 	const { user, profile } = useAuth();
 
 	return (
-		<Suspense
-			fallback={
-				<div className="p-5 md:p-10 flex flex-col gap-4 md:w-3/4 mx-auto">
-					<Skeleton className="h-6 w-1/3 rounded" />
-				</div>
-			}
-		>
-			<ScrollToTop />
-			<Routes>
-				{/* CUSTOMER ROUTES */}
-				<Route
-					path="/"
-					element={
-						<RequireRole
-							allowedRoles={["Individual", "Cooperative"]}
-						>
+		<LoginModalProvider>
+			<LoginModal />
+			<Suspense
+				fallback={
+					<div className="p-5 md:p-10 flex flex-col gap-4 md:w-3/4 mx-auto">
+						<Skeleton className="h-6 w-1/3 rounded" />
+					</div>
+				}
+			>
+				<ScrollToTop />
+				<Routes>
+					{/* CUSTOMER ROUTES */}
+					<Route
+						path="/"
+						element={
 							<CustomerLayout
 								user={user}
 								profile={profile}
 								handleSignOut={handleSignOut}
 							/>
-						</RequireRole>
-					}
-				>
-					<Route index element={<Shop />} />
-					<Route element={<Shop />} path="/shop" />
-					<Route element={<Cart />} path="/cart" />
-					<Route element={<Orders />} path="/orders" />
-					<Route element={<Profile />} path="/profile" />
-					<Route element={<Settings />} path="/settings" />
-					<Route element={<Message />} path="/messages" />
-				</Route>
+						}
+					>
+						<Route index element={<Shop />} />
+						<Route element={<Shop />} path="/shop" />
+						<Route
+							element={
+								<RequireAuth>
+									<Cart />
+								</RequireAuth>
+							}
+							path="/cart"
+						/>
+						<Route
+							element={
+								<RequireAuth>
+									<Orders />
+								</RequireAuth>
+							}
+							path="/orders"
+						/>
+						<Route
+							element={
+								<RequireAuth>
+									<Profile />
+								</RequireAuth>
+							}
+							path="/profile"
+						/>
+						<Route
+							element={
+								<RequireAuth>
+									<Settings />
+								</RequireAuth>
+							}
+							path="/settings"
+						/>
+						<Route
+							element={
+								<RequireAuth>
+									<Message />
+								</RequireAuth>
+							}
+							path="/messages"
+						/>
+					</Route>
 
-				<Route element={<LoginPage />} path="/login" />
+					<Route element={<LoginPage />} path="/login" />
 
-				{/* ADMIN ROUTES */}
-				<Route
-					path="/admin"
-					element={
-						<RequireRole allowedRoles={["Admin"]}>
-							<AdminLayout />
-						</RequireRole>
-					}
-				>
-					<Route element={<Dashboard />} path="dashboard" />
-					<Route element={<AdminOrders />} path="orders" />
-					<Route element={<AdminProducts />} path="products" />
-					<Route element={<AdminUsers />} path="users" />
-					<Route element={<AdminMessages />} path="messages" />
-				</Route>
-			</Routes>
-		</Suspense>
+					{/* ADMIN ROUTES */}
+					<Route
+						path="/admin"
+						element={
+							<RequireRole allowedRoles={["Admin"]}>
+								<AdminLayout />
+							</RequireRole>
+						}
+					>
+						<Route element={<Dashboard />} path="dashboard" />
+						<Route element={<AdminOrders />} path="orders" />
+						<Route element={<AdminProducts />} path="products" />
+						<Route element={<AdminUsers />} path="users" />
+						<Route element={<AdminMessages />} path="messages" />
+					</Route>
+				</Routes>
+			</Suspense>
+		</LoginModalProvider>
 	);
 }
 
