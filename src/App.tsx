@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { Skeleton } from "@heroui/react";
+import { addToast, Skeleton } from "@heroui/react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
+import { supabase } from "@/config/supabaseclient";
+import { useNavigate } from "react-router-dom";
 import CustomerLayout from "@/layouts/CustomerLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
@@ -30,6 +31,29 @@ const LoginPage = lazy(() => import("@/pages/General/Login"));
 import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
 
 function App() {
+	const navigate = useNavigate();
+
+	const handleSignOut = async () => {
+		try {
+			await supabase.auth.signOut();
+			navigate("/shop");
+			addToast({
+				title: "Sign out",
+				description: "You have been signed out successfully",
+				color: "success",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		} catch (error) {
+			addToast({
+				title: "Error",
+				description: error as string,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		}
+	};
 	function ScrollToTop() {
 		const { pathname } = useLocation();
 
@@ -58,7 +82,11 @@ function App() {
 						<RequireRole
 							allowedRoles={["Individual", "Cooperative"]}
 						>
-							<CustomerLayout user={user} profile={profile} />
+							<CustomerLayout
+								user={user}
+								profile={profile}
+								handleSignOut={handleSignOut}
+							/>
 						</RequireRole>
 					}
 				>

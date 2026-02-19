@@ -20,9 +20,11 @@ import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUs
 export function NavbarMobile({
 	user,
 	profile,
+	handleSignOut,
 }: {
 	user: any | null;
 	profile: any | null;
+	handleSignOut: () => Promise<void>;
 }) {
 	const [active, setActive] = useState("");
 	const navigate = useNavigate();
@@ -179,7 +181,7 @@ export function NavbarMobile({
 						<DropdownItem
 							key="logout"
 							color="danger"
-							onPress={() => navigate("/logout")}
+							onPress={handleSignOut}
 						>
 							Log Out
 						</DropdownItem>

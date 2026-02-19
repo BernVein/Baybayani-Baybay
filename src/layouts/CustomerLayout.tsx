@@ -7,9 +7,11 @@ import { NavbarMobile } from "@/components/navbar/CustomerNav/navbarMobile";
 export default function CustomerLayout({
 	user,
 	profile,
+	handleSignOut,
 }: {
 	user: any | null;
 	profile: any | null;
+	handleSignOut: () => Promise<void>;
 }) {
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);
 	const topNavRef = useRef<HTMLDivElement>(null);
@@ -46,6 +48,7 @@ export default function CustomerLayout({
 					user={user}
 					profile={profile}
 					setSearchTerm={setSearchTerm}
+					handleSignOut={handleSignOut}
 				/>
 			</div>
 
@@ -64,7 +67,11 @@ export default function CustomerLayout({
 				ref={bottomNavRef}
 				className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
 			>
-				<NavbarMobile user={user} profile={profile} />
+				<NavbarMobile
+					user={user}
+					profile={profile}
+					handleSignOut={handleSignOut}
+				/>
 			</div>
 		</div>
 	);

@@ -13,8 +13,11 @@ import { BaybayaniLogo } from "@/components/icons";
 import { useState } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+	const navigate = useNavigate();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -53,7 +56,7 @@ export default function Login() {
 			shouldShowTimeoutProgress: true,
 			timeout: 5000,
 		});
-		// navigate("/dashboard");
+		navigate("/shop");
 
 		setLoading(false);
 	};

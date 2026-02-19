@@ -31,10 +31,12 @@ export function Navbar({
 	user,
 	profile,
 	setSearchTerm,
+	handleSignOut,
 }: {
 	user: any | null;
 	profile: any | null;
 	setSearchTerm: (val: string) => void;
+	handleSignOut: () => Promise<void>;
 }) {
 	const [active, setActive] = useState("");
 	const [searchValue, setSearchValue] = useState("");
@@ -259,7 +261,7 @@ export function Navbar({
 						<DropdownItem
 							key="logout"
 							color="danger"
-							onPress={() => navigate("/logout")}
+							onPress={handleSignOut}
 						>
 							Log Out
 						</DropdownItem>
