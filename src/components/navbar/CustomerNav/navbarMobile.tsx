@@ -172,7 +172,7 @@ export function NavbarMobile({
 							>
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">
-									{user?.email.split("@")[0]}
+									{profile?.user_name}
 								</p>
 							</DropdownItem>
 							<DropdownItem key="theme">
