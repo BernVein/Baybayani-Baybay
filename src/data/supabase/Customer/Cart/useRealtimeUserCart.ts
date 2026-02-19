@@ -20,7 +20,7 @@ export const useRealtimeUserCart = (userId: string | null) => {
 			.select(
 				`
         *,
-        parentCart:cart_id(user_id)
+        parentCart:cart_id!inner(user_id)
       `,
 			)
 			.eq("parentCart.user_id", userId)
