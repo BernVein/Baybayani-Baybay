@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
-import { useLoginModal } from "@/context/LoginModalContext";
+import { useLoginModal } from "@/data/supabase/General/AuthContext/LoginModalContext";
 
 export default function LoginModal() {
 	const { isLoginModalOpen, closeLoginModal } = useLoginModal();
@@ -72,6 +72,7 @@ export default function LoginModal() {
 
 	return (
 		<Modal
+			disableAnimation
 			isOpen={isLoginModalOpen}
 			onOpenChange={(open) => {
 				if (!open) {

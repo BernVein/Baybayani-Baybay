@@ -5,7 +5,7 @@ import { Variant } from "@/model/variant";
 import { CartIcon } from "@/components/icons";
 import { addToCart } from "@/data/supabase/Customer/Cart/addToCart";
 import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
-import { useLoginModal } from "@/context/LoginModalContext";
+import { useLoginModal } from "@/data/supabase/General/AuthContext/LoginModalContext";
 
 export default function Footer({
 	item_id,

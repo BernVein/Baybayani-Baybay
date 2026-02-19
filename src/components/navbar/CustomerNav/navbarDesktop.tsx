@@ -27,7 +27,7 @@ import {
 import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
-import { useLoginModal } from "@/context/LoginModalContext";
+import { useLoginModal } from "@/data/supabase/General/AuthContext/LoginModalContext";
 
 export function Navbar({
 	user,
@@ -288,7 +288,6 @@ export function Navbar({
 					<Button
 						color="success"
 						variant="flat"
-						size="sm"
 						onPress={openLoginModal}
 					>
 						Log In

@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { BaybayaniLogo, CartIcon, MessageIcon } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
-import { useLoginModal } from "@/context/LoginModalContext";
+import { useLoginModal } from "@/data/supabase/General/AuthContext/LoginModalContext";
 import { SoloUserIcon } from "@/components/icons";
 
 export function NavbarMobile({

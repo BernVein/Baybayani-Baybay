@@ -10,8 +10,8 @@ import AdminLayout from "@/layouts/AdminLayout";
 
 import RequireRole from "@/data/supabase/General/RequireRole";
 import RequireAuth from "@/data/supabase/General/RequireAuth";
-import { LoginModalProvider } from "@/context/LoginModalContext";
-import LoginModal from "@/components/modals/LoginModal";
+import { LoginModalProvider } from "@/data/supabase/General/AuthContext/LoginModalContext";
+import LoginModal from "@/pages/General/LoginModal";
 
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
 const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
