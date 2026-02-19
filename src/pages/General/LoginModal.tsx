@@ -80,7 +80,6 @@ export default function LoginModal() {
 					closeLoginModal();
 				}
 			}}
-			placement="center"
 			size="md"
 		>
 			<ModalContent>
