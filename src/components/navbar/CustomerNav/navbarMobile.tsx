@@ -146,14 +146,13 @@ export function NavbarMobile() {
 							key="profile"
 							className="h-14 gap-2"
 							onPress={() => navigate("/profile")}
-							shouldCloseOnSelect={true}
 						>
 							<p className="font-semibold">Signed in as</p>
 							<p className="font-semibold">
 								realbernvein@gmail.com
 							</p>
 						</DropdownItem>
-						<DropdownItem key="theme" shouldCloseOnSelect={false}>
+						<DropdownItem key="theme">
 							<div className="flex flex-row w-full justify-between">
 								<span className="font-semibold">Dark mode</span>
 								<ThemeSwitcher />
@@ -162,14 +161,12 @@ export function NavbarMobile() {
 						<DropdownItem
 							key="orders"
 							onPress={() => navigate("/orders")}
-							shouldCloseOnSelect={true}
 						>
 							Orders
 						</DropdownItem>
 						<DropdownItem
 							key="settings"
 							onPress={() => navigate("/settings")}
-							shouldCloseOnSelect={true}
 						>
 							Settings
 						</DropdownItem>
@@ -177,7 +174,6 @@ export function NavbarMobile() {
 							key="logout"
 							color="danger"
 							onPress={() => navigate("/logout")}
-							shouldCloseOnSelect={true}
 						>
 							Log Out
 						</DropdownItem>
