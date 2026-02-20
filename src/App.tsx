@@ -10,6 +10,7 @@ import AdminLayout from "@/layouts/AdminLayout";
 
 import RequireRole from "@/ContextProvider/AuthContext/RequireRole";
 import RequireAuth from "@/ContextProvider/AuthContext/RequireAuth";
+import RedirectAdmin from "@/ContextProvider/AuthContext/RedirectAdmin";
 import { LoginModalProvider } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import LoginModal from "@/pages/General/LoginModal";
 
@@ -84,11 +85,13 @@ function App() {
 					<Route
 						path="/"
 						element={
-							<CustomerLayout
-								user={user}
-								profile={profile}
-								handleSignOut={handleSignOut}
-							/>
+							<RedirectAdmin>
+								<CustomerLayout
+									user={user}
+									profile={profile}
+									handleSignOut={handleSignOut}
+								/>
+							</RedirectAdmin>
 						}
 					>
 						<Route index element={<Shop />} />

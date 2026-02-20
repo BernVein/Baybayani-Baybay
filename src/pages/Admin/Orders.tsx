@@ -8,6 +8,7 @@ import {
 	Input,
 } from "@heroui/react";
 import { useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { CartIcon, SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
@@ -17,6 +18,7 @@ import { OrderTable } from "./OrdersComponent/OrderTable";
 
 export default function Orders() {
 	const isMobile = useIsMobile();
+	const { profile } = useOutletContext<any>();
 	const {
 		isOpen: isOpenAddOrder,
 		onOpen: onOpenAddOrder,
@@ -42,7 +44,7 @@ export default function Orders() {
 							Logged in as{" "}
 						</div>
 						<div className="text-lg font-semibold">
-							Admin Bern Vein
+							{profile?.user_name ?? "Admin"}
 						</div>
 					</div>
 				</div>

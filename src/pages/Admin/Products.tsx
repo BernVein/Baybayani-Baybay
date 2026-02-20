@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
 import { ProductIcon } from "@/components/icons";
 import { ProductSummary } from "@/pages/Admin/ProductsComponent/ProductSummary";
@@ -7,6 +8,7 @@ import { ProductTable } from "@/pages/Admin/ProductsComponent/ProductTable";
 import { useFetchProductsUI } from "@/data/supabase/Admin/Products/useFetchProductsUI";
 
 export default function Products() {
+	const { profile } = useOutletContext<any>();
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
@@ -26,7 +28,9 @@ export default function Products() {
 					<div className="text-base text-default-500">
 						Logged in as{" "}
 					</div>
-					<div className="text-lg font-semibold">Admin Bern Vein</div>
+					<div className="text-lg font-semibold">
+						{profile?.user_name ?? "Admin"}
+					</div>
 				</div>
 			</div>
 			<div className="hidden sm:block shrink-0">
