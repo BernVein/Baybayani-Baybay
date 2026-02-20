@@ -7,68 +7,25 @@ import {
 	Input,
 	Checkbox,
 	Button,
-	addToast,
 } from "@heroui/react";
-import { useState } from "react";
-import { supabase } from "@/config/supabaseclient";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
+import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
 
 export default function LoginModal() {
 	const { isLoginModalOpen, closeLoginModal } = useLoginModal();
-
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [loading, setLoading] = useState(false);
-	const [isVisible, setIsVisible] = useState(false);
-	const [isSubmitted, setIsSubmitted] = useState(false);
-
-	const toggleVisibility = () => setIsVisible(!isVisible);
-
-	const isValid = () => {
-		return email.trim() !== "" && password.trim() !== "";
-	};
-
-	const resetForm = () => {
-		setEmail("");
-		setPassword("");
-		setIsSubmitted(false);
-		setIsVisible(false);
-		setLoading(false);
-	};
-
-	const handleLogin = async () => {
-		setLoading(true);
-
-		const { error } = await supabase.auth.signInWithPassword({
-			email: email + "@baybayani.baybay",
-			password,
-		});
-
-		if (error) {
-			addToast({
-				title: "Login Failed",
-				description: error.message,
-				color: "danger",
-				shouldShowTimeoutProgress: true,
-				timeout: 5000,
-			});
-			setLoading(false);
-			return;
-		}
-
-		addToast({
-			title: "Success",
-			description: "Logged in successfully",
-			color: "success",
-			shouldShowTimeoutProgress: true,
-			timeout: 5000,
-		});
-
-		setLoading(false);
-		resetForm();
-		closeLoginModal();
-	};
+	const {
+		email,
+		setEmail,
+		password,
+		setPassword,
+		loading,
+		isVisible,
+		isSubmitted,
+		toggleVisibility,
+		resetForm,
+		submitLogin,
+	} = useLogin();
 
 	return (
 		<Modal
@@ -148,23 +105,12 @@ export default function LoginModal() {
 							<Button
 								fullWidth
 								color="success"
-								onPress={() => {
-									setIsSubmitted(true);
-
-									if (isValid()) {
-										handleLogin();
-									} else {
-										addToast({
-											title: "Error",
-											description:
-												"Please enter valid login details",
-											color: "danger",
-											shouldShowTimeoutProgress: true,
-											timeout: 5000,
-										});
-										return;
-									}
-								}}
+								onPress={() =>
+									submitLogin(() => {
+										resetForm();
+										closeLoginModal();
+									})
+								}
 								isLoading={loading}
 							>
 								Sign in

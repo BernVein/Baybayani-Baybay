@@ -6,60 +6,24 @@ import {
 	CardHeader,
 	Checkbox,
 	Button,
-	addToast,
 } from "@heroui/react";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { BaybayaniLogo } from "@/components/icons";
-import { useState } from "react";
-import { supabase } from "@/config/supabaseclient";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
-import { useNavigate } from "react-router-dom";
+import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
 
 export default function Login() {
-	const navigate = useNavigate();
-
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [loading, setLoading] = useState(false);
-	const [isVisible, setIsVisible] = useState(false);
-	const [isSubmitted, setIsSubmitted] = useState(false);
-
-	const toggleVisibility = () => setIsVisible(!isVisible);
-
-	const isValid = () => {
-		return email.trim() !== "" && password.trim() !== "";
-	};
-
-	const handleLogin = async () => {
-		setLoading(true);
-
-		const { error } = await supabase.auth.signInWithPassword({
-			email: email + "@baybayani.baybay",
-			password,
-		});
-
-		if (error) {
-			addToast({
-				title: "Login Failed",
-				description: error.message,
-				color: "danger",
-				shouldShowTimeoutProgress: true,
-				timeout: 5000,
-			});
-			setLoading(false);
-			return;
-		}
-		addToast({
-			title: "Success",
-			description: "Logged in successfully",
-			color: "success",
-			shouldShowTimeoutProgress: true,
-			timeout: 5000,
-		});
-		navigate("/shop");
-
-		setLoading(false);
-	};
+	const {
+		email,
+		setEmail,
+		password,
+		setPassword,
+		loading,
+		isVisible,
+		isSubmitted,
+		toggleVisibility,
+		submitLogin,
+	} = useLogin();
 
 	return (
 		<div className="relative min-h-screen flex">
@@ -152,23 +116,7 @@ export default function Login() {
 								fullWidth
 								color="success"
 								className="mt-5"
-								onPress={() => {
-									setIsSubmitted(true);
-
-									if (isValid()) {
-										handleLogin();
-									} else {
-										addToast({
-											title: "Error",
-											description:
-												"Please enter valid login details",
-											color: "danger",
-											shouldShowTimeoutProgress: true,
-											timeout: 5000,
-										});
-										return;
-									}
-								}}
+								onPress={() => submitLogin()}
 								isLoading={loading}
 							>
 								Sign in

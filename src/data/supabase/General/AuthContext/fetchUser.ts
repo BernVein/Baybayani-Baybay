@@ -9,6 +9,7 @@ export function fetchUser() {
 
 	useEffect(() => {
 		const fetchUser = async () => {
+			setLoading(true);
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
@@ -22,7 +23,6 @@ export function fetchUser() {
 					)
 					.eq("user_id", user.id)
 					.single();
-
 				setProfile(profile);
 				setRole(profile?.user_role ?? null);
 			} else {
