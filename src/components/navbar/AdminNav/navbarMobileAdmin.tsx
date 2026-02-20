@@ -108,21 +108,21 @@ export function NavbarMobileAdmin() {
 						<DropdownSection title="Manage">
 							<DropdownItem
 								key="products"
-								href="/admin/products"
+								onPress={() => navigate("/admin/products")}
 								startContent={<ProductIcon className="w-5" />}
 							>
 								Products
 							</DropdownItem>
 							<DropdownItem
 								key="users"
-								href="/admin/users"
+								onPress={() => navigate("/admin/users")}
 								startContent={<UserIcon className="w-5" />}
 							>
 								Users
 							</DropdownItem>
 							<DropdownItem
 								key="messages"
-								href="/admin/messages"
+								onPress={() => navigate("/admin/messages")}
 								startContent={<MessageIcon className="w-5" />}
 							>
 								Messages
