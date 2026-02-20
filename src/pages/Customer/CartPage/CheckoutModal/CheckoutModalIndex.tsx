@@ -14,7 +14,7 @@ import { AddToCart } from "@/components/icons";
 import { addOrderItems } from "@/data/supabase/Customer/Orders/addOrderItems";
 import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItem";
 import { OrderSuccessfulModal } from "@/pages/Customer/CartPage/CheckoutModal/OrderSuccessfulModal";
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
 export default function CheckoutModalIndex({
 	checkoutModalIsOpen,

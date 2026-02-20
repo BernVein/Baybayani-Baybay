@@ -18,7 +18,7 @@ import CheckoutModalIndex from "@/pages/Customer/CartPage/CheckoutModal/Checkout
 import DeleteMultipleCartItemsModal from "@/pages/Customer/CartPage/DeleteCartItemModal/DeleteMultipleCartItemsModal";
 import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import { TrashIcon } from "@/components/icons";
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 export default function Cart() {
 	const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
 	const {

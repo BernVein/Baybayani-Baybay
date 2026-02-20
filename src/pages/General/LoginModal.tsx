@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
-import { useLoginModal } from "@/data/supabase/General/AuthContext/LoginModalContext";
+import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 
 export default function LoginModal() {
 	const { isLoginModalOpen, closeLoginModal } = useLoginModal();

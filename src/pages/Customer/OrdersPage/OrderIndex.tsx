@@ -5,7 +5,7 @@ import OrderItem from "./OrderItem";
 
 import { BaybayaniLogo, CartIcon } from "@/components/icons";
 import { useFetchOrderCards } from "@/data/supabase/Customer/Orders/useFetchOrderItems";
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 export default function OrderIndex() {
 	const [page, setPage] = useState(1);
 	const { user } = useAuth();

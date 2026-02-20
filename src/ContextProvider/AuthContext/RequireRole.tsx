@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { ReactNode } from "react";
 export default function RequireRole({
 	children,

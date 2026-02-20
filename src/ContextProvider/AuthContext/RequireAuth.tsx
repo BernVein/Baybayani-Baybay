@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
-import { useLoginModal } from "@/data/supabase/General/AuthContext/LoginModalContext";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { ReactNode, useEffect } from "react";
 
 export default function RequireAuth({ children }: { children: ReactNode }) {

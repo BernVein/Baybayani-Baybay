@@ -27,7 +27,7 @@ import {
 import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
-import { useLoginModal } from "@/data/supabase/General/AuthContext/LoginModalContext";
+import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 
 export function Navbar({
 	user,

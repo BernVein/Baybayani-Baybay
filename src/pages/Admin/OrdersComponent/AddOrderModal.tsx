@@ -18,7 +18,7 @@ import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMul
 import { OrderCartItems } from "@/pages/Admin/OrdersComponent/AddOrderModalComponent/OrderCartItems";
 import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItem";
 import { addOrderItems } from "@/data/supabase/Customer/Orders/addOrderItems";
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
 export function AddOrderModal({
 	isOpenAddOrder,

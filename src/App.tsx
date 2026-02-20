@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 import CustomerLayout from "@/layouts/CustomerLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
-import RequireRole from "@/data/supabase/General/RequireRole";
-import RequireAuth from "@/data/supabase/General/RequireAuth";
-import { LoginModalProvider } from "@/data/supabase/General/AuthContext/LoginModalContext";
+import RequireRole from "@/ContextProvider/AuthContext/RequireRole";
+import RequireAuth from "@/ContextProvider/AuthContext/RequireAuth";
+import { LoginModalProvider } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import LoginModal from "@/pages/General/LoginModal";
 
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
@@ -31,7 +31,7 @@ const AdminMessages = lazy(() => import("@/pages/Admin/Messages"));
 
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
 function App() {
 	const navigate = useNavigate();

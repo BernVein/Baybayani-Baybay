@@ -5,7 +5,7 @@ import { TrashIcon } from "@/components/icons";
 import { deleteMultipleCartItems } from "@/data/supabase/Customer/Cart/deleteMultipleCartItems";
 import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import CartItem from "@/pages/Customer/CartPage/Cart/CartItem";
-import { useAuth } from "@/data/supabase/General/AuthContext/AuthProvider";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
 export function OrderCartItems({
 	selectedCartItem,
