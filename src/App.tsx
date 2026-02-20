@@ -11,6 +11,7 @@ import AdminLayout from "@/layouts/AdminLayout";
 import RequireRole from "@/ContextProvider/AuthContext/RequireRole";
 import RequireAuth from "@/ContextProvider/AuthContext/RequireAuth";
 import RedirectAdmin from "@/ContextProvider/AuthContext/RedirectAdmin";
+import RequireGuest from "@/ContextProvider/AuthContext/RequireGuest";
 import { LoginModalProvider } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import LoginModal from "@/pages/General/LoginModal";
 
@@ -138,7 +139,14 @@ function App() {
 						/>
 					</Route>
 
-					<Route element={<LoginPage />} path="/login" />
+					<Route
+						element={
+							<RequireGuest>
+								<LoginPage />
+							</RequireGuest>
+						}
+						path="/login"
+					/>
 
 					{/* ADMIN ROUTES */}
 					<Route
