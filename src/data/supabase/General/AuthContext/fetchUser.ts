@@ -17,7 +17,9 @@ export function fetchUser() {
 
 				const { data: profile } = await supabase
 					.from("User")
-					.select("user_name, user_profile_img_url, user_role")
+					.select(
+						"user_name, user_profile_img_url, user_role, user_theme",
+					)
 					.eq("user_id", user.id)
 					.single();
 
