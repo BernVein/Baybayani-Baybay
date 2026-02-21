@@ -2,12 +2,15 @@ import { Navigate } from "react-router-dom";
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { ReactNode } from "react";
+
+type Role = "Admin" | "Individual" | "Cooperative";
+
 export default function RequireRole({
 	children,
 	allowedRoles,
 }: {
 	children: ReactNode;
-	allowedRoles: string[];
+	allowedRoles: Role[];
 }) {
 	const { role, loading } = useAuth();
 
