@@ -8,3 +8,11 @@ export interface Cart {
   created_at: string;
   updated_at: string;
 }
+
+export interface User{
+  user_id: string;
+  user_name: string:
+  user_theme: "light" | "dark"
+  user_email: string;
+  user_role: "Individual" | "Cooperative" | "Admin";
+}
