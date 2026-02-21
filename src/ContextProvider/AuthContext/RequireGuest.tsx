@@ -65,6 +65,7 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 				onClose={handleGoBack}
 				isDismissable={false}
 				hideCloseButton
+				disableAnimation
 			>
 				<ModalContent>
 					<ModalHeader className="flex flex-col gap-1">
