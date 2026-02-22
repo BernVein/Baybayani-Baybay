@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "123405079857",
+    "project_id": "baybayani-80d4b",
+    "storage_bucket": "baybayani-80d4b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123405079857:android:964b8a4a0be7677b808c10",
+        "android_client_info": {
+          "package_name": "com.baybayani.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv94L9ga5RZIBvTacggRI6uB9cXKHwocM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

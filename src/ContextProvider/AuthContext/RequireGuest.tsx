@@ -58,7 +58,6 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 
 	return (
 		<>
-			{/* Login page visible behind the modal backdrop */}
 			{children}
 			<Modal
 				isOpen={isOpen}

@@ -34,8 +34,64 @@ const AdminMessages = lazy(() => import("@/pages/Admin/Messages"));
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { Capacitor } from "@capacitor/core";
+import { PushNotifications } from "@capacitor/push-notifications";
 
 function App() {
+	useEffect(() => {
+		if (Capacitor.getPlatform() !== "android") return;
+
+		const setupPush = async () => {
+			const permission = await PushNotifications.requestPermissions();
+
+			if (permission.receive !== "granted") {
+				alert("Push permission not granted");
+				return;
+			}
+
+			await PushNotifications.register();
+
+			// Show the token directly on your phone
+			PushNotifications.addListener("registration", (token) => {
+				alert("🔥 FCM TOKEN: " + token.value);
+				console.log("🔥 FCM TOKEN:", token.value);
+			});
+
+			PushNotifications.addListener("registrationError", (err) => {
+				alert("Registration error: " + JSON.stringify(err));
+				console.error("Registration error:", err);
+			});
+
+			// Show a popup when a push arrives in the foreground
+			PushNotifications.addListener(
+				"pushNotificationReceived",
+				(notification) => {
+					alert(
+						"Push received: " +
+							notification.title +
+							"\n" +
+							notification.body,
+					);
+					console.log("Push received:", notification);
+				},
+			);
+
+			// Handle notification tap (app in background/killed)
+			PushNotifications.addListener(
+				"pushNotificationActionPerformed",
+				(notification) => {
+					console.log("Notification tapped:", notification);
+				},
+			);
+		};
+
+		setupPush();
+
+		// Cleanup listeners to prevent duplicates on re-render
+		return () => {
+			PushNotifications.removeAllListeners();
+		};
+	}, []);
 	const navigate = useNavigate();
 
 	const handleSignOut = async () => {
