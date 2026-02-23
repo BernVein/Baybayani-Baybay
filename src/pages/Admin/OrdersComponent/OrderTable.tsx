@@ -15,10 +15,12 @@ import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 export function OrderTable({
 	orders,
+	setOrders,
 	loading,
 	refetch,
 }: {
 	orders: OrderTableRow[] | null;
+	setOrders: React.Dispatch<React.SetStateAction<OrderTableRow[] | null>>;
 	loading: boolean;
 	refetch: () => Promise<void>;
 }) {
@@ -45,7 +47,14 @@ export function OrderTable({
 				severity: "success",
 				color: "success",
 			});
-			refetch();
+			setOrders((prev) => {
+				if (!prev) return prev;
+				return prev.map((order) =>
+					order.order_id === orderId
+						? { ...order, status: changeToStatus }
+						: order,
+				);
+			});
 		} catch (err: any) {
 			addToast({
 				title: "Update Failed",

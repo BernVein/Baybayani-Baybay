@@ -73,6 +73,7 @@ export const useFetchOrderItems = () => {
 
 	return {
 		orderItems,
+		setOrderItems,
 		loading,
 		fetchError,
 		refetch: fetchItem,
