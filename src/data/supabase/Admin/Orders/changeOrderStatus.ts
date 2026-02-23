@@ -11,7 +11,7 @@ export async function changeOrderStatus(
 			.update({
 				status: orderStatus,
 			})
-			.eq("order_id", orderId);
+			.eq("order_item_user_id", orderId);
 
 		if (error) throw error;
 

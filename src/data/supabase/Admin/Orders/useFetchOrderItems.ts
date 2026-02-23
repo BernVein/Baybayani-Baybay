@@ -26,7 +26,8 @@ export const useFetchOrderItems = () => {
 				VariantSnapshot(variant_snapshot_name)          
                 `,
 			)
-			.eq("is_soft_deleted", false);
+			.eq("is_soft_deleted", false)
+			.order("created_at", { ascending: false });
 		console.log("Data: ", data);
 		setLoading(false);
 

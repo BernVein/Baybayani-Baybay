@@ -8,8 +8,8 @@ export function fetchUser() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const fetchUser = async () => {
-			setLoading(true);
+		const fetchUser = async (isInitial = false) => {
+			if (isInitial) setLoading(true);
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
@@ -34,10 +34,10 @@ export function fetchUser() {
 			setLoading(false);
 		};
 
-		fetchUser();
+		fetchUser(true);
 
 		const { data: listener } = supabase.auth.onAuthStateChange(() => {
-			fetchUser();
+			fetchUser(false);
 		});
 
 		return () => {

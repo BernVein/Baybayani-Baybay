@@ -45,6 +45,7 @@ export function OrderTable({
 				severity: "success",
 				color: "success",
 			});
+			refetch();
 		} catch (err: any) {
 			addToast({
 				title: "Update Failed",
