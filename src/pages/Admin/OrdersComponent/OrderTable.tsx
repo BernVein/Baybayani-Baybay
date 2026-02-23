@@ -6,16 +6,13 @@ import {
 	TableRow,
 	TableCell,
 	Skeleton,
+	addToast,
 } from "@heroui/react";
 
 import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableMobile";
 import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableDesktop";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
-// import { useState } from "react";
-// import { useDisclosure, addToast } from "@heroui/react";
-// import { softDeleteItem } from "@/data/supabase/Admin/Products/softDeleteItem";
-// import { SoftDeleteConfirmationModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/SoftDeleteConfirmationModal";
-
+import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 export function OrderTable({
 	orders,
 	loading,
@@ -26,42 +23,39 @@ export function OrderTable({
 	refetch: () => Promise<void>;
 }) {
 	console.log(refetch);
-	// const {
-	// 	isOpen: isOpenDeleteConfirm,
-	// 	onOpen: onOpenDeleteConfirm,
-	// 	onOpenChange: onOpenChangeDeleteConfirm,
-	// } = useDisclosure();
-	// const [selectedDeleteItem, setSelectedDeleteItem] = useState<{
-	// 	id: string;
-	// 	name: string;
-	// } | null>(null);
-	// const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
-	// const onConfirmDeleteItem = async () => {
-	// 	if (!selectedDeleteItem?.id) return;
-	// 	setIsDeleteLoading(true);
-	// 	const result = await softDeleteItem(selectedDeleteItem.id);
-	// 	if (result.success) {
-	// 		addToast({
-	// 			title: "Success",
-	// 			description: "Item deleted successfully.",
-	// 			timeout: 3000,
-	// 			color: "success",
-	// 			shouldShowTimeoutProgress: true,
-	// 		});
-	// 		refetch();
-	// 		onOpenChangeDeleteConfirm();
-	// 	} else {
-	// 		addToast({
-	// 			title: "Error",
-	// 			description: result.error || "Failed to delete item.",
-	// 			timeout: 3000,
-	// 			color: "danger",
-	// 			shouldShowTimeoutProgress: true,
-	// 		});
-	// 	}
-	// 	setIsDeleteLoading(false);
-	// };
+	const handleOrder = async (
+		orderId: string,
+		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+	) => {
+		console.log(currentStatus);
+		try {
+			const { error } = await changeOrderStatus(orderId, changeToStatus);
+
+			if (error) {
+				throw error;
+			}
+
+			addToast({
+				title: `Order updated to ${changeToStatus}`,
+				description: "The order status has been successfully updated.",
+				timeout: 4000,
+				shouldShowTimeoutProgress: true,
+				severity: "success",
+				color: "success",
+			});
+		} catch (err: any) {
+			addToast({
+				title: "Update Failed",
+				description: err?.message || "Failed to update order status",
+				timeout: 5000,
+				shouldShowTimeoutProgress: true,
+				severity: "danger",
+				color: "danger",
+			});
+		}
+	};
 
 	if (loading) {
 		return (
@@ -166,18 +160,11 @@ export function OrderTable({
 
 	return (
 		<div className="h-full flex flex-col">
-			<OrderTableMobile orders={orders || []} />
-			<OrderTableDesktop orders={orders || []} />
-			{/* 
-			<SoftDeleteConfirmationModal
-				isLoading={isDeleteLoading}
-				isOpen={isOpenDeleteConfirm}
-				name={selectedDeleteItem?.name || "this item"}
-				title="Delete Item"
-				type="Item"
-				onConfirm={onConfirmDeleteItem}
-				onOpenChange={onOpenChangeDeleteConfirm}
-			/> */}
+			<OrderTableMobile orders={orders || []} handleOrder={handleOrder} />
+			<OrderTableDesktop
+				orders={orders || []}
+				handleOrder={handleOrder}
+			/>
 		</div>
 	);
 }

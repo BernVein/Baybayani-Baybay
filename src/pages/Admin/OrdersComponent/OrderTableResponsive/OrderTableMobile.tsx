@@ -16,7 +16,17 @@ import {
 import { MoreIconVertical } from "@/components/icons";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 
-export function OrderTableMobile({ orders }: { orders: OrderTableRow[] }) {
+export function OrderTableMobile({
+	orders,
+	handleOrder,
+}: {
+	orders: OrderTableRow[];
+	handleOrder: (
+		orderId: string,
+		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+	) => Promise<void>;
+}) {
 	return (
 		<div className="sm:hidden flex-1 min-h-0 flex flex-col">
 			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
@@ -106,28 +116,63 @@ export function OrderTableMobile({ orders }: { orders: OrderTableRow[] }) {
 											title="Set Status"
 											showDivider
 										>
-											<DropdownItem key="pending">
+											<DropdownItem
+												key="pending"
+												onPress={() =>
+													handleOrder(
+														order.order_id,
+														"Pending",
+														order.status,
+													)
+												}
+											>
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-yellow-400" />
 													<span>Pending</span>
 												</div>
 											</DropdownItem>
 
-											<DropdownItem key="ready">
+											<DropdownItem
+												key="ready"
+												onPress={() =>
+													handleOrder(
+														order.order_id,
+														"Ready",
+														order.status,
+													)
+												}
+											>
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-blue-400" />
 													<span>Ready</span>
 												</div>
 											</DropdownItem>
-
-											<DropdownItem key="completed">
+											<DropdownItem
+												key="completed"
+												onPress={() =>
+													handleOrder(
+														order.order_id,
+														"Completed",
+														order.status,
+													)
+												}
+											>
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-green-400" />
 													<span>Completed</span>
 												</div>
 											</DropdownItem>
 
-											<DropdownItem key="cancel">
+											<DropdownItem
+												key="cancel"
+												onPress={() =>
+													handleOrder(
+														order.order_id,
+														"Cancel",
+														order.status,
+													)
+												}
+											>
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-red-300" />
 													<span className="text-danger">
