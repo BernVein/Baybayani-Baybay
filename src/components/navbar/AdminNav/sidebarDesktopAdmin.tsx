@@ -12,9 +12,11 @@ import {
 	DropdownTrigger,
 	DropdownMenu,
 	DropdownItem,
+	addToast,
 } from "@heroui/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { supabase } from "@/config/supabaseclient";
 
 import { BaybayaniLogo } from "@/components/icons";
 import {
@@ -39,6 +41,21 @@ export function SidebarDesktopAdmin() {
 		"/admin/products": "products",
 		"/admin/users": "users",
 		"/admin/messages": "messages",
+	};
+
+	const handleLogOut = async () => {
+		try {
+			await supabase.auth.signOut();
+			navigate("/shop");
+		} catch (error) {
+			addToast({
+				title: "Error",
+				description: error as string,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		}
 	};
 	const selectedKey = pathToKey[location.pathname];
 
@@ -164,6 +181,7 @@ export function SidebarDesktopAdmin() {
 							className=""
 							color="danger"
 							startContent={<LogoutIcon className="size-6" />}
+							onPress={handleLogOut}
 						>
 							Log Out
 						</ListboxItem>

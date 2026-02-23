@@ -10,6 +10,7 @@ import {
 	Avatar,
 	Badge,
 	Divider,
+	addToast,
 } from "@heroui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,9 +24,33 @@ import {
 	UserIcon,
 } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
+import { supabase } from "@/config/supabaseclient";
+
 export function NavbarMobileAdmin() {
 	const [active, setActive] = useState("");
 	const navigate = useNavigate();
+
+	const handleLogOut = async () => {
+		try {
+			await supabase.auth.signOut();
+			navigate("/shop");
+			addToast({
+				title: "Sign out",
+				description: "You have been signed out successfully",
+				color: "success",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		} catch (error) {
+			addToast({
+				title: "Error",
+				description: error as string,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		}
+	};
 
 	return (
 		<HeroNavBar
@@ -186,7 +211,7 @@ export function NavbarMobileAdmin() {
 						<DropdownItem
 							key="logout"
 							color="danger"
-							onPress={() => navigate("/logout")}
+							onPress={handleLogOut}
 						>
 							Log Out
 						</DropdownItem>
