@@ -57,38 +57,35 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	};
 
 	return (
-		<>
-			{children}
-			<Modal
-				isOpen={isOpen}
-				onClose={handleGoBack}
-				isDismissable={false}
-				hideCloseButton
-				disableAnimation
-			>
-				<ModalContent>
-					<ModalHeader className="flex flex-col gap-1">
-						Already signed in
-					</ModalHeader>
-					<ModalBody>
-						<p className="text-default-600 text-sm">
-							You are currently signed in as{" "}
-							<span className="font-semibold text-foreground">
-								{profile.user_name}
-							</span>
-							. Would you like to log out first?
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button variant="light" onPress={handleGoBack}>
-							Go back
-						</Button>
-						<Button color="danger" onPress={handleLogOut}>
-							Log out
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</>
+		<Modal
+			isOpen={isOpen}
+			onClose={handleGoBack}
+			isDismissable={false}
+			hideCloseButton
+			disableAnimation
+		>
+			<ModalContent>
+				<ModalHeader className="flex flex-col gap-1">
+					Already signed in
+				</ModalHeader>
+				<ModalBody>
+					<p className="text-default-600 text-sm">
+						You are currently signed in as{" "}
+						<span className="font-semibold text-foreground">
+							{profile.user_name}
+						</span>
+						. Would you like to log out first?
+					</p>
+				</ModalBody>
+				<ModalFooter>
+					<Button variant="light" onPress={handleGoBack}>
+						Go back
+					</Button>
+					<Button color="danger" onPress={handleLogOut}>
+						Log out
+					</Button>
+				</ModalFooter>
+			</ModalContent>
+		</Modal>
 	);
 }
