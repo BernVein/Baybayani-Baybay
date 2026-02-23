@@ -12,7 +12,7 @@ export default function Products() {
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-	const { items, allItems, loading, refetch } = useFetchProductsUI(
+	const { items, allItems, setAllItems, loading } = useFetchProductsUI(
 		searchQuery,
 		selectedCategories,
 	);
@@ -49,7 +49,7 @@ export default function Products() {
 				<ProductTable
 					items={items}
 					loading={loading}
-					refetch={refetch}
+					setAllItems={setAllItems}
 				/>
 			</div>
 		</div>

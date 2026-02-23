@@ -150,6 +150,7 @@ export const useFetchProductsUI = (
 	return {
 		items,
 		allItems,
+		setAllItems,
 		loading,
 		error,
 		refetch: fetchItems,

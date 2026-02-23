@@ -19,11 +19,11 @@ import { SoftDeleteConfirmationModal } from "@/pages/Admin/ProductsComponent/Add
 export function ProductTable({
 	items,
 	loading,
-	refetch,
+	setAllItems,
 }: {
 	items: ItemTableRow[];
 	loading: boolean;
-	refetch: () => Promise<void>;
+	setAllItems: React.Dispatch<React.SetStateAction<ItemTableRow[]>>;
 }) {
 	const {
 		isOpen: isOpenDeleteConfirm,
@@ -48,7 +48,9 @@ export function ProductTable({
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
-			refetch();
+			setAllItems((prev) =>
+				prev.filter((item) => item.item_id !== selectedDeleteItem.id),
+			);
 			onOpenChangeDeleteConfirm();
 		} else {
 			addToast({
