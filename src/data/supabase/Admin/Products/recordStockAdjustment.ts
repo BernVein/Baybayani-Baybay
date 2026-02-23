@@ -18,6 +18,7 @@ export async function recordStockAdjustment(
 				stock_change_date: movement.stock_change_date,
 				stock_loss_reason: movement.stock_loss_reason,
 				effective_stocks: movement.effective_stocks,
+				sale_amount: movement.sale_amount,
 				is_soft_deleted: false,
 			})
 			.select()

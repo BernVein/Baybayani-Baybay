@@ -8,6 +8,7 @@ export interface StockMovement {
 	effective_stocks?: number;
 	stock_change_date?: string;
 	stock_loss_reason?: string;
+	sale_amount?: number;
 	last_updated?: string; // timestamptz
 	is_soft_deleted?: boolean;
 	created_at?: string; // timestamptz

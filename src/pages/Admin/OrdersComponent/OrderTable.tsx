@@ -11,7 +11,11 @@ import {
 import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableMobile";
 import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableDesktop";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
+import { fetchLatestStock } from "@/data/supabase/Admin/Products/fetchLatestStock";
+import { recordStockAdjustment } from "@/data/supabase/Admin/Products/recordStockAdjustment";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
+import { StockMovement } from "@/model/stockMovement";
+
 export function OrderTable({
 	orders,
 	setOrders,
@@ -26,12 +30,50 @@ export function OrderTable({
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancel",
 	) => {
-		console.log(currentStatus);
 		try {
 			const { error } = await changeOrderStatus(orderId, changeToStatus);
 
 			if (error) {
 				throw error;
+			}
+
+			const order = orders?.find((o) => o.order_id === orderId);
+
+			if (order) {
+				// Deduct stock when completed
+				if (
+					changeToStatus === "Completed" &&
+					currentStatus !== "Completed"
+				) {
+					const { effectiveStocks } = await fetchLatestStock(
+						order.item_variant_id,
+					);
+					await recordStockAdjustment(order.item_variant_id, {
+						stock_change_count: order.item_quantity,
+						stock_adjustment_type: "Sale",
+						stock_change_date: new Date().toISOString(),
+						effective_stocks:
+							(effectiveStocks ?? 0) - order.item_quantity,
+						sale_amount: order.subtotal,
+						stock_loss_reason: "Sale",
+					} as StockMovement);
+				}
+				// Restore stock when moving away from completed
+				else if (
+					changeToStatus !== "Completed" &&
+					currentStatus === "Completed"
+				) {
+					const { effectiveStocks } = await fetchLatestStock(
+						order.item_variant_id,
+					);
+					await recordStockAdjustment(order.item_variant_id, {
+						stock_change_count: order.item_quantity,
+						stock_adjustment_type: "From Cancel",
+						stock_change_date: new Date().toISOString(),
+						effective_stocks:
+							(effectiveStocks ?? 0) + order.item_quantity,
+					});
+				}
 			}
 
 			addToast({

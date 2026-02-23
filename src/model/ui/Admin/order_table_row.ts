@@ -5,6 +5,7 @@ export interface OrderTableRow {
 	date_ordered: string;
 	item_name: string;
 	item_variant_name: string;
+	item_variant_id: string;
 	item_quantity: number;
 	subtotal: number;
 	price_variant: string;

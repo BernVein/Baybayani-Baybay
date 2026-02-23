@@ -23,7 +23,7 @@ export const useFetchOrderItems = () => {
 				created_at,
 				User(user_role, user_name, user_profile_img_url),
                 Item(item_title, item_sold_by, Item_Image(item_image_url), Tag(tag_name), Category(category_name)),
-				VariantSnapshot(variant_snapshot_name)          
+				VariantSnapshot(variant_snapshot_name, variant_snapshot_id, variant_copy_snapshot_id)          
                 `,
 			)
 			.eq("is_soft_deleted", false)
@@ -61,6 +61,8 @@ export const useFetchOrderItems = () => {
 						orderItem.Item.Item_Image[0].item_image_url,
 					user_profile_img_url: orderItem.User.user_profile_img_url,
 					item_sold_by: orderItem.Item.item_sold_by,
+					item_variant_id:
+						orderItem.VariantSnapshot.variant_copy_snapshot_id,
 				}) as OrderTableRow,
 		);
 

@@ -12,10 +12,8 @@ import {
 	Button,
 	DropdownSection,
 } from "@heroui/react";
-
 import { MoreIconVertical } from "@/components/icons";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
-
 export function OrderTableMobile({
 	orders,
 	handleOrder,
