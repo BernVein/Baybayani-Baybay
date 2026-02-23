@@ -29,8 +29,7 @@ export default function Orders() {
 		document.title = "Baybayani | Admin | Orders";
 	}, []);
 
-	const { orderItems, setOrderItems, loading, refetch } =
-		useFetchOrderItems();
+	const { orderItems, setOrderItems, loading } = useFetchOrderItems();
 	return (
 		<>
 			<div className="flex flex-col gap-8 p-4 h-full">
@@ -122,7 +121,6 @@ export default function Orders() {
 						orders={orderItems}
 						setOrders={setOrderItems}
 						loading={loading}
-						refetch={refetch}
 					/>
 				</div>
 			</div>

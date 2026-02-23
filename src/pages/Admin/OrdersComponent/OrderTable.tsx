@@ -8,7 +8,6 @@ import {
 	Skeleton,
 	addToast,
 } from "@heroui/react";
-
 import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableMobile";
 import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableDesktop";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
@@ -17,15 +16,11 @@ export function OrderTable({
 	orders,
 	setOrders,
 	loading,
-	refetch,
 }: {
 	orders: OrderTableRow[] | null;
 	setOrders: React.Dispatch<React.SetStateAction<OrderTableRow[] | null>>;
 	loading: boolean;
-	refetch: () => Promise<void>;
 }) {
-	console.log(refetch);
-
 	const handleOrder = async (
 		orderId: string,
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",
