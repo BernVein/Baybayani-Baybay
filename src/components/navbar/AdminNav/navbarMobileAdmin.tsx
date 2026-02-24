@@ -34,13 +34,6 @@ export function NavbarMobileAdmin() {
 		try {
 			await supabase.auth.signOut();
 			navigate("/shop");
-			addToast({
-				title: "Sign out",
-				description: "You have been signed out successfully",
-				color: "success",
-				shouldShowTimeoutProgress: true,
-				timeout: 5000,
-			});
 		} catch (error) {
 			addToast({
 				title: "Error",

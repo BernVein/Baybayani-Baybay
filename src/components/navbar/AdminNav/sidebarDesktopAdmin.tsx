@@ -47,6 +47,13 @@ export function SidebarDesktopAdmin() {
 		try {
 			await supabase.auth.signOut();
 			navigate("/shop");
+			addToast({
+				title: "Signed out",
+				description: "You have been signed out successfully",
+				color: "success",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
 		} catch (error) {
 			addToast({
 				title: "Error",
