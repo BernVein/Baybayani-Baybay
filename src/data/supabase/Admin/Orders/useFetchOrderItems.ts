@@ -36,7 +36,20 @@ export const useFetchOrderItems = (
 		}
 
 		if (searchQuery && searchQuery.trim() !== "") {
-			query = query.eq("order_item_user_id", searchQuery);
+			const trimmedSearch = searchQuery.trim();
+			// UUID regex to check if it's a valid order_item_user_id
+			const uuidRegex =
+				/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+			if (uuidRegex.test(trimmedSearch)) {
+				// Search by ID only if it's a valid UUID
+				query = query.eq("order_item_user_id", trimmedSearch);
+			} else {
+				// Search by User Name (requires ilike on joined User table)
+				// Note: .or() filter for joining tables can be tricky,
+				// but since we want to search user_name when not a UUID:
+				query = query.ilike("User.user_name", `%${trimmedSearch}%`);
+			}
 		}
 
 		const { data, error } = await query.order("created_at", {
@@ -47,12 +60,13 @@ export const useFetchOrderItems = (
 
 		if (error) {
 			setFetchError(error.message || "Failed to fetch item.");
+			setOrderItems([]); // Clear stale data on error
 
 			return;
 		}
 
-		if (!data) {
-			setOrderItems(null);
+		if (!data || data.length === 0) {
+			setOrderItems([]);
 
 			return;
 		}
@@ -61,22 +75,25 @@ export const useFetchOrderItems = (
 			(orderItem: any) =>
 				({
 					order_id: orderItem.order_item_user_id,
-					user_name: orderItem.User.user_name,
-					user_role: orderItem.User.user_role,
+					user_name: orderItem.User?.user_name ?? "Unknown User",
+					user_role: orderItem.User?.user_role ?? "Guest",
 					date_ordered: orderItem.created_at,
-					item_name: orderItem.Item.item_title,
+					item_name: orderItem.Item?.item_title ?? "Unknown Item",
 					item_variant_name:
-						orderItem.VariantSnapshot.variant_snapshot_name,
+						orderItem.VariantSnapshot?.variant_snapshot_name ??
+						"Default Variant",
 					item_quantity: orderItem.quantity,
 					subtotal: orderItem.subtotal,
 					price_variant: orderItem.price_variant,
 					status: orderItem.status,
 					item_first_img_url:
-						orderItem.Item.Item_Image[0].item_image_url,
-					user_profile_img_url: orderItem.User.user_profile_img_url,
-					item_sold_by: orderItem.Item.item_sold_by,
+						orderItem.Item?.Item_Image?.[0]?.item_image_url ?? "",
+					user_profile_img_url:
+						orderItem.User?.user_profile_img_url ?? "",
+					item_sold_by: orderItem.Item?.item_sold_by ?? "Unknown",
 					item_variant_id:
-						orderItem.VariantSnapshot.variant_copy_snapshot_id,
+						orderItem.VariantSnapshot?.variant_copy_snapshot_id ??
+						"",
 				}) as OrderTableRow,
 		);
 
