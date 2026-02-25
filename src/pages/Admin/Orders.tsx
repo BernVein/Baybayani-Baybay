@@ -80,8 +80,20 @@ export default function Orders() {
 									startContent={
 										<FilterIcon className="w-5" />
 									}
+									color={
+										selectedCategories instanceof Set
+											? selectedCategories.size > 0
+												? "success"
+												: "default"
+											: "default"
+									}
 								>
-									{isMobile ? "" : "Filter Status"}
+									{isMobile ? "" : "Filter Status"}{" "}
+									{selectedCategories instanceof Set
+										? selectedCategories.size > 0
+											? `(${selectedCategories.size})`
+											: ""
+										: ""}
 								</Button>
 							</DropdownTrigger>
 							<DropdownMenu
