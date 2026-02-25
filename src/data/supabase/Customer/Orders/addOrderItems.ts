@@ -9,18 +9,19 @@ export async function addOrderItems(
 
 	const generateRandomId = () => {
 		const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+		const timePart = Date.now().toString(36);
+
 		const array = new Uint8Array(10);
-
-		// Fills the array with cryptographically strong random bytes
 		window.crypto.getRandomValues(array);
+		const randomPart = Array.from(
+			array,
+			(b) => chars[b % chars.length],
+		).join("");
 
-		// Map the random bytes to our character set
-		const result = Array.from(array, (byte) => chars[byte % chars.length]);
-
-		// Insert dashes at the 3rd and 6th indices (xxx-xxx-xxxx)
-		return `${result.slice(0, 3).join("")}-${result.slice(3, 6).join("")}-${result.slice(6, 10).join("")}`;
+		const combined = (timePart + randomPart).padEnd(10, "0").slice(0, 10);
+		return `${combined.slice(0, 3)}-${combined.slice(3, 6)}-${combined.slice(6, 10)}`;
 	};
-
 	const orderItems = cart_items.map((cartItemUser: CartItemUser) => ({
 		status: "Pending",
 		item_id: cartItemUser.item.item_id,
