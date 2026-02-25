@@ -15,13 +15,25 @@ import { recordStockAdjustment } from "@/data/supabase/Admin/Products/recordStoc
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 import { StockMovement } from "@/model/stockMovement";
 import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
+import type { Selection } from "@heroui/react";
+import { useMemo } from "react";
 
-export function OrderTable() {
+export function OrderTable({
+	selectedCategories,
+}: {
+	selectedCategories: Selection;
+}) {
+	const selectedCategoryArray = useMemo(() => {
+		return selectedCategories === "all"
+			? []
+			: Array.from(selectedCategories).map((key) => String(key));
+	}, [selectedCategories]);
+
 	const {
 		orderItems: orders,
 		setOrderItems: setOrders,
 		loading,
-	} = useFetchOrderItems();
+	} = useFetchOrderItems(selectedCategoryArray);
 
 	const handleOrder = async (
 		orderId: string,

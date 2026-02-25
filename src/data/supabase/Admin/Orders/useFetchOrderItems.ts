@@ -30,7 +30,7 @@ export const useFetchOrderItems = (categories?: string[]) => {
 			.order("created_at", { ascending: false });
 
 		if (categories && categories.length > 0) {
-			query = query.in("Item.Category.category_name", categories);
+			query = query.in("status", categories);
 		}
 
 		const { data, error } = await query.order("created_at", {
@@ -75,7 +75,7 @@ export const useFetchOrderItems = (categories?: string[]) => {
 		);
 
 		setOrderItems(orderItems);
-	}, []);
+	}, [categories]);
 
 	useEffect(() => {
 		fetchItem();

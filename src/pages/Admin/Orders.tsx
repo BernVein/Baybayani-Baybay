@@ -14,10 +14,16 @@ import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import useIsMobile from "@/lib/isMobile";
 import { AddOrderModal } from "@/pages/Admin/OrdersComponent/AddOrderModal";
 import { OrderTable } from "./OrdersComponent/OrderTable";
+import { useState } from "react";
+import type { Selection } from "@heroui/react";
 
 export default function Orders() {
 	const isMobile = useIsMobile();
 	const { profile } = useOutletContext<any>();
+	const [selectedCategories, setSelectedCategories] = useState<Selection>(
+		new Set([]),
+	);
+
 	const {
 		isOpen: isOpenAddOrder,
 		onOpen: onOpenAddOrder,
@@ -79,28 +85,30 @@ export default function Orders() {
 								</Button>
 							</DropdownTrigger>
 							<DropdownMenu
+								selectedKeys={selectedCategories}
+								onSelectionChange={setSelectedCategories}
 								closeOnSelect={false}
 								selectionMode="multiple"
 							>
-								<DropdownItem key="pending">
+								<DropdownItem key="Pending">
 									<div className="flex items-center gap-2">
 										<span className="w-2 h-2 rounded-full bg-yellow-400" />
 										<span>Pending</span>
 									</div>
 								</DropdownItem>
-								<DropdownItem key="ready">
+								<DropdownItem key="Ready">
 									<div className="flex items-center gap-2">
 										<span className="w-2 h-2 rounded-full bg-blue-400" />
 										<span>Ready</span>
 									</div>
 								</DropdownItem>
-								<DropdownItem key="completed">
+								<DropdownItem key="Completed">
 									<div className="flex items-center gap-2">
 										<span className="w-2 h-2 rounded-full bg-green-400" />
 										<span>Completed</span>
 									</div>
 								</DropdownItem>
-								<DropdownItem key="cancel">
+								<DropdownItem key="Cancel">
 									<div className="flex items-center gap-2">
 										<span className="w-2 h-2 rounded-full bg-red-300" />
 										<span className="text-danger">
@@ -115,7 +123,7 @@ export default function Orders() {
 
 				{/* TABLE ROW */}
 				<div className="flex-1 min-h-0 flex flex-col">
-					<OrderTable />
+					<OrderTable selectedCategories={selectedCategories} />
 				</div>
 			</div>
 			<AddOrderModal
