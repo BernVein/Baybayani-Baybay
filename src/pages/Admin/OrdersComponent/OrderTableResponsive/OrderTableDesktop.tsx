@@ -153,7 +153,7 @@ export function OrderTableDesktop({
 											showDivider
 										>
 											<DropdownItem
-												key="pending"
+												key="Pending"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
@@ -169,7 +169,7 @@ export function OrderTableDesktop({
 											</DropdownItem>
 
 											<DropdownItem
-												key="ready"
+												key="Ready"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
@@ -185,7 +185,7 @@ export function OrderTableDesktop({
 											</DropdownItem>
 
 											<DropdownItem
-												key="completed"
+												key="Completed"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
@@ -201,7 +201,7 @@ export function OrderTableDesktop({
 											</DropdownItem>
 
 											<DropdownItem
-												key="cancel"
+												key="Cancel"
 												onPress={() =>
 													handleOrder(
 														order.order_id,

@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { CartIcon, SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
-import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
 import useIsMobile from "@/lib/isMobile";
 import { AddOrderModal } from "@/pages/Admin/OrdersComponent/AddOrderModal";
 import { OrderTable } from "./OrdersComponent/OrderTable";
@@ -29,7 +28,6 @@ export default function Orders() {
 		document.title = "Baybayani | Admin | Orders";
 	}, []);
 
-	const { orderItems, setOrderItems, loading } = useFetchOrderItems();
 	return (
 		<>
 			<div className="flex flex-col gap-8 p-4 h-full">
@@ -117,11 +115,7 @@ export default function Orders() {
 
 				{/* TABLE ROW */}
 				<div className="flex-1 min-h-0 flex flex-col">
-					<OrderTable
-						orders={orderItems}
-						setOrders={setOrderItems}
-						loading={loading}
-					/>
+					<OrderTable />
 				</div>
 			</div>
 			<AddOrderModal

@@ -10,21 +10,19 @@ import {
 } from "@heroui/react";
 import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableMobile";
 import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableDesktop";
-import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 import { fetchLatestStock } from "@/data/supabase/Admin/Products/fetchLatestStock";
 import { recordStockAdjustment } from "@/data/supabase/Admin/Products/recordStockAdjustment";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 import { StockMovement } from "@/model/stockMovement";
+import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
 
-export function OrderTable({
-	orders,
-	setOrders,
-	loading,
-}: {
-	orders: OrderTableRow[] | null;
-	setOrders: React.Dispatch<React.SetStateAction<OrderTableRow[] | null>>;
-	loading: boolean;
-}) {
+export function OrderTable() {
+	const {
+		orderItems: orders,
+		setOrderItems: setOrders,
+		loading,
+	} = useFetchOrderItems();
+
 	const handleOrder = async (
 		orderId: string,
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",

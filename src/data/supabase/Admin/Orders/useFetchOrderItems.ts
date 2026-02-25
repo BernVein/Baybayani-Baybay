@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 
-export const useFetchOrderItems = () => {
+export const useFetchOrderItems = (categories?: string[]) => {
 	const [orderItems, setOrderItems] = useState<OrderTableRow[] | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [fetchError, setFetchError] = useState<string | null>(null);
@@ -12,7 +12,7 @@ export const useFetchOrderItems = () => {
 		setLoading(true);
 		setFetchError(null);
 
-		const { data, error } = await supabase
+		let query = supabase
 			.from("OrderItemUser")
 			.select(
 				`order_item_user_id,
@@ -28,7 +28,15 @@ export const useFetchOrderItems = () => {
 			)
 			.eq("is_soft_deleted", false)
 			.order("created_at", { ascending: false });
-		console.log("Data: ", data);
+
+		if (categories && categories.length > 0) {
+			query = query.in("Item.Category.category_name", categories);
+		}
+
+		const { data, error } = await query.order("created_at", {
+			ascending: false,
+		});
+
 		setLoading(false);
 
 		if (error) {
