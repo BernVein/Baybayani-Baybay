@@ -25,8 +25,8 @@ export function OrderTableDesktop({
 	orders: OrderTableRow[];
 	handleOrder: (
 		orderId: string,
-		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",
-		currentStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => Promise<void>;
 }) {
 	return (
@@ -134,7 +134,8 @@ export function OrderTableDesktop({
 												? "primary"
 												: order.status === "Completed"
 													? "success"
-													: order.status === "Cancel"
+													: order.status ===
+														  "Cancelled"
 														? "danger"
 														: "default"
 									}
@@ -204,11 +205,11 @@ export function OrderTableDesktop({
 											</DropdownItem>
 
 											<DropdownItem
-												key="Cancel"
+												key="Cancelled"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
-														"Cancel",
+														"Cancelled",
 														order.status,
 													)
 												}
@@ -216,7 +217,7 @@ export function OrderTableDesktop({
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-red-300" />
 													<span className="text-danger">
-														Cancel
+														Cancelled
 													</span>
 												</div>
 											</DropdownItem>

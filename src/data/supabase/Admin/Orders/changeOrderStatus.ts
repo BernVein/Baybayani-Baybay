@@ -1,7 +1,7 @@
 import { supabase } from "@/config/supabaseclient";
 export async function changeOrderStatus(
 	orderId: string,
-	orderStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+	orderStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 ) {
 	try {
 		if (!orderId) throw new Error("Order ID is required");

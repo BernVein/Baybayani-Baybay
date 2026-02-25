@@ -122,11 +122,11 @@ export default function Orders() {
 										<span>Completed</span>
 									</div>
 								</DropdownItem>
-								<DropdownItem key="Cancel">
+								<DropdownItem key="Cancelled">
 									<div className="flex items-center gap-2">
 										<span className="w-2 h-2 rounded-full bg-red-300" />
 										<span className="text-danger">
-											Cancel
+											Cancelled
 										</span>
 									</div>
 								</DropdownItem>

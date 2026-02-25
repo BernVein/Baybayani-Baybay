@@ -39,8 +39,8 @@ export function OrderTable({
 
 	const handleOrder = async (
 		orderId: string,
-		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",
-		currentStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => {
 		try {
 			const { error } = await changeOrderStatus(orderId, changeToStatus);
@@ -80,7 +80,7 @@ export function OrderTable({
 					);
 					await recordStockAdjustment(order.item_variant_id, {
 						stock_change_count: order.item_quantity,
-						stock_adjustment_type: "From Cancel",
+						stock_adjustment_type: "From Cancelled",
 						stock_change_date: new Date().toISOString(),
 						effective_stocks:
 							(effectiveStocks ?? 0) + order.item_quantity,

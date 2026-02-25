@@ -1,13 +1,4 @@
-import {
-	Card,
-	CardBody,
-	Image,
-	Divider,
-	Chip,
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-} from "@heroui/react";
+import { Card, CardBody, Image, Divider, Chip, Progress } from "@heroui/react";
 
 import { OrderCard } from "@/model/ui/Customer/order_card";
 export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
@@ -31,44 +22,67 @@ export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
 					{/* Content column */}
 					<div className="flex flex-col justify-start items-start text-left flex-1">
 						<div className="w-full flex justify-between items-start">
-							<div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-left">
-								<span className="text-sm sm:text-base text-default-700">
-									{orderItem.variant_name}
-								</span>
-								<span className="text-xs sm:text-sm text-default-500">
-									{orderItem.item_name}
-								</span>
+							<div className="flex flex-col gap-2">
+								<div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-left">
+									<span className="text-sm sm:text-base text-default-700">
+										{orderItem.variant_name}
+									</span>
+									<span className="text-xs sm:text-sm text-default-500">
+										{orderItem.item_name}
+									</span>
+								</div>
 							</div>
 
-							<Chip
-								color={
-									orderItem.status === "Pending"
-										? "warning"
-										: orderItem.status === "Ready"
-											? "primary"
-											: orderItem.status === "Completed"
-												? "success"
-												: orderItem.status === "Cancel"
-													? "danger"
-													: "default"
-								}
-								variant="flat"
-							>
-								{orderItem.status}
-							</Chip>
+							<div className="flex flex-col w-1/4 gap-2">
+								<Chip
+									color={
+										orderItem.status === "Pending"
+											? "warning"
+											: orderItem.status === "Ready"
+												? "primary"
+												: orderItem.status ===
+													  "Completed"
+													? "success"
+													: orderItem.status ===
+														  "Cancelled"
+														? "danger"
+														: "default"
+									}
+									variant="flat"
+								>
+									{orderItem.status}
+								</Chip>
+								<Progress
+									aria-label="Loading..."
+									color={
+										orderItem.status === "Pending"
+											? "warning"
+											: orderItem.status === "Ready"
+												? "primary"
+												: orderItem.status ===
+													  "Completed"
+													? "success"
+													: orderItem.status ===
+														  "Cancelled"
+														? "danger"
+														: "default"
+									}
+									value={
+										orderItem.status === "Pending"
+											? 25
+											: orderItem.status === "Ready"
+												? 50
+												: orderItem.status ===
+													  "Completed"
+													? 100
+													: orderItem.status ===
+														  "Cancelled"
+														? 0
+														: 0
+									}
+								/>
+							</div>
 						</div>
-						<Popover placement="bottom" showArrow={true}>
-							<PopoverTrigger>
-								<span className="text-default-500 text-xs italic max-w-[150px] truncate block cursor-pointer">
-									Order ID: {orderItem.order_identifier}
-								</span>
-							</PopoverTrigger>
-							<PopoverContent>
-								<p className="text-bold text-sm">
-									Order ID: {orderItem.order_identifier}
-								</p>
-							</PopoverContent>
-						</Popover>
 
 						<Divider className="my-3 sm:my-2" />
 

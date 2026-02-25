@@ -21,8 +21,8 @@ export function OrderTableMobile({
 	orders: OrderTableRow[];
 	handleOrder: (
 		orderId: string,
-		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancel",
-		currentStatus: "Pending" | "Ready" | "Completed" | "Cancel",
+		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => Promise<void>;
 }) {
 	return (
@@ -93,7 +93,7 @@ export function OrderTableMobile({
 																  "Completed"
 																? "bg-green-400"
 																: order.status ===
-																	  "Cancel"
+																	  "Cancelled"
 																	? "bg-red-400"
 																	: "bg-gray-400"
 												}`}
@@ -163,13 +163,12 @@ export function OrderTableMobile({
 													<span>Completed</span>
 												</div>
 											</DropdownItem>
-
 											<DropdownItem
-												key="cancel"
+												key="Cancelled"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
-														"Cancel",
+														"Cancelled",
 														order.status,
 													)
 												}
@@ -177,7 +176,7 @@ export function OrderTableMobile({
 												<div className="flex items-center gap-2">
 													<span className="w-2 h-2 rounded-full bg-red-300" />
 													<span className="text-danger">
-														Cancel
+														Cancelled
 													</span>
 												</div>
 											</DropdownItem>
