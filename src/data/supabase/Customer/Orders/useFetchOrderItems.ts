@@ -40,7 +40,8 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
                             quantity,
                             price_variant,
                             created_at,
-                            status                            
+                            status,
+                            order_identifier                            
                       `,
 						{ count: "exact" },
 					)
@@ -72,6 +73,7 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 						price_variant: order.price_variant ?? "",
 						date_ordered: order.created_at,
 						status: order.status,
+						order_identifier: order.order_identifier,
 					}),
 				);
 

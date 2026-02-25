@@ -60,7 +60,7 @@ export default function Orders() {
 					{/* Search Row */}
 					<Input
 						className="w-1/2 sm:w-1/4"
-						placeholder="Search user / item"
+						placeholder="Search Order ID"
 						startContent={<SearchIcon />}
 						value={searchQuery}
 						onValueChange={setSearchQuery}
