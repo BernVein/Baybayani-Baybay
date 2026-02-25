@@ -20,8 +20,10 @@ import { useMemo } from "react";
 
 export function OrderTable({
 	selectedCategories,
+	searchQuery,
 }: {
 	selectedCategories: Selection;
+	searchQuery: string;
 }) {
 	const selectedCategoryArray = useMemo(() => {
 		return selectedCategories === "all"
@@ -33,7 +35,7 @@ export function OrderTable({
 		orderItems: orders,
 		setOrderItems: setOrders,
 		loading,
-	} = useFetchOrderItems(selectedCategoryArray);
+	} = useFetchOrderItems(selectedCategoryArray, searchQuery);
 
 	const handleOrder = async (
 		orderId: string,

@@ -23,7 +23,7 @@ export default function Orders() {
 	const [selectedCategories, setSelectedCategories] = useState<Selection>(
 		new Set([]),
 	);
-
+	const [searchQuery, setSearchQuery] = useState<string>("");
 	const {
 		isOpen: isOpenAddOrder,
 		onOpen: onOpenAddOrder,
@@ -62,6 +62,8 @@ export default function Orders() {
 						className="w-1/2 sm:w-1/4"
 						placeholder="Search user / item"
 						startContent={<SearchIcon />}
+						value={searchQuery}
+						onValueChange={setSearchQuery}
 					/>
 					<div className="flex flex-row gap-2 items-center">
 						<Button
@@ -135,7 +137,10 @@ export default function Orders() {
 
 				{/* TABLE ROW */}
 				<div className="flex-1 min-h-0 flex flex-col">
-					<OrderTable selectedCategories={selectedCategories} />
+					<OrderTable
+						selectedCategories={selectedCategories}
+						searchQuery={searchQuery}
+					/>
 				</div>
 			</div>
 			<AddOrderModal

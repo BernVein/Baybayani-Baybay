@@ -3,7 +3,10 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 
-export const useFetchOrderItems = (categories?: string[]) => {
+export const useFetchOrderItems = (
+	categories?: string[],
+	searchQuery?: string,
+) => {
 	const [orderItems, setOrderItems] = useState<OrderTableRow[] | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [fetchError, setFetchError] = useState<string | null>(null);
@@ -26,11 +29,14 @@ export const useFetchOrderItems = (categories?: string[]) => {
 				VariantSnapshot(variant_snapshot_name, variant_snapshot_id, variant_copy_snapshot_id)          
                 `,
 			)
-			.eq("is_soft_deleted", false)
-			.order("created_at", { ascending: false });
+			.eq("is_soft_deleted", false);
 
 		if (categories && categories.length > 0) {
 			query = query.in("status", categories);
+		}
+
+		if (searchQuery && searchQuery.trim() !== "") {
+			query = query.eq("order_item_user_id", searchQuery);
 		}
 
 		const { data, error } = await query.order("created_at", {
@@ -75,7 +81,7 @@ export const useFetchOrderItems = (categories?: string[]) => {
 		);
 
 		setOrderItems(orderItems);
-	}, [categories]);
+	}, [categories, searchQuery]);
 
 	useEffect(() => {
 		fetchItem();
