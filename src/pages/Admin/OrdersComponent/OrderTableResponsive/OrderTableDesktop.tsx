@@ -34,7 +34,7 @@ export function OrderTableDesktop({
 			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
 				<TableHeader>
 					<TableColumn>CUSTOMER</TableColumn>
-					<TableColumn>DATE</TableColumn>
+					<TableColumn>DATE & ORDER ID</TableColumn>
 					<TableColumn>ITEM</TableColumn>
 					<TableColumn>QUANTITY</TableColumn>
 					<TableColumn>SUBTOTAL</TableColumn>
@@ -80,6 +80,9 @@ export function OrderTableDesktop({
 											minute: "2-digit",
 											hour12: true,
 										})}
+									</span>
+									<span className="text-sm text-default-500">
+										{order.order_identifier}
 									</span>
 								</div>
 							</TableCell>

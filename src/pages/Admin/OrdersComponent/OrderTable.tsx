@@ -123,7 +123,7 @@ export function OrderTable({
 				<div className="sm:hidden">
 					<Table className="w-full">
 						<TableHeader>
-							<TableColumn>CUSTOMER</TableColumn>
+							<TableColumn>CUSTOMER & ORDER ID</TableColumn>
 							<TableColumn>ORDER INFO</TableColumn>
 							<TableColumn>ACTIONS</TableColumn>
 						</TableHeader>
@@ -158,7 +158,7 @@ export function OrderTable({
 					<Table className="w-full">
 						<TableHeader>
 							<TableColumn>CUSTOMER</TableColumn>
-							<TableColumn>DATE</TableColumn>
+							<TableColumn>DATE & ORDER ID</TableColumn>
 							<TableColumn>ITEM</TableColumn>
 							<TableColumn>QUANTITY</TableColumn>
 							<TableColumn>SUBTOTAL</TableColumn>

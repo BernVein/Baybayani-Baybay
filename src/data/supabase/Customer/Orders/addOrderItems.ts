@@ -7,6 +7,20 @@ export async function addOrderItems(
 ) {
 	if (!cart_items.length) return;
 
+	const generateRandomId = () => {
+		const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+		const array = new Uint8Array(10);
+
+		// Fills the array with cryptographically strong random bytes
+		window.crypto.getRandomValues(array);
+
+		// Map the random bytes to our character set
+		const result = Array.from(array, (byte) => chars[byte % chars.length]);
+
+		// Insert dashes at the 3rd and 6th indices (xxx-xxx-xxxx)
+		return `${result.slice(0, 3).join("")}-${result.slice(3, 6).join("")}-${result.slice(6, 10).join("")}`;
+	};
+
 	const orderItems = cart_items.map((cartItemUser: CartItemUser) => ({
 		status: "Pending",
 		item_id: cartItemUser.item.item_id,
@@ -15,6 +29,7 @@ export async function addOrderItems(
 		price_variant: cartItemUser.price_variant,
 		quantity: cartItemUser.quantity,
 		subtotal: cartItemUser.subtotal,
+		order_identifier: generateRandomId(),
 	}));
 
 	const { error: insertError } = await supabase

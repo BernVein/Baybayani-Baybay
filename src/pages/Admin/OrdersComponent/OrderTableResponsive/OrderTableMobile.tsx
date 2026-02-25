@@ -29,7 +29,7 @@ export function OrderTableMobile({
 		<div className="sm:hidden flex-1 min-h-0 flex flex-col">
 			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
 				<TableHeader>
-					<TableColumn>CUSTOMER</TableColumn>
+					<TableColumn>CUSTOMER & ORDER ID</TableColumn>
 					<TableColumn>ORDER INFO</TableColumn>
 					<TableColumn>ACTIONS</TableColumn>
 				</TableHeader>
@@ -45,6 +45,9 @@ export function OrderTableMobile({
 										</span>
 										<span className="text-default-500 italic text-xs">
 											{order.user_role}
+										</span>
+										<span className="text-sm text-default-500">
+											{order.order_identifier}
 										</span>
 									</div>
 								</div>
