@@ -90,6 +90,25 @@ export const useFetchOrderItems = (
 
 	useEffect(() => {
 		fetchItem();
+
+		const channel = supabase
+			.channel("OrderItemUser-changes")
+			.on(
+				"postgres_changes",
+				{
+					event: "*",
+					schema: "public",
+					table: "OrderItemUser",
+				},
+				() => {
+					fetchItem();
+				},
+			)
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
 	}, [fetchItem]);
 
 	return {
