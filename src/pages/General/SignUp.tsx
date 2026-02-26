@@ -1,15 +1,19 @@
-import { useState, useRef } from "react";
-import { Image, Input, Button } from "@heroui/react";
-import { BaybayaniLogo } from "@/components/icons";
-import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
+import { useState } from "react";
+import { Image, Button } from "@heroui/react";
+import {
+	BaybayaniLogo,
+	RightArrow,
+	LeftArrow,
+	CheckIcon,
+} from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
-import { Icon } from "@iconify/react";
+import { Step1 } from "@/pages/General/SignUpComponents/Step1";
+import { Step2 } from "@/pages/General/SignUpComponents/Step2";
+import { Step3 } from "@/pages/General/SignUpComponents/Step3";
 
-type Role = "Customer" | "Admin" | "Cooperative";
-const ROLES: Role[] = ["Customer", "Admin", "Cooperative"];
-const MAX_IMAGES = 4;
 const TOTAL_STEPS = 3;
 const STEP_LABELS = ["Account Info", "Password", "Valid ID"];
+export type Role = "Customer" | "Admin" | "Cooperative";
 
 export default function SignUp() {
 	// Step 1 Fields
@@ -24,12 +28,9 @@ export default function SignUp() {
 	// Step 2 Fields
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const [showPass, setShowPass] = useState(false);
-	const [showConfirm, setShowConfirm] = useState(false);
 
 	// Step 3 Fields
 	const [idImages, setIdImages] = useState<File[]>([]);
-	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	// Validation triggered
 	const [tried, setTried] = useState(false);
@@ -67,295 +68,6 @@ export default function SignUp() {
 		// TODO: hook up to database
 		alert("Sign up submitted!");
 	};
-
-	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const files = Array.from(e.target.files ?? []);
-		setIdImages((prev) => [...prev, ...files].slice(0, MAX_IMAGES));
-		e.target.value = "";
-	};
-
-	const removeImage = (i: number) =>
-		setIdImages((prev) => prev.filter((_, idx) => idx !== i));
-
-	const Step1 = (
-		<div className="flex flex-col gap-4 w-full">
-			{/* Role pills */}
-			<div className="flex flex-col gap-1.5">
-				<span className="text-sm text-default-500">User Role</span>
-				<div className="flex flex-wrap gap-2">
-					{ROLES.map((r) => (
-						<button
-							key={r}
-							type="button"
-							onClick={() => setRole(r)}
-							className={[
-								"px-4 py-1.5 rounded-full text-sm font-medium border-2 transition-all",
-								role === r
-									? "border-[#36975f] bg-[#36975f]/10 text-[#36975f]"
-									: "border-default-200 text-default-500 hover:border-default-400",
-							].join(" ")}
-						>
-							{r}
-						</button>
-					))}
-				</div>
-			</div>
-
-			{/* Name fields */}
-			{isCooperative ? (
-				<Input
-					label="Cooperative Name"
-					labelPlacement="outside"
-					placeholder="e.g. Baybay Farmers Cooperative"
-					value={cooperativeName}
-					onValueChange={setCooperativeName}
-					isInvalid={tried && cooperativeName.trim() === ""}
-					errorMessage="Required"
-					startContent={
-						<Icon
-							icon="solar:buildings-2-bold-duotone"
-							className="text-default-400 text-lg shrink-0"
-						/>
-					}
-				/>
-			) : (
-				<div className="flex gap-3">
-					<Input
-						label="First Name"
-						labelPlacement="outside"
-						placeholder="Juan"
-						value={firstName}
-						onValueChange={setFirstName}
-						isInvalid={tried && firstName.trim() === ""}
-						errorMessage="Required"
-					/>
-					<Input
-						label="Last Name"
-						labelPlacement="outside"
-						placeholder="dela Cruz"
-						value={lastName}
-						onValueChange={setLastName}
-						isInvalid={tried && lastName.trim() === ""}
-						errorMessage="Required"
-					/>
-				</div>
-			)}
-
-			{/* Username */}
-			<Input
-				label="Username"
-				labelPlacement="outside"
-				placeholder="Choose a username"
-				value={username}
-				onValueChange={setUsername}
-				isInvalid={tried && username.trim() === ""}
-				errorMessage="Username is required"
-				startContent={
-					<Icon
-						icon="solar:user-bold-duotone"
-						className="text-default-400 text-lg shrink-0"
-					/>
-				}
-			/>
-
-			{/* Phone */}
-			<Input
-				label="Phone Number"
-				labelPlacement="outside"
-				placeholder="+63 9XX XXX XXXX"
-				type="tel"
-				value={phone}
-				onValueChange={setPhone}
-				isInvalid={tried && phone.trim() === ""}
-				errorMessage="Phone number is required"
-				startContent={
-					<Icon
-						icon="solar:phone-bold-duotone"
-						className="text-default-400 text-lg shrink-0"
-					/>
-				}
-			/>
-		</div>
-	);
-
-	const Step2 = (
-		<div className="flex flex-col gap-4 w-full">
-			<Input
-				label="Create Password"
-				labelPlacement="outside"
-				placeholder="At least 8 characters"
-				type={showPass ? "text" : "password"}
-				value={password}
-				onValueChange={setPassword}
-				isInvalid={tried && password.length < 8}
-				errorMessage="Password must be at least 8 characters"
-				startContent={
-					<Icon
-						icon="solar:lock-password-bold-duotone"
-						className="text-default-400 text-lg shrink-0"
-					/>
-				}
-				endContent={
-					<button
-						type="button"
-						onClick={() => setShowPass((v) => !v)}
-						className="focus:outline-none"
-					>
-						{showPass ? (
-							<EyeSlashFilledIcon className="text-xl text-default-400" />
-						) : (
-							<EyeFilledIcon className="text-xl text-default-400" />
-						)}
-					</button>
-				}
-			/>
-			<Input
-				label="Confirm Password"
-				labelPlacement="outside"
-				placeholder="Re-enter your password"
-				type={showConfirm ? "text" : "password"}
-				value={confirmPassword}
-				onValueChange={setConfirmPassword}
-				isInvalid={tried && confirmPassword !== password}
-				errorMessage="Passwords do not match"
-				startContent={
-					<Icon
-						icon="solar:shield-check-bold-duotone"
-						className="text-default-400 text-lg shrink-0"
-					/>
-				}
-				endContent={
-					<button
-						type="button"
-						onClick={() => setShowConfirm((v) => !v)}
-						className="focus:outline-none"
-					>
-						{showConfirm ? (
-							<EyeSlashFilledIcon className="text-xl text-default-400" />
-						) : (
-							<EyeFilledIcon className="text-xl text-default-400" />
-						)}
-					</button>
-				}
-			/>
-			{/* Password strength hints */}
-			<div className="flex flex-col gap-1 mt-1">
-				{[
-					{
-						label: "At least 8 characters",
-						ok: password.length >= 8,
-					},
-					{
-						label: "Passwords match",
-						ok: password.length > 0 && confirmPassword === password,
-					},
-				].map(({ label, ok }) => (
-					<div
-						key={label}
-						className="flex items-center gap-2 text-xs"
-					>
-						<Icon
-							icon={
-								ok
-									? "solar:check-circle-bold"
-									: "solar:close-circle-bold"
-							}
-							className={
-								ok ? "text-[#36975f]" : "text-default-300"
-							}
-						/>
-						<span
-							className={
-								ok ? "text-[#36975f]" : "text-default-400"
-							}
-						>
-							{label}
-						</span>
-					</div>
-				))}
-			</div>
-		</div>
-	);
-
-	const Step3 = (
-		<div className="flex flex-col gap-3 w-full">
-			<div className="flex items-center justify-between">
-				<span className="text-sm text-default-500">
-					Upload Valid ID{" "}
-					<span className="text-default-400">
-						(up to {MAX_IMAGES})
-					</span>
-				</span>
-				<span className="text-xs text-default-400">
-					{idImages.length}/{MAX_IMAGES}
-				</span>
-			</div>
-
-			{/* Upload zone */}
-			{idImages.length < MAX_IMAGES && (
-				<button
-					type="button"
-					onClick={() => fileInputRef.current?.click()}
-					className="flex flex-col items-center justify-center gap-1.5 w-full rounded-2xl border-2 border-dashed border-default-300 hover:border-[#36975f] hover:bg-[#36975f]/5 transition-all py-7 cursor-pointer"
-				>
-					<Icon
-						icon="solar:cloud-upload-bold-duotone"
-						className="text-4xl text-default-400"
-					/>
-					<span className="text-sm text-default-500 font-medium">
-						Click to upload
-					</span>
-					<span className="text-xs text-default-400">
-						PNG, JPG, WEBP
-					</span>
-				</button>
-			)}
-			<input
-				ref={fileInputRef}
-				type="file"
-				accept="image/*"
-				multiple
-				className="hidden"
-				onChange={handleImageChange}
-			/>
-
-			{/* Previews */}
-			{idImages.length > 0 && (
-				<div className="grid grid-cols-2 gap-2">
-					{idImages.map((file, i) => (
-						<div
-							key={i}
-							className="relative rounded-xl overflow-hidden border border-default-200 aspect-video"
-						>
-							<img
-								src={URL.createObjectURL(file)}
-								alt={`ID ${i + 1}`}
-								className="w-full h-full object-cover"
-							/>
-							<button
-								type="button"
-								onClick={() => removeImage(i)}
-								className="absolute top-1 right-1 bg-black/60 hover:bg-black/80 text-white rounded-full p-0.5 transition-all"
-							>
-								<Icon
-									icon="solar:close-circle-bold"
-									className="text-base"
-								/>
-							</button>
-						</div>
-					))}
-				</div>
-			)}
-
-			{tried && idImages.length === 0 && (
-				<p className="text-xs text-danger">
-					Please upload at least one valid ID
-				</p>
-			)}
-		</div>
-	);
-
-	const STEPS = [Step1, Step2, Step3];
 
 	return (
 		<div className="relative min-h-screen flex">
@@ -423,17 +135,14 @@ export default function SignUp() {
 										].join(" ")}
 									>
 										{i < step ? (
-											<Icon
-												icon="solar:check-bold"
-												className="text-sm"
-											/>
+											<CheckIcon className="w-5" />
 										) : (
 											i + 1
 										)}
 									</div>
 									<span
 										className={[
-											"text-[10px] font-medium",
+											"text-sm font-medium",
 											i === step
 												? "text-[#36975f]"
 												: "text-default-400",
@@ -470,7 +179,41 @@ export default function SignUp() {
 						className="flex flex-col gap-5 items-center w-full"
 					>
 						{/* Step panel */}
-						<div className="w-full">{STEPS[step]}</div>
+						<div className="w-full">
+							{step === 0 && (
+								<Step1
+									role={role}
+									setRole={setRole}
+									cooperativeName={cooperativeName}
+									setCooperativeName={setCooperativeName}
+									firstName={firstName}
+									setFirstName={setFirstName}
+									lastName={lastName}
+									setLastName={setLastName}
+									username={username}
+									setUsername={setUsername}
+									phone={phone}
+									setPhone={setPhone}
+									tried={tried}
+								/>
+							)}
+							{step === 1 && (
+								<Step2
+									password={password}
+									setPassword={setPassword}
+									confirmPassword={confirmPassword}
+									setConfirmPassword={setConfirmPassword}
+									tried={tried}
+								/>
+							)}
+							{step === 2 && (
+								<Step3
+									idImages={idImages}
+									setIdImages={setIdImages}
+									tried={tried}
+								/>
+							)}
+						</div>
 
 						{/* Navigation buttons */}
 						<div
@@ -483,9 +226,7 @@ export default function SignUp() {
 									color="default"
 									onPress={handleBack}
 									className="font-semibold"
-									startContent={
-										<Icon icon="solar:arrow-left-bold" />
-									}
+									startContent={<LeftArrow className="w-4" />}
 								>
 									Back
 								</Button>
@@ -495,9 +236,7 @@ export default function SignUp() {
 									type="submit"
 									color="success"
 									className="font-semibold text-white"
-									endContent={
-										<Icon icon="solar:arrow-right-bold" />
-									}
+									endContent={<RightArrow className="w-4" />}
 								>
 									Next
 								</Button>
