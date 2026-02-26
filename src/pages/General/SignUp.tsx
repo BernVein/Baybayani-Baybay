@@ -176,10 +176,10 @@ export default function SignUp() {
 									}
 								: handleSubmit
 						}
-						className="flex flex-col gap-5 items-center w-full"
+						className="flex flex-col gap-5 items-center w-full min-h-[440px] justify-between"
 					>
 						{/* Step panel */}
-						<div className="w-full">
+						<div className="w-full flex-1">
 							{step === 0 && (
 								<Step1
 									role={role}
@@ -217,7 +217,7 @@ export default function SignUp() {
 
 						{/* Navigation buttons */}
 						<div
-							className={`flex gap-3 w-full mt-1 ${step === 0 ? "justify-end" : "justify-between"}`}
+							className={`flex gap-3 w-full mt-auto ${step === 0 ? "justify-end" : "justify-between"}`}
 						>
 							{step > 0 && (
 								<Button
