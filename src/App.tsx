@@ -32,6 +32,7 @@ const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
 const AdminMessages = lazy(() => import("@/pages/Admin/Messages"));
 
 const LoginPage = lazy(() => import("@/pages/General/Login"));
+const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { Capacitor } from "@capacitor/core";
@@ -202,6 +203,14 @@ function App() {
 							</RequireGuest>
 						}
 						path="/login"
+					/>
+					<Route
+						element={
+							// <RequireGuest>
+							<SignUpPage />
+							// </RequireGuest>
+						}
+						path="/signup"
 					/>
 
 					{/* ADMIN ROUTES */}
