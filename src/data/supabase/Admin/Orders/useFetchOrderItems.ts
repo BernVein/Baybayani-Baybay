@@ -47,7 +47,7 @@ export const useFetchOrderItems = (
 
 		if (error) {
 			setFetchError(error.message || "Failed to fetch item.");
-			setOrderItems([]); // Clear stale data on error
+			setOrderItems([]);
 
 			return;
 		}
@@ -91,24 +91,24 @@ export const useFetchOrderItems = (
 	useEffect(() => {
 		fetchItem();
 
-		const channel = supabase
-			.channel("OrderItemUser-changes")
-			.on(
-				"postgres_changes",
-				{
-					event: "*",
-					schema: "public",
-					table: "OrderItemUser",
-				},
-				() => {
-					fetchItem();
-				},
-			)
-			.subscribe();
+		// const channel = supabase
+		// 	.channel("OrderItemUser-changes")
+		// 	.on(
+		// 		"postgres_changes",
+		// 		{
+		// 					event: "*",
+		// 					schema: "public",
+		// 					table: "OrderItemUser",
+		// 				},
+		// 		() => {
+		// 					fetchItem();
+		// 				},
+		// 	)
+		// 	.subscribe();
 
-		return () => {
-			supabase.removeChannel(channel);
-		};
+		// return () => {
+		// 	supabase.removeChannel(channel);
+		// };
 	}, [fetchItem]);
 
 	return {

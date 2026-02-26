@@ -7,7 +7,7 @@ import {
 	useDisclosure,
 	Input,
 } from "@heroui/react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useOutletContext } from "react-router-dom";
 import { CartIcon, SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
@@ -16,6 +16,7 @@ import { AddOrderModal } from "@/pages/Admin/OrdersComponent/AddOrderModal";
 import { OrderTable } from "./OrdersComponent/OrderTable";
 import { useState } from "react";
 import type { Selection } from "@heroui/react";
+import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
 
 export default function Orders() {
 	const isMobile = useIsMobile();
@@ -29,6 +30,17 @@ export default function Orders() {
 		onOpen: onOpenAddOrder,
 		onOpenChange: onOpenChangeAddOrder,
 	} = useDisclosure();
+
+	const selectedCategoryArray = useMemo(() => {
+		return selectedCategories === "all"
+			? []
+			: Array.from(selectedCategories).map((key) => String(key));
+	}, [selectedCategories]);
+
+	const { orderItems, setOrderItems, loading, refetch } = useFetchOrderItems(
+		selectedCategoryArray,
+		searchQuery,
+	);
 
 	useEffect(() => {
 		document.title = "Baybayani | Admin | Orders";
@@ -140,12 +152,16 @@ export default function Orders() {
 					<OrderTable
 						selectedCategories={selectedCategories}
 						searchQuery={searchQuery}
+						orderItems={orderItems}
+						setOrderItems={setOrderItems}
+						loading={loading}
 					/>
 				</div>
 			</div>
 			<AddOrderModal
 				isOpenAddOrder={isOpenAddOrder}
 				onOpenChangeAddOrder={onOpenChangeAddOrder}
+				onSuccess={refetch}
 			/>
 		</>
 	);

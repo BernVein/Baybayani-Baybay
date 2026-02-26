@@ -23,9 +23,11 @@ import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 export function AddOrderModal({
 	isOpenAddOrder,
 	onOpenChangeAddOrder,
+	onSuccess,
 }: {
 	isOpenAddOrder: boolean;
 	onOpenChangeAddOrder: () => void;
+	onSuccess?: () => void;
 }) {
 	const [selectedCartItem, setSelectedCartItem] = useState<string[]>([]);
 	const [itemId, setItemId] = useState<string>("");
@@ -77,6 +79,7 @@ export function AddOrderModal({
 				color: "success",
 				shouldShowTimeoutProgress: true,
 			});
+			if (onSuccess) onSuccess();
 			onClose();
 		} catch (err) {
 			addToast({

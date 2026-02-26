@@ -14,29 +14,21 @@ import { fetchLatestStock } from "@/data/supabase/Admin/Products/fetchLatestStoc
 import { recordStockAdjustment } from "@/data/supabase/Admin/Products/recordStockAdjustment";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 import { StockMovement } from "@/model/stockMovement";
-import { useFetchOrderItems } from "@/data/supabase/Admin/Orders/useFetchOrderItems";
 import type { Selection } from "@heroui/react";
-import { useMemo } from "react";
+import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
+import { Dispatch, SetStateAction } from "react";
 
 export function OrderTable({
-	selectedCategories,
-	searchQuery,
+	orderItems: orders,
+	setOrderItems: setOrders,
+	loading,
 }: {
 	selectedCategories: Selection;
 	searchQuery: string;
+	orderItems: OrderTableRow[] | null;
+	setOrderItems: Dispatch<SetStateAction<OrderTableRow[] | null>>;
+	loading: boolean;
 }) {
-	const selectedCategoryArray = useMemo(() => {
-		return selectedCategories === "all"
-			? []
-			: Array.from(selectedCategories).map((key) => String(key));
-	}, [selectedCategories]);
-
-	const {
-		orderItems: orders,
-		setOrderItems: setOrders,
-		loading,
-	} = useFetchOrderItems(selectedCategoryArray, searchQuery);
-
 	const handleOrder = async (
 		orderId: string,
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
