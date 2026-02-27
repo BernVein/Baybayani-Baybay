@@ -19,8 +19,7 @@ export default function SignUp() {
 	// Step 1 Fields
 	const [step, setStep] = useState(0);
 	const [role, setRole] = useState<Role>("Customer");
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
+	const [fullName, setFullName] = useState("");
 	const [cooperativeName, setCooperativeName] = useState("");
 	const [username, setUsername] = useState("");
 	const [checkingUsername, setCheckingUsername] = useState(false);
@@ -41,7 +40,7 @@ export default function SignUp() {
 	const step1Valid =
 		(isCooperative
 			? cooperativeName.trim() !== ""
-			: firstName.trim() !== "" && lastName.trim() !== "") &&
+			: fullName.trim() !== "" && fullName.trim() !== "") &&
 		username.trim() !== "" &&
 		phone.trim() !== "";
 
@@ -187,10 +186,8 @@ export default function SignUp() {
 									setRole={setRole}
 									cooperativeName={cooperativeName}
 									setCooperativeName={setCooperativeName}
-									firstName={firstName}
-									setFirstName={setFirstName}
-									lastName={lastName}
-									setLastName={setLastName}
+									fullName={fullName}
+									setFullName={setFullName}
 									username={username}
 									setUsername={setUsername}
 									phone={phone}

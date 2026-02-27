@@ -1,5 +1,10 @@
 import { Input } from "@heroui/react";
-import { GroupUserIcon, PhoneIcon } from "@/components/icons";
+import {
+	GroupUserIcon,
+	KeyIcon,
+	PhoneIcon,
+	SoloUserIcon,
+} from "@/components/icons";
 import { Role } from "@/pages/General/SignUp";
 import { useEffect, useState } from "react";
 import { supabase } from "@/config/supabaseclient";
@@ -9,10 +14,8 @@ export function Step1({
 	setRole,
 	cooperativeName,
 	setCooperativeName,
-	firstName,
-	setFirstName,
-	lastName,
-	setLastName,
+	fullName,
+	setFullName,
 	username,
 	setUsername,
 	phone,
@@ -25,10 +28,8 @@ export function Step1({
 	setRole: (role: Role) => void;
 	cooperativeName: string;
 	setCooperativeName: (cooperativeName: string) => void;
-	firstName: string;
-	setFirstName: (firstName: string) => void;
-	lastName: string;
-	setLastName: (lastName: string) => void;
+	fullName: string;
+	setFullName: (firstName: string) => void;
 	username: string;
 	setUsername: (username: string) => void;
 	phone: string;
@@ -39,8 +40,27 @@ export function Step1({
 }) {
 	const ROLES: Role[] = ["Customer", "Admin", "Cooperative"];
 	const [usernameError, setUsernameError] = useState<string | null>(null);
+	const [phoneError, setPhoneError] = useState<string | null>(null);
+
 	const username_length = 5;
 	const usernameRegex = /^[a-zA-Z0-9]+$/;
+	const phoneRegex = /^(?:\+639|09)\d{9}$/;
+	useEffect(() => {
+		if (!phone) {
+			setPhoneError(null);
+			return;
+		}
+
+		const cleanPhone = phone.trim();
+
+		if (!phoneRegex.test(cleanPhone)) {
+			setPhoneError(
+				"Enter a valid Philippine mobile number (+639 or 09)",
+			);
+		} else {
+			setPhoneError(null);
+		}
+	}, [phone]);
 
 	useEffect(() => {
 		if (!username) {
@@ -88,6 +108,17 @@ export function Step1({
 		return () => clearTimeout(timeout);
 	}, [username]);
 
+	const handlePhoneChange = (value: string) => {
+		// Allow only digits and + sign
+		const filtered = value.replace(/[^0-9+]/g, "");
+
+		// Only allow + at the start
+		const formatted = filtered.startsWith("+")
+			? "+" + filtered.slice(1).replace(/\+/g, "") // remove any other +
+			: filtered.replace(/\+/g, ""); // remove any + in middle
+
+		setPhone(formatted);
+	};
 	return (
 		<div className="flex flex-col gap-4 w-full">
 			{/* Role pills */}
@@ -116,6 +147,7 @@ export function Step1({
 			{role === "Cooperative" ? (
 				<Input
 					label="Cooperative Name"
+					description="For name display"
 					labelPlacement="outside"
 					placeholder="e.g. Baybay Farmers Cooperative"
 					value={cooperativeName}
@@ -127,22 +159,21 @@ export function Step1({
 			) : (
 				<div className="flex gap-3">
 					<Input
-						label="First Name"
+						label="Full Name"
+						description="For name display"
 						labelPlacement="outside"
-						placeholder="Juan"
-						value={firstName}
-						onValueChange={setFirstName}
-						isInvalid={tried && firstName.trim() === ""}
+						placeholder="e.g. Juan dela Cruz"
+						value={fullName}
+						onValueChange={setFullName}
+						isInvalid={tried && fullName.trim() === ""}
 						errorMessage="Required"
-					/>
-					<Input
-						label="Last Name"
-						labelPlacement="outside"
-						placeholder="dela Cruz"
-						value={lastName}
-						onValueChange={setLastName}
-						isInvalid={tried && lastName.trim() === ""}
-						errorMessage="Required"
+						startContent={
+							role === "Customer" ? (
+								<SoloUserIcon className="w-5" />
+							) : (
+								<KeyIcon className="w-5" />
+							)
+						}
 					/>
 				</div>
 			)}
@@ -161,10 +192,12 @@ export function Step1({
 						: (usernameError ?? undefined)
 				}
 				description={
-					!usernameError && username && !checkingUsername ? (
-						<div className="text-success">Username available</div>
+					username.trim() === "" ? (
+						"For login credential"
 					) : checkingUsername ? (
 						"Checking availability..."
+					) : !usernameError ? (
+						<div className="text-success">Username available</div>
 					) : undefined
 				}
 			/>
@@ -176,9 +209,13 @@ export function Step1({
 				placeholder="+63 9XX XXX XXXX"
 				type="tel"
 				value={phone}
-				onValueChange={setPhone}
-				isInvalid={tried && phone.trim() === ""}
-				errorMessage="Phone number is required"
+				onValueChange={handlePhoneChange}
+				isInvalid={!!phoneError || (tried && phone.trim() === "")}
+				errorMessage={
+					phone.trim() === ""
+						? "Phone number is required"
+						: (phoneError ?? undefined)
+				}
 				startContent={<PhoneIcon className="w-5" />}
 			/>
 		</div>
