@@ -1,7 +1,19 @@
 import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
+import imageCompression from "browser-image-compression";
 
 export async function addItem(item: Item) {
+	const compressImage = async (file: File): Promise<File> => {
+		const options = {
+			maxSizeMB: 0.5,
+			maxWidthOrHeight: 1200,
+			useWebWorker: true,
+			fileType: "image/jpeg",
+		};
+		const compressedFile = await imageCompression(file, options);
+		return compressedFile;
+	};
+
 	try {
 		// Insert Item
 		const { data: newItem, error: itemError } = await supabase
@@ -81,14 +93,14 @@ export async function addItem(item: Item) {
 		// Upload Images
 		for (const img of item.item_img) {
 			if (!(img instanceof File)) continue;
-
+			const compressedImage = await compressImage(img);
 			const fileExt = img.name.split(".").pop();
 			const fileName = `item-${Date.now()}-${Math.floor(Math.random() * 10000)}.${fileExt}`;
 			const filePath = `items/${fileName}`;
 
 			const { error: uploadError } = await supabase.storage
 				.from("Images")
-				.upload(filePath, img);
+				.upload(filePath, compressedImage);
 
 			if (uploadError) throw uploadError;
 

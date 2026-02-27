@@ -48,7 +48,7 @@ export default function SignUp() {
 
 	const step2Valid = password.length >= 8 && confirmPassword === password;
 
-	const step3Valid = idImages.length > 0;
+	const step3Valid = (idImages?.length || 0) > 0;
 
 	const handleNext = () => {
 		setTried(true);
@@ -83,7 +83,7 @@ export default function SignUp() {
 				user_phone_number: phone,
 				user_status: "For Approval",
 			};
-			await registerUser(userProfile, password);
+			await registerUser(userProfile, password, idImages);
 			addToast({
 				title: "Account Created Successfully",
 				description: "Your account has been created successfully.",
@@ -242,7 +242,7 @@ export default function SignUp() {
 							{step === 2 && (
 								<Step3
 									idImages={idImages}
-									setIdImages={setIdImages}
+									setIdImages={setIdImages || (() => {})}
 									tried={tried}
 								/>
 							)}
