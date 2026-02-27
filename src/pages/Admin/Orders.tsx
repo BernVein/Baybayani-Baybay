@@ -3,13 +3,20 @@ import {
 	DropdownTrigger,
 	DropdownMenu,
 	DropdownItem,
+	DropdownSection,
 	Button,
 	useDisclosure,
 	Input,
 } from "@heroui/react";
 import { useEffect, useMemo } from "react";
 import { useOutletContext } from "react-router-dom";
-import { CartIcon, SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
+import {
+	CartIcon,
+	SearchIcon,
+	FilterIcon,
+	PlusIcon,
+	SortIcon,
+} from "@/components/icons";
 import { OrderSummary } from "@/pages/Admin/OrdersComponent/OrderSummary";
 import useIsMobile from "@/lib/isMobile";
 import { AddOrderModal } from "@/pages/Admin/OrdersComponent/AddOrderModal";
@@ -25,6 +32,10 @@ export default function Orders() {
 		new Set([]),
 	);
 	const [searchQuery, setSearchQuery] = useState<string>("");
+	const [sortConfig, setSortConfig] = useState<{
+		column: string;
+		direction: "asc" | "desc";
+	} | null>(null);
 	const {
 		isOpen: isOpenAddOrder,
 		onOpen: onOpenAddOrder,
@@ -40,6 +51,7 @@ export default function Orders() {
 	const { orderItems, setOrderItems, loading, refetch } = useFetchOrderItems(
 		selectedCategoryArray,
 		searchQuery,
+		sortConfig,
 	);
 
 	useEffect(() => {
@@ -141,6 +153,76 @@ export default function Orders() {
 											Cancelled
 										</span>
 									</div>
+								</DropdownItem>
+							</DropdownMenu>
+						</Dropdown>
+
+						<Dropdown>
+							<DropdownTrigger>
+								<Button
+									className="capitalize"
+									isIconOnly={isMobile}
+									startContent={
+										<SortIcon className="w-4 shrink-0" />
+									}
+									color={sortConfig ? "success" : "default"}
+								>
+									{isMobile ? "" : "Sort By"}
+								</Button>
+							</DropdownTrigger>
+							<DropdownMenu
+								selectionMode="single"
+								selectedKeys={
+									new Set(
+										sortConfig
+											? [
+													`${sortConfig.column}:${sortConfig.direction}`,
+												]
+											: [],
+									)
+								}
+								onAction={(key) => {
+									if (key === "clear") {
+										setSortConfig(null);
+										return;
+									}
+									const [column, direction] =
+										String(key).split(":");
+									setSortConfig({
+										column,
+										direction: direction as "asc" | "desc",
+									});
+								}}
+							>
+								<DropdownSection title="Price" showDivider>
+									<DropdownItem key="subtotal:asc">
+										Price (Lowest)
+									</DropdownItem>
+									<DropdownItem key="subtotal:desc">
+										Price (Highest)
+									</DropdownItem>
+								</DropdownSection>
+								<DropdownSection
+									title="Alphabetical"
+									showDivider
+								>
+									<DropdownItem key="item_title:asc">
+										A - Z
+									</DropdownItem>
+									<DropdownItem key="item_title:desc">
+										Z - A
+									</DropdownItem>
+								</DropdownSection>
+								<DropdownSection title="Date" showDivider>
+									<DropdownItem key="created_at:asc">
+										Oldest First
+									</DropdownItem>
+									<DropdownItem key="created_at:desc">
+										Newest First
+									</DropdownItem>
+								</DropdownSection>
+								<DropdownItem key="clear" color="danger">
+									Clear Sort
 								</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>

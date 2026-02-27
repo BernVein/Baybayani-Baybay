@@ -6,6 +6,7 @@ import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 export const useFetchOrderItems = (
 	categories?: string[],
 	searchQuery?: string,
+	sortConfig?: { column: string; direction: "asc" | "desc" } | null,
 ) => {
 	const [orderItems, setOrderItems] = useState<OrderTableRow[] | null>(null);
 	const [loading, setLoading] = useState(false);
@@ -39,9 +40,23 @@ export const useFetchOrderItems = (
 			query = query.or(`order_identifier.ilike.%${searchQuery}%`);
 		}
 
-		const { data, error } = await query.order("created_at", {
-			ascending: false,
-		});
+		let data, error;
+
+		if (sortConfig) {
+			const { data: d, error: e } = await query.order(sortConfig.column, {
+				ascending: sortConfig.direction === "asc",
+				referencedTable:
+					sortConfig.column === "item_title" ? "Item" : undefined,
+			});
+			data = d;
+			error = e;
+		} else {
+			const { data: d, error: e } = await query.order("created_at", {
+				ascending: false,
+			});
+			data = d;
+			error = e;
+		}
 
 		setLoading(false);
 
@@ -86,7 +101,7 @@ export const useFetchOrderItems = (
 		);
 
 		setOrderItems(orderItems);
-	}, [categories, searchQuery]);
+	}, [categories, searchQuery, sortConfig]);
 
 	useEffect(() => {
 		fetchItem();

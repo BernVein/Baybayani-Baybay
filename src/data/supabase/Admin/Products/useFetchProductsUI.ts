@@ -6,6 +6,7 @@ import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 export const useFetchProductsUI = (
 	search: string = "",
 	selectedCategories: string[] = [],
+	sortConfig: { column: string; direction: "asc" | "desc" } | null = null,
 ) => {
 	const [allItems, setAllItems] = useState<ItemTableRow[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ export const useFetchProductsUI = (
 		setError(null);
 
 		try {
-			const { data, error } = await supabase
+			let query = supabase
 				.from("Item")
 				.select(
 					`
@@ -39,11 +40,26 @@ export const useFetchProductsUI = (
                     Item_Image ( item_image_url )
                 `,
 				)
-				.eq("is_soft_deleted", false)
-				.order("created_at", {
+				.eq("is_soft_deleted", false);
+
+			if (sortConfig) {
+				// Only alphabetical and date can be easily sorted in DB for now
+				if (
+					sortConfig.column === "item_title" ||
+					sortConfig.column === "created_at"
+				) {
+					query = query.order(sortConfig.column, {
+						ascending: sortConfig.direction === "asc",
+					});
+				}
+			} else {
+				query = query.order("created_at", {
 					referencedTable: "Variant.StockMovement",
 					ascending: false,
 				});
+			}
+
+			const { data, error } = await query;
 
 			if (error) throw error;
 			const formatted: ItemTableRow[] = (data ?? []).map((item: any) => {
@@ -86,12 +102,10 @@ export const useFetchProductsUI = (
 			});
 
 			setAllItems(formatted);
-		} catch (err: any) {
-			setError(err.message || JSON.stringify(err));
 		} finally {
 			setLoading(false);
 		}
-	}, []);
+	}, [sortConfig]);
 
 	useEffect(() => {
 		fetchItems();
@@ -111,41 +125,62 @@ export const useFetchProductsUI = (
 
 	// --- CLIENT-SIDE FILTERING ---
 	const items = useMemo(() => {
-		return allItems.filter((item) => {
-			const q = search.trim().toLowerCase();
+		return allItems
+			.filter((item) => {
+				const q = search.trim().toLowerCase();
 
-			const matchesSearch =
-				!q ||
-				item.item_name.toLowerCase().includes(q) ||
-				item.item_category.toLowerCase().includes(q) ||
-				item.item_sold_by.toLowerCase().includes(q);
+				const matchesSearch =
+					!q ||
+					item.item_name.toLowerCase().includes(q) ||
+					item.item_category.toLowerCase().includes(q) ||
+					item.item_sold_by.toLowerCase().includes(q);
 
-			// Filter by selected categories (only category IDs)
-			const categoryKeys = selectedCategories.filter(
-				(k) => k !== "with-variant" && k !== "no-variant",
-			);
-			const matchesCategory =
-				categoryKeys.length === 0 ||
-				categoryKeys.includes(
-					item.item_category_id
-						? String(item.item_category_id)
-						: "null",
+				// Filter by selected categories (only category IDs)
+				const categoryKeys = selectedCategories.filter(
+					(k) => k !== "with-variant" && k !== "no-variant",
 				);
+				const matchesCategory =
+					categoryKeys.length === 0 ||
+					categoryKeys.includes(
+						item.item_category_id
+							? String(item.item_category_id)
+							: "null",
+					);
 
-			// Filter by selected variant type
-			const variantKeys = selectedCategories.filter(
-				(k) => k === "with-variant" || k === "no-variant",
-			);
-			const matchesVariant =
-				variantKeys.length === 0 ||
-				variantKeys.includes(
-					item.item_has_variant ? "with-variant" : "no-variant",
+				// Filter by selected variant type
+				const variantKeys = selectedCategories.filter(
+					(k) => k === "with-variant" || k === "no-variant",
 				);
+				const matchesVariant =
+					variantKeys.length === 0 ||
+					variantKeys.includes(
+						item.item_has_variant ? "with-variant" : "no-variant",
+					);
 
-			// Pass only if both match
-			return matchesSearch && matchesCategory && matchesVariant;
-		});
-	}, [allItems, search, selectedCategories]);
+				// Pass only if both match
+				return matchesSearch && matchesCategory && matchesVariant;
+			})
+			.sort((a, b) => {
+				if (!sortConfig) return 0;
+
+				const { column, direction } = sortConfig;
+				const isAsc = direction === "asc";
+
+				if (column === "item_min_price") {
+					return isAsc
+						? a.item_min_price - b.item_min_price
+						: b.item_min_price - a.item_min_price;
+				}
+
+				if (column === "variant_stock") {
+					return isAsc
+						? a.variant_stock - b.variant_stock
+						: b.variant_stock - a.variant_stock;
+				}
+
+				return 0;
+			});
+	}, [allItems, search, selectedCategories, sortConfig]);
 
 	return {
 		items,

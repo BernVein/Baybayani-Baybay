@@ -12,7 +12,7 @@ import {
 } from "@heroui/react";
 import { useState } from "react";
 
-import { SearchIcon, FilterIcon, PlusIcon } from "@/components/icons";
+import { SearchIcon, FilterIcon, PlusIcon, SortIcon } from "@/components/icons";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
 import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
@@ -23,11 +23,17 @@ export function FilterSection({
 	setSelectedCategories,
 	searchQuery,
 	selectedCategories,
+	sortConfig,
+	setSortConfig,
 }: {
 	setSearchQuery: (query: string) => void;
 	setSelectedCategories: (categories: string[]) => void;
 	searchQuery: string;
 	selectedCategories: string[];
+	sortConfig: { column: string; direction: "asc" | "desc" } | null;
+	setSortConfig: (
+		config: { column: string; direction: "asc" | "desc" } | null,
+	) => void;
 }) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
@@ -144,6 +150,78 @@ export function FilterSection({
 								</div>
 							</DropdownItem>
 						</DropdownSection>
+					</DropdownMenu>
+				</Dropdown>
+
+				<Dropdown>
+					<DropdownTrigger>
+						<Button
+							className="capitalize w-full"
+							isIconOnly={isMobile}
+							startContent={<SortIcon className="w-4 shrink-0" />}
+							color={sortConfig ? "success" : "default"}
+						>
+							{isMobile ? "" : "Sort By"}
+						</Button>
+					</DropdownTrigger>
+					<DropdownMenu
+						selectionMode="single"
+						selectedKeys={
+							new Set(
+								sortConfig
+									? [
+											`${sortConfig.column}:${sortConfig.direction}`,
+										]
+									: [],
+							)
+						}
+						onAction={(key) => {
+							if (key === "clear") {
+								setSortConfig(null);
+								return;
+							}
+							const [column, direction] = String(key).split(":");
+							setSortConfig({
+								column,
+								direction: direction as "asc" | "desc",
+							});
+						}}
+					>
+						<DropdownSection title="Alphabetical" showDivider>
+							<DropdownItem key="item_title:asc">
+								A - Z
+							</DropdownItem>
+							<DropdownItem key="item_title:desc">
+								Z - A
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownSection title="Price" showDivider>
+							<DropdownItem key="item_min_price:asc">
+								Price (Lowest)
+							</DropdownItem>
+							<DropdownItem key="item_min_price:desc">
+								Price (Highest)
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownSection title="Stock" showDivider>
+							<DropdownItem key="variant_stock:asc">
+								Stock (Lowest)
+							</DropdownItem>
+							<DropdownItem key="variant_stock:desc">
+								Stock (Highest)
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownSection title="Date">
+							<DropdownItem key="created_at:asc">
+								Oldest First
+							</DropdownItem>
+							<DropdownItem key="created_at:desc">
+								Newest First
+							</DropdownItem>
+						</DropdownSection>
+						<DropdownItem key="clear" color="danger">
+							Clear Sort
+						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</div>

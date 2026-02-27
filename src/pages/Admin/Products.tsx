@@ -12,9 +12,15 @@ export default function Products() {
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
+	const [sortConfig, setSortConfig] = useState<{
+		column: string;
+		direction: "asc" | "desc";
+	} | null>(null);
+
 	const { items, allItems, setAllItems, loading } = useFetchProductsUI(
 		searchQuery,
 		selectedCategories,
+		sortConfig,
 	);
 
 	return (
@@ -43,6 +49,8 @@ export default function Products() {
 					selectedCategories={selectedCategories}
 					setSearchQuery={setSearchQuery}
 					setSelectedCategories={setSelectedCategories}
+					sortConfig={sortConfig}
+					setSortConfig={setSortConfig}
 				/>
 			</div>
 			<div className="flex-1 min-h-0">
