@@ -89,9 +89,13 @@ export function Step3({
 				</div>
 			)}
 
-			{tried && idImages.length === 0 && (
+			{tried && idImages.length === 0 ? (
 				<p className="text-xs text-danger">
 					Please upload at least one valid ID
+				</p>
+			) : (
+				<p className="text-xs text-default-400">
+					For verification purposes
 				</p>
 			)}
 		</div>
