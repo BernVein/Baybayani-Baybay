@@ -34,7 +34,7 @@ export const registerUser = async (profile: UserProfile, password: string) => {
 			} as UserProfile,
 		])
 		.select();
-
+	await supabase.auth.signOut();
 	if (tableError) {
 		console.error("Users table insert error:", tableError.message);
 		return null;
