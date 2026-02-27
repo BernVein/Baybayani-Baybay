@@ -208,9 +208,9 @@ function App() {
 					/>
 					<Route
 						element={
-							// <RequireGuest>
-							<SignUpPage />
-							// </RequireGuest>
+							<RequireGuest>
+								<SignUpPage />
+							</RequireGuest>
 						}
 						path="/signup"
 					/>
