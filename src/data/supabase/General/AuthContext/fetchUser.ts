@@ -32,7 +32,7 @@ export function fetchUser() {
 						`,
 					)
 					.eq("user_id", user.id)
-					.single();
+					.maybeSingle();
 
 				const userProfile: UserProfile = {
 					user_id: user.id,

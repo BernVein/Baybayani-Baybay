@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, Button } from "@heroui/react";
+import { Image, Button, addToast } from "@heroui/react";
 import {
 	BaybayaniLogo,
 	RightArrow,
@@ -10,15 +10,17 @@ import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { Step1 } from "@/pages/General/SignUpComponents/Step1";
 import { Step2 } from "@/pages/General/SignUpComponents/Step2";
 import { Step3 } from "@/pages/General/SignUpComponents/Step3";
+import { registerUser } from "@/data/supabase/General/registerUser";
+import { UserProfile } from "@/model/userProfile";
 
 const TOTAL_STEPS = 3;
 const STEP_LABELS = ["Account Info", "Password", "Valid ID"];
-export type Role = "Customer" | "Admin" | "Cooperative";
+export type Role = "Individual" | "Cooperative" | "Admin";
 
 export default function SignUp() {
 	// Step 1 Fields
 	const [step, setStep] = useState(0);
-	const [role, setRole] = useState<Role>("Customer");
+	const [role, setRole] = useState<Role>("Individual");
 	const [fullName, setFullName] = useState("");
 	const [cooperativeName, setCooperativeName] = useState("");
 	const [username, setUsername] = useState("");
@@ -67,6 +69,38 @@ export default function SignUp() {
 		if (!step3Valid) return;
 		// TODO: hook up to database
 		alert("Sign up submitted!");
+	};
+
+	const handleRegisterUser = async () => {
+		try {
+			const nameToUse =
+				role === "Cooperative" ? cooperativeName : fullName;
+			const userProfile: UserProfile = {
+				user_name: nameToUse,
+				user_role: role,
+				user_profile_img_url: `https://api.dicebear.com/6.x/bottts-neutral/svg?seed=${nameToUse}`,
+				user_theme: "light",
+				login_user_name: username,
+				user_phone_number: phone,
+				user_status: "For Approval",
+			};
+			await registerUser(userProfile, password);
+			addToast({
+				title: "Account Created Successfully",
+				description: "Your account has been created successfully.",
+				color: "success",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		} catch (error) {
+			addToast({
+				title: "Account Creation Failed",
+				description: "Something went wrong. Please try again.",
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		}
 	};
 
 	return (
@@ -246,6 +280,7 @@ export default function SignUp() {
 									type="submit"
 									color="success"
 									fullWidth={step === 0}
+									onPress={handleRegisterUser}
 									className="font-semibold text-white"
 								>
 									Create Account

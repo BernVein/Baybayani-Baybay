@@ -3,7 +3,7 @@ import { UserProfile } from "@/model/userProfile";
 
 export const registerUser = async (profile: UserProfile, password: string) => {
 	const { data: authData, error: authError } = await supabase.auth.signUp({
-		email: profile.login_user_name + "@baybayani.baybay",
+		email: profile.login_user_name + "@gmail.com",
 		password,
 	});
 
@@ -23,6 +23,7 @@ export const registerUser = async (profile: UserProfile, password: string) => {
 		.from("User")
 		.insert([
 			{
+				user_id: userId,
 				user_name: profile.user_name,
 				user_role: profile.user_role,
 				user_profile_img_url: `https://api.dicebear.com/6.x/bottts-neutral/svg?seed=${profile.user_name}`,

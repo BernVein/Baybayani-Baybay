@@ -30,7 +30,7 @@ export function useLogin() {
 		setLoading(true);
 
 		const { error } = await supabase.auth.signInWithPassword({
-			email: email + "@baybayani.baybay",
+			email: email + "@gmail.com",
 			password,
 		});
 

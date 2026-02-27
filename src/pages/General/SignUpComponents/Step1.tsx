@@ -38,7 +38,7 @@ export function Step1({
 	checkingUsername: boolean;
 	setCheckingUsername: (checkingUsername: boolean) => void;
 }) {
-	const ROLES: Role[] = ["Customer", "Admin", "Cooperative"];
+	const ROLES: Role[] = ["Individual", "Admin", "Cooperative"];
 	const [usernameError, setUsernameError] = useState<string | null>(null);
 	const [phoneError, setPhoneError] = useState<string | null>(null);
 
@@ -168,7 +168,7 @@ export function Step1({
 						isInvalid={tried && fullName.trim() === ""}
 						errorMessage="Required"
 						startContent={
-							role === "Customer" ? (
+							role === "Individual" ? (
 								<SoloUserIcon className="w-5" />
 							) : (
 								<KeyIcon className="w-5" />
