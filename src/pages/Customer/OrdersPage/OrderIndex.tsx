@@ -8,7 +8,8 @@ import { useFetchOrderCards } from "@/data/supabase/Customer/Orders/useFetchOrde
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 export default function OrderIndex() {
 	const [page, setPage] = useState(1);
-	const { user } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user;
 	const {
 		data: orderItems,
 		error,

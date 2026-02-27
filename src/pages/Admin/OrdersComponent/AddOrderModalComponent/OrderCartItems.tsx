@@ -15,7 +15,8 @@ export function OrderCartItems({
 	setSelectedCartItem: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
 	const [isDeleting, setIsDeleting] = useState(false);
-	const { user } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user ?? null;
 	const { items, loading, refetch } = useFetchCartItemsUI(user?.id ?? "");
 	const totalSubtotal = useMemo(
 		() =>

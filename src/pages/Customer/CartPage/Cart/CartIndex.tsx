@@ -34,7 +34,8 @@ export default function Cart() {
 	} = useDisclosure();
 
 	const isMobile = useIsMobile();
-	const { user } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user;
 	const { items, loading, errorMsg, refetch } = useFetchCartItemsUI(
 		user?.id ?? "",
 	);

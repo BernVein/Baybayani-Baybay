@@ -4,7 +4,9 @@ import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalCon
 import { ReactNode, useEffect } from "react";
 
 export default function RequireAuth({ children }: { children: ReactNode }) {
-	const { user, loading } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user;
+	const loading = auth?.loading;
 	const { openLoginModal } = useLoginModal();
 
 	useEffect(() => {

@@ -2,21 +2,22 @@ import { Navigate } from "react-router-dom";
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { ReactNode } from "react";
-
-type Role = "Admin" | "Individual" | "Cooperative";
+import { UserProfile } from "@/model/userProfile";
 
 export default function RequireRole({
 	children,
 	allowedRoles,
 }: {
 	children: ReactNode;
-	allowedRoles: Role[];
+	allowedRoles: UserProfile["user_role"][];
 }) {
-	const { role, loading } = useAuth();
+	const auth = useAuth();
+	const profile = auth?.profile;
+	const loading = auth?.loading;
 
 	if (loading) return null;
 
-	if (!allowedRoles.includes(role)) {
+	if (!profile || !allowedRoles.includes(profile.user_role)) {
 		return <Navigate to="/" replace />;
 	}
 

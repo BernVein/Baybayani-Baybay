@@ -29,7 +29,8 @@ export default function LoginModal() {
 		resetForm,
 		submitLogin,
 	} = useLogin();
-	const { profile } = useAuth();
+	const auth = useAuth();
+	const profile = auth?.profile;
 
 	const handleLogOut = async () => {
 		try {

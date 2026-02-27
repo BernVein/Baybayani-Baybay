@@ -14,7 +14,9 @@ import { ReactNode, useEffect } from "react";
 import { supabase } from "@/config/supabaseclient";
 
 export default function RequireGuest({ children }: { children: ReactNode }) {
-	const { profile, loading } = useAuth();
+	const auth = useAuth();
+	const profile = auth?.profile;
+	const loading = auth?.loading;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const navigate = useNavigate();
 

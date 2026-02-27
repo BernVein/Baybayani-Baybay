@@ -28,6 +28,8 @@ import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchN
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
+import { UserProfile } from "@/model/userProfile";
+import { User as AuthUser } from "@supabase/supabase-js";
 
 export function Navbar({
 	user,
@@ -35,8 +37,8 @@ export function Navbar({
 	setSearchTerm,
 	handleSignOut,
 }: {
-	user: any | null;
-	profile: any | null;
+	user: AuthUser | null;
+	profile: UserProfile | null;
 	setSearchTerm: (val: string) => void;
 	handleSignOut: () => Promise<void>;
 }) {

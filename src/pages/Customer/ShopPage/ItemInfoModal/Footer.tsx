@@ -23,7 +23,8 @@ export default function Footer({
 	onClose: () => void;
 }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { user } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user;
 	const { openLoginModal } = useLoginModal();
 
 	async function addToCartHandler() {

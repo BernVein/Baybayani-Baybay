@@ -35,7 +35,8 @@ export default function CheckoutModalIndex({
 	const { cartItems: selectedItems, loading } =
 		useFetchCartItems(selectedItemsId);
 	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
-	const { user } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user;
 	const handleCheckout = async (onClose: () => void) => {
 		try {
 			setIsAddToCartLoading(true);

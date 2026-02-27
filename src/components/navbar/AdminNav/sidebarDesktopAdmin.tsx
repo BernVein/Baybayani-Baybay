@@ -29,8 +29,13 @@ import {
 	ClockIcon,
 } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
+import { UserProfile } from "@/model/userProfile";
 
-export function SidebarDesktopAdmin() {
+export function SidebarDesktopAdmin({
+	profile,
+}: {
+	profile: UserProfile | null;
+}) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -207,7 +212,7 @@ export function SidebarDesktopAdmin() {
 										as="button"
 										color="success"
 										size="sm"
-										src="https://picsum.photos/300/300?random=42"
+										src={profile?.user_profile_img_url}
 									/>
 								</div>
 							</div>
@@ -224,7 +229,7 @@ export function SidebarDesktopAdmin() {
 							>
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">
-									realbernvein@gmail.com
+									{profile?.user_login_name}
 								</p>
 							</DropdownItem>
 							<DropdownItem key="theme">
@@ -244,9 +249,13 @@ export function SidebarDesktopAdmin() {
 							</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
-					<div className="flex flex-col items-start">
-						<span className="text-sm">Bern Vein Balermo</span>
-						<span className="text-xs text-default-600">Admin</span>
+					<div className="flex flex-col items-start text-start overflow-hidden w-full">
+						<span className="text-sm truncate w-full">
+							{profile?.user_name}
+						</span>
+						<span className="text-xs text-default-600">
+							{profile?.user_role}
+						</span>
 					</div>
 				</div>
 			</CardFooter>

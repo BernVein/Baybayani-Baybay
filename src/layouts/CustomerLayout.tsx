@@ -3,14 +3,16 @@ import { useState, useRef, useEffect } from "react";
 
 import { Navbar } from "@/components/navbar/CustomerNav/navbarDesktop";
 import { NavbarMobile } from "@/components/navbar/CustomerNav/navbarMobile";
+import { UserProfile } from "@/model/userProfile";
+import { User as AuthUser } from "@supabase/supabase-js";
 
 export default function CustomerLayout({
 	user,
 	profile,
 	handleSignOut,
 }: {
-	user: any | null;
-	profile: any | null;
+	user: AuthUser | null;
+	profile: UserProfile | null;
 	handleSignOut: () => Promise<void>;
 }) {
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);

@@ -25,8 +25,13 @@ import {
 } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { supabase } from "@/config/supabaseclient";
+import { UserProfile } from "@/model/userProfile";
 
-export function NavbarMobileAdmin() {
+export function NavbarMobileAdmin({
+	profile,
+}: {
+	profile: UserProfile | null;
+}) {
 	const [active, setActive] = useState("");
 	const navigate = useNavigate();
 
@@ -163,7 +168,7 @@ export function NavbarMobileAdmin() {
 									as="button"
 									color="success"
 									size="sm"
-									src="https://picsum.photos/300/300?random=42"
+									src={profile?.user_profile_img_url}
 								/>
 							</div>
 							<span className="text-sm font-light mt-1">
@@ -180,7 +185,7 @@ export function NavbarMobileAdmin() {
 						>
 							<p className="font-semibold">Signed in as</p>
 							<p className="font-semibold">
-								realbernvein@gmail.com
+								{profile?.user_login_name}
 							</p>
 						</DropdownItem>
 						<DropdownItem key="theme">

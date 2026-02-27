@@ -33,7 +33,8 @@ export function AddOrderModal({
 	const [itemId, setItemId] = useState<string>("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
-	const { user } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user ?? null;
 
 	useEffect(() => {
 		document.title = isOpenAddOrder

@@ -27,7 +27,9 @@ export default function AdminLayout() {
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);
 	const bottomNavRef = useRef<HTMLDivElement>(null);
 	const [footerHeight, setFooterHeight] = useState(0);
-	const { user, profile } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user ?? null;
+	const profile = auth?.profile ?? null;
 	const location = useLocation();
 	const [isNavigating, setIsNavigating] = useState(false);
 
@@ -59,7 +61,7 @@ export default function AdminLayout() {
 		<div className="relative h-[100dvh] w-full bg-background text-foreground overflow-hidden flex flex-col sm:flex-row">
 			{/* Sidebar Desktop */}
 			<div className="hidden sm:block w-[330px] h-full flex-shrink-0">
-				<SidebarDesktopAdmin />
+				<SidebarDesktopAdmin profile={profile} />
 			</div>
 
 			{/* Main Content Area */}
@@ -90,7 +92,7 @@ export default function AdminLayout() {
 				ref={bottomNavRef}
 				className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
 			>
-				<NavbarMobileAdmin />
+				<NavbarMobileAdmin profile={profile} />
 			</div>
 		</div>
 	);

@@ -125,7 +125,9 @@ function App() {
 
 		return null;
 	}
-	const { user, profile } = useAuth();
+	const auth = useAuth();
+	const user = auth?.user ?? null;
+	const profile = auth?.profile ?? null;
 
 	return (
 		<LoginModalProvider>

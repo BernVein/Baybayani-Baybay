@@ -3,11 +3,13 @@ import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { ReactNode } from "react";
 
 export default function RedirectAdmin({ children }: { children: ReactNode }) {
-	const { role, loading } = useAuth();
+	const auth = useAuth();
+	const profile = auth?.profile;
+	const loading = auth?.loading;
 
 	if (loading) return null;
 
-	if (role === "Admin") {
+	if (profile?.user_role === "Admin") {
 		return <Navigate to="/admin/dashboard" replace />;
 	}
 

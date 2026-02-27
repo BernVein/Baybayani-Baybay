@@ -18,14 +18,16 @@ import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { SoloUserIcon } from "@/components/icons";
+import { UserProfile } from "@/model/userProfile";
+import { User as AuthUser } from "@supabase/supabase-js";
 
 export function NavbarMobile({
 	user,
 	profile,
 	handleSignOut,
 }: {
-	user: any | null;
-	profile: any | null;
+	user: AuthUser | null;
+	profile: UserProfile | null;
 	handleSignOut: () => Promise<void>;
 }) {
 	const [active, setActive] = useState("");

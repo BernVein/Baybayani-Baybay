@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/config/supabaseclient";
+import { UserProfile } from "@/model/userProfile";
+import { User as AuthUser } from "@supabase/supabase-js";
 
 export function fetchUser() {
-	const [user, setUser] = useState<any>(null);
-	const [profile, setProfile] = useState<any>(null);
-	const [role, setRole] = useState<string | null>(null);
+	const [user, setUser] = useState<AuthUser | null>(null);
+	const [profile, setProfile] = useState<UserProfile | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -19,16 +20,26 @@ export function fetchUser() {
 				const { data: profile } = await supabase
 					.from("User")
 					.select(
-						"user_name, user_profile_img_url, user_role, user_theme",
+						"user_name, user_profile_img_url, user_role, user_theme, login_user_name, user_phone_number, fcm_token",
 					)
 					.eq("user_id", user.id)
 					.single();
-				setProfile(profile);
-				setRole(profile?.user_role ?? null);
+
+				const userProfile: UserProfile = {
+					user_id: user.id,
+					user_name: profile?.user_name,
+					user_profile_img_url: profile?.user_profile_img_url,
+					user_role: profile?.user_role,
+					user_theme: profile?.user_theme,
+					user_login_name: profile?.login_user_name,
+					user_phone_number: profile?.user_phone_number,
+					user_fcm_token: profile?.fcm_token,
+				};
+				setProfile(userProfile);
+				console.log(userProfile);
 			} else {
 				setUser(null);
 				setProfile(null);
-				setRole(null);
 			}
 
 			setLoading(false);
@@ -48,7 +59,6 @@ export function fetchUser() {
 	return {
 		user,
 		profile,
-		role,
 		loading,
 	};
 }
