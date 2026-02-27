@@ -12,12 +12,14 @@ import { Step2 } from "@/pages/General/SignUpComponents/Step2";
 import { Step3 } from "@/pages/General/SignUpComponents/Step3";
 import { registerUser } from "@/data/supabase/General/registerUser";
 import { UserProfile } from "@/model/userProfile";
+import { useNavigate } from "react-router-dom";
 
 const TOTAL_STEPS = 3;
 const STEP_LABELS = ["Account Info", "Password", "Valid ID"];
 export type Role = "Individual" | "Cooperative" | "Admin";
 
 export default function SignUp() {
+	const navigate = useNavigate();
 	// Step 1 Fields
 	const [step, setStep] = useState(0);
 	const [role, setRole] = useState<Role>("Individual");
@@ -92,7 +94,8 @@ export default function SignUp() {
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
-			setIsRegistering(false);
+
+			navigate("/");
 		} catch (error) {
 			addToast({
 				title: "Account Creation Failed",
