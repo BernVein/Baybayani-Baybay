@@ -229,7 +229,7 @@ export function SidebarDesktopAdmin({
 							>
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">
-									{profile?.user_login_name}
+									{profile?.login_user_name}
 								</p>
 							</DropdownItem>
 							<DropdownItem key="theme">

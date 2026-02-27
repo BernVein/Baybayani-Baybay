@@ -1,10 +1,11 @@
 export interface UserProfile {
-	user_id: string;
+	user_id?: string | null;
 	user_name: string;
 	user_theme: "light" | "dark";
-	user_login_name: string;
+	login_user_name: string;
 	user_phone_number: string;
-	user_fcm_token: string;
+	user_fcm_token?: string | null;
 	user_role: "Individual" | "Cooperative" | "Admin";
 	user_profile_img_url: string;
+	user_status: "For Approval" | "Approved" | "Rejected" | "Suspended";
 }

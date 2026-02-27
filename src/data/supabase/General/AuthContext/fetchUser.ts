@@ -20,7 +20,16 @@ export function fetchUser() {
 				const { data: profile } = await supabase
 					.from("User")
 					.select(
-						"user_name, user_profile_img_url, user_role, user_theme, login_user_name, user_phone_number, fcm_token",
+						`
+						user_name,
+						user_profile_img_url,
+						user_role,
+						user_theme,
+						login_user_name,
+						user_phone_number,
+						fcm_token,
+						user_status
+						`,
 					)
 					.eq("user_id", user.id)
 					.single();
@@ -31,12 +40,12 @@ export function fetchUser() {
 					user_profile_img_url: profile?.user_profile_img_url,
 					user_role: profile?.user_role,
 					user_theme: profile?.user_theme,
-					user_login_name: profile?.login_user_name,
+					login_user_name: profile?.login_user_name,
 					user_phone_number: profile?.user_phone_number,
 					user_fcm_token: profile?.fcm_token,
+					user_status: profile?.user_status,
 				};
 				setProfile(userProfile);
-				console.log(userProfile);
 			} else {
 				setUser(null);
 				setProfile(null);
