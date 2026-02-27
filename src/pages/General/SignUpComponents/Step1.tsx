@@ -1,6 +1,8 @@
 import { Input } from "@heroui/react";
-import { GroupUserIcon, UserIcon, PhoneIcon } from "@/components/icons";
+import { GroupUserIcon, PhoneIcon } from "@/components/icons";
 import { Role } from "@/pages/General/SignUp";
+import { useEffect, useState } from "react";
+import { supabase } from "@/config/supabaseclient";
 
 export function Step1({
 	role,
@@ -16,6 +18,8 @@ export function Step1({
 	phone,
 	setPhone,
 	tried,
+	checkingUsername,
+	setCheckingUsername,
 }: {
 	role: Role;
 	setRole: (role: Role) => void;
@@ -30,14 +34,65 @@ export function Step1({
 	phone: string;
 	setPhone: (phone: string) => void;
 	tried: boolean;
+	checkingUsername: boolean;
+	setCheckingUsername: (checkingUsername: boolean) => void;
 }) {
 	const ROLES: Role[] = ["Customer", "Admin", "Cooperative"];
+	const [usernameError, setUsernameError] = useState<string | null>(null);
+	const username_length = 5;
+	const usernameRegex = /^[a-zA-Z0-9]+$/;
+
+	useEffect(() => {
+		if (!username) {
+			setUsernameError(null);
+			return;
+		}
+
+		const cleanUsername = username.toLowerCase().trim();
+		if (cleanUsername.length < username_length) {
+			setUsernameError(
+				`Username must be at least ${username_length} characters`,
+			);
+			return;
+		}
+		// Format validation first
+		if (!usernameRegex.test(cleanUsername)) {
+			setUsernameError(
+				"Only letters and numbers allowed (no spaces or special characters)",
+			);
+			return;
+		}
+
+		setUsernameError(null);
+
+		const timeout = setTimeout(async () => {
+			setCheckingUsername(true);
+
+			const { data, error } = await supabase
+				.from("User")
+				.select("login_user_name")
+				.eq("login_user_name", cleanUsername)
+				.maybeSingle();
+
+			if (error) {
+				setUsernameError("Error checking username");
+			} else if (data) {
+				setUsernameError("Username already taken");
+			} else {
+				setUsernameError(null);
+			}
+
+			setCheckingUsername(false);
+		}, 500);
+
+		return () => clearTimeout(timeout);
+	}, [username]);
 
 	return (
 		<div className="flex flex-col gap-4 w-full">
 			{/* Role pills */}
 			<div className="flex flex-col gap-1.5">
-				<span className="text-sm text-default-500">User Role</span>
+				<span className="text-sm text-default-500">Choose a Role</span>
 				<div className="flex flex-wrap gap-2">
 					{ROLES.map((r) => (
 						<button
@@ -98,10 +153,20 @@ export function Step1({
 				labelPlacement="outside"
 				placeholder="Choose a username"
 				value={username}
-				onValueChange={setUsername}
-				isInvalid={tried && username.trim() === ""}
-				errorMessage="Username is required"
-				startContent={<UserIcon className="w-5" />}
+				onValueChange={(val) => setUsername(val.toLowerCase())}
+				isInvalid={!!usernameError || (tried && username.trim() === "")}
+				errorMessage={
+					username.trim() === ""
+						? "Username is required"
+						: (usernameError ?? undefined)
+				}
+				description={
+					!usernameError && username && !checkingUsername ? (
+						<div className="text-success">Username available</div>
+					) : checkingUsername ? (
+						"Checking availability..."
+					) : undefined
+				}
 			/>
 
 			{/* Phone */}

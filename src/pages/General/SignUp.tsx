@@ -23,6 +23,7 @@ export default function SignUp() {
 	const [lastName, setLastName] = useState("");
 	const [cooperativeName, setCooperativeName] = useState("");
 	const [username, setUsername] = useState("");
+	const [checkingUsername, setCheckingUsername] = useState(false);
 	const [phone, setPhone] = useState("");
 
 	// Step 2 Fields
@@ -195,6 +196,8 @@ export default function SignUp() {
 									phone={phone}
 									setPhone={setPhone}
 									tried={tried}
+									checkingUsername={checkingUsername}
+									setCheckingUsername={setCheckingUsername}
 								/>
 							)}
 							{step === 1 && (
@@ -237,6 +240,7 @@ export default function SignUp() {
 									color="success"
 									className="font-semibold text-white"
 									endContent={<RightArrow className="w-4" />}
+									isDisabled={checkingUsername}
 								>
 									Next
 								</Button>
