@@ -33,7 +33,7 @@ export default function SignUp() {
 
 	// Step 3 Fields
 	const [idImages, setIdImages] = useState<File[]>([]);
-
+	const [isRegistering, setIsRegistering] = useState(false);
 	// Validation triggered
 	const [tried, setTried] = useState(false);
 
@@ -72,6 +72,7 @@ export default function SignUp() {
 
 	const handleRegisterUser = async () => {
 		try {
+			setIsRegistering(true);
 			const nameToUse =
 				role === "Cooperative" ? cooperativeName : fullName;
 			const userProfile: UserProfile = {
@@ -91,6 +92,7 @@ export default function SignUp() {
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
+			setIsRegistering(false);
 		} catch (error) {
 			addToast({
 				title: "Account Creation Failed",
@@ -99,6 +101,7 @@ export default function SignUp() {
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
+			setIsRegistering(false);
 		}
 	};
 
@@ -280,6 +283,7 @@ export default function SignUp() {
 									color="success"
 									fullWidth={step === 0}
 									className="font-semibold text-white"
+									isLoading={isRegistering}
 								>
 									Create Account
 								</Button>
