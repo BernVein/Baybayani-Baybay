@@ -58,7 +58,7 @@ export function FilterSection({
 				<ModalAwareSelect
 					className="w-full"
 					classNames={{ innerWrapper: "w-full pr-6" }}
-					placeholder="Add Item"
+					placeholder={isMobile ? "" : "Add Item"}
 					selectedKeys={selectKeys}
 					selectionMode="single"
 					startContent={<PlusIcon className="w-5 shrink-0" />}
