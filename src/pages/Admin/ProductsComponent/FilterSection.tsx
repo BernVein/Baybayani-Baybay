@@ -12,7 +12,14 @@ import {
 } from "@heroui/react";
 import { useState } from "react";
 
-import { SearchIcon, FilterIcon, PlusIcon, SortIcon } from "@/components/icons";
+import {
+	SearchIcon,
+	FilterIcon,
+	PlusIcon,
+	SortIcon,
+	SingleListBullet,
+	ListBullet,
+} from "@/components/icons";
 import ModalAwareSelect from "@/lib/ModalAwareSelect";
 import useIsMobile from "@/lib/isMobile";
 import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
@@ -71,8 +78,20 @@ export function FilterSection({
 						setSelectKeys(new Set());
 					}}
 				>
-					<SelectItem key="no-variant">No Variant</SelectItem>
-					<SelectItem key="with-variant">With Variant</SelectItem>
+					<SelectItem key="no-variant">
+						{isMobile ? (
+							<SingleListBullet className="w-5" />
+						) : (
+							"No Variant"
+						)}
+					</SelectItem>
+					<SelectItem key="with-variant">
+						{isMobile ? (
+							<ListBullet className="w-5" />
+						) : (
+							"With Variant"
+						)}
+					</SelectItem>
 				</ModalAwareSelect>
 
 				<Dropdown
