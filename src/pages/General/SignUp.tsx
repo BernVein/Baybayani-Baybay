@@ -67,8 +67,7 @@ export default function SignUp() {
 		e.preventDefault();
 		setTried(true);
 		if (!step3Valid) return;
-		// TODO: hook up to database
-		alert("Sign up submitted!");
+		handleRegisterUser();
 	};
 
 	const handleRegisterUser = async () => {
@@ -280,7 +279,6 @@ export default function SignUp() {
 									type="submit"
 									color="success"
 									fullWidth={step === 0}
-									onPress={handleRegisterUser}
 									className="font-semibold text-white"
 								>
 									Create Account
