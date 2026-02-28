@@ -1,5 +1,22 @@
 import { Outlet } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
+import { Skeleton } from "@heroui/react";
+
+function CustomerPageSkeleton() {
+	return (
+		<div className="p-5 md:p-8 flex flex-col gap-5 w-full">
+			<Skeleton className="h-8 w-1/3 rounded-lg" />
+			<div className="flex gap-4 flex-wrap">
+				<Skeleton className="h-48 w-40 rounded-xl" />
+				<Skeleton className="h-48 w-40 rounded-xl" />
+				<Skeleton className="h-48 w-40 rounded-xl" />
+				<Skeleton className="h-48 w-40 rounded-xl" />
+			</div>
+			<Skeleton className="h-6 w-2/3 rounded-lg" />
+			<Skeleton className="h-6 w-1/2 rounded-lg" />
+		</div>
+	);
+}
 
 import { Navbar } from "@/components/navbar/CustomerNav/navbarDesktop";
 import { NavbarMobile } from "@/components/navbar/CustomerNav/navbarMobile";
@@ -61,7 +78,9 @@ export default function CustomerLayout({
 					paddingBottom: `${footerHeight}px`,
 				}}
 			>
-				<Outlet context={{ searchTerm, setSearchTerm }} />
+				<Suspense fallback={<CustomerPageSkeleton />}>
+					<Outlet context={{ searchTerm, setSearchTerm }} />
+				</Suspense>
 			</main>
 
 			{/* Bottom Navbar */}

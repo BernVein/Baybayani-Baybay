@@ -1,5 +1,5 @@
-import { Outlet, useLocation } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { Skeleton } from "@heroui/react";
 
 import { NavbarMobileAdmin } from "@/components/navbar/AdminNav/navbarMobileAdmin";
@@ -30,14 +30,6 @@ export default function AdminLayout() {
 	const auth = useAuth();
 	const user = auth?.user ?? null;
 	const profile = auth?.profile ?? null;
-	const location = useLocation();
-	const [isNavigating, setIsNavigating] = useState(false);
-
-	useEffect(() => {
-		setIsNavigating(true);
-		const timer = setTimeout(() => setIsNavigating(false), 300);
-		return () => clearTimeout(timer);
-	}, [location.pathname]);
 
 	useEffect(() => {
 		const updateHeights = () => {
@@ -72,9 +64,7 @@ export default function AdminLayout() {
 				}}
 			>
 				<div className="flex-1 h-full w-full overflow-y-auto overflow-x-hidden">
-					{isNavigating ? (
-						<AdminPageSkeleton />
-					) : (
+					<Suspense fallback={<AdminPageSkeleton />}>
 						<Outlet
 							context={{
 								searchTerm,
@@ -83,7 +73,7 @@ export default function AdminLayout() {
 								profile,
 							}}
 						/>
-					)}
+					</Suspense>
 				</div>
 			</main>
 
