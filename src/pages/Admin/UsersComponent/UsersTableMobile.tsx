@@ -6,6 +6,11 @@ import {
 	TableRow,
 	TableCell,
 	Button,
+	Dropdown,
+	DropdownTrigger,
+	DropdownMenu,
+	DropdownSection,
+	DropdownItem,
 	useDisclosure,
 } from "@heroui/react";
 
@@ -105,17 +110,43 @@ export function UsersTableMobile({
 										size="sm"
 										variant="light"
 										onPress={onOpenViewUserDetail}
-									>
-										<EyeIcon className="w-5" />
-									</Button>
+										startContent={
+											<EyeIcon className="w-5" />
+										}
+									/>
 
-									<Button
-										isIconOnly
-										size="sm"
-										variant="light"
-									>
-										<PencilIcon className="w-5" />
-									</Button>
+									<Dropdown>
+										<DropdownTrigger>
+											<Button
+												isIconOnly
+												size="sm"
+												variant="light"
+												startContent={
+													<PencilIcon className="w-5" />
+												}
+											/>
+										</DropdownTrigger>
+										<DropdownMenu>
+											<DropdownSection title="Set Status">
+												<DropdownItem key="Approved">
+													Approved
+												</DropdownItem>
+												<DropdownItem key="For Approval">
+													For Approval
+												</DropdownItem>
+												<DropdownItem key="Rejected">
+													Rejected
+												</DropdownItem>
+												<DropdownItem
+													key="Suspended"
+													className="text-danger"
+													color="danger"
+												>
+													Suspended
+												</DropdownItem>
+											</DropdownSection>
+										</DropdownMenu>
+									</Dropdown>
 								</div>
 							</TableCell>
 						</TableRow>
