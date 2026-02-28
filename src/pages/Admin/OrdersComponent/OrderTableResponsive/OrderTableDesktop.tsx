@@ -88,7 +88,7 @@ export function OrderTableDesktop({
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-row gap-2 items-center">
-									<Avatar />
+									<Avatar src={order.item_img_url} />
 									<div className="flex flex-col items-start">
 										<span className="text-base font-bold">
 											{order.item_variant_name}

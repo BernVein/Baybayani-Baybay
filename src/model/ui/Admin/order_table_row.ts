@@ -14,4 +14,5 @@ export interface OrderTableRow {
 	user_profile_img_url: string;
 	item_sold_by: string;
 	order_identifier: string;
+	item_img_url: string;
 }

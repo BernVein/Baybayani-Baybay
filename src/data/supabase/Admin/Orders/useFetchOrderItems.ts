@@ -97,6 +97,8 @@ export const useFetchOrderItems = (
 						orderItem.VariantSnapshot?.variant_copy_snapshot_id ??
 						"",
 					order_identifier: orderItem.order_identifier ?? "",
+					item_img_url:
+						orderItem.Item?.Item_Image?.[0]?.item_image_url ?? "",
 				}) as OrderTableRow,
 		);
 
