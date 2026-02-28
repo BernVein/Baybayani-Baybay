@@ -13,12 +13,14 @@ import { Step3 } from "@/pages/General/SignUpComponents/Step3";
 import { registerUser } from "@/data/supabase/General/registerUser";
 import { UserProfile } from "@/model/userProfile";
 import { SignUpSuccessModal } from "@/pages/General/SignUpSuccessModal";
+import { useNavigate } from "react-router-dom";
 
 const TOTAL_STEPS = 3;
 const STEP_LABELS = ["Account Info", "Password", "Valid ID"];
 export type Role = "Individual" | "Cooperative" | "Admin";
 
 export default function SignUp() {
+	const navigate = useNavigate();
 	const {
 		isOpen: isOpenWarning,
 		onOpen: onOpenWarning,
@@ -296,7 +298,10 @@ export default function SignUp() {
 							<p className="text-sm text-default-500">
 								Already have an account?
 							</p>
-							<p className="text-sm cursor-pointer hover:underline text-[#36975f] font-medium">
+							<p
+								onClick={() => navigate("/login")}
+								className="text-sm cursor-pointer hover:underline text-success font-bold"
+							>
 								Sign in
 							</p>
 						</div>

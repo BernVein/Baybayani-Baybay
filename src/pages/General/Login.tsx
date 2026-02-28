@@ -11,8 +11,10 @@ import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { BaybayaniLogo } from "@/components/icons";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+	const navigate = useNavigate();
 	const {
 		email,
 		setEmail,
@@ -132,7 +134,10 @@ export default function Login() {
 									<p className="text-sm text-default-500">
 										Dont have an account?
 									</p>
-									<p className="text-sm cursor-pointer hover:underline">
+									<p
+										onClick={() => navigate("/signup")}
+										className="text-sm cursor-pointer hover:underline text-success"
+									>
 										Sign up
 									</p>
 								</div>

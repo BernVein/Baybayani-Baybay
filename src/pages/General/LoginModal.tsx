@@ -14,8 +14,9 @@ import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { supabase } from "@/config/supabaseclient";
 import { addToast } from "@heroui/react";
-
+import { useNavigate } from "react-router-dom";
 export default function LoginModal() {
+	const navigate = useNavigate();
 	const { isLoginModalOpen, closeLoginModal } = useLoginModal();
 	const {
 		email,
@@ -174,7 +175,13 @@ export default function LoginModal() {
 										<p className="text-sm text-default-500">
 											Dont have an account?
 										</p>
-										<p className="text-sm cursor-pointer hover:underline">
+										<p
+											onClick={() => {
+												closeLoginModal();
+												navigate("/signup");
+											}}
+											className="text-sm cursor-pointer hover:underline text-success font-bold"
+										>
 											Sign up
 										</p>
 									</div>
