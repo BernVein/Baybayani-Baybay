@@ -9,4 +9,5 @@ export interface UserProfile {
 	user_profile_img_url: string;
 	user_status: "For Approval" | "Approved" | "Rejected" | "Suspended";
 	user_valid_id_img_url?: string[] | null;
+	created_at?: string | null;
 }

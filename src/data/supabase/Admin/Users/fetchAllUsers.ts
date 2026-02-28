@@ -30,7 +30,8 @@ export const fetchAllUsers = () => {
 				User_Valid_Identification(valid_id_img_url)
 				`,
 			)
-			.eq("is_soft_deleted", false);
+			.eq("is_soft_deleted", false)
+			.eq("is_for_debugging", false);
 
 		if (error) {
 			setFetchError(error.message);
@@ -60,6 +61,7 @@ export const fetchAllUsers = () => {
 				user.User_Valid_Identification?.map(
 					(img: any) => img.valid_id_img_url,
 				) ?? [],
+			created_at: user.created_at,
 		})) as UserProfile[];
 
 		setUserProfiles(mappedUsers);
