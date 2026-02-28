@@ -1,15 +1,12 @@
-import { useDisclosure } from "@heroui/react";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
 import { MessageIcon } from "@/components/icons";
 import { MessageList } from "@/pages/Admin/MessagesComponent/MessageList";
-import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
 import { MessageContentDesktop } from "@/pages/Admin/MessagesComponent/MessageContentDesktop";
 
 export default function Messages() {
 	const { profile } = useOutletContext<any>();
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedMessageId, setSelectedMessageId] = useState<string | null>(
 		null,
 	);
@@ -47,11 +44,10 @@ export default function Messages() {
 								: "hidden sm:flex sm:w-2/3 h-full"
 						}
 						onBack={() => setSelectedMessageId(null)}
-						onOpen={onOpen}
+						onOpen={() => {}}
 					/>
 				</div>
 			</div>
-			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
 		</>
 	);
 }
