@@ -16,7 +16,9 @@ import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatu
 import { StockMovement } from "@/model/stockMovement";
 import type { Selection } from "@heroui/react";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { InsufficientStockModal } from "@/pages/Admin/OrdersComponent/InsufficientStockModal";
+import { useDisclosure } from "@heroui/react";
 
 export function OrderTable({
 	orderItems: orders,
@@ -29,19 +31,65 @@ export function OrderTable({
 	setOrderItems: Dispatch<SetStateAction<OrderTableRow[] | null>>;
 	loading: boolean;
 }) {
+	const {
+		isOpen: isStockModalOpen,
+		onOpen: onOpenStockModal,
+		onOpenChange: onOpenChangeStockModal,
+	} = useDisclosure();
+
+	const [stockConflictData, setStockConflictData] = useState<{
+		itemName: string;
+		variantName: string;
+		requestedQuantity: number;
+		availableStock: number;
+		targetStatus: string;
+		unitOfMeasure: string;
+	} | null>(null);
+
 	const handleOrder = async (
 		orderId: string,
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => {
+		const canCheckStockChangeStatus =
+			changeToStatus === "Ready" || changeToStatus === "Completed";
+		const canCheckStockCurrentStatus =
+			currentStatus !== "Ready" &&
+			currentStatus !== "Completed" &&
+			currentStatus !== "Cancelled";
 		try {
+			const order = orders?.find((o) => o.order_id === orderId);
+
+			if (order) {
+				// Only check if we are NOT already in a Ready or Completed state
+				if (canCheckStockChangeStatus && canCheckStockCurrentStatus) {
+					const { effectiveStocks, success } = await fetchLatestStock(
+						order.item_variant_id,
+					);
+
+					if (
+						success &&
+						(effectiveStocks ?? 0) < order.item_quantity
+					) {
+						setStockConflictData({
+							itemName: order.item_name,
+							variantName: order.item_variant_name,
+							requestedQuantity: order.item_quantity,
+							availableStock: effectiveStocks ?? 0,
+							targetStatus: changeToStatus,
+							unitOfMeasure: order.item_sold_by,
+						});
+						onOpenStockModal();
+						return;
+					}
+				}
+			}
+
 			const { error } = await changeOrderStatus(orderId, changeToStatus);
 
 			if (error) {
 				throw error;
 			}
-
-			const order = orders?.find((o) => o.order_id === orderId);
 
 			if (order) {
 				// Deduct stock when completed
@@ -215,6 +263,16 @@ export function OrderTable({
 			<OrderTableDesktop
 				orders={orders || []}
 				handleOrder={handleOrder}
+			/>
+			<InsufficientStockModal
+				isOpen={isStockModalOpen}
+				onOpenChange={onOpenChangeStockModal}
+				itemName={stockConflictData?.itemName || ""}
+				unitOfMeasure={stockConflictData?.unitOfMeasure || ""}
+				variantName={stockConflictData?.variantName || ""}
+				requestedQuantity={stockConflictData?.requestedQuantity || 0}
+				availableStock={stockConflictData?.availableStock || 0}
+				targetStatus={stockConflictData?.targetStatus || ""}
 			/>
 		</div>
 	);
