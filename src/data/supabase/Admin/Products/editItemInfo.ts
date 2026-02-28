@@ -19,6 +19,15 @@ export async function editItemInfo(itemId: string, item: Item) {
 
 		if (itemError) throw itemError;
 
+		// Sync variant name for no-variant items
+		if (!item.item_has_variant || item.item_variants.length == 1) {
+			const { error: variantSyncError } = await supabase
+				.from("Variant")
+				.update({ variant_name: item.item_title })
+				.eq("item_id", itemId);
+			if (variantSyncError) throw variantSyncError;
+		}
+
 		// Fetch existing images from DB
 		const { data: existingImages } = await supabase
 			.from("Item_Image")
