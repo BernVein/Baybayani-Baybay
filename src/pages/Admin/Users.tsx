@@ -8,7 +8,7 @@ import { fetchAllUsers } from "@/data/supabase/Admin/Users/fetchAllUsers";
 
 export default function Users() {
 	const { profile } = useOutletContext<any>();
-	const { userProfiles, loading, refetch } = fetchAllUsers();
+	const { userProfiles, loading } = fetchAllUsers();
 	return (
 		<div className="flex flex-col gap-8 p-4 h-full">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
@@ -37,12 +37,10 @@ export default function Users() {
 				<UsersTableMobile
 					userProfiles={userProfiles}
 					isLoading={loading}
-					refetch={refetch}
 				/>
 				<UsersTableDesktop
 					userProfiles={userProfiles}
 					isLoading={loading}
-					refetch={refetch}
 				/>
 			</div>
 		</div>

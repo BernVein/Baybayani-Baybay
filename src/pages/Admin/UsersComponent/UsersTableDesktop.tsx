@@ -12,21 +12,23 @@ import {
 } from "@heroui/react";
 
 import { EyeIcon, PencilIcon } from "@/components/icons";
-import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
 import { UserProfile } from "@/model/userProfile";
 import { detectNetwork } from "@/utils/detectNetwork";
 
 export function UsersTableDesktop({
 	userProfiles,
 	isLoading,
-	refetch,
 }: {
 	userProfiles: UserProfile[] | null;
 	isLoading: boolean;
-	refetch: () => void;
 }) {
-	console.log(isLoading, refetch);
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	console.log(isLoading);
+	const {
+		isOpen: isOpenViewUserDetail,
+		onOpen: onOpenViewUserDetail,
+		onOpenChange: onOpenChangeViewUserDetail,
+	} = useDisclosure();
+	console.log(isOpenViewUserDetail, onOpenChangeViewUserDetail);
 
 	const formatPHNumber = (phone: string) => {
 		if (!phone) return "";
@@ -87,7 +89,20 @@ export function UsersTableDesktop({
 								</div>
 							</TableCell>
 							<TableCell>
-								<Chip color="success" variant="flat">
+								<Chip
+									color={
+										userProfile.user_status === "Approved"
+											? "success"
+											: userProfile.user_status ===
+												  "For Approval"
+												? "warning"
+												: userProfile.user_status ===
+													  "Rejected"
+													? "danger"
+													: "default"
+									}
+									variant="flat"
+								>
 									{userProfile.user_status}
 								</Chip>
 							</TableCell>
@@ -138,7 +153,7 @@ export function UsersTableDesktop({
 										isIconOnly
 										size="sm"
 										variant="light"
-										onPress={onOpen}
+										onPress={onOpenViewUserDetail}
 									>
 										<EyeIcon className="w-5" />
 									</Button>
@@ -156,7 +171,6 @@ export function UsersTableDesktop({
 					))}
 				</TableBody>
 			</Table>
-			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
 		</div>
 	);
 }
