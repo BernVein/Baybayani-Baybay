@@ -26,8 +26,7 @@ export const fetchAllUsers = () => {
 				login_user_name,
 				user_phone_number,
 				user_status,
-				created_at,
-				User_Valid_Identification(valid_id_img_url)
+				created_at
 				`,
 			)
 			.eq("is_soft_deleted", false)
@@ -57,10 +56,6 @@ export const fetchAllUsers = () => {
 			user_profile_img_url: user.user_profile_img_url,
 			user_status: user.user_status,
 
-			valid_ids:
-				user.User_Valid_Identification?.map(
-					(img: any) => img.valid_id_img_url,
-				) ?? [],
 			created_at: user.created_at,
 		})) as UserProfile[];
 

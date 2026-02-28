@@ -11,9 +11,7 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 
-import { DeleteUserModal } from "./DeleteUserModal";
-
-import { TrashIcon, EyeIcon } from "@/components/icons";
+import { EyeIcon, PencilIcon } from "@/components/icons";
 import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
 import { UserProfile } from "@/model/userProfile";
 import { detectNetwork } from "@/utils/detectNetwork";
@@ -29,11 +27,6 @@ export function UsersTableDesktop({
 }) {
 	console.log(isLoading, refetch);
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const {
-		isOpen: isOpenDeleteUser,
-		onOpen: onOpenDeleteUser,
-		onOpenChange: onOpenChangeDeleteUser,
-	} = useDisclosure();
 
 	const formatPHNumber = (phone: string) => {
 		if (!phone) return "";
@@ -72,7 +65,10 @@ export function UsersTableDesktop({
 						<TableRow key={userProfile.user_id}>
 							<TableCell>
 								<div className="flex flex-row items-center gap-2">
-									<Avatar size="md" />
+									<Avatar
+										size="md"
+										src={userProfile.user_profile_img_url}
+									/>
 									<div className="flex flex-col items-start">
 										<span className="text-base font-bold">
 											{userProfile.user_name}
@@ -114,7 +110,7 @@ export function UsersTableDesktop({
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-col items-start">
-									<span>
+									<span className="font-bold text-base">
 										{new Date(
 											userProfile.created_at ?? "",
 										).toLocaleDateString("en-US", {
@@ -151,9 +147,8 @@ export function UsersTableDesktop({
 										isIconOnly
 										size="sm"
 										variant="light"
-										onPress={onOpenDeleteUser}
 									>
-										<TrashIcon className="w-5 text-danger-300" />
+										<PencilIcon className="w-5" />
 									</Button>
 								</div>
 							</TableCell>
@@ -162,10 +157,6 @@ export function UsersTableDesktop({
 				</TableBody>
 			</Table>
 			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
-			<DeleteUserModal
-				isOpenDeleteUser={isOpenDeleteUser}
-				onOpenChangeDeleteUser={onOpenChangeDeleteUser}
-			/>
 		</div>
 	);
 }

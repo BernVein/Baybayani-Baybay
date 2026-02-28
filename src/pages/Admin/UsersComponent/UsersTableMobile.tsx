@@ -16,7 +16,6 @@ import {
 
 import { MoreIconVertical, PencilIcon, TrashIcon } from "@/components/icons";
 import { EditUserModal } from "@/pages/Admin/UsersComponent/EditUserModal";
-import { DeleteUserModal } from "@/pages/Admin/UsersComponent/DeleteUserModal";
 import { UserProfile } from "@/model/userProfile";
 
 export function UsersTableMobile({
@@ -31,11 +30,6 @@ export function UsersTableMobile({
 	console.log(isLoading, refetch);
 
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const {
-		isOpen: isOpenDeleteUser,
-		onOpen: onOpenDeleteUser,
-		onOpenChange: onOpenChangeDeleteUser,
-	} = useDisclosure();
 
 	return (
 		<div className="sm:hidden flex-1 min-h-0 flex flex-col">
@@ -106,7 +100,6 @@ export function UsersTableMobile({
 												startContent={
 													<TrashIcon className="w-5 text-danger-300" />
 												}
-												onClick={onOpenDeleteUser}
 											>
 												<div className="flex items-center gap-2">
 													<span className="text-danger">
@@ -123,10 +116,6 @@ export function UsersTableMobile({
 				</TableBody>
 			</Table>
 			<EditUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
-			<DeleteUserModal
-				isOpenDeleteUser={isOpenDeleteUser}
-				onOpenChangeDeleteUser={onOpenChangeDeleteUser}
-			/>
 		</div>
 	);
 }
