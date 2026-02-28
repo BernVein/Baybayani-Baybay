@@ -35,6 +35,7 @@ export function AddOrderModal({
 	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
 	const auth = useAuth();
 	const user = auth?.user ?? null;
+	const profile = auth?.profile ?? null;
 
 	useEffect(() => {
 		document.title = isOpenAddOrder
@@ -133,7 +134,7 @@ export function AddOrderModal({
 								Note: When adding an order, the name will
 								automatically be set to{" "}
 								<span className="font-semibold text-default-700">
-									Bern Vein Balermo
+									{profile?.user_name}
 								</span>
 								, the admin currently logged in.
 							</p>
