@@ -11,7 +11,13 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 
-import { EyeIcon, PencilIcon } from "@/components/icons";
+import {
+	EyeIcon,
+	KeyIcon,
+	PencilIcon,
+	SoloUserIcon,
+	GroupUserIcon,
+} from "@/components/icons";
 import { UserProfile } from "@/model/userProfile";
 import { detectNetwork } from "@/utils/detectNetwork";
 
@@ -82,10 +88,18 @@ export function UsersTableDesktop({
 								</div>
 							</TableCell>
 							<TableCell>
-								<div className="flex flex-row gap-2 items-center">
-									<Chip color="success" variant="flat">
-										{userProfile.user_role}
-									</Chip>
+								<div className="flex flex-row gap-1 items-center">
+									{userProfile.user_role === "Admin" && (
+										<KeyIcon className="w-5" />
+									)}
+									{userProfile.user_role === "Individual" && (
+										<SoloUserIcon className="w-5" />
+									)}
+									{userProfile.user_role ===
+										"Cooperative" && (
+										<GroupUserIcon className="w-5" />
+									)}
+									{userProfile.user_role}
 								</div>
 							</TableCell>
 							<TableCell>
