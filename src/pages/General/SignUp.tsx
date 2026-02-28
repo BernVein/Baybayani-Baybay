@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Image, Button, addToast } from "@heroui/react";
+import {
+	Image,
+	addToast,
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	Button,
+	useDisclosure,
+} from "@heroui/react";
 import {
 	BaybayaniLogo,
 	RightArrow,
@@ -19,6 +29,11 @@ const STEP_LABELS = ["Account Info", "Password", "Valid ID"];
 export type Role = "Individual" | "Cooperative" | "Admin";
 
 export default function SignUp() {
+	const {
+		isOpen: isOpenWarning,
+		onOpen: onOpenWarning,
+		onOpenChange: onOpenChangeWarning,
+	} = useDisclosure();
 	const navigate = useNavigate();
 	// Step 1 Fields
 	const [step, setStep] = useState(0);
@@ -87,19 +102,13 @@ export default function SignUp() {
 				user_status: "For Approval",
 			};
 			await registerUser(userProfile, password, idImages);
-			addToast({
-				title: "Account Created Successfully",
-				description: "Your account has been created successfully.",
-				color: "success",
-				shouldShowTimeoutProgress: true,
-				timeout: 5000,
-			});
 
-			navigate("/");
-		} catch (error) {
+			onOpenWarning();
+		} catch (error: any) {
 			addToast({
 				title: "Account Creation Failed",
-				description: "Something went wrong. Please try again.",
+				description:
+					error.message || "Something went wrong. Please try again.",
 				color: "danger",
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
@@ -325,6 +334,73 @@ export default function SignUp() {
 					/>
 				</div>
 			</div>
+			<Modal
+				isOpen={isOpenWarning}
+				onOpenChange={onOpenChangeWarning}
+				disableAnimation
+				hideCloseButton
+			>
+				<ModalContent>
+					{(onClose) => (
+						<>
+							<ModalHeader className="flex flex-col gap-1">
+								Registration Successful!
+							</ModalHeader>
+							<ModalBody>
+								<div className="flex flex-col gap-4 text-center items-center py-4">
+									<div className="p-4 bg-success-50 rounded-full">
+										<CheckIcon className="w-12 h-12 text-success" />
+									</div>
+									<div className="flex flex-col gap-2">
+										<p className="text-xl font-bold">
+											Account Created
+										</p>
+										<p className="text-default-600">
+											Your account has been successfully
+											registered and is now{" "}
+											<span className="font-semibold text-success">
+												pending approval
+											</span>{" "}
+											from our administrators.
+										</p>
+										<p className="text-default-500 text-sm italic">
+											In the meantime, you can{" "}
+										</p>
+										<p className="text-default-500 text-sm italic">
+											browse the shop to see our available
+											products.
+										</p>
+									</div>
+								</div>
+							</ModalBody>
+							<ModalFooter>
+								<Button
+									onPress={() => {
+										onClose();
+										// hard reset lol
+										window.location.reload();
+									}}
+									variant="light"
+									color="danger"
+								>
+									Close
+								</Button>
+								<Button
+									startContent={
+										<BaybayaniLogo className="w-5" />
+									}
+									onPress={() => {
+										onClose();
+										navigate("/shop");
+									}}
+								>
+									Browse Shop
+								</Button>
+							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
 		</div>
 	);
 }

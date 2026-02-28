@@ -21,15 +21,16 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	const navigate = useNavigate();
 
 	// Open modal as soon as we know the user is logged in
+	// and they are not a new registration waiting for approval
 	useEffect(() => {
-		if (!loading && profile) {
+		if (!loading && profile && profile.user_status !== "For Approval") {
 			onOpen();
+		} else if (!profile) {
+			onClose();
 		}
-	}, [loading, profile, onOpen]);
+	}, [loading, profile, onOpen, onClose]);
 
 	if (loading) return null;
-
-	if (!profile) return children;
 
 	const handleLogOut = async () => {
 		try {
@@ -59,35 +60,38 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	};
 
 	return (
-		<Modal
-			isOpen={isOpen}
-			onClose={handleGoBack}
-			isDismissable={false}
-			hideCloseButton
-			disableAnimation
-		>
-			<ModalContent>
-				<ModalHeader className="flex flex-col gap-1">
-					Already signed in
-				</ModalHeader>
-				<ModalBody>
-					<p className="text-default-600 text-sm">
-						You are currently signed in as{" "}
-						<span className="font-semibold text-foreground">
-							{profile.user_name}
-						</span>
-						. Would you like to log out first?
-					</p>
-				</ModalBody>
-				<ModalFooter>
-					<Button variant="light" onPress={handleGoBack}>
-						Go back
-					</Button>
-					<Button color="danger" onPress={handleLogOut}>
-						Log out
-					</Button>
-				</ModalFooter>
-			</ModalContent>
-		</Modal>
+		<>
+			{children}
+			<Modal
+				isOpen={isOpen}
+				onClose={handleGoBack}
+				isDismissable={false}
+				hideCloseButton
+				disableAnimation
+			>
+				<ModalContent>
+					<ModalHeader className="flex flex-col gap-1">
+						Already signed in
+					</ModalHeader>
+					<ModalBody>
+						<p className="text-default-600 text-sm">
+							You are currently signed in as{" "}
+							<span className="font-semibold text-foreground">
+								{profile?.user_name}
+							</span>
+							. Would you like to log out first?
+						</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button variant="light" onPress={handleGoBack}>
+							Go back
+						</Button>
+						<Button color="danger" onPress={handleLogOut}>
+							Log out
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</>
 	);
 }

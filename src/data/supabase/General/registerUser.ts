@@ -25,13 +25,12 @@ export const registerUser = async (
 
 	if (authError) {
 		console.error("Auth signup error:", authError.message);
-		return null;
+		throw new Error(authError.message);
 	}
 
 	const userId = authData.user?.id;
 	if (!userId) {
-		console.error("No user ID returned from Auth");
-		return null;
+		throw new Error("No user ID returned from Auth");
 	}
 
 	// Insert user into users table
@@ -77,7 +76,7 @@ export const registerUser = async (
 
 	if (tableError) {
 		console.error("Users table insert error:", tableError.message);
-		return null;
+		throw new Error(tableError.message);
 	}
 
 	await supabase.auth.signOut();
