@@ -31,7 +31,7 @@
 
 ## Overview
 
-Baybayani is my capstone thesis project built for a farmer group in Baybay City, Leyte that sells and grows fresh produce. It covers the full retail workflow: customers can browse products, manage their cart, place orders, and chat with admins in real time. On the admin side, the platform provides a full management - tracking orders, managing product catalogs with variant-level pricing and stock, monitoring customer accounts, and live metrics on the dashboard.
+Baybayani is a capstone thesis project built for a farmer group in Baybay City, Leyte that sells and grows fresh produce. It covers the full retail workflow: customers can browse products, manage their cart, place orders, and chat with admins in real time. On the admin side, the platform provides a full management - tracking orders, managing product catalogs with variant-level pricing and stock, monitoring customer accounts, and live metrics on the dashboard.
 
 The app runs as a web application and is also packaged as an Android APK via Capacitor, with push notification support.
 
