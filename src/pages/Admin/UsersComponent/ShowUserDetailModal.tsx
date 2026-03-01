@@ -9,12 +9,15 @@ import {
 	Chip,
 	Divider,
 	Image,
+	useDisclosure,
 } from "@heroui/react";
+import { useState } from "react";
 
 import { formatCreatedAt } from "@/utils/formatCreatedAt";
 import { formatPHNumber } from "@/utils/formatPHNumber";
 import { UserProfile } from "@/model/userProfile";
 import { fetchUserValidID } from "@/data/supabase/Admin/Users/fetchUserValidID";
+import { PreviewImage } from "@/pages/Admin/UsersComponent/ShowUserDetailModalComponent/PreviewImage";
 
 export function ShowUserDetailModal({
 	isOpen,
@@ -28,6 +31,17 @@ export function ShowUserDetailModal({
 	const { userValidIDLink, loading } = fetchUserValidID(
 		selectedUserProfile?.user_id || "",
 	);
+	const {
+		isOpen: isPreviewOpen,
+		onOpen: onPreviewOpen,
+		onOpenChange: onPreviewOpenChange,
+	} = useDisclosure();
+	const [selectedImage, setSelectedImage] = useState<string>("");
+
+	const handleImageClick = (url: string) => {
+		setSelectedImage(url);
+		onPreviewOpen();
+	};
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -127,12 +141,16 @@ export function ShowUserDetailModal({
 							<p>{selectedUserProfile?.user_name}'s Valid IDs:</p>
 							<div className="flex flex-row gap-1 w-full">
 								{userValidIDLink?.map((url, index) => (
-									<div key={index} className="w-1/2 relative">
+									<div
+										key={index}
+										className="w-1/2 relative cursor-zoom-in"
+										onClick={() => handleImageClick(url)}
+									>
 										<Image
 											isLoading={loading}
 											src={url}
 											alt={`Valid ID ${index + 1}`}
-											className="object-cover rounded-lg w-full h-48"
+											className="object-cover rounded-lg w-full h-48 hover:opacity-80 transition-opacity"
 										/>
 									</div>
 								))}
@@ -153,6 +171,11 @@ export function ShowUserDetailModal({
 					</>
 				)}
 			</ModalContent>
+			<PreviewImage
+				isPreviewOpen={isPreviewOpen}
+				onPreviewOpenChange={onPreviewOpenChange}
+				selectedImage={selectedImage}
+			/>
 		</Modal>
 	);
 }
