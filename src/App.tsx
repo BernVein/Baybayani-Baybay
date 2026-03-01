@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import { lazy } from "react";
-import { addToast } from "@heroui/react";
+import { lazy, Suspense } from "react";
+import { addToast, Spinner } from "@heroui/react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/config/supabaseclient";
@@ -131,88 +131,96 @@ function App() {
 		<LoginModalProvider>
 			<LoginModal />
 			<ScrollToTop />
-			<Routes>
-				{/* CUSTOMER ROUTES */}
-				<Route
-					path="/"
-					element={
-						<RedirectAdmin>
-							<CustomerLayout
-								user={user}
-								profile={profile}
-								handleSignOut={handleSignOut}
-							/>
-						</RedirectAdmin>
-					}
-				>
-					<Route index element={<Shop />} />
-					<Route element={<Shop />} path="/shop" />
+			<Suspense
+				fallback={
+					<div className="flex h-screen w-screen items-center justify-center">
+						<Spinner color="success" size="lg" />
+					</div>
+				}
+			>
+				<Routes>
+					{/* CUSTOMER ROUTES */}
 					<Route
+						path="/"
 						element={
-							<RequireAuth>
-								<Cart />
-							</RequireAuth>
+							<RedirectAdmin>
+								<CustomerLayout
+									user={user}
+									profile={profile}
+									handleSignOut={handleSignOut}
+								/>
+							</RedirectAdmin>
 						}
-						path="/cart"
-					/>
-					<Route
-						element={
-							<RequireAuth>
-								<Orders />
-							</RequireAuth>
-						}
-						path="/orders"
-					/>
-					<Route
-						element={
-							<RequireAuth>
-								<Profile />
-							</RequireAuth>
-						}
-						path="/profile"
-					/>
-					<Route
-						element={
-							<RequireAuth>
-								<Settings />
-							</RequireAuth>
-						}
-						path="/settings"
-					/>
-				</Route>
+					>
+						<Route index element={<Shop />} />
+						<Route element={<Shop />} path="/shop" />
+						<Route
+							element={
+								<RequireAuth>
+									<Cart />
+								</RequireAuth>
+							}
+							path="/cart"
+						/>
+						<Route
+							element={
+								<RequireAuth>
+									<Orders />
+								</RequireAuth>
+							}
+							path="/orders"
+						/>
+						<Route
+							element={
+								<RequireAuth>
+									<Profile />
+								</RequireAuth>
+							}
+							path="/profile"
+						/>
+						<Route
+							element={
+								<RequireAuth>
+									<Settings />
+								</RequireAuth>
+							}
+							path="/settings"
+						/>
+					</Route>
 
-				<Route
-					element={
-						<RequireGuest>
-							<LoginPage />
-						</RequireGuest>
-					}
-					path="/login"
-				/>
-				<Route
-					element={
-						<RequireGuest>
-							<SignUpPage />
-						</RequireGuest>
-					}
-					path="/signup"
-				/>
+					<Route
+						element={
+							<RequireGuest>
+								<LoginPage />
+							</RequireGuest>
+						}
+						path="/login"
+					/>
+					<Route
+						element={
+							<RequireGuest>
+								<SignUpPage />
+							</RequireGuest>
+						}
+						path="/signup"
+					/>
 
-				{/* ADMIN ROUTES */}
-				<Route
-					path="/admin"
-					element={
-						<RequireRole allowedRoles={["Admin"]}>
-							<AdminLayout />
-						</RequireRole>
-					}
-				>
-					<Route element={<Dashboard />} path="dashboard" />
-					<Route element={<AdminOrders />} path="orders" />
-					<Route element={<AdminProducts />} path="products" />
-					<Route element={<AdminUsers />} path="users" />
-				</Route>
-			</Routes>
+					{/* ADMIN ROUTES */}
+					<Route
+						path="/admin"
+						element={
+							<RequireRole allowedRoles={["Admin"]}>
+								<AdminLayout />
+							</RequireRole>
+						}
+					>
+						<Route element={<Dashboard />} path="dashboard" />
+						<Route element={<AdminOrders />} path="orders" />
+						<Route element={<AdminProducts />} path="products" />
+						<Route element={<AdminUsers />} path="users" />
+					</Route>
+				</Routes>
+			</Suspense>
 		</LoginModalProvider>
 	);
 }

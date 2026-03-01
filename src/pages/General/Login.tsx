@@ -12,9 +12,11 @@ import { BaybayaniLogo } from "@/components/icons";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
 import { useNavigate } from "react-router-dom";
+import { useTransition } from "react";
 
 export default function Login() {
 	const navigate = useNavigate();
+	const [, startTransition] = useTransition();
 	const {
 		email,
 		setEmail,
@@ -135,7 +137,11 @@ export default function Login() {
 										Dont have an account?
 									</p>
 									<p
-										onClick={() => navigate("/signup")}
+										onClick={() => {
+											startTransition(() => {
+												navigate("/signup");
+											});
+										}}
 										className="text-sm cursor-pointer hover:underline text-success"
 									>
 										Sign up

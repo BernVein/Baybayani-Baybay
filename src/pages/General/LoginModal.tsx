@@ -15,9 +15,12 @@ import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { supabase } from "@/config/supabaseclient";
 import { addToast } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
+import { useTransition } from "react";
+
 export default function LoginModal() {
 	const navigate = useNavigate();
 	const { isLoginModalOpen, closeLoginModal } = useLoginModal();
+	const [, startTransition] = useTransition();
 	const {
 		email,
 		setEmail,
@@ -177,8 +180,10 @@ export default function LoginModal() {
 										</p>
 										<p
 											onClick={() => {
-												closeLoginModal();
-												navigate("/signup");
+												startTransition(() => {
+													closeLoginModal();
+													navigate("/signup");
+												});
 											}}
 											className="text-sm cursor-pointer hover:underline text-success font-bold"
 										>
