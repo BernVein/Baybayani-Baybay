@@ -83,7 +83,7 @@ export const RealtimeChat = ({
 	);
 
 	return (
-		<div className="flex flex-col h-full w-full bg-background text-foreground antialiased">
+		<div className="flex flex-col h-full min-h-0 w-full bg-background text-foreground antialiased">
 			{/* Messages */}
 			<div
 				ref={containerRef}

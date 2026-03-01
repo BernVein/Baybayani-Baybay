@@ -85,10 +85,7 @@ export function FloatingChat() {
 				</div>
 
 				{/* Chat Body */}
-				<div
-					className="flex-1 min-h-0 overflow-hidden"
-					style={{ height: "420px" }}
-				>
+				<div className="flex-1 min-h-0 overflow-hidden flex flex-col">
 					{user && username ? (
 						<RealtimeChat roomName={roomName} username={username} />
 					) : (
