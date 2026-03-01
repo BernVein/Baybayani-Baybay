@@ -18,19 +18,13 @@ import {
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import {
-	BaybayaniLogo,
-	CartIcon,
-	SearchIcon,
-	MessageIcon,
-} from "@/components/icons";
+import { BaybayaniLogo, CartIcon, SearchIcon } from "@/components/icons";
 import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
-import { useFloatingChat } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 
 export function Navbar({
 	user,
@@ -51,7 +45,6 @@ export function Navbar({
 	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
 	const { openLoginModal } = useLoginModal();
-	const { openChat } = useFloatingChat();
 
 	const { items: fetchedItems, loading } = useFetchNavbarItems();
 	const searchItems = fetchedItems.map((i, index) => ({
@@ -162,24 +155,6 @@ export function Navbar({
 				className="flex-shrink-0 items-center gap-4 hidden sm:flex"
 				justify="end"
 			>
-				<NavbarItem className="hidden sm:inline-block">
-					<button
-						className="flex items-center gap-2 text-foreground hover:text-success transition-colors"
-						onClick={() => {
-							if (!user) {
-								openLoginModal();
-								return;
-							}
-							openChat();
-						}}
-					>
-						<MessageIcon className="size-6" />
-						<span className="hidden sm:inline font-normal">
-							Chat
-						</span>
-					</button>
-				</NavbarItem>
-
 				<NavbarItem
 					className="hidden sm:inline-block"
 					isActive={active === "Cart"}

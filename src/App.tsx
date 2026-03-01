@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { lazy } from "react";
 import { addToast } from "@heroui/react";
 import { useEffect } from "react";
@@ -179,10 +179,6 @@ function App() {
 						}
 						path="/settings"
 					/>
-					<Route
-						element={<Navigate to="/shop" replace />}
-						path="/messages"
-					/>
 				</Route>
 
 				<Route
@@ -215,10 +211,6 @@ function App() {
 					<Route element={<AdminOrders />} path="orders" />
 					<Route element={<AdminProducts />} path="products" />
 					<Route element={<AdminUsers />} path="users" />
-					<Route
-						element={<Navigate to="/admin/dashboard" replace />}
-						path="messages"
-					/>
 				</Route>
 			</Routes>
 		</LoginModalProvider>

@@ -13,12 +13,11 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { BaybayaniLogo, CartIcon, MessageIcon } from "@/components/icons";
+import { BaybayaniLogo, CartIcon } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { SoloUserIcon } from "@/components/icons";
-import { useFloatingChat } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
 
@@ -36,7 +35,6 @@ export function NavbarMobile({
 	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
 	const { openLoginModal } = useLoginModal();
-	const { openChat } = useFloatingChat();
 
 	return (
 		<HeroNavBar
@@ -68,23 +66,6 @@ export function NavbarMobile({
 
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
 
-			<NavbarItem className="flex flex-col items-center">
-				<button
-					className="flex flex-col items-center text-foreground"
-					onClick={() => {
-						if (!user) {
-							openLoginModal();
-							return;
-						}
-						openChat();
-					}}
-				>
-					<div className="w-8 h-8 flex items-center justify-center relative">
-						<MessageIcon className="w-6 h-6" />
-					</div>
-					<span className="text-sm font-light mt-1">Chat</span>
-				</button>
-			</NavbarItem>
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
 
 			{/* Cart */}

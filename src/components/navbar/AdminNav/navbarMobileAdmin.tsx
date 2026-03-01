@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 
 import {
 	DashboardIcon,
-	MessageIcon,
 	MoreIcon,
 	OrdersIcon,
 	ProductIcon,
@@ -142,13 +141,6 @@ export function NavbarMobileAdmin({
 								startContent={<UserIcon className="w-5" />}
 							>
 								Users
-							</DropdownItem>
-							<DropdownItem
-								key="messages"
-								onPress={() => navigate("/admin/messages")}
-								startContent={<MessageIcon className="w-5" />}
-							>
-								Messages
 							</DropdownItem>
 						</DropdownSection>
 					</DropdownMenu>

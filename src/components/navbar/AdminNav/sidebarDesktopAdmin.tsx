@@ -24,7 +24,6 @@ import {
 	CartIcon,
 	UserIcon,
 	ProductIcon,
-	MessageIcon,
 	LogoutIcon,
 	ClockIcon,
 } from "@/components/icons";
@@ -45,7 +44,6 @@ export function SidebarDesktopAdmin({
 		"/admin/orders": "orders",
 		"/admin/products": "products",
 		"/admin/users": "users",
-		"/admin/messages": "messages",
 	};
 
 	const handleLogOut = async () => {
@@ -176,15 +174,6 @@ export function SidebarDesktopAdmin({
 							startContent={<UserIcon className="size-6" />}
 						>
 							Users
-						</ListboxItem>
-						<ListboxItem
-							key="messages"
-							className="mb-3"
-							color="success"
-							onPress={() => navigate("/admin/messages")}
-							startContent={<MessageIcon className="size-6" />}
-						>
-							Messages
 						</ListboxItem>
 					</ListboxSection>
 					<ListboxSection title="Account">
