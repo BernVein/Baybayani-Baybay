@@ -28,7 +28,6 @@ const Dashboard = lazy(() => import("@/pages/Admin/Dashboard"));
 const AdminOrders = lazy(() => import("@/pages/Admin/Orders"));
 const AdminProducts = lazy(() => import("@/pages/Admin/Products"));
 const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
-const AdminMessages = lazy(() => import("@/pages/Admin/Messages"));
 
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
@@ -216,7 +215,10 @@ function App() {
 					<Route element={<AdminOrders />} path="orders" />
 					<Route element={<AdminProducts />} path="products" />
 					<Route element={<AdminUsers />} path="users" />
-					<Route element={<AdminMessages />} path="messages" />
+					<Route
+						element={<Navigate to="/admin/dashboard" replace />}
+						path="messages"
+					/>
 				</Route>
 			</Routes>
 		</LoginModalProvider>

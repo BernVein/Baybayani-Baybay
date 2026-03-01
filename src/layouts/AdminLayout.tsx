@@ -5,6 +5,7 @@ import { Skeleton } from "@heroui/react";
 import { NavbarMobileAdmin } from "@/components/navbar/AdminNav/navbarMobileAdmin";
 import { SidebarDesktopAdmin } from "@/components/navbar/AdminNav/sidebarDesktopAdmin";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { AdminFloatingChat } from "@/components/chat/AdminFloatingChat";
 
 function AdminPageSkeleton() {
 	return (
@@ -84,6 +85,9 @@ export default function AdminLayout() {
 			>
 				<NavbarMobileAdmin profile={profile} />
 			</div>
+
+			{/* Admin Floating Chat Widget */}
+			<AdminFloatingChat />
 		</div>
 	);
 }
