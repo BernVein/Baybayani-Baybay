@@ -14,6 +14,7 @@ import {
 import { formatCreatedAt } from "@/utils/formatCreatedAt";
 import { formatPHNumber } from "@/utils/formatPHNumber";
 import { UserProfile } from "@/model/userProfile";
+import { fetchUserValidID } from "@/data/supabase/Admin/Users/fetchUserValidID";
 
 export function ShowUserDetailModal({
 	isOpen,
@@ -24,6 +25,9 @@ export function ShowUserDetailModal({
 	onOpenChange: (isOpen: boolean) => void;
 	selectedUserProfile: UserProfile | null;
 }) {
+	const { userValidIDLink, loading } = fetchUserValidID(
+		selectedUserProfile?.user_id || "",
+	);
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -122,32 +126,16 @@ export function ShowUserDetailModal({
 							</p>
 							<p>{selectedUserProfile?.user_name}'s Valid IDs:</p>
 							<div className="flex flex-row gap-1 w-full">
-								<div className="flex-1 relative">
-									<Image
-										src={
-											selectedUserProfile?.user_profile_img_url ||
-											"/placeholder.png"
-										}
-										alt="Profile"
-										className="object-cover rounded-lg w-full h-full"
-										classNames={{
-											wrapper: "min-w-full h-full",
-										}}
-									/>
-								</div>
-								<div className="flex-1 relative">
-									<Image
-										src={
-											selectedUserProfile?.user_profile_img_url ||
-											"/placeholder.png"
-										}
-										alt="Profile"
-										className="object-cover rounded-lg w-full h-full"
-										classNames={{
-											wrapper: "min-w-full h-full",
-										}}
-									/>
-								</div>
+								{userValidIDLink?.map((url, index) => (
+									<div key={index} className="w-1/2 relative">
+										<Image
+											isLoading={loading}
+											src={url}
+											alt={`Valid ID ${index + 1}`}
+											className="object-cover rounded-lg w-full h-48"
+										/>
+									</div>
+								))}
 							</div>
 						</ModalBody>
 						<ModalFooter>

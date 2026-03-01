@@ -144,10 +144,7 @@ export default function Users() {
 						userProfiles={userProfiles}
 						isLoading={loading}
 					/>
-					<UsersTableDesktop
-						userProfiles={userProfiles}
-						isLoading={loading}
-					/>
+					<UsersTableDesktop userProfiles={userProfiles} />
 				</div>
 			)}
 		</div>

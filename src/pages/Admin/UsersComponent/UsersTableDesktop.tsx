@@ -32,12 +32,9 @@ import { ShowUserDetailModal } from "./ShowUserDetailModal";
 
 export function UsersTableDesktop({
 	userProfiles,
-	isLoading,
 }: {
 	userProfiles: UserProfile[] | null;
-	isLoading: boolean;
 }) {
-	console.log(isLoading);
 	const {
 		isOpen: isOpenViewUserDetail,
 		onOpen: onOpenViewUserDetail,

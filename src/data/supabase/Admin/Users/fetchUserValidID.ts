@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
 
-export const useUserValidIDs = (userID: string) => {
+export const fetchUserValidID = (userID: string) => {
 	const [userValidIDLink, setUserValidIDLink] = useState<string[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [fetchError, setFetchError] = useState<string | null>(null);
