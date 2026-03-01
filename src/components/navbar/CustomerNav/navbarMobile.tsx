@@ -18,6 +18,7 @@ import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { SoloUserIcon } from "@/components/icons";
+import { useFloatingChat } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
 
@@ -35,6 +36,7 @@ export function NavbarMobile({
 	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
 	const { openLoginModal } = useLoginModal();
+	const { openChat } = useFloatingChat();
 
 	return (
 		<HeroNavBar
@@ -66,38 +68,22 @@ export function NavbarMobile({
 
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
 
-			<NavbarItem
-				className="flex flex-col items-center"
-				isActive={active === "Messages"}
-			>
-				<Link
-					className="flex flex-col items-center"
-					color={active === "Messages" ? "success" : "foreground"}
-					href="/messages"
-					onClick={(e) => {
-						e.preventDefault();
+			<NavbarItem className="flex flex-col items-center">
+				<button
+					className="flex flex-col items-center text-foreground"
+					onClick={() => {
 						if (!user) {
 							openLoginModal();
 							return;
 						}
-						setActive("Messages");
-						navigate("/messages");
+						openChat();
 					}}
 				>
 					<div className="w-8 h-8 flex items-center justify-center relative">
-						<Badge
-							className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-							color="danger"
-							content="3"
-							shape="circle"
-							showOutline={false}
-							size="sm"
-						>
-							<MessageIcon className="w-6 h-6" />
-						</Badge>
+						<MessageIcon className="w-6 h-6" />
 					</div>
 					<span className="text-sm font-light mt-1">Chat</span>
-				</Link>
+				</button>
 			</NavbarItem>
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
 

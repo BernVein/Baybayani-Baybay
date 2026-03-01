@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { lazy } from "react";
 import { addToast } from "@heroui/react";
 import { useEffect } from "react";
@@ -18,7 +18,6 @@ import LoginModal from "@/pages/General/LoginModal";
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
 const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
 const Shop = lazy(() => import("@/pages/Customer/ShopPage/ShopIndex"));
-const Message = lazy(() => import("@/pages/Customer/MessagePage/MessageIndex"));
 const Profile = lazy(
 	() => import("@/pages/Customer/UserAccount/ProfilePage/Profile"),
 );
@@ -182,11 +181,7 @@ function App() {
 						path="/settings"
 					/>
 					<Route
-						element={
-							<RequireAuth>
-								<Message />
-							</RequireAuth>
-						}
+						element={<Navigate to="/shop" replace />}
 						path="/messages"
 					/>
 				</Route>

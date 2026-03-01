@@ -22,6 +22,8 @@ import { Navbar } from "@/components/navbar/CustomerNav/navbarDesktop";
 import { NavbarMobile } from "@/components/navbar/CustomerNav/navbarMobile";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
+import { FloatingChatProvider } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
+import { FloatingChat } from "@/components/chat/FloatingChat";
 
 export default function CustomerLayout({
 	user,
@@ -60,40 +62,45 @@ export default function CustomerLayout({
 	}, []);
 
 	return (
-		<div className="relative min-h-screen bg-background text-foreground">
-			{/* Top Navbar */}
-			<div ref={topNavRef} className="fixed top-0 left-0 w-full z-50">
-				<Navbar
-					user={user}
-					profile={profile}
-					setSearchTerm={setSearchTerm}
-					handleSignOut={handleSignOut}
-				/>
-			</div>
+		<FloatingChatProvider>
+			<div className="relative min-h-screen bg-background text-foreground">
+				{/* Top Navbar */}
+				<div ref={topNavRef} className="fixed top-0 left-0 w-full z-50">
+					<Navbar
+						user={user}
+						profile={profile}
+						setSearchTerm={setSearchTerm}
+						handleSignOut={handleSignOut}
+					/>
+				</div>
 
-			{/* Page content */}
-			<main
-				style={{
-					paddingTop: `${navHeight}px`,
-					paddingBottom: `${footerHeight}px`,
-				}}
-			>
-				<Suspense fallback={<CustomerPageSkeleton />}>
-					<Outlet context={{ searchTerm, setSearchTerm }} />
-				</Suspense>
-			</main>
+				{/* Page content */}
+				<main
+					style={{
+						paddingTop: `${navHeight}px`,
+						paddingBottom: `${footerHeight}px`,
+					}}
+				>
+					<Suspense fallback={<CustomerPageSkeleton />}>
+						<Outlet context={{ searchTerm, setSearchTerm }} />
+					</Suspense>
+				</main>
 
-			{/* Bottom Navbar */}
-			<div
-				ref={bottomNavRef}
-				className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
-			>
-				<NavbarMobile
-					user={user}
-					profile={profile}
-					handleSignOut={handleSignOut}
-				/>
+				{/* Bottom Navbar */}
+				<div
+					ref={bottomNavRef}
+					className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
+				>
+					<NavbarMobile
+						user={user}
+						profile={profile}
+						handleSignOut={handleSignOut}
+					/>
+				</div>
+
+				{/* Floating Chat Widget */}
+				<FloatingChat />
 			</div>
-		</div>
+		</FloatingChatProvider>
 	);
 }
