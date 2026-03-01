@@ -146,7 +146,7 @@ export function AdminFloatingChat() {
 						? "opacity-100 scale-100 pointer-events-auto"
 						: "opacity-0 scale-95 pointer-events-none",
 				].join(" ")}
-				style={{ maxHeight: "520px" }}
+				style={{ height: "520px" }}
 			>
 				{/* Panel Header */}
 				<div className="flex items-center justify-between px-4 py-3 bg-[#146A38] text-white flex-shrink-0">
