@@ -13,7 +13,13 @@ import {
 	DropdownSection,
 	DropdownItem,
 	Chip,
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
 	useDisclosure,
+	Divider,
 } from "@heroui/react";
 
 import {
@@ -25,6 +31,8 @@ import {
 } from "@/components/icons";
 import { UserProfile } from "@/model/userProfile";
 import { detectNetwork } from "@/utils/detectNetwork";
+import { useState } from "react";
+import { formatCreatedAt } from "@/utils/formatCreatedAt";
 
 export function UsersTableDesktop({
 	userProfiles,
@@ -39,7 +47,9 @@ export function UsersTableDesktop({
 		onOpen: onOpenViewUserDetail,
 		onOpenChange: onOpenChangeViewUserDetail,
 	} = useDisclosure();
-	console.log(isOpenViewUserDetail, onOpenChangeViewUserDetail);
+
+	const [selectedUserProfile, setSelectedUserProfile] =
+		useState<UserProfile | null>(null);
 
 	const formatPHNumber = (phone: string) => {
 		if (!phone) return "";
@@ -60,7 +70,6 @@ export function UsersTableDesktop({
 
 		return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7)}`;
 	};
-
 	return (
 		<div className="sm:flex hidden flex-1 min-h-0 flex-col">
 			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
@@ -144,66 +153,27 @@ export function UsersTableDesktop({
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-col items-start">
-									{userProfile.created_at &&
-										!isNaN(
-											new Date(
-												userProfile.created_at,
-											).getTime(),
-										) && (
-											<>
-												<span className="font-bold text-base">
-													{new Date(
+									{formatCreatedAt(
+										userProfile.created_at,
+									) && (
+										<>
+											<span className="font-bold text-base">
+												{
+													formatCreatedAt(
 														userProfile.created_at,
-													).toLocaleDateString(
-														"en-US",
-														{
-															year: "numeric",
-															month: "short",
-															day: "numeric",
-														},
-													)}
-												</span>
+													)?.formattedDate
+												}
+											</span>
 
-												<span className="text-sm text-default-500 italic">
-													{(() => {
-														const created =
-															new Date(
-																userProfile.created_at,
-															);
-														const today =
-															new Date();
-
-														created.setHours(
-															0,
-															0,
-															0,
-															0,
-														);
-														today.setHours(
-															0,
-															0,
-															0,
-															0,
-														);
-
-														const diff = Math.floor(
-															(today.getTime() -
-																created.getTime()) /
-																(1000 *
-																	60 *
-																	60 *
-																	24),
-														);
-
-														if (diff === 0)
-															return "Today";
-														if (diff === 1)
-															return "1 day ago";
-														return `${diff} days ago`;
-													})()}
-												</span>
-											</>
-										)}
+											<span className="text-sm text-default-500 italic">
+												{
+													formatCreatedAt(
+														userProfile.created_at,
+													)?.relativeText
+												}
+											</span>
+										</>
+									)}
 								</div>
 							</TableCell>
 							<TableCell>
@@ -212,7 +182,10 @@ export function UsersTableDesktop({
 										isIconOnly
 										size="sm"
 										variant="light"
-										onPress={onOpenViewUserDetail}
+										onPress={() => {
+											setSelectedUserProfile(userProfile);
+											onOpenViewUserDetail();
+										}}
 										startContent={
 											<EyeIcon className="w-5" />
 										}
@@ -255,6 +228,137 @@ export function UsersTableDesktop({
 					))}
 				</TableBody>
 			</Table>
+			<Modal
+				isOpen={isOpenViewUserDetail}
+				onOpenChange={onOpenChangeViewUserDetail}
+				disableAnimation
+				size="xl"
+			>
+				<ModalContent>
+					{(onClose) => (
+						<>
+							<ModalHeader className="flex flex-col gap-1">
+								View User Details
+							</ModalHeader>
+							<ModalBody>
+								<div className="flex flex-row gap-2 items-center w-full justify-between">
+									<div className="flex sm:flex-row flex-col gap-2 items-center">
+										<Avatar
+											className="w-20 h-20 text-large shrink-0 self-start sm:self-center"
+											src={
+												selectedUserProfile?.user_profile_img_url
+											}
+										/>
+										<div className="flex flex-col items-start">
+											<span className="text-base font-bold">
+												{selectedUserProfile?.user_name}
+											</span>
+											<span className="text-sm text-default-500">
+												Username:{" "}
+												<span className="text-default-900">
+													{
+														selectedUserProfile?.login_user_name
+													}
+												</span>
+											</span>
+											<span className="text-sm text-default-500">
+												Role:{" "}
+												<span className="text-default-900">
+													{
+														selectedUserProfile?.user_role
+													}
+												</span>
+											</span>
+											<span className="text-sm text-default-500">
+												Phone Number :{" "}
+												<span className="text-default-900">
+													{formatPHNumber(
+														selectedUserProfile?.user_phone_number!,
+													)}
+												</span>
+											</span>
+										</div>
+									</div>
+									<Chip
+										color={
+											selectedUserProfile?.user_status ===
+											"Approved"
+												? "success"
+												: selectedUserProfile?.user_status ===
+													  "For Approval"
+													? "warning"
+													: selectedUserProfile?.user_status ===
+														  "Rejected"
+														? "danger"
+														: "default"
+										}
+										variant="flat"
+										className="self-start"
+									>
+										{selectedUserProfile?.user_status}
+									</Chip>
+								</div>
+								<Divider />
+								<p className="text-default-500">
+									Registered on:{" "}
+									{formatCreatedAt(
+										selectedUserProfile?.created_at,
+									) && (
+										<>
+											<span className="text-default-900">
+												{
+													formatCreatedAt(
+														selectedUserProfile?.created_at,
+													)?.formattedDate
+												}{" "}
+											</span>
+
+											<span className="text-default-900 italic">
+												(
+												{
+													formatCreatedAt(
+														selectedUserProfile?.created_at,
+													)?.relativeText
+												}
+												)
+											</span>
+										</>
+									)}
+								</p>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur
+									adipiscing elit. Nullam pulvinar risus non
+									risus hendrerit venenatis. Pellentesque sit
+									amet hendrerit risus, sed porttitor quam.
+								</p>
+								<p>
+									Magna exercitation reprehenderit magna aute
+									tempor cupidatat consequat elit dolor
+									adipisicing. Mollit dolor eiusmod sunt ex
+									incididunt cillum quis. Velit duis sit
+									officia eiusmod Lorem aliqua enim laboris do
+									dolor eiusmod. Et mollit incididunt nisi
+									consectetur esse laborum eiusmod pariatur
+									proident Lorem eiusmod et. Culpa deserunt
+									nostrud ad veniam.
+								</p>
+							</ModalBody>
+							<ModalFooter>
+								<Button
+									color="danger"
+									variant="light"
+									onPress={onClose}
+								>
+									Close
+								</Button>
+								<Button color="success" onPress={onClose}>
+									Approve
+								</Button>
+							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
 		</div>
 	);
 }
