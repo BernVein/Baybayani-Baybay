@@ -12,7 +12,7 @@ import {
 	Divider,
 	addToast,
 } from "@heroui/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -34,11 +34,23 @@ export function NavbarMobileAdmin({
 	const [active, setActive] = useState("");
 	const navigate = useNavigate();
 
+	const isLoggingOut = useRef(false);
+
 	const handleLogOut = async () => {
+		if (isLoggingOut.current) return;
+		isLoggingOut.current = true;
 		try {
 			await supabase.auth.signOut();
 			navigate("/shop");
+			addToast({
+				title: "Signed out",
+				description: "You have been signed out successfully",
+				color: "success",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
 		} catch (error) {
+			isLoggingOut.current = false;
 			addToast({
 				title: "Error",
 				description: error as string,

@@ -15,7 +15,7 @@ import {
 	addToast,
 } from "@heroui/react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/config/supabaseclient";
 
 import { BaybayaniLogo } from "@/components/icons";
@@ -46,7 +46,11 @@ export function SidebarDesktopAdmin({
 		"/admin/users": "users",
 	};
 
+	const isLoggingOut = useRef(false);
+
 	const handleLogOut = async () => {
+		if (isLoggingOut.current) return;
+		isLoggingOut.current = true;
 		try {
 			await supabase.auth.signOut();
 			navigate("/shop");
@@ -58,6 +62,7 @@ export function SidebarDesktopAdmin({
 				timeout: 5000,
 			});
 		} catch (error) {
+			isLoggingOut.current = false;
 			addToast({
 				title: "Error",
 				description: error as string,
