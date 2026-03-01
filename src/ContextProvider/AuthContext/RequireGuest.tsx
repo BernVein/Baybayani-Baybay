@@ -23,9 +23,16 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	// Open modal as soon as we know the user is logged in
 	// and they are not a new registration waiting for approval
 	useEffect(() => {
-		if (!loading && profile && profile.user_status !== "For Approval") {
+		// Only open the modal if the user is logged in AND their status is NOT "For Approval"
+		// This prevents the modal from appearing right after sign-up before the auto-login session is cleared
+		if (
+			!loading &&
+			profile &&
+			profile.user_status &&
+			profile.user_status !== "For Approval"
+		) {
 			onOpen();
-		} else if (!profile) {
+		} else {
 			onClose();
 		}
 	}, [loading, profile, onOpen, onClose]);
