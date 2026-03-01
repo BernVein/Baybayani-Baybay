@@ -5,11 +5,14 @@ import { MessageIcon } from "@/components/icons";
 import { MessageList } from "@/pages/Admin/MessagesComponent/MessageList";
 import { MessageContentDesktop } from "@/pages/Admin/MessagesComponent/MessageContentDesktop";
 
+interface SelectedUser {
+	id: string;
+	name: string;
+}
+
 export default function Messages() {
 	const { profile } = useOutletContext<any>();
-	const [selectedMessageId, setSelectedMessageId] = useState<string | null>(
-		null,
-	);
+	const [selectedUser, setSelectedUser] = useState<SelectedUser | null>(null);
 
 	return (
 		<>
@@ -31,20 +34,23 @@ export default function Messages() {
 				<div className="flex flex-row gap-2 flex-1 min-h-0">
 					<MessageList
 						className={
-							selectedMessageId
-								? "hidden sm:flex sm:w-2/3 h-full"
+							selectedUser
+								? "hidden sm:flex sm:w-1/3 h-full"
 								: "flex w-full sm:w-1/3 h-full"
 						}
-						onSelect={() => setSelectedMessageId("selected")}
+						selectedUserId={selectedUser?.id ?? null}
+						onSelect={(id, name) => setSelectedUser({ id, name })}
 					/>
 					<MessageContentDesktop
 						className={
-							selectedMessageId
-								? "flex w-full h-full"
+							selectedUser
+								? "flex w-full sm:w-2/3 h-full"
 								: "hidden sm:flex sm:w-2/3 h-full"
 						}
-						onBack={() => setSelectedMessageId(null)}
-						onOpen={() => {}}
+						selectedUserId={selectedUser?.id ?? null}
+						selectedUserName={selectedUser?.name ?? null}
+						adminName={profile?.user_name ?? "Admin"}
+						onBack={() => setSelectedUser(null)}
 					/>
 				</div>
 			</div>

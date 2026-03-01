@@ -1,103 +1,60 @@
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Avatar,
-  Input,
-  Button,
-} from "@heroui/react";
-
 import { BaybayaniLogo } from "@/components/icons";
-import { SendIcon } from "@/components/icons";
+import { RealtimeChat } from "@/data/supabase/General/realtime-chat";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
 export default function MessageIndex() {
-  document.body.style.overflow = "hidden";
+	document.body.style.overflow = "hidden";
 
-  return (
-    <>
-      {/* Header */}
-      <div className="flex justify-between items-center w-full md:w-3/4 md:mx-auto px-5">
-        <div className="flex items-center gap-2">
-          <BaybayaniLogo className="size-7" />
-          <h2 className="text-xl sm:text-3xl font-semibold">
-            Baybayani <span className="text-default-400">|</span> Message
-          </h2>
-        </div>
-      </div>
-      <div className="flex justify-center w-full mt-5">
-        <Card className="h-[70vh] sm:h-[80vh] flex sm:w-3/4">
-          <CardHeader className="flex gap-3">
-            <div className="flex flex-row gap-2 items-center w-full">
-              <div className="flex flex-row justify-between w-full">
-                <div className="flex flex-row gap-2 items-center">
-                  <Avatar />
-                  <span className="font-semibold">User 1</span>
-                </div>
-                {/* <div className="flex flex-row gap-2 items-center">
-									<Button variant="light" isIconOnly>
-										<ExclamationCircle className="w-7" />
-									</Button>
-								</div> */}
-              </div>
-            </div>
-          </CardHeader>
-          <CardBody className="flex flex-col-reverse overflow-y-auto space-y-3-reverse p-3 gap-2">
-            <CardBody className="flex flex-col-reverse overflow-y-auto space-y-3-reverse p-3 gap-2">
-              {/* User (You) */}
-              <div className="flex justify-end gap-2 items-start">
-                <div className="flex flex-col gap-1 items-end">
-                  <span className="text-xs text-default-600">You</span>
-                  <div className="max-w-[70%] rounded-lg bg-green-900 text-primary-foreground px-3 py-2 text-sm">
-                    Hello admin, I have a question about my order.
-                  </div>
-                </div>
-                <Avatar className="shrink-0" size="sm" />
-              </div>
+	const auth = useAuth();
+	const user = auth?.user ?? null;
+	const profile = auth?.profile ?? null;
 
-              {/* Admin */}
-              <div className="flex justify-start gap-2 items-start">
-                <Avatar className="shrink-0" size="sm" />
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs text-default-600">Admin Alex</span>
-                  <div className="max-w-[70%] rounded-lg bg-default-200 px-3 py-2 text-sm">
-                    Sure! What seems to be the problem?
-                  </div>
-                </div>
-              </div>
+	if (!user || !profile) {
+		return (
+			<div className="flex flex-col items-center justify-center h-[70vh] gap-4 text-default-400">
+				<BaybayaniLogo className="size-12 opacity-30" />
+				<p className="text-lg">Please log in to access messages.</p>
+			</div>
+		);
+	}
 
-              {/* User (You) */}
-              <div className="flex justify-end gap-2 items-start">
-                <div className="flex flex-col gap-1 items-end">
-                  <span className="text-xs text-default-600">You</span>
-                  <div className="max-w-[70%] rounded-lg bg-green-900 text-primary-foreground px-3 py-2 text-sm">
-                    It says completed but I haven’t received it yet.
-                  </div>
-                </div>
-                <Avatar className="shrink-0" size="sm" />
-              </div>
+	const roomName = `user-${user.id}`;
+	const username = profile.user_name;
 
-              {/* Admin */}
-              <div className="flex justify-start gap-2 items-start">
-                <Avatar className="shrink-0" size="sm" />
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs text-default-600">Admin Vein</span>
-                  <div className="max-w-[70%] rounded-lg bg-default-200 px-3 py-2 text-sm">
-                    Let me check that for you right now.
-                  </div>
-                </div>
-              </div>
-            </CardBody>
-          </CardBody>
+	return (
+		<>
+			{/* Header */}
+			<div className="flex justify-between items-center w-full md:w-3/4 md:mx-auto px-5">
+				<div className="flex items-center gap-2">
+					<BaybayaniLogo className="size-7" />
+					<h2 className="text-xl sm:text-3xl font-semibold">
+						Baybayani <span className="text-default-400">|</span>{" "}
+						Message
+					</h2>
+				</div>
+			</div>
 
-          <CardFooter className="flex flex-row gap-2">
-            <Input placeholder="Type your message..." />
-            <Button isIconOnly variant="light">
-              <SendIcon className="w-5" />
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
-    </>
-  );
+			{/* Chat Card */}
+			<div className="flex justify-center w-full mt-5 px-4">
+				<div className="h-[70vh] sm:h-[80vh] w-full sm:w-3/4 border border-divider rounded-xl overflow-hidden bg-content1 shadow-md flex flex-col">
+					{/* Chat Header */}
+					<div className="flex items-center gap-3 px-4 py-3 border-b border-divider bg-content2">
+						<div className="flex flex-col">
+							<span className="font-semibold text-sm">
+								Baybayani Support
+							</span>
+							<span className="text-xs text-default-400">
+								Chat with our admin team
+							</span>
+						</div>
+					</div>
+
+					{/* RealtimeChat fills the rest */}
+					<div className="flex-1 min-h-0">
+						<RealtimeChat roomName={roomName} username={username} />
+					</div>
+				</div>
+			</div>
+		</>
+	);
 }
