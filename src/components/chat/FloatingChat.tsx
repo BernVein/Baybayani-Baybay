@@ -38,7 +38,7 @@ export function FloatingChat() {
 			<div
 				aria-hidden={!isOpen || minimized}
 				className={[
-					"fixed bottom-[5.5rem] sm:bottom-6 right-4 sm:right-6 z-[60]",
+					"fixed bottom-[5.5rem] sm:bottom-6 right-4 sm:right-6 z-[40]",
 					"w-[calc(100vw-2rem)] sm:w-[360px]",
 					"rounded-2xl overflow-hidden shadow-2xl border border-divider",
 					"bg-content1",
@@ -100,7 +100,7 @@ export function FloatingChat() {
 			{isOpen && minimized && (
 				<button
 					className={[
-						"fixed bottom-[5.5rem] sm:bottom-6 right-4 sm:right-6 z-[60]",
+						"fixed bottom-[5.5rem] sm:bottom-6 right-4 sm:right-6 z-[40]",
 						"flex items-center gap-2 px-4 py-2 rounded-full shadow-xl",
 						"bg-[#146A38] text-white text-sm font-semibold",
 						"hover:bg-[#1a8a48] transition-colors duration-200",
@@ -118,7 +118,7 @@ export function FloatingChat() {
 				<button
 					aria-label="Open support chat"
 					className={[
-						"fixed bottom-[5.5rem] sm:bottom-6 right-4 sm:right-6 z-[60]",
+						"fixed bottom-[5.5rem] sm:bottom-6 right-4 sm:right-6 z-[40]",
 						"size-14 rounded-full shadow-2xl",
 						"bg-[#146A38] text-white",
 						"flex items-center justify-center",
