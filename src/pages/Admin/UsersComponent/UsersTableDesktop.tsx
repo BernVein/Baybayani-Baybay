@@ -144,26 +144,66 @@ export function UsersTableDesktop({
 							</TableCell>
 							<TableCell>
 								<div className="flex flex-col items-start">
-									<span className="font-bold text-base">
-										{new Date(
-											userProfile.created_at ?? "",
-										).toLocaleDateString("en-US", {
-											year: "numeric",
-											month: "short",
-											day: "numeric",
-										})}
-									</span>
-									<span className="text-sm text-default-500 italic">
-										{Math.floor(
-											(new Date().getTime() -
-												new Date(
-													userProfile.created_at ??
-														"",
-												).getTime()) /
-												(1000 * 60 * 60 * 24),
-										)}{" "}
-										day/s ago
-									</span>
+									{userProfile.created_at &&
+										!isNaN(
+											new Date(
+												userProfile.created_at,
+											).getTime(),
+										) && (
+											<>
+												<span className="font-bold text-base">
+													{new Date(
+														userProfile.created_at,
+													).toLocaleDateString(
+														"en-US",
+														{
+															year: "numeric",
+															month: "short",
+															day: "numeric",
+														},
+													)}
+												</span>
+
+												<span className="text-sm text-default-500 italic">
+													{(() => {
+														const created =
+															new Date(
+																userProfile.created_at,
+															);
+														const today =
+															new Date();
+
+														created.setHours(
+															0,
+															0,
+															0,
+															0,
+														);
+														today.setHours(
+															0,
+															0,
+															0,
+															0,
+														);
+
+														const diff = Math.floor(
+															(today.getTime() -
+																created.getTime()) /
+																(1000 *
+																	60 *
+																	60 *
+																	24),
+														);
+
+														if (diff === 0)
+															return "Today";
+														if (diff === 1)
+															return "1 day ago";
+														return `${diff} days ago`;
+													})()}
+												</span>
+											</>
+										)}
 								</div>
 							</TableCell>
 							<TableCell>
