@@ -5,21 +5,18 @@ import {
 	DropdownItem,
 	Button,
 	Input,
-	useDisclosure,
 	DropdownSection,
 } from "@heroui/react";
 
 import {
 	SearchIcon,
 	FilterIcon,
-	PlusIcon,
 	SoloUserIcon,
 	KeyIcon,
 	GroupUserIcon,
 	SortIcon,
 } from "@/components/icons";
 import useIsMobile from "@/lib/isMobile";
-import { AddUserModal } from "@/pages/Admin/UsersComponent/AddUserModal";
 import { SortConfig } from "@/data/supabase/Admin/Users/fetchAllUsers";
 import { useMemo } from "react";
 
@@ -44,7 +41,6 @@ export function FilterSection({
 	selectedStatuses,
 	setSelectedStatuses,
 }: FilterSectionProps) {
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const isMobile = useIsMobile();
 
 	const sortOptions = [
@@ -122,47 +118,6 @@ export function FilterSection({
 				onClear={() => setSearchTerm("")}
 			/>
 			<div className="flex flex-row gap-2 justify-end">
-				<Dropdown>
-					<DropdownTrigger>
-						<Button
-							isIconOnly={isMobile}
-							startContent={<SortIcon className="w-5" />}
-							className="capitalize"
-						>
-							{isMobile ? "" : currentSortOption.label}
-						</Button>
-					</DropdownTrigger>
-					<DropdownMenu
-						aria-label="Sort Options"
-						onAction={(key) => {
-							const option = sortOptions.find(
-								(opt) => opt.key === key,
-							);
-							if (option) {
-								setSortConfig({
-									column: option.column,
-									ascending: option.ascending,
-								});
-							}
-						}}
-						selectedKeys={[currentSortOption.key]}
-						selectionMode="single"
-					>
-						{sortOptions.map((option) => (
-							<DropdownItem key={option.key}>
-								{option.label}
-							</DropdownItem>
-						))}
-					</DropdownMenu>
-				</Dropdown>
-
-				<Button
-					isIconOnly={isMobile}
-					startContent={<PlusIcon className="w-5" />}
-					onPress={onOpen}
-				>
-					{isMobile ? "" : "Add User"}
-				</Button>
 				<Dropdown>
 					<DropdownTrigger>
 						<Button
@@ -250,8 +205,43 @@ export function FilterSection({
 						</DropdownSection>
 					</DropdownMenu>
 				</Dropdown>
+				<Dropdown>
+					<DropdownTrigger>
+						<Button
+							isIconOnly={isMobile}
+							startContent={<SortIcon className="w-5" />}
+							className="capitalize"
+							color={
+								sortOptions.length > 0 ? "success" : "default"
+							}
+						>
+							{isMobile ? "" : "Sort By"}
+						</Button>
+					</DropdownTrigger>
+					<DropdownMenu
+						aria-label="Sort Options"
+						onAction={(key) => {
+							const option = sortOptions.find(
+								(opt) => opt.key === key,
+							);
+							if (option) {
+								setSortConfig({
+									column: option.column,
+									ascending: option.ascending,
+								});
+							}
+						}}
+						selectedKeys={[currentSortOption.key]}
+						selectionMode="single"
+					>
+						{sortOptions.map((option) => (
+							<DropdownItem key={option.key}>
+								{option.label}
+							</DropdownItem>
+						))}
+					</DropdownMenu>
+				</Dropdown>
 			</div>
-			<AddUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
 		</div>
 	);
 }
