@@ -30,7 +30,8 @@ export const fetchAllUsers = () => {
 				`,
 			)
 			.eq("is_soft_deleted", false)
-			.eq("is_for_debugging", false);
+			.eq("is_for_debugging", false)
+			.order("created_at", { ascending: false });
 
 		if (error) {
 			setFetchError(error.message);

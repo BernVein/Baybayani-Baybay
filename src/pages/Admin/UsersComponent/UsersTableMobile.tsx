@@ -142,7 +142,7 @@ export function UsersTableMobile({
 													key="Approved"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"Approved",
 														);
@@ -154,7 +154,7 @@ export function UsersTableMobile({
 													key="For Approval"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"For Approval",
 														);
@@ -166,7 +166,7 @@ export function UsersTableMobile({
 													key="Suspended"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"Suspended",
 														);
@@ -180,7 +180,7 @@ export function UsersTableMobile({
 													color="danger"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"Rejected",
 														);

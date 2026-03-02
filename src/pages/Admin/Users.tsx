@@ -19,7 +19,7 @@ import {
 
 export default function Users() {
 	const { profile } = useOutletContext<any>();
-	const { userProfiles, loading } = fetchAllUsers();
+	const { userProfiles, setUserProfiles, loading } = fetchAllUsers();
 
 	const handleChangeUserStatus = async (
 		userID: string,
@@ -33,6 +33,14 @@ export default function Users() {
 				color: "success",
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
+			});
+			setUserProfiles((prev) => {
+				if (!prev) return prev;
+				return prev.map((user) =>
+					user.user_id === userID
+						? { ...user, user_status: userStatus }
+						: user,
+				);
 			});
 		} else {
 			addToast({

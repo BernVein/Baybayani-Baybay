@@ -186,7 +186,7 @@ export function UsersTableDesktop({
 													key="Approved"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"Approved",
 														);
@@ -198,7 +198,7 @@ export function UsersTableDesktop({
 													key="For Approval"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"For Approval",
 														);
@@ -210,7 +210,7 @@ export function UsersTableDesktop({
 													key="Rejected"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"Suspended",
 														);
@@ -224,7 +224,7 @@ export function UsersTableDesktop({
 													color="danger"
 													onPress={() => {
 														handleChangeUserStatus(
-															selectedUserProfile?.user_id ??
+															userProfile.user_id ??
 																"",
 															"Rejected",
 														);
