@@ -13,10 +13,10 @@ import {
 	DropdownItem,
 	useDisclosure,
 } from "@heroui/react";
-
+import { ShowUserDetailModal } from "@/pages/Admin/UsersComponent/ShowUserDetailModal";
 import { EyeIcon, PencilIcon } from "@/components/icons";
 import { UserProfile } from "@/model/userProfile";
-
+import { useState } from "react";
 export function UsersTableMobile({
 	userProfiles,
 	isLoading,
@@ -31,7 +31,10 @@ export function UsersTableMobile({
 		onOpen: onOpenViewUserDetail,
 		onOpenChange: onOpenChangeViewUserDetail,
 	} = useDisclosure();
-	console.log(isOpenViewUserDetail, onOpenChangeViewUserDetail);
+
+	const [selectedUserProfile, setSelectedUserProfile] =
+		useState<UserProfile | null>(null);
+
 	return (
 		<div className="sm:hidden flex-1 min-h-0 flex flex-col">
 			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
@@ -149,7 +152,10 @@ export function UsersTableMobile({
 										isIconOnly
 										size="sm"
 										variant="light"
-										onPress={onOpenViewUserDetail}
+										onPress={() => {
+											setSelectedUserProfile(userProfile);
+											onOpenViewUserDetail();
+										}}
 										startContent={
 											<EyeIcon className="w-5" />
 										}
@@ -193,6 +199,11 @@ export function UsersTableMobile({
 					))}
 				</TableBody>
 			</Table>
+			<ShowUserDetailModal
+				isOpen={isOpenViewUserDetail}
+				onOpenChange={onOpenChangeViewUserDetail}
+				selectedUserProfile={selectedUserProfile}
+			/>
 		</div>
 	);
 }
