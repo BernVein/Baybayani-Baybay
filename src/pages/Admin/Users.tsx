@@ -5,6 +5,7 @@ import { UsersTableMobile } from "@/pages/Admin/UsersComponent/UsersTableMobile"
 import { UsersTableDesktop } from "@/pages/Admin/UsersComponent/UsersTableDesktop";
 import { FilterSection } from "@/pages/Admin/UsersComponent/FilterSection";
 import { fetchAllUsers } from "@/data/supabase/Admin/Users/fetchAllUsers";
+import { changeUserStatus } from "@/data/supabase/Admin/Users/changeUserStatus";
 import {
 	Skeleton,
 	Table,
@@ -13,11 +14,36 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
+	addToast,
 } from "@heroui/react";
 
 export default function Users() {
 	const { profile } = useOutletContext<any>();
 	const { userProfiles, loading } = fetchAllUsers();
+
+	const handleChangeUserStatus = async (
+		userID: string,
+		userStatus: "Approved" | "For Approval" | "Rejected" | "Suspended",
+	) => {
+		const { success, error } = await changeUserStatus(userID, userStatus);
+		if (success) {
+			addToast({
+				title: "Success",
+				description: `User status changed to ${userStatus} successfully`,
+				color: "success",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		} else {
+			addToast({
+				title: "Error",
+				description: error,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+		}
+	};
 
 	const renderSkeleton = () => (
 		<div className="flex-1 min-h-0 flex flex-col">
@@ -140,8 +166,14 @@ export default function Users() {
 				renderSkeleton()
 			) : (
 				<div className="flex-1 min-h-0 flex flex-col">
-					<UsersTableMobile userProfiles={userProfiles} />
-					<UsersTableDesktop userProfiles={userProfiles} />
+					<UsersTableMobile
+						userProfiles={userProfiles}
+						handleChangeUserStatus={handleChangeUserStatus}
+					/>
+					<UsersTableDesktop
+						userProfiles={userProfiles}
+						handleChangeUserStatus={handleChangeUserStatus}
+					/>
 				</div>
 			)}
 		</div>

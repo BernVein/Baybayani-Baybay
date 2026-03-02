@@ -32,8 +32,13 @@ import { ShowUserDetailModal } from "./ShowUserDetailModal";
 
 export function UsersTableDesktop({
 	userProfiles,
+	handleChangeUserStatus,
 }: {
 	userProfiles: UserProfile[] | null;
+	handleChangeUserStatus: (
+		userID: string,
+		userStatus: "Approved" | "For Approval" | "Rejected" | "Suspended",
+	) => void;
 }) {
 	const {
 		isOpen: isOpenViewUserDetail,
@@ -43,7 +48,7 @@ export function UsersTableDesktop({
 
 	const [selectedUserProfile, setSelectedUserProfile] =
 		useState<UserProfile | null>(null);
-
+	console.log(selectedUserProfile);
 	return (
 		<div className="sm:flex hidden flex-1 min-h-0 flex-col">
 			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
@@ -177,21 +182,55 @@ export function UsersTableDesktop({
 										</DropdownTrigger>
 										<DropdownMenu>
 											<DropdownSection title="Set Status">
-												<DropdownItem key="Approved">
+												<DropdownItem
+													key="Approved"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"Approved",
+														);
+													}}
+												>
 													Approved
 												</DropdownItem>
-												<DropdownItem key="For Approval">
+												<DropdownItem
+													key="For Approval"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"For Approval",
+														);
+													}}
+												>
 													For Approval
 												</DropdownItem>
-												<DropdownItem key="Rejected">
-													Rejected
+												<DropdownItem
+													key="Rejected"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"Suspended",
+														);
+													}}
+												>
+													Suspended
 												</DropdownItem>
 												<DropdownItem
 													key="Suspended"
 													className="text-danger"
 													color="danger"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"Rejected",
+														);
+													}}
 												>
-													Suspended
+													Rejected
 												</DropdownItem>
 											</DropdownSection>
 										</DropdownMenu>

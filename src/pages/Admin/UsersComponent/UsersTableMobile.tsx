@@ -19,8 +19,13 @@ import { UserProfile } from "@/model/userProfile";
 import { useState } from "react";
 export function UsersTableMobile({
 	userProfiles,
+	handleChangeUserStatus,
 }: {
 	userProfiles: UserProfile[] | null;
+	handleChangeUserStatus: (
+		userID: string,
+		userStatus: "Approved" | "For Approval" | "Rejected" | "Suspended",
+	) => void;
 }) {
 	const {
 		isOpen: isOpenViewUserDetail,
@@ -170,21 +175,55 @@ export function UsersTableMobile({
 										</DropdownTrigger>
 										<DropdownMenu>
 											<DropdownSection title="Set Status">
-												<DropdownItem key="Approved">
+												<DropdownItem
+													key="Approved"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"Approved",
+														);
+													}}
+												>
 													Approved
 												</DropdownItem>
-												<DropdownItem key="For Approval">
+												<DropdownItem
+													key="For Approval"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"For Approval",
+														);
+													}}
+												>
 													For Approval
-												</DropdownItem>
-												<DropdownItem key="Rejected">
-													Rejected
 												</DropdownItem>
 												<DropdownItem
 													key="Suspended"
-													className="text-danger"
-													color="danger"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"Suspended",
+														);
+													}}
 												>
 													Suspended
+												</DropdownItem>
+												<DropdownItem
+													key="Rejected"
+													className="text-danger"
+													color="danger"
+													onPress={() => {
+														handleChangeUserStatus(
+															selectedUserProfile?.user_id ??
+																"",
+															"Rejected",
+														);
+													}}
+												>
+													Rejected
 												</DropdownItem>
 											</DropdownSection>
 										</DropdownMenu>
