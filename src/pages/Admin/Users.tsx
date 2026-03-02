@@ -140,10 +140,7 @@ export default function Users() {
 				renderSkeleton()
 			) : (
 				<div className="flex-1 min-h-0 flex flex-col">
-					<UsersTableMobile
-						userProfiles={userProfiles}
-						isLoading={loading}
-					/>
+					<UsersTableMobile userProfiles={userProfiles} />
 					<UsersTableDesktop userProfiles={userProfiles} />
 				</div>
 			)}

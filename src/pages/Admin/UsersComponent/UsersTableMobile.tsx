@@ -19,13 +19,9 @@ import { UserProfile } from "@/model/userProfile";
 import { useState } from "react";
 export function UsersTableMobile({
 	userProfiles,
-	isLoading,
 }: {
 	userProfiles: UserProfile[] | null;
-	isLoading: boolean;
 }) {
-	console.log(isLoading);
-
 	const {
 		isOpen: isOpenViewUserDetail,
 		onOpen: onOpenViewUserDetail,
