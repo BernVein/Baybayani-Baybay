@@ -140,20 +140,29 @@ export function ShowUserDetailModal({
 							</p>
 							<p>{selectedUserProfile?.user_name}'s Valid IDs:</p>
 							<div className="flex flex-row gap-1 w-full">
-								{userValidIDLink?.map((url, index) => (
-									<div
-										key={index}
-										className="w-1/2 relative cursor-zoom-in"
-										onClick={() => handleImageClick(url)}
-									>
-										<Image
-											isLoading={loading}
-											src={url}
-											alt={`Valid ID ${index + 1}`}
-											className="object-cover rounded-lg w-full h-48 hover:opacity-80 transition-opacity"
-										/>
-									</div>
-								))}
+								{Array.from({ length: 2 }).map((_, index) => {
+									const url = userValidIDLink?.[index];
+
+									return (
+										<div
+											key={index}
+											className="w-1/2 relative cursor-zoom-in h-48"
+											onClick={() =>
+												url && handleImageClick(url)
+											}
+										>
+											{loading ? (
+												<div className="w-full h-48 rounded-lg animate-pulse bg-default-200" />
+											) : url ? (
+												<Image
+													src={url}
+													alt={`Valid ID ${index + 1}`}
+													className="w-full h-48 object-cover rounded-lg hover:opacity-80 transition-opacity"
+												/>
+											) : null}
+										</div>
+									);
+								})}
 							</div>
 						</ModalBody>
 						<ModalFooter>
