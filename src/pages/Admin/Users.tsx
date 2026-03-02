@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { UserIcon } from "@/components/icons";
 import { useOutletContext } from "react-router-dom";
 import { UsersSummary } from "@/pages/Admin/UsersComponent/UsersSummary";
@@ -19,7 +20,20 @@ import {
 
 export default function Users() {
 	const { profile } = useOutletContext<any>();
-	const { userProfiles, setUserProfiles, loading } = fetchAllUsers();
+	const [searchTerm, setSearchTerm] = useState("");
+	const [sortConfig, setSortConfig] = useState({
+		column: "created_at",
+		ascending: false,
+	});
+	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+
+	const { userProfiles, setUserProfiles, loading } = fetchAllUsers(
+		searchTerm,
+		sortConfig,
+		selectedRoles,
+		selectedStatuses,
+	);
 
 	const handleChangeUserStatus = async (
 		userID: string,
@@ -167,10 +181,19 @@ export default function Users() {
 			</div>
 
 			<div className="flex flex-row items-center justify-between shrink-0">
-				<FilterSection />
+				<FilterSection
+					searchTerm={searchTerm}
+					setSearchTerm={setSearchTerm}
+					sortConfig={sortConfig}
+					setSortConfig={setSortConfig}
+					selectedRoles={selectedRoles}
+					setSelectedRoles={setSelectedRoles}
+					selectedStatuses={selectedStatuses}
+					setSelectedStatuses={setSelectedStatuses}
+				/>
 			</div>
 
-			{loading && (!userProfiles || userProfiles.length === 0) ? (
+			{loading ? (
 				renderSkeleton()
 			) : (
 				<div className="flex-1 min-h-0 flex flex-col">

@@ -2,7 +2,17 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { UserProfile } from "@/model/userProfile";
 
-export const fetchAllUsers = () => {
+export interface SortConfig {
+	column: string;
+	ascending: boolean;
+}
+
+export const fetchAllUsers = (
+	searchTerm: string = "",
+	sortConfig: SortConfig = { column: "created_at", ascending: false },
+	roles: string[] = [],
+	statuses: string[] = [],
+) => {
 	const [userProfiles, setUserProfiles] = useState<UserProfile[] | null>(
 		null,
 	);
@@ -13,7 +23,7 @@ export const fetchAllUsers = () => {
 		setLoading(true);
 		setFetchError(null);
 
-		const { data, error } = await supabase
+		let query = supabase
 			.from("User")
 			.select(
 				`
@@ -30,8 +40,23 @@ export const fetchAllUsers = () => {
 				`,
 			)
 			.eq("is_soft_deleted", false)
-			.eq("is_for_debugging", false)
-			.order("created_at", { ascending: false });
+			.eq("is_for_debugging", false);
+
+		if (searchTerm) {
+			query = query.ilike("user_name", `%${searchTerm}%`);
+		}
+
+		if (roles.length > 0) {
+			query = query.in("user_role", roles);
+		}
+
+		if (statuses.length > 0) {
+			query = query.in("user_status", statuses);
+		}
+
+		const { data, error } = await query.order(sortConfig.column, {
+			ascending: sortConfig.ascending,
+		});
 
 		if (error) {
 			setFetchError(error.message);
@@ -62,10 +87,14 @@ export const fetchAllUsers = () => {
 
 		setUserProfiles(mappedUsers);
 		setLoading(false);
-	}, []);
+	}, [searchTerm, sortConfig, roles, statuses]);
 
 	useEffect(() => {
-		fetchItem();
+		const handler = setTimeout(() => {
+			fetchItem();
+		}, 300); // Small debounce to avoid too many requests while typing
+
+		return () => clearTimeout(handler);
 	}, [fetchItem]);
 
 	return {
