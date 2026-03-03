@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { BaybayaniLogo, CartIcon } from "@/components/icons";
+import { BaybayaniLogo, CartIcon, OrdersIcon } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
@@ -65,7 +65,43 @@ export function NavbarMobile({
 			</NavbarItem>
 
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
-
+			<NavbarItem
+				className="flex flex-col items-center"
+				isActive={active === "Orders"}
+			>
+				<Link
+					className="flex flex-col items-center"
+					color={active === "Orders" ? "success" : "foreground"}
+					href="/orders"
+					onClick={(e) => {
+						e.preventDefault();
+						if (!user) {
+							openLoginModal();
+							return;
+						}
+						setActive("Orders");
+						navigate("/orders");
+					}}
+				>
+					<div className="w-8 h-8 flex items-center justify-center relative">
+						{cartCount > 0 ? (
+							<Badge
+								className="absolute top-0 right-0 translate-x-1 -translate-y-1"
+								color="success"
+								content={String(cartCount)}
+								shape="circle"
+								showOutline={false}
+								size="sm"
+							>
+								<OrdersIcon className="w-6 h-6" />
+							</Badge>
+						) : (
+							<OrdersIcon className="w-6 h-6" />
+						)}
+					</div>
+					<span className="text-sm font-light mt-1">Orders</span>
+				</Link>
+			</NavbarItem>
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
 
 			{/* Cart */}
@@ -152,12 +188,7 @@ export function NavbarMobile({
 									<ThemeSwitcher />
 								</div>
 							</DropdownItem>
-							<DropdownItem
-								key="orders"
-								onPress={() => navigate("/orders")}
-							>
-								Orders
-							</DropdownItem>
+
 							<DropdownItem
 								key="settings"
 								onPress={() => navigate("/settings")}

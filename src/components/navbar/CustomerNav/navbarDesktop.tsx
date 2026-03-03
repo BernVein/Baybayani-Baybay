@@ -18,7 +18,12 @@ import {
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { BaybayaniLogo, CartIcon, SearchIcon } from "@/components/icons";
+import {
+	BaybayaniLogo,
+	CartIcon,
+	OrdersIcon,
+	SearchIcon,
+} from "@/components/icons";
 import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
@@ -155,6 +160,42 @@ export function Navbar({
 				className="flex-shrink-0 items-center gap-4 hidden sm:flex"
 				justify="end"
 			>
+				<NavbarItem
+					className="hidden sm:inline-block"
+					isActive={active === "Orders"}
+				>
+					<Link
+						color={active === "Orders" ? "success" : "foreground"}
+						href="/orders"
+						onClick={(e) => {
+							e.preventDefault();
+							if (!user) {
+								openLoginModal();
+								return;
+							}
+							setActive("Orders");
+							navigate("/orders");
+						}}
+					>
+						<div className="flex items-center gap-2">
+							{cartCount > 0 ? (
+								<Badge
+									color="success"
+									content={String(cartCount)}
+									shape="circle"
+									showOutline={false}
+								>
+									<OrdersIcon className="size-6" />
+								</Badge>
+							) : (
+								<OrdersIcon className="size-6" />
+							)}
+							<span className="hidden sm:inline font-normal">
+								Orders
+							</span>
+						</div>
+					</Link>
+				</NavbarItem>
 				<NavbarItem
 					className="hidden sm:inline-block"
 					isActive={active === "Cart"}

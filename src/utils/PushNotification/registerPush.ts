@@ -12,6 +12,7 @@ export const registerPush = async () => {
 		return;
 	}
 
+	await PushNotifications.removeAllListeners();
 	await PushNotifications.register();
 
 	PushNotifications.addListener("registration", async (token) => {
@@ -21,21 +22,27 @@ export const registerPush = async () => {
 		} = await supabase.auth.getUser();
 		if (!user) return;
 
+		// Remove the token if it already exists for another user
+		await supabase
+			.from("User_Push_Token")
+			.delete()
+			.eq("user_push_token", token.value)
+			.neq("user_id", user.id);
+
+		// Insert the token if it doesn’t exist yet for this user
 		const { error } = await supabase.from("User_Push_Token").upsert(
-			[
-				{
-					user_id: user.id,
-					user_push_token: token.value,
-				},
-			],
-			{ onConflict: "user_push_token" },
+			{
+				user_id: user.id,
+				user_push_token: token.value,
+			},
+			{
+				onConflict: "user_push_token", // conflict on the token, not user
+				ignoreDuplicates: true, // don’t overwrite if already exists
+			},
 		);
 
-		if (error) {
-			console.error("Error saving FCM token:", error);
-		} else {
-			console.log("FCM token saved successfully");
-		}
+		if (error) console.error("Error saving FCM token:", error);
+		else console.log("FCM token saved successfully");
 	});
 
 	PushNotifications.addListener("registrationError", (err) => {

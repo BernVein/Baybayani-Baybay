@@ -33,64 +33,18 @@ const LoginPage = lazy(() => import("@/pages/General/Login"));
 const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
-import { Capacitor } from "@capacitor/core";
-import { PushNotifications } from "@capacitor/push-notifications";
+import { registerPush } from "@/utils/PushNotification/registerPush";
 
 function App() {
+	const auth = useAuth();
+	const user = auth?.user ?? null;
+	const profile = auth?.profile ?? null;
+
 	useEffect(() => {
-		if (Capacitor.getPlatform() !== "android") return;
-
-		const setupPush = async () => {
-			const permission = await PushNotifications.requestPermissions();
-
-			if (permission.receive !== "granted") {
-				alert("Push permission not granted");
-				return;
-			}
-
-			await PushNotifications.register();
-
-			// Show the token directly on your phone
-			PushNotifications.addListener("registration", (token) => {
-				alert("🔥 FCM TOKEN: " + token.value);
-				console.log("🔥 FCM TOKEN:", token.value);
-			});
-
-			PushNotifications.addListener("registrationError", (err) => {
-				alert("Registration error: " + JSON.stringify(err));
-				console.error("Registration error:", err);
-			});
-
-			// Show a popup when a push arrives in the foreground
-			PushNotifications.addListener(
-				"pushNotificationReceived",
-				(notification) => {
-					alert(
-						"Push received: " +
-							notification.title +
-							"\n" +
-							notification.body,
-					);
-					console.log("Push received:", notification);
-				},
-			);
-
-			// Handle notification tap (app in background/killed)
-			PushNotifications.addListener(
-				"pushNotificationActionPerformed",
-				(notification) => {
-					console.log("Notification tapped:", notification);
-				},
-			);
-		};
-
-		setupPush();
-
-		// Cleanup listeners to prevent duplicates on re-render
-		return () => {
-			PushNotifications.removeAllListeners();
-		};
-	}, []);
+		if (user?.id) {
+			registerPush();
+		}
+	}, [user?.id]);
 	const navigate = useNavigate();
 
 	const handleSignOut = async () => {
@@ -123,10 +77,6 @@ function App() {
 
 		return null;
 	}
-	const auth = useAuth();
-	const user = auth?.user ?? null;
-	const profile = auth?.profile ?? null;
-
 	return (
 		<LoginModalProvider>
 			<LoginModal />
