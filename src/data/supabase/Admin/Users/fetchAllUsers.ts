@@ -7,11 +7,18 @@ export interface SortConfig {
 	ascending: boolean;
 }
 
+const DEFAULT_SORT_CONFIG: SortConfig = {
+	column: "created_at",
+	ascending: false,
+};
+const DEFAULT_ROLES: string[] = [];
+const DEFAULT_STATUSES: string[] = [];
+
 export const fetchAllUsers = (
 	searchTerm: string = "",
-	sortConfig: SortConfig = { column: "created_at", ascending: false },
-	roles: string[] = [],
-	statuses: string[] = [],
+	sortConfig: SortConfig = DEFAULT_SORT_CONFIG,
+	roles: string[] = DEFAULT_ROLES,
+	statuses: string[] = DEFAULT_STATUSES,
 ) => {
 	const [userProfiles, setUserProfiles] = useState<UserProfile[] | null>(
 		null,
