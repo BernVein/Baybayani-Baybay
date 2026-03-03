@@ -4,7 +4,6 @@ export interface UserProfile {
 	user_theme: "light" | "dark";
 	login_user_name: string;
 	user_phone_number: string;
-	user_fcm_token?: string | null;
 	user_role: "Individual" | "Cooperative" | "Admin";
 	user_profile_img_url: string;
 	user_status: "For Approval" | "Approved" | "Rejected" | "Suspended";

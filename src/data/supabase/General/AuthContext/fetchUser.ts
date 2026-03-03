@@ -27,7 +27,6 @@ export function fetchUser() {
 						user_theme,
 						login_user_name,
 						user_phone_number,
-						fcm_token,
 						user_status
 						`,
 					)
@@ -42,7 +41,6 @@ export function fetchUser() {
 					user_theme: profile?.user_theme,
 					login_user_name: profile?.login_user_name,
 					user_phone_number: profile?.user_phone_number,
-					user_fcm_token: profile?.fcm_token,
 					user_status: profile?.user_status,
 				};
 				setProfile(userProfile);
