@@ -21,12 +21,14 @@ export const registerPush = async () => {
 		} = await supabase.auth.getUser();
 		if (!user) return;
 
-		const { error } = await supabase.from("User").upsert(
-			{
-				user_id: user.id,
-				fcm_token: token.value,
-			},
-			{ onConflict: "fcm_token" },
+		const { error } = await supabase.from("User_Push_Token").upsert(
+			[
+				{
+					user_id: user.id,
+					user_push_token: token.value,
+				},
+			],
+			{ onConflict: "user_push_token" },
 		);
 
 		if (error) {
