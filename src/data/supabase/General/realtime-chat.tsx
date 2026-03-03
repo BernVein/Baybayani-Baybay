@@ -139,7 +139,7 @@ export const RealtimeChat = ({
 				/>
 				{isConnected && newMessage.trim() && (
 					<Button
-						className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300"
+						className="aspect-square rounded-full bg-success text-success-foreground hover:bg-success/80 animate-in fade-in slide-in-from-right-4 duration-300"
 						type="submit"
 						disabled={!isConnected}
 					>
