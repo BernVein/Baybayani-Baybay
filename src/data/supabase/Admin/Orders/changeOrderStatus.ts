@@ -15,13 +15,22 @@ export async function changeOrderStatus(
 
 		if (error) throw error;
 
-		window.dispatchEvent(new Event("baybayani:update-order-table"));
+		const { data: userData, error: userError } = await supabase
+			.from("OrderItemUser")
+			.select("User(user_role)")
+			.eq("order_item_user_id", orderId)
+			.single();
 
+		if (userError) throw userError;
+
+		window.dispatchEvent(new Event("baybayani:update-order-table"));
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const userRole = (userData?.User as any)?.user_role;
 		// Send notification if status is "Ready"
-		if (orderStatus === "Ready") {
+		if (orderStatus === "Ready" && userRole !== "Admin") {
 			try {
 				// Get user ID associated with the order
-				const { data: orderData, error: userError } = await supabase
+				const { data: orderData, error: orderError } = await supabase
 					.from("OrderItemUser")
 					.select(
 						"user_id, subtotal, User(user_name), VariantSnapshot(variant_snapshot_name)",
@@ -29,7 +38,7 @@ export async function changeOrderStatus(
 					.eq("order_item_user_id", orderId)
 					.single();
 
-				if (userError || !orderData)
+				if (orderError || !orderData)
 					throw new Error("User not found for order");
 
 				const userId = orderData.user_id;
