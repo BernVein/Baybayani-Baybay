@@ -38,22 +38,32 @@ export const registerPush = async () => {
 		if (!user) return;
 
 		try {
-			// Use upsert so that if a token for this user already exists,
-			// it gets updated instead of throwing a duplicate-key error.
-			// Adjust onConflict to match your actual unique constraint column(s).
-			const { error } = await supabase.from("User_Push_Token").upsert(
-				{
-					user_id: user.id,
-					user_push_token: token.value,
-				},
-				{ onConflict: "user_id" },
-			);
+			// A physical device always produces the same FCM token regardless of
+			// which account is logged in. Because user_push_token has a UNIQUE
+			// constraint on the token column, a plain INSERT fails with a
+			// duplicate-key error when a different user logs in on the same device.
+			//
+			// Fix: upsert on the token value and update user_id to the current
+			// user. This re-assigns the device row to whoever is logged in now,
+			// which is exactly what we want for "multi-account, one device".
+			const { error: upsertError } = await supabase
+				.from("User_Push_Token")
+				.upsert(
+					{
+						user_id: user.id,
+						user_push_token: token.value,
+					},
+					{
+						onConflict: "user_push_token", // unique column
+						ignoreDuplicates: false, // always update user_id
+					},
+				);
 
-			if (error) {
-				console.error("Error saving FCM token:", error);
+			if (upsertError) {
+				console.error("Error saving FCM token:", upsertError);
 			} else {
 				console.log(
-					"FCM token registered/updated for user:",
+					"FCM token upserted for user:",
 					user.id,
 					"token:",
 					token.value,
