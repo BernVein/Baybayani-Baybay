@@ -76,8 +76,27 @@ Deno.serve(async (req) => {
 			.eq("user_id", userId);
 
 		if (tokensError) throw new Error(`DB error: ${tokensError.message}`);
-		if (!tokensData?.length)
-			throw new Error(`No FCM tokens found for user: ${userId}`);
+		if (!tokensData?.length) {
+			// User has no FCM token (e.g. not on Android / never granted permission)
+			// skip silently instead of erroring.
+			console.log(
+				`No FCM token for user ${userId}, skipping notification.`,
+			);
+			return new Response(
+				JSON.stringify({
+					success: true,
+					skipped: true,
+					reason: "No FCM token registered",
+				}),
+				{
+					status: 200,
+					headers: {
+						...corsHeaders,
+						"Content-Type": "application/json",
+					},
+				},
+			);
+		}
 
 		const tokens = tokensData.map(
 			(t: { user_push_token: string }) => t.user_push_token,
