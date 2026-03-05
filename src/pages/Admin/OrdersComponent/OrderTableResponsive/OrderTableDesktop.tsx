@@ -21,6 +21,7 @@ import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 export function OrderTableDesktop({
 	orders,
 	handleOrder,
+	onOpenCancelModal,
 }: {
 	orders: OrderTableRow[];
 	handleOrder: (
@@ -28,6 +29,7 @@ export function OrderTableDesktop({
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => Promise<void>;
+	onOpenCancelModal: () => void;
 }) {
 	return (
 		<div className="hidden sm:flex flex-1 min-h-0 flex-col">
@@ -207,11 +209,7 @@ export function OrderTableDesktop({
 											<DropdownItem
 												key="Cancelled"
 												onPress={() =>
-													handleOrder(
-														order.order_id,
-														"Cancelled",
-														order.status,
-													)
+													onOpenCancelModal()
 												}
 											>
 												<div className="flex items-center gap-2">

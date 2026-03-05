@@ -17,6 +17,7 @@ import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 export function OrderTableMobile({
 	orders,
 	handleOrder,
+	onOpenCancelModal,
 }: {
 	orders: OrderTableRow[];
 	handleOrder: (
@@ -24,6 +25,7 @@ export function OrderTableMobile({
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => Promise<void>;
+	onOpenCancelModal: () => void;
 }) {
 	return (
 		<div className="sm:hidden flex-1 min-h-0 flex flex-col">
@@ -166,11 +168,7 @@ export function OrderTableMobile({
 											<DropdownItem
 												key="Cancelled"
 												onPress={() =>
-													handleOrder(
-														order.order_id,
-														"Cancelled",
-														order.status,
-													)
+													onOpenCancelModal()
 												}
 											>
 												<div className="flex items-center gap-2">
