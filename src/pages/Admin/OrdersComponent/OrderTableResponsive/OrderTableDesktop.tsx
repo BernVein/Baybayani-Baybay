@@ -153,7 +153,7 @@ export function OrderTableDesktop({
 											<MoreIconVertical className="w-5" />
 										</Button>
 									</DropdownTrigger>
-									<DropdownMenu aria-label="Static Actions">
+									<DropdownMenu disabledKeys={[order.status]}>
 										<DropdownSection
 											title="Set Status"
 											showDivider

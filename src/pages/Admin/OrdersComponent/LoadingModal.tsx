@@ -18,7 +18,6 @@ export function LoadingModal({
 			disableAnimation
 			isOpen={isOpenLoading}
 			onOpenChange={onOpenChangeLoading}
-			placement="center"
 			hideCloseButton
 			isDismissable={false}
 			isKeyboardDismissDisabled

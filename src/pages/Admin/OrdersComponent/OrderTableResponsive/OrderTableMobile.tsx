@@ -114,13 +114,13 @@ export function OrderTableMobile({
 											<MoreIconVertical className="w-5" />
 										</Button>
 									</DropdownTrigger>
-									<DropdownMenu aria-label="Static Actions">
+									<DropdownMenu disabledKeys={[order.status]}>
 										<DropdownSection
 											title="Set Status"
 											showDivider
 										>
 											<DropdownItem
-												key="pending"
+												key="Pending"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
@@ -136,7 +136,7 @@ export function OrderTableMobile({
 											</DropdownItem>
 
 											<DropdownItem
-												key="ready"
+												key="Ready"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
@@ -151,7 +151,7 @@ export function OrderTableMobile({
 												</div>
 											</DropdownItem>
 											<DropdownItem
-												key="completed"
+												key="Completed"
 												onPress={() =>
 													handleOrder(
 														order.order_id,
