@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { BaybayaniLogo, CartIcon, OrdersIcon } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
+import { useRealtimeReadyOrders } from "@/data/supabase/Customer/Orders/useRealtimeReadyOrders";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { SoloUserIcon } from "@/components/icons";
 import { UserProfile } from "@/model/userProfile";
@@ -34,6 +35,7 @@ export function NavbarMobile({
 	const navigate = useNavigate();
 	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
+	const { readyCount } = useRealtimeReadyOrders(user?.id ?? null);
 	const { openLoginModal } = useLoginModal();
 
 	return (
@@ -82,11 +84,11 @@ export function NavbarMobile({
 					}}
 				>
 					<div className="w-8 h-8 flex items-center justify-center relative">
-						{cartCount > 0 ? (
+						{readyCount > 0 ? (
 							<Badge
 								className="absolute top-0 right-0 translate-x-1 -translate-y-1"
 								color="success"
-								content={String(cartCount)}
+								content={String(readyCount)}
 								shape="circle"
 								showOutline={false}
 								size="sm"

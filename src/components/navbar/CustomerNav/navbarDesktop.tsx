@@ -27,6 +27,7 @@ import {
 import { useFetchNavbarItems } from "@/data/supabase/Customer/Products/useFetchNavbarItems";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { useRealtimeUserCart } from "@/data/supabase/Customer/Cart/useRealtimeUserCart";
+import { useRealtimeReadyOrders } from "@/data/supabase/Customer/Orders/useRealtimeReadyOrders";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
@@ -49,6 +50,7 @@ export function Navbar({
 	const location = useLocation();
 	const { cartItems } = useRealtimeUserCart(user?.id ?? null);
 	const cartCount = cartItems.length;
+	const { readyCount } = useRealtimeReadyOrders(user?.id ?? null);
 	const { openLoginModal } = useLoginModal();
 
 	const { items: fetchedItems, loading } = useFetchNavbarItems();
@@ -178,10 +180,10 @@ export function Navbar({
 						}}
 					>
 						<div className="flex items-center gap-2">
-							{cartCount > 0 ? (
+							{readyCount > 0 ? (
 								<Badge
 									color="success"
-									content={String(cartCount)}
+									content={String(readyCount)}
 									shape="circle"
 									showOutline={false}
 								>
