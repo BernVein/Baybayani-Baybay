@@ -50,7 +50,6 @@ export function NavbarMobile({
 				<Link
 					className="flex flex-col items-center"
 					color={active === "Shop" ? "success" : "foreground"}
-					href="/"
 					onClick={(e) => {
 						e.preventDefault();
 						setActive("Shop");
@@ -72,7 +71,6 @@ export function NavbarMobile({
 				<Link
 					className="flex flex-col items-center"
 					color={active === "Orders" ? "success" : "foreground"}
-					href="/orders"
 					onClick={(e) => {
 						e.preventDefault();
 						if (!user) {
@@ -112,7 +110,6 @@ export function NavbarMobile({
 				<Link
 					className="flex flex-col items-center"
 					color={active === "Cart" ? "success" : "foreground"}
-					href="/cart"
 					onClick={(e) => {
 						e.preventDefault();
 						if (!user) {
