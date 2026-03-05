@@ -33,7 +33,7 @@ export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
 								</div>
 							</div>
 
-							<div className="flex flex-col w-1/4 gap-2">
+							<div className="flex flex-col w-1/4 gap-2 items-end">
 								<Chip
 									color={
 										orderItem.status === "Pending"
@@ -118,7 +118,11 @@ export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
 								Subtotal
 							</span>
 							<span className="text-sm text-default-600">
-								₱{orderItem.subtotal.toLocaleString()}
+								₱
+								{orderItem.subtotal.toLocaleString("en-PH", {
+									minimumFractionDigits: 2,
+									maximumFractionDigits: 2,
+								})}
 							</span>
 						</div>
 					</div>
