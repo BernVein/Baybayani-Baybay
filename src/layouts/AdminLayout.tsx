@@ -5,7 +5,7 @@ import { Skeleton } from "@heroui/react";
 import { NavbarMobileAdmin } from "@/components/navbar/AdminNav/navbarMobileAdmin";
 import { SidebarDesktopAdmin } from "@/components/navbar/AdminNav/sidebarDesktopAdmin";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
-import { AdminFloatingChat } from "@/components/chat/AdminFloatingChat";
+import { AdminFloatingChat } from "@/pages/Admin/Chat/AdminFloatingChat";
 
 function AdminPageSkeleton() {
 	return (

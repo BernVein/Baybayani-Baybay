@@ -23,7 +23,7 @@ import { NavbarMobile } from "@/components/navbar/CustomerNav/navbarMobile";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
 import { FloatingChatProvider } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
-import { FloatingChat } from "@/components/chat/FloatingChat";
+import { FloatingChat } from "@/pages/General/Chat/FloatingChat";
 
 export default function CustomerLayout({
 	user,
