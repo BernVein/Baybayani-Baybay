@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
 
 import { supabase } from "@/config/supabaseclient";
@@ -27,6 +27,8 @@ export function useRealtimeChat({
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [isConnected, setIsConnected] = useState(false);
 	const [isFocused, setIsFocused] = useState(true);
+	const [activeUsers, setActiveUsers] = useState<Set<string>>(new Set());
+	const channelRef = useRef<any>(null);
 
 	// App focus listener
 	useEffect(() => {
@@ -106,50 +108,78 @@ export function useRealtimeChat({
 		let channelHandle: any;
 
 		const setupChannel = async () => {
-			const channel = supabase.channel(`chat-${roomId}`).on(
-				"postgres_changes",
-				{
-					event: "INSERT",
-					schema: "public",
-					table: "ChatMessage",
-					filter: `chat_room_id=eq.${roomId}`,
+			const channel = supabase.channel(`chat-${roomId}`, {
+				config: {
+					presence: {
+						key: userId,
+					},
 				},
-				async (payload) => {
-					const newMsg = payload.new;
+			});
 
-					let senderName = username;
-
-					if (newMsg.user_id !== userId) {
-						const { data: userData } = await supabase
-							.from("User")
-							.select("user_name")
-							.eq("user_id", newMsg.user_id)
-							.single();
-
-						if (userData) senderName = userData.user_name;
+			channel
+				.on("presence", { event: "sync" }, () => {
+					const newState = channel.presenceState();
+					const active = new Set<string>();
+					for (const key in newState) {
+						const presences = newState[key] as any[];
+						for (const p of presences) {
+							if (p.is_focused) active.add(p.user_id);
+						}
 					}
+					if (isMounted) setActiveUsers(active);
+				})
+				.on(
+					"postgres_changes",
+					{
+						event: "INSERT",
+						schema: "public",
+						table: "ChatMessage",
+						filter: `chat_room_id=eq.${roomId}`,
+					},
+					async (payload) => {
+						const newMsg = payload.new;
 
-					const formattedMsg: ChatMessage = {
-						id: newMsg.chat_message_id,
-						content: newMsg.message,
-						user: { id: newMsg.user_id, name: senderName },
-						createdAt: newMsg.created_at,
-					};
+						let senderName = username;
 
-					setMessages((prev) => {
-						if (prev.some((m) => m.id === formattedMsg.id))
-							return prev;
+						if (newMsg.user_id !== userId) {
+							const { data: userData } = await supabase
+								.from("User")
+								.select("user_name")
+								.eq("user_id", newMsg.user_id)
+								.single();
 
-						return [...prev, formattedMsg];
-					});
-				},
-			);
+							if (userData) senderName = userData.user_name;
+						}
 
-			await channel.subscribe();
+						const formattedMsg: ChatMessage = {
+							id: newMsg.chat_message_id,
+							content: newMsg.message,
+							user: { id: newMsg.user_id, name: senderName },
+							createdAt: newMsg.created_at,
+						};
+
+						setMessages((prev) => {
+							if (prev.some((m) => m.id === formattedMsg.id))
+								return prev;
+
+							return [...prev, formattedMsg];
+						});
+					},
+				);
+
+			await channel.subscribe(async (status) => {
+				if (status === "SUBSCRIBED" && isMounted) {
+					await channel
+						.track({ user_id: userId, is_focused: isFocused })
+						.catch(() => {});
+				}
+			});
+
 			if (!isMounted) {
 				await supabase.removeChannel(channel).catch(() => {});
 			}
 			channelHandle = channel;
+			channelRef.current = channel;
 			setIsConnected(true);
 		};
 
@@ -159,8 +189,19 @@ export function useRealtimeChat({
 			isMounted = false;
 			if (channelHandle)
 				supabase.removeChannel(channelHandle).catch(() => {});
+			channelRef.current = null;
+			if (isMounted) setIsConnected(false);
 		};
 	}, [roomId, userId, username]);
+
+	// Update presence when focus changes
+	useEffect(() => {
+		if (isConnected && channelRef.current) {
+			channelRef.current
+				.track({ user_id: userId, is_focused: isFocused })
+				.catch(() => {});
+		}
+	}, [isFocused, isConnected, userId]);
 
 	// Send message
 	const sendMessage = useCallback(
@@ -242,6 +283,13 @@ export function useRealtimeChat({
 						}
 
 						for (const recipientId of recipients) {
+							if (activeUsers.has(recipientId)) {
+								console.log(
+									`User ${recipientId} is active in app. Skipping push notification.`,
+								);
+								continue;
+							}
+
 							await fetch(
 								"https://mnitpbgrbldkrhlzmnpy.supabase.co/functions/v1/send-push-notification",
 								{
@@ -269,7 +317,7 @@ export function useRealtimeChat({
 				}
 			}
 		},
-		[roomId, userId, username, isConnected, isFocused],
+		[roomId, userId, username, isConnected, isFocused, activeUsers],
 	);
 
 	return { messages, sendMessage, isConnected };

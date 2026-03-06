@@ -27,7 +27,6 @@ export const registerPush = async () => {
 	}
 
 	await PushNotifications.removeAllListeners();
-	await PushNotifications.register();
 
 	PushNotifications.addListener("registration", async (token) => {
 		console.log("Device Token:", token.value);
@@ -91,4 +90,6 @@ export const registerPush = async () => {
 			console.log("Notification clicked:", notification);
 		},
 	);
+
+	await PushNotifications.register();
 };
