@@ -34,6 +34,7 @@ const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { registerPush } from "@/utils/PushNotification/registerPush";
+import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 function App() {
 	const auth = useAuth();
@@ -49,6 +50,7 @@ function App() {
 
 	const handleSignOut = async () => {
 		try {
+			await unregisterPush();
 			await supabase.auth.signOut();
 			navigate("/shop");
 			addToast({

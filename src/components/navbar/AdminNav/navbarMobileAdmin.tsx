@@ -25,6 +25,7 @@ import {
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { supabase } from "@/config/supabaseclient";
 import { UserProfile } from "@/model/userProfile";
+import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 export function NavbarMobileAdmin({
 	profile,
@@ -40,6 +41,7 @@ export function NavbarMobileAdmin({
 		if (isLoggingOut.current) return;
 		isLoggingOut.current = true;
 		try {
+			await unregisterPush();
 			await supabase.auth.signOut();
 			navigate("/shop");
 			addToast({

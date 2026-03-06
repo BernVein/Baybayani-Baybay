@@ -1,6 +1,7 @@
 import { supabase } from "@/config/supabaseclient";
 import { UserProfile } from "@/model/userProfile";
 import imageCompression from "browser-image-compression";
+import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 export const registerUser = async (
 	profile: UserProfile,
@@ -79,5 +80,6 @@ export const registerUser = async (
 		throw new Error(tableError.message);
 	}
 
+	await unregisterPush();
 	await supabase.auth.signOut();
 };

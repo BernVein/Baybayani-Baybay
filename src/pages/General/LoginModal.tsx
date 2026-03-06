@@ -16,6 +16,7 @@ import { supabase } from "@/config/supabaseclient";
 import { addToast } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { useTransition } from "react";
+import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 export default function LoginModal() {
 	const navigate = useNavigate();
@@ -38,6 +39,7 @@ export default function LoginModal() {
 
 	const handleLogOut = async () => {
 		try {
+			await unregisterPush();
 			await supabase.auth.signOut();
 			addToast({
 				title: "Signed out",

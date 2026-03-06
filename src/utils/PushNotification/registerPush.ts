@@ -67,6 +67,7 @@ export const registerPush = async () => {
 					"token:",
 					token.value,
 				);
+				localStorage.setItem("fcm_token", token.value);
 			}
 		} catch (err) {
 			console.error("Error registering token:", err);

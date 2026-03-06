@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { ReactNode, useEffect } from "react";
 import { supabase } from "@/config/supabaseclient";
+import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 export default function RequireGuest({ children }: { children: ReactNode }) {
 	const auth = useAuth();
@@ -41,6 +42,7 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 
 	const handleLogOut = async () => {
 		try {
+			await unregisterPush();
 			await supabase.auth.signOut();
 			onClose();
 			addToast({

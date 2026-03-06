@@ -17,6 +17,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/config/supabaseclient";
+import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 import { BaybayaniLogo } from "@/components/icons";
 import {
@@ -52,6 +53,7 @@ export function SidebarDesktopAdmin({
 		if (isLoggingOut.current) return;
 		isLoggingOut.current = true;
 		try {
+			await unregisterPush();
 			await supabase.auth.signOut();
 			navigate("/shop");
 			addToast({
