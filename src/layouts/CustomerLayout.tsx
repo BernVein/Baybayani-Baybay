@@ -4,7 +4,7 @@ import { Skeleton } from "@heroui/react";
 
 function CustomerPageSkeleton() {
 	return (
-		<div className="p-5 md:p-8 flex flex-col gap-5 w-full">
+		<div className="p-5 md:p-8 flex flex-col gap-5 w-full justify-center items-center">
 			<Skeleton className="h-8 w-1/3 rounded-lg" />
 			<div className="flex gap-4 flex-wrap">
 				<Skeleton className="h-48 w-40 rounded-xl" />
