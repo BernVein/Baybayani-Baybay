@@ -45,8 +45,7 @@ export const fetchAllUsers = (
 				created_at
 				`,
 			)
-			.eq("is_soft_deleted", false)
-			.eq("is_for_debugging", false);
+			.eq("is_soft_deleted", false);
 
 		if (searchTerm) {
 			query = query.ilike("user_name", `%${searchTerm}%`);
