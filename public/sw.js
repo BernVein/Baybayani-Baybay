@@ -1,4 +1,4 @@
-const CACHE_NAME = "baybayani-v1";
+const CACHE_NAME = "baybayani-v2";
 const ASSETS_TO_CACHE = [
 	"/",
 	"/index.html",
@@ -6,7 +6,6 @@ const ASSETS_TO_CACHE = [
 	"/baybayani.svg",
 	"/login_image.jpg",
 	"/cover.jpg",
-	"/src/main.tsx",
 ];
 
 self.addEventListener("install", (event) => {
@@ -34,6 +33,14 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+	if (event.request.mode === "navigate") {
+		// Network-first for navigation (HTML) requests
+		event.respondWith(
+			fetch(event.request).catch(() => caches.match(event.request)),
+		);
+		return;
+	}
+
 	event.respondWith(
 		caches.match(event.request).then((response) => {
 			return response || fetch(event.request);
