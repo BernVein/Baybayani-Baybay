@@ -10,38 +10,84 @@ import {
 } from "@/data/supabase/General/use-realtime-chat";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { supabase } from "@/config/supabaseclient";
 
 interface RealtimeChatProps {
-	roomName: string;
-	username: string;
+	customerId: string;
 	onMessage?: (messages: ChatMessage[]) => void;
 	messages?: ChatMessage[];
 }
 
 /**
  * Realtime chat component
- * @param roomName - The name of the room to join. Each room is a unique chat.
- * @param username - The username of the user
- * @param onMessage - The callback function to handle the messages. Useful if you want to store the messages in a database.
- * @param messages - The messages to display in the chat. Useful if you want to display messages from a database.
+ * @param customerId - The ID of the customer (user_id) to chat with.
+ * @param onMessage - The callback function to handle the messages.
+ * @param messages - The messages to display in the chat.
  * @returns The chat component
  */
 export const RealtimeChat = ({
-	roomName,
-	username,
+	customerId,
 	onMessage,
 	messages: initialMessages = [],
 }: RealtimeChatProps) => {
 	const { containerRef, scrollToBottom } = useChatScroll();
+	const auth = useAuth();
+	const user = auth?.user ?? null;
+	const profile = auth?.profile ?? null;
+
+	const [resolvedRoomId, setResolvedRoomId] = useState<string | null>(null);
+	const [isResolving, setIsResolving] = useState(true);
+
+	// Resolve or create ChatRoom for this customer
+	useEffect(() => {
+		async function resolveRoom() {
+			if (!customerId) return;
+			setIsResolving(true);
+
+			try {
+				// Try to find existing room for this customer
+				const { data: existingRoom, error: fetchError } = await supabase
+					.from("ChatRoom")
+					.select("chat_room_id")
+					.eq("user_id", customerId)
+					.maybeSingle();
+
+				if (fetchError) throw fetchError;
+
+				if (existingRoom) {
+					setResolvedRoomId(existingRoom.chat_room_id);
+				} else {
+					// Create new room if it doesn't exist
+					const { data: newRoom, error: createError } = await supabase
+						.from("ChatRoom")
+						.insert({ user_id: customerId })
+						.select("chat_room_id")
+						.single();
+
+					if (createError) throw createError;
+					if (newRoom) setResolvedRoomId(newRoom.chat_room_id);
+				}
+			} catch (err) {
+				console.error("Failed to resolve chat room:", err);
+			} finally {
+				setIsResolving(false);
+			}
+		}
+
+		resolveRoom();
+	}, [customerId]);
 
 	const {
 		messages: realtimeMessages,
 		sendMessage,
 		isConnected,
 	} = useRealtimeChat({
-		roomName,
-		username,
+		roomId: resolvedRoomId || "",
+		userId: user?.id || "",
+		username: profile?.user_name || "Unknown",
 	});
+
 	const [newMessage, setNewMessage] = useState("");
 
 	// Merge realtime messages with initial messages
@@ -54,7 +100,7 @@ export const RealtimeChat = ({
 		);
 		// Sort by creation date
 		const sortedMessages = uniqueMessages.sort((a, b) =>
-			a.createdAt.localeCompare(b.createdAt),
+			(a.createdAt || "").localeCompare(b.createdAt || ""),
 		);
 
 		return sortedMessages;
@@ -74,13 +120,29 @@ export const RealtimeChat = ({
 	const handleSendMessage = useCallback(
 		(e: React.FormEvent) => {
 			e.preventDefault();
-			if (!newMessage.trim() || !isConnected) return;
+			if (!newMessage.trim() || !isConnected || !resolvedRoomId) return;
 
 			sendMessage(newMessage);
 			setNewMessage("");
 		},
-		[newMessage, isConnected, sendMessage],
+		[newMessage, isConnected, sendMessage, resolvedRoomId],
 	);
+
+	if (isResolving) {
+		return (
+			<div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+				Initializing chat...
+			</div>
+		);
+	}
+
+	if (!resolvedRoomId) {
+		return (
+			<div className="flex items-center justify-center h-full text-danger text-sm">
+				Failed to establish chat connection.
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-col h-full min-h-0 w-full bg-background text-foreground antialiased">
@@ -109,9 +171,7 @@ export const RealtimeChat = ({
 							>
 								<ChatMessageItem
 									message={message}
-									isOwnMessage={
-										message.user.name === username
-									}
+									isOwnMessage={message.user.id === user?.id}
 									showHeader={showHeader}
 								/>
 							</div>

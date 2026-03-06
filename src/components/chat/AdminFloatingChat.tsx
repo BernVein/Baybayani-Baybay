@@ -194,8 +194,7 @@ export function AdminFloatingChat() {
 					{selectedUser && adminName ? (
 						<RealtimeChat
 							key={selectedUser.id}
-							roomName={`user-${selectedUser.id}`}
-							username={adminName}
+							customerId={selectedUser.id}
 						/>
 					) : selectedUser && !adminName ? (
 						<div className="flex items-center justify-center h-full text-default-400 text-sm">

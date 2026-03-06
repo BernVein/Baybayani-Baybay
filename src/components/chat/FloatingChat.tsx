@@ -29,7 +29,6 @@ export function FloatingChat() {
 		}
 	};
 
-	const roomName = user ? `user-${user.id}` : "";
 	const username = profile?.user_name ?? "";
 
 	return (
@@ -87,7 +86,7 @@ export function FloatingChat() {
 				{/* Chat Body */}
 				<div className="flex-1 min-h-0 overflow-hidden flex flex-col">
 					{user && username ? (
-						<RealtimeChat roomName={roomName} username={username} />
+						<RealtimeChat customerId={user.id} />
 					) : (
 						<div className="flex items-center justify-center h-full text-default-400 text-sm px-4 text-center">
 							Please log in to chat with our support team.

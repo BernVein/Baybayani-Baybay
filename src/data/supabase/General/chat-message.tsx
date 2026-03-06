@@ -52,6 +52,11 @@ export const ChatMessageItem = ({
 				>
 					{message.content}
 				</div>
+				{message.status === "sending" && (
+					<span className="text-[10px] text-foreground/40 px-1 animate-pulse">
+						sending...
+					</span>
+				)}
 			</div>
 		</div>
 	);
