@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { ChatMessage } from "@/data/supabase/General/use-realtime-chat";
+import type { ChatMessage } from "@/data/supabase/General/Chat/use-realtime-chat";
 
 interface ChatMessageItemProps {
 	message: ChatMessage;

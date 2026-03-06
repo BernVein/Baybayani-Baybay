@@ -2,12 +2,12 @@ import { Send } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
-import { ChatMessageItem } from "@/data/supabase/General/chat-message";
+import { ChatMessageItem } from "@/pages/General/Chat/chat-message";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
 import {
 	useRealtimeChat,
 	type ChatMessage,
-} from "@/data/supabase/General/use-realtime-chat";
+} from "@/data/supabase/General/Chat/use-realtime-chat";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";

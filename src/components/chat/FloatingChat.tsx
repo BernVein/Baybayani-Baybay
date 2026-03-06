@@ -2,7 +2,7 @@ import { X, Minus, MessageCircle } from "lucide-react";
 import { useState } from "react";
 
 import { BaybayaniLogo } from "@/components/icons";
-import { RealtimeChat } from "@/data/supabase/General/realtime-chat";
+import { RealtimeChat } from "@/pages/General/Chat/realtime-chat";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { useFloatingChat } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
