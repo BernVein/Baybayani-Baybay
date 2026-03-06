@@ -47,7 +47,7 @@ export default function DeleteCartItemModalIndex({
   }
 
   return (
-    <Modal
+    <Modal backdrop="blur"
       disableAnimation
       isOpen={isOpen}
       size="sm"

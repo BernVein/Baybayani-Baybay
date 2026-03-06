@@ -77,7 +77,7 @@ export function EditCatModal({
   };
 
   return (
-    <Modal
+    <Modal backdrop="blur"
       disableAnimation
       isOpen={isOpenEditCat}
       onOpenChange={onOpenChangeEditCat}

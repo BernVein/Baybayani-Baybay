@@ -20,7 +20,7 @@ export function CloseWarningModal({
 }) {
   return (
     <>
-      <Modal
+      <Modal backdrop="blur"
         disableAnimation
         isOpen={isOpenWarning}
         size="sm"

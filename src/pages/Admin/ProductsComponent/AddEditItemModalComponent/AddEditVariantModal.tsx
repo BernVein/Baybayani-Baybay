@@ -339,7 +339,7 @@ export function AddEditVariantModal({
 
 	return (
 		<>
-			<Modal
+			<Modal backdrop="blur"
 				disableAnimation
 				isDismissable={false}
 				isOpen={isOpenAddVar}

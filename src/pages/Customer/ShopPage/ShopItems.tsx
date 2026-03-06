@@ -131,7 +131,7 @@ export default function ShopItems({
 
   if (error) {
     return (
-      <Modal
+      <Modal backdrop="blur"
         isOpen
         onOpenChange={() => {
           /* do nothing */

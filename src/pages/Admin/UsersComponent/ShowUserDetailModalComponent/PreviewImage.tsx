@@ -10,7 +10,7 @@ export function PreviewImage({
 	selectedImage: string;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			isOpen={isPreviewOpen}
 			onOpenChange={onPreviewOpenChange}
 			disableAnimation

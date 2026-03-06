@@ -29,7 +29,7 @@ export function DeleteVariantModal({
 }) {
   return (
     <>
-      <Modal
+      <Modal backdrop="blur"
         disableAnimation
         isOpen={isOpenDeleteVar}
         size="sm"

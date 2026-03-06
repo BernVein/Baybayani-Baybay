@@ -60,7 +60,7 @@ export default function LoginModal() {
 	};
 
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			disableAnimation
 			isOpen={isLoginModalOpen}
 			onOpenChange={(open) => {

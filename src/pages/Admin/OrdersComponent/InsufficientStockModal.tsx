@@ -28,7 +28,7 @@ export function InsufficientStockModal({
 	targetStatus: string;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
 			size="md"

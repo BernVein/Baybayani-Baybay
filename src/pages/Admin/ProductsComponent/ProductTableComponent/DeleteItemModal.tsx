@@ -17,7 +17,7 @@ export function DeleteItemModal({
   onOpenChangeDeleteItem: () => void;
 }) {
   return (
-    <Modal
+    <Modal backdrop="blur"
       disableAnimation
       isOpen={isOpenDeleteItem}
       size="sm"

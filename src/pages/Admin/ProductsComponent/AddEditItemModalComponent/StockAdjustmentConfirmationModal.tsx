@@ -34,6 +34,7 @@ export function StockAdjustmentConfirmationModal({
 
 	return (
 		<Modal
+			backdrop="blur"
 			disableAnimation
 			isOpen={isOpen}
 			size="md"

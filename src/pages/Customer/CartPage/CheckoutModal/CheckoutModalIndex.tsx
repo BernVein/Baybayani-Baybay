@@ -52,7 +52,7 @@ export default function CheckoutModalIndex({
 
 	return (
 		<>
-			<Modal
+			<Modal backdrop="blur"
 				disableAnimation
 				isOpen={checkoutModalIsOpen}
 				scrollBehavior="inside"

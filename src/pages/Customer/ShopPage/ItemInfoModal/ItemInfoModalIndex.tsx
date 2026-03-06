@@ -92,7 +92,7 @@ export default function ItemInfoModal({
 	}, [isOpen, item, onOpenChange]);
 
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			disableAnimation
 			classNames={{
 				header: "border-b-[1px] border-[rgba(41,47,70,0.4)]",

@@ -50,7 +50,7 @@ export default function DeleteMultipleCartItemsModal({
     }
 
     return (
-        <Modal
+        <Modal backdrop="blur"
             disableAnimation
             isOpen={isOpen}
             size="sm"

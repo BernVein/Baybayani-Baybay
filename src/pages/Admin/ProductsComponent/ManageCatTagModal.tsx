@@ -77,7 +77,7 @@ export function ManageCatTagModal({
 
   return (
     <>
-      <Modal
+      <Modal backdrop="blur"
         disableAnimation
         isOpen={isOpen}
         scrollBehavior="inside"

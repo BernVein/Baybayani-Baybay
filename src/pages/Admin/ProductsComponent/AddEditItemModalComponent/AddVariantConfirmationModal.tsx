@@ -26,7 +26,7 @@ export function AddVariantConfirmationModal({
 	itemUnitOfMeasure: string;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			disableAnimation
 			isOpen={isOpen}
 			size="md"

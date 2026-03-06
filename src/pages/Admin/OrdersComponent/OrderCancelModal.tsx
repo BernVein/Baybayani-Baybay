@@ -16,7 +16,7 @@ export function OrderCancelModal({
 	onOpenChangeCancelModal: (isOpen: boolean) => void;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			isOpen={isOpenCancelModal}
 			onOpenChange={onOpenChangeCancelModal}
 			disableAnimation

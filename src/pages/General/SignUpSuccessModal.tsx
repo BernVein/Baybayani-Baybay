@@ -19,7 +19,7 @@ export function SignUpSuccessModal({
 }) {
 	const navigate = useNavigate();
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
 			disableAnimation

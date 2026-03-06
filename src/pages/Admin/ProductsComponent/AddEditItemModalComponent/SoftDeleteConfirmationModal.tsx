@@ -26,7 +26,7 @@ export function SoftDeleteConfirmationModal({
 	isLoading: boolean;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			disableAnimation
 			isOpen={isOpen}
 			size="md"

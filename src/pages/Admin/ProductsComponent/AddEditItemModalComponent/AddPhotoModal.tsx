@@ -139,7 +139,7 @@ export function AddPhotoModal({
     };
 
     return (
-        <Modal
+        <Modal backdrop="blur"
             disableAnimation
             isOpen={isOpen}
             scrollBehavior="inside"

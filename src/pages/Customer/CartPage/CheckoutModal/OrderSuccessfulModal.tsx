@@ -17,7 +17,7 @@ export function OrderSuccessfulModal({
   onOpenChangeOrderSuccessful: (isOpen: boolean) => void;
 }) {
   return (
-    <Modal
+    <Modal backdrop="blur"
       disableAnimation
       isOpen={isOpenOrderSuccessful}
       onOpenChange={onOpenChangeOrderSuccessful}

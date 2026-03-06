@@ -71,7 +71,7 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	return (
 		<>
 			{children}
-			<Modal
+			<Modal backdrop="blur"
 				isOpen={isOpen}
 				onClose={handleGoBack}
 				isDismissable={false}

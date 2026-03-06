@@ -350,7 +350,7 @@ export function AddEditItemModal({
 
 	return (
 		<>
-			<Modal
+			<Modal backdrop="blur"
 				disableAnimation
 				isDismissable={false}
 				isOpen={isOpen}

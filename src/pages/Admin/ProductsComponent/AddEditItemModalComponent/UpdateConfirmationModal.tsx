@@ -29,7 +29,7 @@ export function UpdateConfirmationModal({
 	isLoading: boolean;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			disableAnimation
 			isOpen={isOpen}
 			size="md"

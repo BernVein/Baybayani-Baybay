@@ -26,7 +26,7 @@ export function UpdateVariantConfirmationModal({
 	variantName: string;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			disableAnimation
 			isOpen={isOpen}
 			size="md"

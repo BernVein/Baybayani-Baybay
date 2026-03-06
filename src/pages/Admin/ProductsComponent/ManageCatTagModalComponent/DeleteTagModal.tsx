@@ -74,7 +74,7 @@ export function DeleteTagModal({
   };
 
   return (
-    <Modal
+    <Modal backdrop="blur"
       disableAnimation
       isOpen={isOpenDeleteTag}
       size="sm"

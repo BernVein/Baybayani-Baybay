@@ -14,7 +14,7 @@ export function LoadingModal({
 	onOpenChangeLoading: (isOpen: boolean) => void;
 }) {
 	return (
-		<Modal
+		<Modal backdrop="blur"
 			disableAnimation
 			isOpen={isOpenLoading}
 			onOpenChange={onOpenChangeLoading}

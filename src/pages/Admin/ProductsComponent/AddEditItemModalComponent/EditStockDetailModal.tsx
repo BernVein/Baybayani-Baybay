@@ -161,7 +161,7 @@ export function EditStockDetailModal({
 
 	return (
 		<>
-			<Modal
+			<Modal backdrop="blur"
 				disableAnimation
 				isDismissable={false}
 				isOpen={isOpenEditStock}

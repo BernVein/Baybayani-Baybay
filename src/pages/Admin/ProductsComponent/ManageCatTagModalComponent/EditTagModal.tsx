@@ -76,7 +76,7 @@ export function EditTagModal({
   };
 
   return (
-    <Modal
+    <Modal backdrop="blur"
       disableAnimation
       isOpen={isOpenEditTag}
       onOpenChange={onOpenChangeEditTag}

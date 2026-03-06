@@ -97,7 +97,7 @@ export function AddOrderModal({
 
 	return (
 		<>
-			<Modal
+			<Modal backdrop="blur"
 				disableAnimation
 				closeButton={
 					isLoading ? <Spinner color="danger" size="sm" /> : undefined

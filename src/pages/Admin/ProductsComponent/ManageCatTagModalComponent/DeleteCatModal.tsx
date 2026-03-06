@@ -74,7 +74,7 @@ export function DeleteCatModal({
   };
 
   return (
-    <Modal
+    <Modal backdrop="blur"
       disableAnimation
       isOpen={isOpenDeleteCat}
       size="sm"
