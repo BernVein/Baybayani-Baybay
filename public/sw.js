@@ -4,6 +4,8 @@ const ASSETS_TO_CACHE = [
 	"/index.html",
 	"/manifest.json",
 	"/baybayani.svg",
+	"/login_image.jpg",
+	"/cover.jpg",
 	"/src/main.tsx",
 ];
 

@@ -6,6 +6,22 @@
 	"display": "standalone",
 	"background_color": "#ffffff",
 	"theme_color": "#15803d",
+	"screenshots": [
+		{
+			"src": "/login_image.jpg",
+			"sizes": "1280x720",
+			"type": "image/jpeg",
+			"form_factor": "wide",
+			"label": "Login Page"
+		},
+		{
+			"src": "/cover.jpg",
+			"sizes": "1280x720",
+			"type": "image/jpeg",
+			"form_factor": "narrow",
+			"label": "Welcome Screen"
+		}
+	],
 	"icons": [
 		{
 			"src": "/baybayani.svg",
