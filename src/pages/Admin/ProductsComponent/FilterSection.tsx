@@ -6,21 +6,12 @@ import {
 	Button,
 	Input,
 	useDisclosure,
-	SelectItem,
 	DropdownSection,
 	Spinner,
 } from "@heroui/react";
 import { useState } from "react";
 
-import {
-	SearchIcon,
-	FilterIcon,
-	PlusIcon,
-	SortIcon,
-	SingleListBullet,
-	ListBullet,
-} from "@/components/icons";
-import ModalAwareSelect from "@/lib/ModalAwareSelect";
+import { SearchIcon, FilterIcon, PlusIcon, SortIcon } from "@/components/icons";
 import useIsMobile from "@/lib/isMobile";
 import { AddEditItemModal } from "@/pages/Admin/ProductsComponent/AddEditItemModal";
 import { useFetchCategories } from "@/data/supabase/useFetchCategories";
@@ -43,7 +34,6 @@ export function FilterSection({
 	) => void;
 }) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const [selectKeys, setSelectKeys] = useState<Set<string>>(new Set());
 	const [itemHasVariant, setItemHasVariant] = useState<boolean>(false);
 	const isMobile = useIsMobile();
 	const { categories, loading: catLoading } = useFetchCategories();
@@ -62,37 +52,37 @@ export function FilterSection({
 				onValueChange={setSearchQuery}
 			/>
 			<div className="flex flex-row gap-2 justify-end">
-				<ModalAwareSelect
-					className="w-full"
-					classNames={{ innerWrapper: "w-full pr-6" }}
-					placeholder={isMobile ? "" : "Add Item"}
-					selectedKeys={selectKeys}
-					selectionMode="single"
-					startContent={<PlusIcon className="w-5 shrink-0" />}
-					onSelectionChange={(keys) => {
-						const key = Array.from(keys)[0] as string | undefined;
-
-						if (!key) return;
-						setItemHasVariant(key === "with-variant");
-						onOpen();
-						setSelectKeys(new Set());
-					}}
-				>
-					<SelectItem key="no-variant">
-						{isMobile ? (
-							<SingleListBullet className="w-5" />
-						) : (
-							"No Variant"
-						)}
-					</SelectItem>
-					<SelectItem key="with-variant">
-						{isMobile ? (
-							<ListBullet className="w-5" />
-						) : (
-							"With Variant"
-						)}
-					</SelectItem>
-				</ModalAwareSelect>
+				<Dropdown>
+					<DropdownTrigger>
+						<Button
+							className="capitalize w-full"
+							isIconOnly={isMobile}
+							startContent={<PlusIcon className="w-4 shrink-0" />}
+						>
+							{isMobile ? "" : "Add Item"}
+						</Button>
+					</DropdownTrigger>
+					<DropdownMenu aria-label="Static Actions">
+						<DropdownItem
+							key="with-variant"
+							onPress={() => {
+								setItemHasVariant(true);
+								onOpen();
+							}}
+						>
+							With Variant
+						</DropdownItem>
+						<DropdownItem
+							key="no-variant"
+							onPress={() => {
+								setItemHasVariant(false);
+								onOpen();
+							}}
+						>
+							Without Variant
+						</DropdownItem>
+					</DropdownMenu>
+				</Dropdown>
 
 				<Dropdown
 					isOpen={isDropdownOpen}
