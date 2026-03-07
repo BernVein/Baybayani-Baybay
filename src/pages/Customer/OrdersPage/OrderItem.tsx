@@ -1,4 +1,12 @@
-import { Card, CardBody, Image, Divider, Chip, Progress } from "@heroui/react";
+import {
+	Card,
+	CardBody,
+	Image,
+	Divider,
+	Chip,
+	Progress,
+	Link,
+} from "@heroui/react";
 
 import { OrderCard } from "@/model/ui/Customer/order_card";
 export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
@@ -125,6 +133,18 @@ export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
 								})}
 							</span>
 						</div>
+						<Link
+							color={
+								orderItem.status === "Pending"
+									? "danger"
+									: "success"
+							}
+							className={`self-end mt-2 cursor-pointer text-sm ${orderItem.status === "Pending" ? "text-danger" : "text-default-500 italic font-light"}`}
+						>
+							{orderItem.status === "Pending"
+								? "Cancel Order"
+								: "Order Confirmed"}
+						</Link>
 					</div>
 				</CardBody>
 			</Card>
