@@ -64,15 +64,6 @@ export function FilterSection({
 					</DropdownTrigger>
 					<DropdownMenu aria-label="Static Actions">
 						<DropdownItem
-							key="with-variant"
-							onPress={() => {
-								setItemHasVariant(true);
-								onOpen();
-							}}
-						>
-							With Variant
-						</DropdownItem>
-						<DropdownItem
 							key="no-variant"
 							onPress={() => {
 								setItemHasVariant(false);
@@ -80,6 +71,15 @@ export function FilterSection({
 							}}
 						>
 							Without Variant
+						</DropdownItem>
+						<DropdownItem
+							key="with-variant"
+							onPress={() => {
+								setItemHasVariant(true);
+								onOpen();
+							}}
+						>
+							With Variant
 						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
