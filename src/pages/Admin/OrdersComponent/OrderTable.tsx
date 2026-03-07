@@ -63,22 +63,27 @@ export function OrderTable({
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 		cancelReason?: string,
 	) => {
-		onOpenLoading();
 		const canCheckStockChangeStatus =
 			changeToStatus === "Ready" || changeToStatus === "Completed";
 		const canCheckStockCurrentStatus =
 			currentStatus !== "Ready" &&
 			currentStatus !== "Completed" &&
 			currentStatus !== "Cancelled";
+
+		// Store previous state for rollback
+		const previousOrders = orders;
+
 		try {
 			const order = orders?.find((o) => o.order_id === orderId);
 
 			if (order) {
 				// Only check if we are NOT already in a Ready or Completed state
 				if (canCheckStockChangeStatus && canCheckStockCurrentStatus) {
+					onOpenLoading();
 					const { effectiveStocks, success } = await fetchLatestStock(
 						order.item_variant_id,
 					);
+					onCloseLoading();
 
 					if (
 						success &&
@@ -97,6 +102,15 @@ export function OrderTable({
 					}
 				}
 			}
+
+			setOrders((prev) => {
+				if (!prev) return prev;
+				return prev.map((order) =>
+					order.order_id === orderId
+						? { ...order, status: changeToStatus }
+						: order,
+				);
+			});
 
 			const { error } = await changeOrderStatus(
 				orderId,
@@ -153,15 +167,10 @@ export function OrderTable({
 				severity: "success",
 				color: "success",
 			});
-			setOrders((prev) => {
-				if (!prev) return prev;
-				return prev.map((order) =>
-					order.order_id === orderId
-						? { ...order, status: changeToStatus }
-						: order,
-				);
-			});
 		} catch (err: any) {
+			// Rollback on error
+			setOrders(previousOrders);
+
 			addToast({
 				title: "Update Failed",
 				description: err?.message || "Failed to update order status",
@@ -170,8 +179,6 @@ export function OrderTable({
 				severity: "danger",
 				color: "danger",
 			});
-		} finally {
-			onCloseLoading();
 		}
 	};
 
