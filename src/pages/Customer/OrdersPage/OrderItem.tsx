@@ -6,10 +6,41 @@ import {
 	Chip,
 	Progress,
 	Link,
+	useDisclosure,
+	addToast,
 } from "@heroui/react";
-
 import { OrderCard } from "@/model/ui/Customer/order_card";
+import { OrderCancelModal } from "@/pages/Admin/OrdersComponent/OrderCancelModal"; // Only shared component that is not in the shared folder
+import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
+
 export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+	const handleConfirm = async (reason: string) => {
+		try {
+			const { success, error } = await changeOrderStatus(
+				orderItem.order_item_user_id,
+				"Cancelled",
+				reason,
+			);
+			if (!success) throw new Error(error);
+
+			addToast({
+				title: "Order Cancelled",
+				description: "Your order has been successfully cancelled.",
+				color: "success",
+			});
+
+			window.location.reload();
+		} catch (err: any) {
+			addToast({
+				title: "Cancellation Failed",
+				description: err?.message || "Failed to cancel order",
+				color: "danger",
+			});
+		}
+	};
+
 	return (
 		<div className="relative w-full rounded-lg">
 			<Card className="inline-flex max-w-full w-full bg-content1 m-0 hover:bg-content2 items-center justify-start rounded-lg p-0 border-2 border-transparent">
@@ -137,14 +168,32 @@ export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
 							color={
 								orderItem.status === "Pending"
 									? "danger"
-									: "success"
+									: orderItem.status === "Cancelled"
+										? "foreground"
+										: "success"
 							}
-							className={`self-end mt-2 cursor-pointer text-sm ${orderItem.status === "Pending" ? "text-danger" : "text-default-500 italic font-light"}`}
+							className={`self-end mt-2 text-sm ${orderItem.status === "Pending" || orderItem.status === "Cancelled" ? "text-danger cursor-pointer" : "text-default-500 italic font-light"}`}
+							isDisabled={
+								orderItem.status !== "Pending" &&
+								orderItem.status !== "Cancelled"
+							}
+							onPress={() => {
+								if (orderItem.status === "Pending") {
+									onOpen();
+								}
+							}}
 						>
 							{orderItem.status === "Pending"
 								? "Cancel Order"
-								: "Order Confirmed"}
+								: orderItem.status === "Cancelled"
+									? "View Reason"
+									: "Order Confirmed"}
 						</Link>
+						<OrderCancelModal
+							isOpenCancelModal={isOpen}
+							onOpenChangeCancelModal={onOpenChange}
+							onConfirm={handleConfirm}
+						/>
 					</div>
 				</CardBody>
 			</Card>
