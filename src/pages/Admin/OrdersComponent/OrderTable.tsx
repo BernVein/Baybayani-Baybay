@@ -10,7 +10,7 @@ import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 import { Dispatch, SetStateAction, useState } from "react";
 import { InsufficientStockModal } from "@/pages/Admin/OrdersComponent/InsufficientStockModal";
 import { useDisclosure } from "@heroui/react";
-import { OrderCancelModal } from "@/pages/Admin/OrdersComponent/OrderCancelModal";
+import { OrderCancelModal } from "@/pages/General/Orders/OrderCancelModal";
 import { LoadingModal } from "@/pages/Admin/OrdersComponent/LoadingModal";
 import { OrderTableSkeleton } from "@/components/skeletons/Admin/Orders/OrderTableSkeleton";
 

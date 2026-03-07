@@ -10,7 +10,7 @@ import {
 	addToast,
 } from "@heroui/react";
 import { OrderCard } from "@/model/ui/Customer/order_card";
-import { OrderCancelModal } from "@/pages/Admin/OrdersComponent/OrderCancelModal"; // Only shared component that is not in the shared folder
+import { OrderCancelModal } from "@/pages/General/Orders/OrderCancelModal";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 
 import { Dispatch, SetStateAction } from "react";
