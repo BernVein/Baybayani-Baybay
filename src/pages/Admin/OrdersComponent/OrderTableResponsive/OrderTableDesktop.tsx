@@ -28,8 +28,12 @@ export function OrderTableDesktop({
 		orderId: string,
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+		cancelReason?: string,
 	) => Promise<void>;
-	onOpenCancelModal: () => void;
+	onOpenCancelModal: (
+		orderId: string,
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+	) => void;
 }) {
 	return (
 		<div className="hidden sm:flex flex-1 min-h-0 flex-col">
@@ -206,7 +210,10 @@ export function OrderTableDesktop({
 											<DropdownItem
 												key="Cancelled"
 												onPress={() =>
-													onOpenCancelModal()
+													onOpenCancelModal(
+														order.order_id,
+														order.status,
+													)
 												}
 											>
 												<div className="flex items-center gap-2">

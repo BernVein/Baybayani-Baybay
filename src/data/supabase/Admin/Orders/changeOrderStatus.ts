@@ -3,6 +3,7 @@ import { supabase } from "@/config/supabaseclient";
 export async function changeOrderStatus(
 	orderId: string,
 	orderStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+	cancelReason?: string,
 ) {
 	try {
 		if (!orderId) throw new Error("Order ID is required");
@@ -10,7 +11,12 @@ export async function changeOrderStatus(
 		// Update order status
 		const { error } = await supabase
 			.from("OrderItemUser")
-			.update({ status: orderStatus })
+			.update({
+				status: orderStatus,
+				...(orderStatus === "Cancelled" && {
+					cancel_reason: cancelReason,
+				}),
+			})
 			.eq("order_item_user_id", orderId);
 
 		if (error) throw error;

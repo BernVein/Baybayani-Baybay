@@ -52,11 +52,16 @@ export function OrderTable({
 		targetStatus: string;
 		unitOfMeasure: string;
 	} | null>(null);
+	const [cancelOrderData, setCancelOrderData] = useState<{
+		orderId: string;
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled";
+	} | null>(null);
 
 	const handleOrder = async (
 		orderId: string,
 		changeToStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+		cancelReason?: string,
 	) => {
 		onOpenLoading();
 		const canCheckStockChangeStatus =
@@ -93,7 +98,11 @@ export function OrderTable({
 				}
 			}
 
-			const { error } = await changeOrderStatus(orderId, changeToStatus);
+			const { error } = await changeOrderStatus(
+				orderId,
+				changeToStatus,
+				cancelReason,
+			);
 
 			if (error) {
 				throw error;
@@ -166,6 +175,25 @@ export function OrderTable({
 		}
 	};
 
+	const onOpenCancelModalWithData = (
+		orderId: string,
+		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
+	) => {
+		setCancelOrderData({ orderId, currentStatus });
+		onOpenCancelModal();
+	};
+
+	const handleCancelConfirm = (reason: string) => {
+		if (cancelOrderData) {
+			handleOrder(
+				cancelOrderData.orderId,
+				"Cancelled",
+				cancelOrderData.currentStatus,
+				reason,
+			);
+		}
+	};
+
 	if (loading) {
 		return <OrderTableSkeleton />;
 	}
@@ -175,16 +203,17 @@ export function OrderTable({
 			<OrderTableMobile
 				orders={orders || []}
 				handleOrder={handleOrder}
-				onOpenCancelModal={onOpenCancelModal}
+				onOpenCancelModal={onOpenCancelModalWithData}
 			/>
 			<OrderTableDesktop
 				orders={orders || []}
 				handleOrder={handleOrder}
-				onOpenCancelModal={onOpenCancelModal}
+				onOpenCancelModal={onOpenCancelModalWithData}
 			/>
 			<OrderCancelModal
 				isOpenCancelModal={isOpenCancelModal}
 				onOpenChangeCancelModal={onOpenChangeCancelModal}
+				onConfirm={handleCancelConfirm}
 			/>
 			<LoadingModal
 				isOpenLoading={isOpenLoading}
