@@ -14,6 +14,7 @@ import { OrderCancelModal } from "@/pages/General/Orders/OrderCancelModal";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 
 import { Dispatch, SetStateAction } from "react";
+import { OrderCancelReasonModal } from "@/pages/General/Orders/OrderCancelReasonModal";
 
 export default function OrderItem({
 	orderItem,
@@ -22,7 +23,16 @@ export default function OrderItem({
 	orderItem: OrderCard;
 	setOrderItems: Dispatch<SetStateAction<OrderCard[]>>;
 }) {
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const {
+		isOpen: isOpenCancelOrder,
+		onOpen: onOpenCancelOrder,
+		onOpenChange: onOpenChangeCancelOrder,
+	} = useDisclosure();
+	const {
+		isOpen: isOpenReason,
+		onOpen: onOpenReason,
+		onOpenChange: onOpenChangeReason,
+	} = useDisclosure();
 
 	const handleConfirm = async (reason: string) => {
 		try {
@@ -193,7 +203,9 @@ export default function OrderItem({
 							}
 							onPress={() => {
 								if (orderItem.status === "Pending") {
-									onOpen();
+									onOpenCancelOrder();
+								} else if (orderItem.status === "Cancelled") {
+									onOpenReason();
 								}
 							}}
 						>
@@ -204,9 +216,14 @@ export default function OrderItem({
 									: "Order Confirmed"}
 						</Link>
 						<OrderCancelModal
-							isOpenCancelModal={isOpen}
-							onOpenChangeCancelModal={onOpenChange}
+							isOpenCancelModal={isOpenCancelOrder}
+							onOpenChangeCancelModal={onOpenChangeCancelOrder}
 							onConfirm={handleConfirm}
+						/>
+						<OrderCancelReasonModal
+							isOpenCancelReasonModal={isOpenReason}
+							onOpenChangeCancelReasonModal={onOpenChangeReason}
+							cancelReason=""
 						/>
 					</div>
 				</CardBody>

@@ -7,7 +7,7 @@ import {
 	ModalFooter,
 } from "@heroui/react";
 
-export function OrderReasonModal({
+export function OrderCancelReasonModal({
 	isOpenCancelReasonModal,
 	onOpenChangeCancelReasonModal,
 	cancelReason,
@@ -34,7 +34,7 @@ export function OrderReasonModal({
 						<ModalBody>
 							<div className="space-y-2">
 								<p className="text-sm text-default-500">
-									Reason provided by the vendor:
+									Reason provided by Baybayani:
 								</p>
 
 								<div className="rounded-lg bg-danger-50 border border-danger-200 p-4">
