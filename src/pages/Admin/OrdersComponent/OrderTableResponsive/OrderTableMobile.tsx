@@ -115,10 +115,7 @@ export function OrderTableMobile({
 										</Button>
 									</DropdownTrigger>
 									<DropdownMenu disabledKeys={[order.status]}>
-										<DropdownSection
-											title="Set Status"
-											showDivider
-										>
+										<DropdownSection title="Set Status">
 											<DropdownItem
 												key="Pending"
 												onPress={() =>
@@ -176,18 +173,6 @@ export function OrderTableMobile({
 													<span className="text-danger">
 														Cancelled
 													</span>
-												</div>
-											</DropdownItem>
-										</DropdownSection>
-										<DropdownSection title="Edit">
-											<DropdownItem key="subtotal">
-												<div className="flex items-center gap-2">
-													<span>Subtotal</span>
-												</div>
-											</DropdownItem>
-											<DropdownItem key="quantity">
-												<div className="flex items-center gap-2">
-													<span>Quantity</span>
 												</div>
 											</DropdownItem>
 										</DropdownSection>
