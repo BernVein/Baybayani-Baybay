@@ -6,6 +6,7 @@ import { ItemCard } from "@/model/ui/Customer/item_card";
 export const useFetchItemCardItems = (
 	activeCategories: string[], // category names
 	searchTerm: string | null,
+	sortOption: string = "name_asc",
 	itemsPerPage = 8,
 ) => {
 	const [items, setItems] = useState<ItemCard[]>([]);
@@ -58,13 +59,8 @@ export const useFetchItemCardItems = (
                         )
                     `,
 					)
-					.eq("is_soft_deleted", false)
-					.order("item_title", { ascending: false })
-					.range(from, to)
-					.order("created_at", {
-						referencedTable: "Variant.StockMovement",
-						ascending: false,
-					});
+					.eq("is_soft_deleted", false);
+
 				// Step 3: Filter by category IDs if any
 				if (categoryIds.length > 0) {
 					query = query.in("category_id", categoryIds);
@@ -74,6 +70,21 @@ export const useFetchItemCardItems = (
 				if (searchTerm?.trim()) {
 					query = query.ilike("item_title", `%${searchTerm}%`);
 				}
+
+				// Step 5: Apply sorting
+				if (sortOption === "name_asc") {
+					query = query.order("item_title", { ascending: true });
+				} else if (sortOption === "name_desc") {
+					query = query.order("item_title", { ascending: false });
+				} else {
+					// Default sorting
+					query = query.order("item_title", { ascending: true });
+				}
+
+				query = query.range(from, to).order("created_at", {
+					referencedTable: "Variant.StockMovement",
+					ascending: false,
+				});
 
 				const { data, error: itemError } = await query;
 
@@ -133,7 +144,7 @@ export const useFetchItemCardItems = (
 				setLoading(false);
 			}
 		},
-		[activeCategories, searchTerm, itemsPerPage],
+		[activeCategories, searchTerm, sortOption, itemsPerPage],
 	);
 
 	// Reset items when filters change
@@ -142,7 +153,7 @@ export const useFetchItemCardItems = (
 		setItems([]);
 		setHasMore(true);
 		fetchItems(0, true);
-	}, [activeCategories, searchTerm, fetchItems]);
+	}, [activeCategories, searchTerm, sortOption, fetchItems]);
 
 	useEffect(() => {
 		const handler = () => {

@@ -7,35 +7,38 @@ import Categories from "./Categories";
 import ShopItems from "@/pages/Customer/ShopPage/ShopItems";
 
 type CustomerLayoutContext = {
-  searchTerm: string | null;
-  setSearchTerm: (term: string | null) => void;
+	searchTerm: string | null;
+	setSearchTerm: (term: string | null) => void;
 };
 
 export default function Shop() {
-  const { searchTerm, setSearchTerm } =
-    useOutletContext<CustomerLayoutContext>();
+	const { searchTerm, setSearchTerm } =
+		useOutletContext<CustomerLayoutContext>();
 
-  const [activeCategories, setActiveCategories] = useState<string[]>([]);
+	const [activeCategories, setActiveCategories] = useState<string[]>([]);
+	const [sortOption, setSortOption] = useState<string>("name_asc");
 
-  useEffect(() => {
-    document.title = "Baybayani | Shop";
-  }, []);
+	useEffect(() => {
+		document.title = "Baybayani | Shop";
+	}, []);
 
-  return (
-    <div className="p-5 md:p-10 flex flex-col gap-4 md:w-3/4 mx-auto items-center">
-      <ImageHeader />
+	return (
+		<div className="p-5 md:p-10 flex flex-col gap-4 md:w-3/4 mx-auto items-center">
+			<ImageHeader />
 
-      <Categories
-        activeCategories={activeCategories}
-        setActiveCategories={setActiveCategories}
-      />
+			<Categories
+				activeCategories={activeCategories}
+				setActiveCategories={setActiveCategories}
+			/>
 
-      <ShopItems
-        activeCategories={activeCategories}
-        searchTerm={searchTerm}
-        setActiveCategories={setActiveCategories}
-        setSearchTerm={setSearchTerm}
-      />
-    </div>
-  );
+			<ShopItems
+				activeCategories={activeCategories}
+				searchTerm={searchTerm}
+				setActiveCategories={setActiveCategories}
+				setSearchTerm={setSearchTerm}
+				sortOption={sortOption}
+				setSortOption={setSortOption}
+			/>
+		</div>
+	);
 }
