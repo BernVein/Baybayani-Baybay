@@ -57,7 +57,7 @@ export function FilterSection({
 						<Button
 							className="capitalize w-full"
 							isIconOnly={isMobile}
-							startContent={<PlusIcon className="w-4 shrink-0" />}
+							startContent={<PlusIcon className="w-5 shrink-0" />}
 						>
 							{isMobile ? "" : "Add Item"}
 						</Button>
