@@ -114,7 +114,15 @@ export function OrderTableMobile({
 							<TableCell>
 								<Dropdown>
 									<DropdownTrigger>
-										<Button size="sm" variant="light">
+										<Button
+											size="sm"
+											variant="light"
+											isIconOnly
+											isDisabled={
+												order.status === "Completed" ||
+												order.status === "Cancelled"
+											}
+										>
 											<MoreIconVertical className="w-5" />
 										</Button>
 									</DropdownTrigger>

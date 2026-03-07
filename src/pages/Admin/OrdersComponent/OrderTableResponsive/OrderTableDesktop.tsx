@@ -153,9 +153,18 @@ export function OrderTableDesktop({
 							<TableCell>
 								<Dropdown>
 									<DropdownTrigger>
-										<Button size="sm" variant="light">
-											<MoreIconVertical className="w-5" />
-										</Button>
+										<Button
+											size="sm"
+											variant="light"
+											startContent={
+												<MoreIconVertical className="w-5" />
+											}
+											isIconOnly
+											isDisabled={
+												order.status === "Completed" ||
+												order.status === "Cancelled"
+											}
+										/>
 									</DropdownTrigger>
 									<DropdownMenu disabledKeys={[order.status]}>
 										<DropdownSection title="Set Status">
