@@ -52,7 +52,11 @@ export default function OrderItem({
 			setOrderItems((prev) =>
 				prev.map((order) =>
 					order.order_item_user_id === orderItem.order_item_user_id
-						? { ...order, status: "Cancelled" }
+						? {
+								...order,
+								status: "Cancelled",
+								cancel_reason: reason,
+							}
 						: order,
 				),
 			);

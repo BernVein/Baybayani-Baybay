@@ -107,7 +107,11 @@ export function OrderTable({
 				if (!prev) return prev;
 				return prev.map((order) =>
 					order.order_id === orderId
-						? { ...order, status: changeToStatus }
+						? {
+								...order,
+								status: changeToStatus,
+								cancel_reason: cancelReason,
+							}
 						: order,
 				);
 			});
