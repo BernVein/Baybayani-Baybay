@@ -13,10 +13,12 @@ import {
 	Button,
 	DropdownSection,
 	Chip,
+	useDisclosure,
 } from "@heroui/react";
-
-import { MoreIconVertical } from "@/components/icons";
+import { useState } from "react";
+import { CheckIcon, EyeIcon, MoreIconVertical } from "@/components/icons";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
+import { OrderCancelReasonModal } from "@/pages/General/Orders/OrderCancelReasonModal";
 
 export function OrderTableDesktop({
 	orders,
@@ -35,6 +37,12 @@ export function OrderTableDesktop({
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => void;
 }) {
+	const [cancelReason, setCancelReason] = useState<string | null>(null);
+	const {
+		isOpen: isOpenReason,
+		onOpen: onOpenReason,
+		onOpenChange: onOpenChangeReason,
+	} = useDisclosure();
 	return (
 		<div className="hidden sm:flex flex-1 min-h-0 flex-col">
 			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
@@ -151,95 +159,121 @@ export function OrderTableDesktop({
 								</Chip>
 							</TableCell>
 							<TableCell>
-								<Dropdown>
-									<DropdownTrigger>
-										<Button
-											size="sm"
-											variant="light"
-											startContent={
-												<MoreIconVertical className="w-5" />
-											}
-											isIconOnly
-											isDisabled={
-												order.status === "Completed" ||
-												order.status === "Cancelled"
-											}
-										/>
-									</DropdownTrigger>
-									<DropdownMenu disabledKeys={[order.status]}>
-										<DropdownSection title="Set Status">
-											<DropdownItem
-												key="Pending"
-												onPress={() =>
-													handleOrder(
-														order.order_id,
-														"Pending",
-														order.status,
-													)
-												}
+								{order.status !== "Cancelled" &&
+									order.status !== "Completed" && (
+										<Dropdown>
+											<DropdownTrigger>
+												<Button
+													size="sm"
+													variant="light"
+													startContent={
+														<MoreIconVertical className="w-5" />
+													}
+													isIconOnly
+												/>
+											</DropdownTrigger>
+											<DropdownMenu
+												disabledKeys={[order.status]}
 											>
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-yellow-400" />
-													<span>Pending</span>
-												</div>
-											</DropdownItem>
+												<DropdownSection title="Set Status">
+													<DropdownItem
+														key="Pending"
+														onPress={() =>
+															handleOrder(
+																order.order_id,
+																"Pending",
+																order.status,
+															)
+														}
+													>
+														<div className="flex items-center gap-2">
+															<span className="w-2 h-2 rounded-full bg-yellow-400" />
+															<span>Pending</span>
+														</div>
+													</DropdownItem>
 
-											<DropdownItem
-												key="Ready"
-												onPress={() =>
-													handleOrder(
-														order.order_id,
-														"Ready",
-														order.status,
-													)
-												}
-											>
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-blue-400" />
-													<span>Ready</span>
-												</div>
-											</DropdownItem>
+													<DropdownItem
+														key="Ready"
+														onPress={() =>
+															handleOrder(
+																order.order_id,
+																"Ready",
+																order.status,
+															)
+														}
+													>
+														<div className="flex items-center gap-2">
+															<span className="w-2 h-2 rounded-full bg-blue-400" />
+															<span>Ready</span>
+														</div>
+													</DropdownItem>
 
-											<DropdownItem
-												key="Completed"
-												onPress={() =>
-													handleOrder(
-														order.order_id,
-														"Completed",
-														order.status,
-													)
-												}
-											>
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-green-400" />
-													<span>Completed</span>
-												</div>
-											</DropdownItem>
+													<DropdownItem
+														key="Completed"
+														onPress={() =>
+															handleOrder(
+																order.order_id,
+																"Completed",
+																order.status,
+															)
+														}
+													>
+														<div className="flex items-center gap-2">
+															<span className="w-2 h-2 rounded-full bg-green-400" />
+															<span>
+																Completed
+															</span>
+														</div>
+													</DropdownItem>
 
-											<DropdownItem
-												key="Cancelled"
-												onPress={() =>
-													onOpenCancelModal(
-														order.order_id,
-														order.status,
-													)
-												}
-											>
-												<div className="flex items-center gap-2">
-													<span className="w-2 h-2 rounded-full bg-red-300" />
-													<span className="text-danger">
-														Cancelled
-													</span>
-												</div>
-											</DropdownItem>
-										</DropdownSection>
-									</DropdownMenu>
-								</Dropdown>
+													<DropdownItem
+														key="Cancelled"
+														onPress={() =>
+															onOpenCancelModal(
+																order.order_id,
+																order.status,
+															)
+														}
+													>
+														<div className="flex items-center gap-2">
+															<span className="w-2 h-2 rounded-full bg-red-300" />
+															<span className="text-danger">
+																Cancelled
+															</span>
+														</div>
+													</DropdownItem>
+												</DropdownSection>
+											</DropdownMenu>
+										</Dropdown>
+									)}
+								{order.status === "Cancelled" && (
+									<Button
+										startContent={
+											<EyeIcon className="w-5" />
+										}
+										isIconOnly
+										variant="light"
+										onPress={() => {
+											setCancelReason(
+												order.cancel_reason ?? "",
+											);
+											onOpenReason();
+										}}
+									/>
+								)}
+								{order.status === "Completed" && (
+									<CheckIcon className="w-5 ml-2 text-default" />
+								)}
 							</TableCell>
 						</TableRow>
 					))}
 				</TableBody>
 			</Table>
+			<OrderCancelReasonModal
+				isOpenCancelReasonModal={isOpenReason}
+				onOpenChangeCancelReasonModal={onOpenChangeReason}
+				cancelReason={cancelReason ?? "No reason provided."}
+			/>
 		</div>
 	);
 }

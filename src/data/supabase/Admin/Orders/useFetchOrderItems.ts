@@ -28,7 +28,8 @@ export const useFetchOrderItems = (
 				order_identifier,
 				User(user_role, user_name, user_profile_img_url),
 				Item(item_title, item_sold_by, Item_Image(item_image_url), Tag(tag_name), Category(category_name)),
-				VariantSnapshot(variant_snapshot_name, variant_snapshot_id, variant_copy_snapshot_id)
+				VariantSnapshot(variant_snapshot_name, variant_snapshot_id, variant_copy_snapshot_id),
+				cancel_reason
 				`,
 			)
 			.eq("is_soft_deleted", false);
@@ -99,6 +100,7 @@ export const useFetchOrderItems = (
 					order_identifier: orderItem.order_identifier ?? "",
 					item_img_url:
 						orderItem.Item?.Item_Image?.[0]?.item_image_url ?? "",
+					cancel_reason: orderItem.cancel_reason,
 				}) as OrderTableRow,
 		);
 
@@ -107,25 +109,6 @@ export const useFetchOrderItems = (
 
 	useEffect(() => {
 		fetchItem();
-
-		// const channel = supabase
-		// 	.channel("OrderItemUser-changes")
-		// 	.on(
-		// 		"postgres_changes",
-		// 		{
-		// 					event: "*",
-		// 					schema: "public",
-		// 					table: "OrderItemUser",
-		// 				},
-		// 		() => {
-		// 					fetchItem();
-		// 				},
-		// 	)
-		// 	.subscribe();
-
-		// return () => {
-		// 	supabase.removeChannel(channel);
-		// };
 	}, [fetchItem]);
 
 	return {

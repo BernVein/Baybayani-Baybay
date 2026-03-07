@@ -47,7 +47,11 @@ export function OrderCancelReasonModal({
 						</ModalBody>
 
 						<ModalFooter>
-							<Button color="danger" onPress={onClose}>
+							<Button
+								color="danger"
+								onPress={onClose}
+								variant="light"
+							>
 								Understood
 							</Button>
 						</ModalFooter>

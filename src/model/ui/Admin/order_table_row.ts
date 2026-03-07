@@ -15,4 +15,5 @@ export interface OrderTableRow {
 	item_sold_by: string;
 	order_identifier: string;
 	item_img_url: string;
+	cancel_reason?: string | undefined;
 }
