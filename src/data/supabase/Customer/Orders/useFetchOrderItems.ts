@@ -89,5 +89,5 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 		fetchData();
 	}, [userId, page]);
 
-	return { data, error, totalPages, loading, initialLoading };
+	return { data, setData, error, totalPages, loading, initialLoading };
 };

@@ -13,7 +13,15 @@ import { OrderCard } from "@/model/ui/Customer/order_card";
 import { OrderCancelModal } from "@/pages/Admin/OrdersComponent/OrderCancelModal"; // Only shared component that is not in the shared folder
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 
-export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
+import { Dispatch, SetStateAction } from "react";
+
+export default function OrderItem({
+	orderItem,
+	setOrderItems,
+}: {
+	orderItem: OrderCard;
+	setOrderItems: Dispatch<SetStateAction<OrderCard[]>>;
+}) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	const handleConfirm = async (reason: string) => {
@@ -31,7 +39,13 @@ export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
 				color: "success",
 			});
 
-			window.location.reload();
+			setOrderItems((prev) =>
+				prev.map((order) =>
+					order.order_item_user_id === orderItem.order_item_user_id
+						? { ...order, status: "Cancelled" }
+						: order,
+				),
+			);
 		} catch (err: any) {
 			addToast({
 				title: "Cancellation Failed",
@@ -186,7 +200,7 @@ export default function OrderItem({ orderItem }: { orderItem: OrderCard }) {
 							{orderItem.status === "Pending"
 								? "Cancel Order"
 								: orderItem.status === "Cancelled"
-									? "View Reason"
+									? "View Cancel Reason"
 									: "Order Confirmed"}
 						</Link>
 						<OrderCancelModal

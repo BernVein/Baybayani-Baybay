@@ -12,6 +12,7 @@ export default function OrderIndex() {
 	const user = auth?.user;
 	const {
 		data: orderItems,
+		setData: setOrderItems,
 		error,
 		totalPages,
 		loading,
@@ -79,6 +80,7 @@ export default function OrderIndex() {
 									<OrderItem
 										key={order.order_item_user_id}
 										orderItem={order}
+										setOrderItems={setOrderItems}
 									/>
 								))}
 				</div>
