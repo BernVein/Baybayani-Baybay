@@ -14,12 +14,13 @@ import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { supabase } from "@/config/supabaseclient";
 import { addToast } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTransition } from "react";
 import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 export default function LoginModal() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { isLoginModalOpen, closeLoginModal } = useLoginModal();
 	const [, startTransition] = useTransition();
 	const {
@@ -36,6 +37,9 @@ export default function LoginModal() {
 	} = useLogin();
 	const auth = useAuth();
 	const profile = auth?.profile;
+
+	const isAuthPage =
+		location.pathname === "/login" || location.pathname === "/signup";
 
 	const handleLogOut = async () => {
 		try {
@@ -60,7 +64,8 @@ export default function LoginModal() {
 	};
 
 	return (
-		<Modal backdrop="blur"
+		<Modal
+			backdrop="blur"
 			disableAnimation
 			isOpen={isLoginModalOpen}
 			onOpenChange={(open) => {
@@ -75,9 +80,11 @@ export default function LoginModal() {
 				{() => (
 					<>
 						<ModalHeader className="flex flex-col gap-1">
-							{profile ? "Already signed in" : "Welcome Back!"}
+							{profile && isAuthPage
+								? "Already signed in"
+								: "Welcome Back!"}
 						</ModalHeader>
-						{profile ? (
+						{profile && isAuthPage ? (
 							<>
 								<ModalBody>
 									<p className="text-default-600 text-sm">

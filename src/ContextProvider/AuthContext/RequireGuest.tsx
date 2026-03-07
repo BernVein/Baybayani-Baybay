@@ -8,7 +8,7 @@ import {
 	useDisclosure,
 	addToast,
 } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { ReactNode, useEffect } from "react";
 import { supabase } from "@/config/supabaseclient";
@@ -20,23 +20,22 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	const loading = auth?.loading;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Open modal as soon as we know the user is logged in
 	// and they are not a new registration waiting for approval
 	useEffect(() => {
-		// Only open the modal if the user is logged in AND their status is NOT "For Approval"
-		// This prevents the modal from appearing right after sign-up before the auto-login session is cleared
-		if (
-			!loading &&
-			profile &&
-			profile.user_status &&
-			profile.user_status !== "For Approval"
-		) {
+		// Only open the modal if the user is logged in
+		// AND we are on the login or signup page
+		const isAuthPage =
+			location.pathname === "/login" || location.pathname === "/signup";
+
+		if (!loading && profile && isAuthPage) {
 			onOpen();
 		} else {
 			onClose();
 		}
-	}, [loading, profile, onOpen, onClose]);
+	}, [loading, profile, onOpen, onClose, location.pathname]);
 
 	if (loading) return null;
 
@@ -71,7 +70,8 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	return (
 		<>
 			{children}
-			<Modal backdrop="blur"
+			<Modal
+				backdrop="blur"
 				isOpen={isOpen}
 				onClose={handleGoBack}
 				isDismissable={false}
