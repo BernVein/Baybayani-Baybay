@@ -11,4 +11,5 @@ export interface OrderCard {
 	date_ordered: string;
 	status: string;
 	order_identifier: string;
+	cancel_reason?: string | null;
 }

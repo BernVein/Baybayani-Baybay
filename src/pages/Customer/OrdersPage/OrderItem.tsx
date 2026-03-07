@@ -223,7 +223,9 @@ export default function OrderItem({
 						<OrderCancelReasonModal
 							isOpenCancelReasonModal={isOpenReason}
 							onOpenChangeCancelReasonModal={onOpenChangeReason}
-							cancelReason=""
+							cancelReason={
+								orderItem.cancel_reason ?? "No reason provided."
+							}
 						/>
 					</div>
 				</CardBody>

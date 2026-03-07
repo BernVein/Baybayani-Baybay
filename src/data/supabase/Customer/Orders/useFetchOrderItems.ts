@@ -41,7 +41,8 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
                             price_variant,
                             created_at,
                             status,
-                            order_identifier                            
+                            order_identifier,
+							cancel_reason                           
                       `,
 						{ count: "exact" },
 					)
@@ -49,7 +50,7 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 					.eq("is_soft_deleted", false)
 					.order("created_at", { ascending: false })
 					.range(from, to);
-
+				console.log(rawData);
 				if (fetchError) {
 					setError(fetchError);
 
@@ -74,6 +75,7 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 						date_ordered: order.created_at,
 						status: order.status,
 						order_identifier: order.order_identifier,
+						cancel_reason: order.cancel_reason,
 					}),
 				);
 
