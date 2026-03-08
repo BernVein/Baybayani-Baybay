@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { InsufficientStockModal } from "@/pages/Admin/OrdersComponent/InsufficientStockModal";
 import { useDisclosure } from "@heroui/react";
 import { OrderCancelModal } from "@/pages/General/Orders/OrderCancelModal";
-import { LoadingModal } from "@/pages/Admin/OrdersComponent/LoadingModal";
+import { LoadingModal } from "@/pages/General/Orders/LoadingModal";
 import { OrderTableSkeleton } from "@/components/skeletons/Admin/Orders/OrderTableSkeleton";
 
 export function OrderTable({
@@ -70,8 +70,8 @@ export function OrderTable({
 			currentStatus !== "Completed" &&
 			currentStatus !== "Cancelled";
 
-		// Store previous state for rollback
-		const previousOrders = orders;
+		// Show loading modal immediately
+		onOpenLoading();
 
 		try {
 			const order = orders?.find((o) => o.order_id === orderId);
@@ -79,11 +79,9 @@ export function OrderTable({
 			if (order) {
 				// Only check if we are NOT already in a Ready or Completed state
 				if (canCheckStockChangeStatus && canCheckStockCurrentStatus) {
-					onOpenLoading();
 					const { effectiveStocks, success } = await fetchLatestStock(
 						order.item_variant_id,
 					);
-					onCloseLoading();
 
 					if (
 						success &&
@@ -97,12 +95,25 @@ export function OrderTable({
 							targetStatus: changeToStatus,
 							unitOfMeasure: order.item_sold_by,
 						});
+						onCloseLoading(); // Close it to show stock modal
 						onOpenStockModal();
 						return;
 					}
 				}
 			}
 
+			// Call database update first
+			const { error } = await changeOrderStatus(
+				orderId,
+				changeToStatus,
+				cancelReason,
+			);
+
+			if (error) {
+				throw error;
+			}
+
+			// Update UI state only after successful DB update
 			setOrders((prev) => {
 				if (!prev) return prev;
 				return prev.map((order) =>
@@ -115,16 +126,6 @@ export function OrderTable({
 						: order,
 				);
 			});
-
-			const { error } = await changeOrderStatus(
-				orderId,
-				changeToStatus,
-				cancelReason,
-			);
-
-			if (error) {
-				throw error;
-			}
 
 			if (order) {
 				// Deduct stock when completed
@@ -172,9 +173,6 @@ export function OrderTable({
 				color: "success",
 			});
 		} catch (err: any) {
-			// Rollback on error
-			setOrders(previousOrders);
-
 			addToast({
 				title: "Update Failed",
 				description: err?.message || "Failed to update order status",
@@ -183,6 +181,8 @@ export function OrderTable({
 				severity: "danger",
 				color: "danger",
 			});
+		} finally {
+			onCloseLoading();
 		}
 	};
 

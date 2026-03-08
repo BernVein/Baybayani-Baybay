@@ -12,6 +12,7 @@ import {
 import { OrderCard } from "@/model/ui/Customer/order_card";
 import { OrderCancelModal } from "@/pages/General/Orders/OrderCancelModal";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
+import { LoadingModal } from "@/pages/General/Orders/LoadingModal";
 
 import { Dispatch, SetStateAction } from "react";
 import { OrderCancelReasonModal } from "@/pages/General/Orders/OrderCancelReasonModal";
@@ -33,8 +34,15 @@ export default function OrderItem({
 		onOpen: onOpenReason,
 		onOpenChange: onOpenChangeReason,
 	} = useDisclosure();
+	const {
+		isOpen: isOpenLoading,
+		onOpen: onOpenLoading,
+		onClose: onCloseLoading,
+		onOpenChange: onOpenChangeLoading,
+	} = useDisclosure();
 
 	const handleConfirm = async (reason: string) => {
+		onOpenLoading();
 		try {
 			const { success, error } = await changeOrderStatus(
 				orderItem.order_item_user_id,
@@ -66,6 +74,8 @@ export default function OrderItem({
 				description: err?.message || "Failed to cancel order",
 				color: "danger",
 			});
+		} finally {
+			onCloseLoading();
 		}
 	};
 
@@ -230,6 +240,10 @@ export default function OrderItem({
 							cancelReason={
 								orderItem.cancel_reason ?? "No reason provided."
 							}
+						/>
+						<LoadingModal
+							isOpenLoading={isOpenLoading}
+							onOpenChangeLoading={onOpenChangeLoading}
 						/>
 					</div>
 				</CardBody>
