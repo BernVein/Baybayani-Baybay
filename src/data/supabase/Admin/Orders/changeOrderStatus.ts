@@ -32,8 +32,11 @@ export async function changeOrderStatus(
 		window.dispatchEvent(new Event("baybayani:update-order-table"));
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const userRole = (userData?.User as any)?.user_role;
-		// Send notification if status is "Ready"
-		if (orderStatus === "Ready" && userRole !== "Admin") {
+		// Send notification if status is "Ready" or "Cancelled"
+		if (
+			(orderStatus === "Ready" || orderStatus === "Cancelled") &&
+			userRole !== "Admin"
+		) {
 			try {
 				// Get user ID associated with the order
 				const { data: orderData, error: orderError } = await supabase
@@ -59,6 +62,18 @@ export async function changeOrderStatus(
 					: orderData.VariantSnapshot;
 				const user_name = userRelation?.user_name;
 				const variant_name = snapshotRelation?.variant_snapshot_name;
+
+				let title = "";
+				let body = "";
+
+				if (orderStatus === "Ready") {
+					title = "Order Ready";
+					body = `Mr/Ms ${user_name}, your order ${variant_name} is now ready! Please prepare payment of ₱${subtotal.toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}. Thank you.`;
+				} else if (orderStatus === "Cancelled") {
+					title = "Order Cancelled";
+					body = `Mr/Ms ${user_name}, your order ${variant_name} has been cancelled. Reason: ${cancelReason || "No reason provided"}.`;
+				}
+
 				await fetch(
 					"https://mnitpbgrbldkrhlzmnpy.supabase.co/functions/v1/send-push-notification",
 					{
@@ -70,8 +85,8 @@ export async function changeOrderStatus(
 						},
 						body: JSON.stringify({
 							userId,
-							title: "Order Ready",
-							body: `Mr/Ms ${user_name}, your order ${variant_name} is now ready! Please prepare payment of ₱${subtotal.toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}. Thank you.`,
+							title,
+							body,
 							data: { orderId },
 						}),
 					},
