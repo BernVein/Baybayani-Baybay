@@ -31,7 +31,7 @@ import { useRealtimeReadyOrders } from "@/data/supabase/Customer/Orders/useRealt
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
-import { NotificationBell } from "@/components/notification/NotificationBell";
+import { NotificationBell } from "@/pages/General/Notification/NotificationBell";
 
 export function Navbar({
 	user,

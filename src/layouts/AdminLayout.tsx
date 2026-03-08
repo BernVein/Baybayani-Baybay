@@ -6,8 +6,8 @@ import { NavbarMobileAdmin } from "@/components/navbar/AdminNav/navbarMobileAdmi
 import { SidebarDesktopAdmin } from "@/components/navbar/AdminNav/sidebarDesktopAdmin";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { AdminFloatingChat } from "@/pages/Admin/Chat/AdminFloatingChat";
-import { NotificationAlert } from "@/components/notification/NotificationAlert";
-import { NotificationBell } from "@/components/notification/NotificationBell";
+import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
+import { NotificationBell } from "@/pages/General/Notification/NotificationBell";
 
 function AdminPageSkeleton() {
 	return (

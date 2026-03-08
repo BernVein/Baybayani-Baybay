@@ -24,7 +24,7 @@ import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
 import { FloatingChatProvider } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { FloatingChat } from "@/pages/General/Chat/FloatingChat";
-import { NotificationAlert } from "@/components/notification/NotificationAlert";
+import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
 
 export default function CustomerLayout({
 	user,
