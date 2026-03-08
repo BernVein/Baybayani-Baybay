@@ -31,6 +31,7 @@ import { useRealtimeReadyOrders } from "@/data/supabase/Customer/Orders/useRealt
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
+import { NotificationBell } from "@/components/notification/NotificationBell";
 
 export function Navbar({
 	user,
@@ -154,6 +155,9 @@ export function Navbar({
 							))
 						: null}
 				</Autocomplete>
+				<div className="sm:hidden ml-2 flex-shrink-0">
+					<NotificationBell userId={user?.id} />
+				</div>
 			</NavbarContent>
 
 			{/* Cart + Avatar */}
@@ -233,6 +237,10 @@ export function Navbar({
 							</span>
 						</div>
 					</Link>
+				</NavbarItem>
+
+				<NavbarItem className="hidden sm:inline-block">
+					<NotificationBell userId={user?.id} />
 				</NavbarItem>
 
 				{user ? (

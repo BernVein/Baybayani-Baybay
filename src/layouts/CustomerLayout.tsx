@@ -24,6 +24,7 @@ import { UserProfile } from "@/model/userProfile";
 import { User as AuthUser } from "@supabase/supabase-js";
 import { FloatingChatProvider } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { FloatingChat } from "@/pages/General/Chat/FloatingChat";
+import { NotificationAlert } from "@/components/notification/NotificationAlert";
 
 export default function CustomerLayout({
 	user,
@@ -100,6 +101,9 @@ export default function CustomerLayout({
 
 				{/* Floating Chat Widget */}
 				<FloatingChat />
+
+				{/* In-app Notification Alert */}
+				{user && <NotificationAlert userId={user.id} />}
 			</div>
 		</FloatingChatProvider>
 	);

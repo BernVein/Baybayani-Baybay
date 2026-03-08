@@ -6,6 +6,8 @@ import { NavbarMobileAdmin } from "@/components/navbar/AdminNav/navbarMobileAdmi
 import { SidebarDesktopAdmin } from "@/components/navbar/AdminNav/sidebarDesktopAdmin";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { AdminFloatingChat } from "@/pages/Admin/Chat/AdminFloatingChat";
+import { NotificationAlert } from "@/components/notification/NotificationAlert";
+import { NotificationBell } from "@/components/notification/NotificationBell";
 
 function AdminPageSkeleton() {
 	return (
@@ -88,6 +90,16 @@ export default function AdminLayout() {
 
 			{/* Admin Floating Chat Widget */}
 			<AdminFloatingChat />
+
+			{/* Floating Notification Bell for Admin (Universal) */}
+			<div className="fixed top-24 right-5 z-[45]">
+				<div className="bg-content1 rounded-full shadow-lg border border-divider">
+					<NotificationBell userId={profile?.user_id ?? null} />
+				</div>
+			</div>
+
+			{/* In-app Notification Alert */}
+			{profile && <NotificationAlert userId={profile.user_id} />}
 		</div>
 	);
 }

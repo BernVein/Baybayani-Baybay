@@ -91,6 +91,24 @@ export async function changeOrderStatus(
 						}),
 					},
 				);
+
+				// Also insert into Notification table for in-app notifications
+				const { error: insertError } = await supabase
+					.from("Notification")
+					.insert({
+						user_id: userId,
+						title,
+						body,
+						type:
+							orderStatus === "Ready"
+								? "order_ready"
+								: "order_cancelled",
+						data: { orderId },
+					});
+
+				if (insertError) {
+					console.error("Error inserting notification:", insertError);
+				}
 			} catch (notifError) {
 				console.error("Failed to send notification:", notifError);
 			}
