@@ -44,7 +44,7 @@ export function NotificationBell({
 						shape="circle"
 						size="sm"
 					>
-						<Bell className="size-5" />
+						<Bell className="size-6" />
 					</Badge>
 				</Button>
 			</PopoverTrigger>
