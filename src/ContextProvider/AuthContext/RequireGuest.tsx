@@ -49,7 +49,7 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 				description: "You have been signed out successfully.",
 				color: "success",
 				shouldShowTimeoutProgress: true,
-				timeout: 4000,
+				timeout: 5000,
 			});
 		} catch {
 			addToast({
@@ -57,7 +57,7 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 				description: "Something went wrong. Please try again.",
 				color: "danger",
 				shouldShowTimeoutProgress: true,
-				timeout: 4000,
+				timeout: 5000,
 			});
 		}
 	};
