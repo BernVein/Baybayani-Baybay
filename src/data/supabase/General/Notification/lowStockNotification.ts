@@ -49,12 +49,12 @@ export async function checkLowStockAndNotify(
 			stock = movement?.effective_stocks ?? 0;
 		}
 
-		const threshold = variant.variant_low_stock_threshold ?? 5; // Default to 5 if not set
+		const threshold = variant.variant_low_stock_threshold ?? 0;
 		const itemTitle = (variant.Item as any)?.item_title || "Unknown Item";
 		const variantName = variant.variant_name;
 
 		// 3. If stock is low, notify admins
-		if (stock ?? 0 <= threshold) {
+		if ((stock ?? 0) <= threshold) {
 			// 3a. Fetch all approved admins
 			const { data: admins, error: adminsError } = await supabase
 				.from("User")
@@ -78,28 +78,28 @@ export async function checkLowStockAndNotify(
 			const title = "Low Stock Alert";
 			const body = `Stock for ${itemTitle} (${variantName}) is low: ${stock} remaining. (Threshold: ${threshold})`;
 
-			const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-			const edgeFunctionUrl = `${supabaseUrl}/functions/v1/send-push-notification`;
-
 			// 4. Send notifications to each admin
 			const notificationPromises = admins.map(async (admin) => {
 				const userId = admin.user_id;
 
 				// A. Push Notification via Edge Function
-				const pushPromise = fetch(edgeFunctionUrl, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-						Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+				const pushPromise = fetch(
+					"https://mnitpbgrbldkrhlzmnpy.supabase.co/functions/v1/send-push-notification",
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+							Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+						},
+						body: JSON.stringify({
+							userId,
+							title,
+							body,
+							data: { variantId, currentStock: stock, threshold },
+						}),
 					},
-					body: JSON.stringify({
-						userId,
-						title,
-						body,
-						data: { variantId, currentStock: stock, threshold },
-					}),
-				}).catch((err) =>
+				).catch((err) =>
 					console.error(
 						`Error sending push to admin ${userId}:`,
 						err,
@@ -115,7 +115,6 @@ export async function checkLowStockAndNotify(
 					data: { variantId, currentStock: stock, threshold },
 					is_read: false,
 				});
-
 				return Promise.all([pushPromise, dbPromise]);
 			});
 
