@@ -63,105 +63,95 @@ export function OrderTable({
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 		cancelReason?: string,
 	) => {
-		const canCheckStockChangeStatus =
-			changeToStatus === "Ready" || changeToStatus === "Completed";
-		const canCheckStockCurrentStatus =
-			currentStatus !== "Ready" &&
-			currentStatus !== "Completed" &&
-			currentStatus !== "Cancelled";
-
-		// Show loading modal immediately
 		onOpenLoading();
 
 		try {
 			const order = orders?.find((o) => o.order_id === orderId);
+			if (!order) throw new Error("Order not found");
 
-			if (order) {
-				// Only check if we are NOT already in a Ready or Completed state
-				if (canCheckStockChangeStatus && canCheckStockCurrentStatus) {
-					const { effectiveStocks, success } = await fetchLatestStock(
-						order.item_variant_id,
-					);
+			const willCheckStock =
+				changeToStatus === "Ready" || changeToStatus === "Completed";
 
-					if (
-						success &&
-						(effectiveStocks ?? 0) < order.item_quantity
-					) {
-						setStockConflictData({
-							itemName: order.item_name,
-							variantName: order.item_variant_name,
-							requestedQuantity: order.item_quantity,
-							availableStock: effectiveStocks ?? 0,
-							targetStatus: changeToStatus,
-							unitOfMeasure: order.item_sold_by,
-						});
-						onCloseLoading(); // Close it to show stock modal
-						onOpenStockModal();
-						return;
-					}
+			const willDeductStock =
+				changeToStatus === "Completed" && currentStatus !== "Completed";
+
+			const willRestoreStock =
+				currentStatus === "Completed" && changeToStatus !== "Completed";
+
+			// Validate
+			if (willCheckStock) {
+				const { effectiveStocks, success } = await fetchLatestStock(
+					order.item_variant_id,
+				);
+
+				if (success && (effectiveStocks ?? 0) < order.item_quantity) {
+					setStockConflictData({
+						itemName: order.item_name,
+						variantName: order.item_variant_name,
+						requestedQuantity: order.item_quantity,
+						availableStock: effectiveStocks ?? 0,
+						targetStatus: changeToStatus,
+						unitOfMeasure: order.item_sold_by,
+					});
+
+					onCloseLoading();
+					onOpenStockModal();
+					return;
 				}
 			}
-
-			// Call database update first
+			// update
 			const { error } = await changeOrderStatus(
 				orderId,
 				changeToStatus,
 				cancelReason,
 			);
 
-			if (error) {
-				throw error;
-			}
-
-			// Update UI state only after successful DB update
+			if (error) throw error;
+			// optimistic update
 			setOrders((prev) => {
 				if (!prev) return prev;
-				return prev.map((order) =>
-					order.order_id === orderId
+
+				return prev.map((o) =>
+					o.order_id === orderId
 						? {
-								...order,
+								...o,
 								status: changeToStatus,
 								cancel_reason: cancelReason,
 							}
-						: order,
+						: o,
 				);
 			});
 
-			if (order) {
-				// Deduct stock when completed
-				if (
-					changeToStatus === "Completed" &&
-					currentStatus !== "Completed"
-				) {
-					const { effectiveStocks } = await fetchLatestStock(
-						order.item_variant_id,
-					);
-					await recordStockAdjustment(order.item_variant_id, {
-						stock_change_count: order.item_quantity,
-						stock_adjustment_type: "Sale",
-						stock_change_date: new Date().toISOString(),
-						effective_stocks:
-							(effectiveStocks ?? 0) - order.item_quantity,
-						sale_amount: order.subtotal,
-						stock_loss_reason: "Sale",
-					} as StockMovement);
-				}
-				// Restore stock when moving away from completed
-				else if (
-					changeToStatus !== "Completed" &&
-					currentStatus === "Completed"
-				) {
-					const { effectiveStocks } = await fetchLatestStock(
-						order.item_variant_id,
-					);
-					await recordStockAdjustment(order.item_variant_id, {
-						stock_change_count: order.item_quantity,
-						stock_adjustment_type: "From Cancelled",
-						stock_change_date: new Date().toISOString(),
-						effective_stocks:
-							(effectiveStocks ?? 0) + order.item_quantity,
-					});
-				}
+			// deduct stock
+			if (willDeductStock) {
+				const { effectiveStocks } = await fetchLatestStock(
+					order.item_variant_id,
+				);
+
+				await recordStockAdjustment(order.item_variant_id, {
+					stock_change_count: order.item_quantity,
+					stock_adjustment_type: "Sale",
+					stock_change_date: new Date().toISOString(),
+					effective_stocks:
+						(effectiveStocks ?? 0) - order.item_quantity,
+					sale_amount: order.subtotal,
+					stock_loss_reason: "Sale",
+				} as StockMovement);
+			}
+
+			// ui wont let it do this but in case
+			if (willRestoreStock) {
+				const { effectiveStocks } = await fetchLatestStock(
+					order.item_variant_id,
+				);
+
+				await recordStockAdjustment(order.item_variant_id, {
+					stock_change_count: order.item_quantity,
+					stock_adjustment_type: "From Cancelled",
+					stock_change_date: new Date().toISOString(),
+					effective_stocks:
+						(effectiveStocks ?? 0) + order.item_quantity,
+				});
 			}
 
 			addToast({
@@ -185,7 +175,6 @@ export function OrderTable({
 			onCloseLoading();
 		}
 	};
-
 	const onOpenCancelModalWithData = (
 		orderId: string,
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
