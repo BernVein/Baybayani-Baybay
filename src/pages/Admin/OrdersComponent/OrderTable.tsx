@@ -3,6 +3,7 @@ import { OrderTableMobile } from "@/pages/Admin/OrdersComponent/OrderTableRespon
 import { OrderTableDesktop } from "@/pages/Admin/OrdersComponent/OrderTableResponsive/OrderTableDesktop";
 import { fetchLatestStock } from "@/data/supabase/Admin/Products/fetchLatestStock";
 import { recordStockAdjustment } from "@/data/supabase/Admin/Products/recordStockAdjustment";
+import { checkLowStockAndNotify } from "@/data/supabase/General/Notification/lowStockNotification";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
 import { StockMovement } from "@/model/stockMovement";
 import type { Selection } from "@heroui/react";
@@ -128,15 +129,19 @@ export function OrderTable({
 					order.item_variant_id,
 				);
 
+				const newStock = (effectiveStocks ?? 0) - order.item_quantity;
+
 				await recordStockAdjustment(order.item_variant_id, {
 					stock_change_count: order.item_quantity,
 					stock_adjustment_type: "Sale",
 					stock_change_date: new Date().toISOString(),
-					effective_stocks:
-						(effectiveStocks ?? 0) - order.item_quantity,
+					effective_stocks: newStock,
 					sale_amount: order.subtotal,
 					stock_loss_reason: "Sale",
 				} as StockMovement);
+
+				// Check for low stock and notify admins
+				await checkLowStockAndNotify(order.item_variant_id, newStock);
 			}
 
 			// ui wont let it do this but in case
