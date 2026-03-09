@@ -21,6 +21,7 @@ import { Variant } from "@/model/variant";
 import { StockMovement } from "@/model/stockMovement";
 import { StockAdjustmentConfirmationModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/StockAdjustmentConfirmationModal";
 import { recordStockAdjustment } from "@/data/supabase/Admin/Products/recordStockAdjustment";
+import { checkLowStockAndNotify } from "@/data/supabase/General/Notification/lowStockNotification";
 
 export function EditStockDetailModal({
 	editKey,
@@ -105,6 +106,15 @@ export function EditStockDetailModal({
 				shouldShowTimeoutProgress: true,
 			});
 			onUpdateLastestStockMovement(finalStockMovement);
+
+			// Check for low stock and notify admins
+			if (variant.variant_id) {
+				await checkLowStockAndNotify(
+					variant.variant_id,
+					newEffectiveStock,
+				);
+			}
+
 			onOpenChangeEditStock();
 		} else {
 			addToast({
@@ -161,7 +171,8 @@ export function EditStockDetailModal({
 
 	return (
 		<>
-			<Modal backdrop="blur"
+			<Modal
+				backdrop="blur"
 				disableAnimation
 				isDismissable={false}
 				isOpen={isOpenEditStock}
