@@ -1,5 +1,6 @@
 import { supabase } from "@/config/supabaseclient";
 import { Variant } from "@/model/variant";
+import { checkLowStockAndNotify } from "@/data/supabase/General/Notification/lowStockNotification";
 
 export async function addVariant(itemId: string, variant: Variant) {
 	try {
@@ -54,6 +55,12 @@ export async function addVariant(itemId: string, variant: Variant) {
 
 			if (stockError) throw stockError;
 		}
+
+		// Check for low stock and notify admins
+		await checkLowStockAndNotify(
+			variantId,
+			variant.variant_stock_latest_movement.effective_stocks ?? 0,
+		);
 
 		window.dispatchEvent(new Event("baybayani:update-table"));
 
