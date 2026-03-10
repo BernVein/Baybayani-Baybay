@@ -186,7 +186,7 @@ export function Navbar({
 						<div className="flex items-center gap-2">
 							{readyCount > 0 ? (
 								<Badge
-									color="success"
+									color="danger"
 									content={String(readyCount)}
 									shape="circle"
 									showOutline={false}
@@ -222,7 +222,7 @@ export function Navbar({
 						<div className="flex items-center gap-2">
 							{cartCount > 0 ? (
 								<Badge
-									color="success"
+									color="danger"
 									content={String(cartCount)}
 									shape="circle"
 									showOutline={false}
