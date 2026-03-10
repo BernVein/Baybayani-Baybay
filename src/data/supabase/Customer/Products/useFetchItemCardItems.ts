@@ -86,12 +86,12 @@ export const useFetchItemCardItems = (
 					ascending: false,
 				});
 
-				const { data, error: itemError } = await query;
+				const { data: rawData, error: itemError } = await query;
 
 				if (itemError) throw itemError;
 
 				// Step 5: Map result to ItemCard and filter by stock
-				const mapped: ItemCard[] = (data ?? [])
+				const mapped: ItemCard[] = (rawData ?? [])
 					.map((row: any) => {
 						const variants = (row.Variant ?? []).filter(
 							(v: any) => !v.is_soft_deleted,
@@ -131,7 +131,7 @@ export const useFetchItemCardItems = (
 					})
 					.filter(Boolean) as ItemCard[];
 
-				setHasMore((data ?? []).length === itemsPerPage);
+				setHasMore((rawData ?? []).length === itemsPerPage);
 
 				if (reset) {
 					setItems(mapped);
