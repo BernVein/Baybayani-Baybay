@@ -1,11 +1,13 @@
 import { X, Minus, MessageCircle, ChevronLeft, Search } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Avatar, Skeleton } from "@heroui/react";
+import { supabase } from "@/config/supabaseclient";
 
 import { BaybayaniLogo } from "@/components/icons";
 import { RealtimeChat } from "@/pages/General/Chat/realtime-chat";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
-import { fetchAllUsers } from "@/data/supabase/Admin/Users/fetchAllUsers";
+import { useFetchAdminChatRooms } from "@/data/supabase/Admin/Chat/useFetchAdminChatRooms";
+import { formatDistanceToNow } from "date-fns";
 
 //  Types
 interface SelectedUser {
@@ -19,21 +21,19 @@ function UserPickerPanel({
 }: {
 	onSelect: (user: SelectedUser) => void;
 }) {
-	const { userProfiles, loading } = fetchAllUsers();
+	const { rooms, loading } = useFetchAdminChatRooms();
 	const [search, setSearch] = useState("");
 
 	const filtered = useMemo(() => {
-		const nonAdmin = (userProfiles ?? []).filter(
-			(u) => u.user_role !== "Admin",
-		);
-		if (!search.trim()) return nonAdmin;
+		const items = rooms ?? [];
+		if (!search.trim()) return items;
 		const q = search.toLowerCase();
-		return nonAdmin.filter(
-			(u) =>
-				u.user_name.toLowerCase().includes(q) ||
-				u.login_user_name.toLowerCase().includes(q),
+		return items.filter(
+			(r) =>
+				r.user_name.toLowerCase().includes(q) ||
+				r.login_user_name.toLowerCase().includes(q),
 		);
-	}, [userProfiles, search]);
+	}, [rooms, search]);
 
 	return (
 		<div className="flex flex-col h-full min-h-0">
@@ -72,24 +72,54 @@ function UserPickerPanel({
 				) : (
 					filtered.map((u) => (
 						<button
-							key={u.user_id}
-							className="w-full flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-default-100 transition-colors text-left"
+							key={u.chat_room_id}
+							className="w-full flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-default-100 transition-colors text-left group"
 							onClick={() =>
 								onSelect({ id: u.user_id!, name: u.user_name })
 							}
 						>
-							<Avatar
-								className="shrink-0 size-9"
-								src={u.user_profile_img_url || undefined}
-								name={u.user_name}
-							/>
-							<div className="flex flex-col min-w-0">
-								<span className="font-semibold text-sm truncate">
-									{u.user_name}
-								</span>
-								<span className="text-xs text-default-400 truncate">
-									{u.user_role} · @{u.login_user_name}
-								</span>
+							<div className="relative">
+								<Avatar
+									className="shrink-0 size-9"
+									src={u.user_profile_img_url || undefined}
+									name={u.user_name}
+								/>
+							</div>
+							<div className="flex flex-col min-w-0 flex-1">
+								<div className="flex items-center justify-between gap-2">
+									<div className="flex items-center gap-2 min-w-0">
+										<span className="font-semibold text-sm truncate">
+											{u.user_name}
+										</span>
+										{u.unread_count > 0 && (
+											<span className="shrink-0 px-1.5 py-0.5 rounded-full bg-danger/10 text-danger text-[10px] font-bold uppercase tracking-wider">
+												Unread
+											</span>
+										)}
+									</div>
+									{u.last_message_at && (
+										<span className="text-[10px] text-default-400 whitespace-nowrap">
+											{formatDistanceToNow(
+												new Date(u.last_message_at),
+												{ addSuffix: false },
+											)
+												.replace("about ", "")
+												.replace(" minutes", "m")
+												.replace(" hours", "h")
+												.replace(" days", "d")
+												.replace(" minute", "m")
+												.replace(" hour", "h")
+												.replace(" day", "d")}
+										</span>
+									)}
+								</div>
+								<div className="flex items-center justify-between gap-1">
+									<span
+										className={`text-xs truncate flex-1 ${u.unread_count > 0 ? "text-foreground font-medium" : "text-default-400"}`}
+									>
+										{u.last_message || "No messages yet"}
+									</span>
+								</div>
 							</div>
 						</button>
 					))
@@ -108,6 +138,30 @@ export function AdminFloatingChat() {
 	const auth = useAuth();
 	const profile = auth?.profile ?? null;
 	const adminName = profile?.user_name ?? "";
+
+	// Mark messages as read when a user is selected
+	useEffect(() => {
+		if (selectedUser?.id) {
+			const markAsRead = async () => {
+				try {
+					// Update ChatMessage where user_id is the customer and is_read is false
+					// We need to match the room too, but since rooms are 1-on-1 between customer and admins,
+					// matching user_id = customerId is sufficient for 'unread' from their side.
+					const { error } = await supabase
+						.from("ChatMessage")
+						.update({ is_read: true })
+						.eq("user_id", selectedUser.id)
+						.eq("is_read", false);
+
+					if (error) throw error;
+				} catch (err) {
+					console.error("Failed to mark messages as read:", err);
+				}
+			};
+
+			markAsRead();
+		}
+	}, [selectedUser]);
 
 	const handleFabClick = () => {
 		if (isOpen) {
