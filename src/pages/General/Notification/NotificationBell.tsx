@@ -29,22 +29,16 @@ export function NotificationBell({
 	return (
 		<Popover placement="bottom-end" showArrow shadow="md">
 			<PopoverTrigger>
-				<Button
-					isIconOnly
-					variant="light"
-					radius="full"
-					className="relative"
-				>
+				<div>
 					<Badge
 						color="danger"
 						content={unreadCount > 0 ? unreadCount : null}
 						isInvisible={unreadCount === 0}
 						shape="circle"
-						size="sm"
 					>
 						<Bell className="size-6" />
 					</Badge>
-				</Button>
+				</div>
 			</PopoverTrigger>
 			<PopoverContent className="w-[300px] p-0">
 				<div className="flex flex-col w-full">
