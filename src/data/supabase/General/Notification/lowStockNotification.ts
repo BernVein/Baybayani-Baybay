@@ -15,7 +15,7 @@ export async function checkLowStockAndNotify(
 		const { data: variant, error: variantError } = await supabase
 			.from("Variant")
 			.select(
-				"variant_name, variant_low_stock_threshold, Item(item_title)",
+				"variant_name, variant_low_stock_threshold, Item(item_title, item_sold_by)",
 			)
 			.eq("variant_id", variantId)
 			.single();
@@ -52,7 +52,7 @@ export async function checkLowStockAndNotify(
 		const threshold = variant.variant_low_stock_threshold ?? 0;
 		const itemTitle = (variant.Item as any)?.item_title || "Unknown Item";
 		const variantName = variant.variant_name;
-
+		const soldBy = (variant.Item as any).item_sold_by;
 		// 3. If stock is low, notify admins
 		if ((stock ?? 0) <= threshold) {
 			// 3a. Fetch all approved admins
@@ -60,7 +60,8 @@ export async function checkLowStockAndNotify(
 				.from("User")
 				.select("user_id")
 				.eq("user_role", "Admin")
-				.eq("user_status", "Approved");
+				.eq("user_status", "Approved")
+				.eq("is_soft_deleted", false);
 
 			if (adminsError || !admins) {
 				console.error(
@@ -71,40 +72,53 @@ export async function checkLowStockAndNotify(
 			}
 
 			if (admins.length === 0) {
-				console.log("No admins found to notify for low stock.");
 				return;
 			}
 
 			const title = "Low Stock Alert";
-			const body = `Stock for ${itemTitle} (${variantName}) is low: ${stock} remaining. (Threshold: ${threshold})`;
+			const body = `Stock for ${itemTitle} (${variantName}) is low: ${stock} ${soldBy} remaining. (Threshold: ${threshold} ${soldBy})`;
 
 			// 4. Send notifications to each admin
 			const notificationPromises = admins.map(async (admin) => {
 				const userId = admin.user_id;
 
 				// A. Push Notification via Edge Function
-				const pushPromise = fetch(
-					"https://mnitpbgrbldkrhlzmnpy.supabase.co/functions/v1/send-push-notification",
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-							Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-						},
-						body: JSON.stringify({
+				const pushPromise = supabase.functions
+					.invoke("send-push-notification", {
+						body: {
 							userId,
 							title,
 							body,
-							data: { variantId, currentStock: stock, threshold },
-						}),
-					},
-				).catch((err) =>
-					console.error(
-						`Error sending push to admin ${userId}:`,
-						err,
-					),
-				);
+							data: {
+								variantId: String(variantId),
+								currentStock: String(stock),
+								threshold: String(threshold),
+							},
+						},
+					})
+					.then(({ data, error }) => {
+						if (error) {
+							console.error(
+								`Edge Function error for user ${userId}:`,
+								error,
+							);
+						} else if (data?.skipped) {
+							console.warn(
+								`Push notification SKIPPED for user ${userId}. Reason: ${data.reason}`,
+							);
+						} else {
+							console.log(
+								`Push notification SENT successfully to user ${userId}:`,
+								data,
+							);
+						}
+					})
+					.catch((err) =>
+						console.error(
+							`Network error sending push to admin ${userId}:`,
+							err,
+						),
+					);
 
 				// B. In-app Notification
 				const dbPromise = supabase.from("Notification").insert({

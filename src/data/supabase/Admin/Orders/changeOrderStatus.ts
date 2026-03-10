@@ -74,23 +74,28 @@ export async function changeOrderStatus(
 					body = `Mr/Ms ${user_name}, your order ${variant_name} has been cancelled. Reason: ${cancelReason || "No reason provided"}.`;
 				}
 
-				await fetch(
-					"https://mnitpbgrbldkrhlzmnpy.supabase.co/functions/v1/send-push-notification",
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-							Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-						},
-						body: JSON.stringify({
+				await supabase.functions
+					.invoke("send-push-notification", {
+						body: {
 							userId,
 							title,
 							body,
 							data: { orderId },
-						}),
-					},
-				);
+						},
+					})
+					.then(({ data, error }) => {
+						if (error) {
+							console.error(
+								"Failed to send push notification:",
+								error,
+							);
+						} else {
+							console.log(
+								"Push notification sent successfully:",
+								data,
+							);
+						}
+					});
 
 				// Also insert into Notification table for in-app notifications
 				const { error: insertError } = await supabase
