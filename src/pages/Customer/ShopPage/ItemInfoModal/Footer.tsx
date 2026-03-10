@@ -100,6 +100,9 @@ export default function Footer({
 		}
 	}
 
+	const profile = auth?.profile;
+	const isApproved = profile?.user_status === "Approved";
+
 	return (
 		<>
 			<div className="flex flex-col gap-2 items-start">
@@ -130,10 +133,13 @@ export default function Footer({
 				<Button
 					color="success"
 					isLoading={isLoading}
+					isDisabled={!isApproved && !!user}
 					startContent={!isLoading && <CartIcon className="size-5" />}
 					onPress={addToCartHandler}
 				>
-					Add to Cart
+					{!isApproved && !!user
+						? "Purchase Restricted"
+						: "Add to Cart"}
 				</Button>
 			</div>
 		</>

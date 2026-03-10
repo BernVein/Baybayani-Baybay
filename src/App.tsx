@@ -12,6 +12,7 @@ import RequireRole from "@/ContextProvider/AuthContext/RequireRole";
 import RequireAuth from "@/ContextProvider/AuthContext/RequireAuth";
 import RedirectAdmin from "@/ContextProvider/AuthContext/RedirectAdmin";
 import RequireGuest from "@/ContextProvider/AuthContext/RequireGuest";
+import RequireApproval from "@/ContextProvider/AuthContext/RequireApproval";
 import { LoginModalProvider } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { NotificationProvider } from "@/ContextProvider/NotificationContext/NotificationProvider";
 import LoginModal from "@/pages/General/LoginModal";
@@ -111,7 +112,9 @@ function App() {
 							<Route
 								element={
 									<RequireAuth>
-										<Cart />
+										<RequireApproval>
+											<Cart />
+										</RequireApproval>
 									</RequireAuth>
 								}
 								path="/cart"
@@ -119,7 +122,9 @@ function App() {
 							<Route
 								element={
 									<RequireAuth>
-										<Orders />
+										<RequireApproval>
+											<Orders />
+										</RequireApproval>
 									</RequireAuth>
 								}
 								path="/orders"
@@ -127,7 +132,9 @@ function App() {
 							<Route
 								element={
 									<RequireAuth>
-										<Profile />
+										<RequireApproval>
+											<Profile />
+										</RequireApproval>
 									</RequireAuth>
 								}
 								path="/profile"
@@ -135,7 +142,9 @@ function App() {
 							<Route
 								element={
 									<RequireAuth>
-										<Settings />
+										<RequireApproval>
+											<Settings />
+										</RequireApproval>
 									</RequireAuth>
 								}
 								path="/settings"
@@ -164,7 +173,9 @@ function App() {
 							path="/admin"
 							element={
 								<RequireRole allowedRoles={["Admin"]}>
-									<AdminLayout />
+									<RequireApproval>
+										<AdminLayout />
+									</RequireApproval>
 								</RequireRole>
 							}
 						>
