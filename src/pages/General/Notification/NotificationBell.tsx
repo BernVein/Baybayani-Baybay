@@ -11,7 +11,7 @@ import {
 	Spinner,
 } from "@heroui/react";
 import { Bell, LogIn } from "lucide-react";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useNotifications } from "@/ContextProvider/NotificationContext/NotificationProvider";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { Notification } from "@/model/notification";
 
@@ -21,7 +21,7 @@ export function NotificationBell({
 	userId: string | null | undefined;
 }) {
 	const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
-		useNotifications(userId);
+		useNotifications();
 	const { openLoginModal } = useLoginModal();
 
 	const isGuest = !userId;

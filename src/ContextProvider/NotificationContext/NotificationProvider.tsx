@@ -1,10 +1,36 @@
-"use client";
-
+import React, {
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+	useCallback,
+	useRef,
+} from "react";
 import { supabase } from "@/config/supabaseclient";
 import { Notification } from "@/model/notification";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
-export function useNotifications(userId: string | null | undefined) {
+interface NotificationContextType {
+	notifications: Notification[];
+	unreadCount: number;
+	loading: boolean;
+	markAsRead: (notificationId: string) => Promise<void>;
+	markAllAsRead: () => Promise<void>;
+	refresh: () => Promise<void>;
+}
+
+const NotificationContext = createContext<NotificationContextType | undefined>(
+	undefined,
+);
+
+export function NotificationProvider({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	const auth = useAuth();
+	const userId = auth?.user?.id;
+
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [unreadCount, setUnreadCount] = useState(0);
 	const [loading, setLoading] = useState(true);
@@ -86,7 +112,7 @@ export function useNotifications(userId: string | null | undefined) {
 			.subscribe((status, err) => {
 				if (err) {
 					console.error(
-						`[useNotifications] Subscription error for user: ${userId}`,
+						`[NotificationProvider] Subscription error for user: ${userId}`,
 						err,
 					);
 				}
@@ -151,12 +177,28 @@ export function useNotifications(userId: string | null | undefined) {
 		}
 	};
 
-	return {
-		notifications,
-		unreadCount,
-		loading,
-		markAsRead,
-		markAllAsRead,
-		refresh: fetchNotifications,
-	};
+	return (
+		<NotificationContext.Provider
+			value={{
+				notifications,
+				unreadCount,
+				loading,
+				markAsRead,
+				markAllAsRead,
+				refresh: fetchNotifications,
+			}}
+		>
+			{children}
+		</NotificationContext.Provider>
+	);
 }
+
+export const useNotifications = () => {
+	const context = useContext(NotificationContext);
+	if (context === undefined) {
+		throw new Error(
+			"useNotifications must be used within a NotificationProvider",
+		);
+	}
+	return context;
+};

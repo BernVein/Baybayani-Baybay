@@ -103,7 +103,7 @@ export default function CustomerLayout({
 				<FloatingChat />
 
 				{/* In-app Notification Alert */}
-				{user && <NotificationAlert userId={user.id} />}
+				{user && <NotificationAlert />}
 			</div>
 		</FloatingChatProvider>
 	);

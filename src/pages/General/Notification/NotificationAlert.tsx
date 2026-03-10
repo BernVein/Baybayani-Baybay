@@ -3,16 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import { Alert, Button } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useNotifications } from "@/ContextProvider/NotificationContext/NotificationProvider";
 import { X } from "lucide-react";
 import { Notification } from "@/model/notification";
 
-export function NotificationAlert({
-	userId,
-}: {
-	userId: string | null | undefined;
-}) {
-	const { notifications } = useNotifications(userId ?? null);
+export function NotificationAlert() {
+	const { notifications } = useNotifications();
 	const [activeAlert, setActiveAlert] = useState<Notification | null>(null);
 	const lastSeenId = useRef<string | null>(null);
 

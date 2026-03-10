@@ -13,6 +13,7 @@ import RequireAuth from "@/ContextProvider/AuthContext/RequireAuth";
 import RedirectAdmin from "@/ContextProvider/AuthContext/RedirectAdmin";
 import RequireGuest from "@/ContextProvider/AuthContext/RequireGuest";
 import { LoginModalProvider } from "@/ContextProvider/LoginModalContext/LoginModalContext";
+import { NotificationProvider } from "@/ContextProvider/NotificationContext/NotificationProvider";
 import LoginModal from "@/pages/General/LoginModal";
 
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
@@ -81,98 +82,103 @@ function App() {
 	}
 	return (
 		<LoginModalProvider>
-			<LoginModal />
-			<ScrollToTop />
-			<Suspense
-				fallback={
-					<div className="flex h-screen w-screen items-center justify-center">
-						<Spinner color="success" size="lg" />
-					</div>
-				}
-			>
-				<Routes>
-					{/* CUSTOMER ROUTES */}
-					<Route
-						path="/"
-						element={
-							<RedirectAdmin>
-								<CustomerLayout
-									user={user}
-									profile={profile}
-									handleSignOut={handleSignOut}
-								/>
-							</RedirectAdmin>
-						}
-					>
-						<Route index element={<Shop />} />
-						<Route element={<Shop />} path="/shop" />
+			<NotificationProvider>
+				<LoginModal />
+				<ScrollToTop />
+				<Suspense
+					fallback={
+						<div className="flex h-screen w-screen items-center justify-center">
+							<Spinner color="success" size="lg" />
+						</div>
+					}
+				>
+					<Routes>
+						{/* CUSTOMER ROUTES */}
 						<Route
+							path="/"
 							element={
-								<RequireAuth>
-									<Cart />
-								</RequireAuth>
+								<RedirectAdmin>
+									<CustomerLayout
+										user={user}
+										profile={profile}
+										handleSignOut={handleSignOut}
+									/>
+								</RedirectAdmin>
 							}
-							path="/cart"
-						/>
-						<Route
-							element={
-								<RequireAuth>
-									<Orders />
-								</RequireAuth>
-							}
-							path="/orders"
-						/>
-						<Route
-							element={
-								<RequireAuth>
-									<Profile />
-								</RequireAuth>
-							}
-							path="/profile"
-						/>
-						<Route
-							element={
-								<RequireAuth>
-									<Settings />
-								</RequireAuth>
-							}
-							path="/settings"
-						/>
-					</Route>
+						>
+							<Route index element={<Shop />} />
+							<Route element={<Shop />} path="/shop" />
+							<Route
+								element={
+									<RequireAuth>
+										<Cart />
+									</RequireAuth>
+								}
+								path="/cart"
+							/>
+							<Route
+								element={
+									<RequireAuth>
+										<Orders />
+									</RequireAuth>
+								}
+								path="/orders"
+							/>
+							<Route
+								element={
+									<RequireAuth>
+										<Profile />
+									</RequireAuth>
+								}
+								path="/profile"
+							/>
+							<Route
+								element={
+									<RequireAuth>
+										<Settings />
+									</RequireAuth>
+								}
+								path="/settings"
+							/>
+						</Route>
 
-					<Route
-						element={
-							<RequireGuest>
-								<LoginPage />
-							</RequireGuest>
-						}
-						path="/login"
-					/>
-					<Route
-						element={
-							<RequireGuest>
-								<SignUpPage />
-							</RequireGuest>
-						}
-						path="/signup"
-					/>
+						<Route
+							element={
+								<RequireGuest>
+									<LoginPage />
+								</RequireGuest>
+							}
+							path="/login"
+						/>
+						<Route
+							element={
+								<RequireGuest>
+									<SignUpPage />
+								</RequireGuest>
+							}
+							path="/signup"
+						/>
 
-					{/* ADMIN ROUTES */}
-					<Route
-						path="/admin"
-						element={
-							<RequireRole allowedRoles={["Admin"]}>
-								<AdminLayout />
-							</RequireRole>
-						}
-					>
-						<Route element={<Dashboard />} path="dashboard" />
-						<Route element={<AdminOrders />} path="orders" />
-						<Route element={<AdminProducts />} path="products" />
-						<Route element={<AdminUsers />} path="users" />
-					</Route>
-				</Routes>
-			</Suspense>
+						{/* ADMIN ROUTES */}
+						<Route
+							path="/admin"
+							element={
+								<RequireRole allowedRoles={["Admin"]}>
+									<AdminLayout />
+								</RequireRole>
+							}
+						>
+							<Route element={<Dashboard />} path="dashboard" />
+							<Route element={<AdminOrders />} path="orders" />
+							<Route
+								element={<AdminProducts />}
+								path="products"
+							/>
+							<Route element={<AdminUsers />} path="users" />
+						</Route>
+					</Routes>
+				</Suspense>
+			</NotificationProvider>
 		</LoginModalProvider>
 	);
 }

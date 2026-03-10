@@ -99,7 +99,7 @@ export default function AdminLayout() {
 			</div>
 
 			{/* In-app Notification Alert */}
-			{profile && <NotificationAlert userId={profile.user_id} />}
+			{profile && <NotificationAlert />}
 		</div>
 	);
 }
