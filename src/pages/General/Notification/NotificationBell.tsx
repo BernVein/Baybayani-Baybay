@@ -29,7 +29,7 @@ export function NotificationBell({
 	return (
 		<Popover placement="bottom-end" showArrow shadow="md">
 			<PopoverTrigger>
-				<div>
+				<div className="mt-2">
 					<Badge
 						color="danger"
 						content={unreadCount > 0 ? unreadCount : null}

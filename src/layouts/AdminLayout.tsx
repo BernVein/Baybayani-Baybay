@@ -93,7 +93,7 @@ export default function AdminLayout() {
 
 			{/* Floating Notification Bell for Admin (Universal) */}
 			<div className="fixed top-24 right-5 z-[45]">
-				<div className="bg-content1 rounded-full shadow-lg border border-divider">
+				<div className="w-14 h-14 rounded-full bg-content2 flex items-center justify-center">
 					<NotificationBell userId={profile?.user_id ?? null} />
 				</div>
 			</div>
