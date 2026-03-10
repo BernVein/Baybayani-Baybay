@@ -87,7 +87,7 @@ export function NavbarMobile({
 						{readyCount > 0 ? (
 							<Badge
 								className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-								color="success"
+								color="danger"
 								content={String(readyCount)}
 								shape="circle"
 								showOutline={false}
@@ -126,7 +126,7 @@ export function NavbarMobile({
 						{cartCount > 0 ? (
 							<Badge
 								className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-								color="success"
+								color="danger"
 								content={String(cartCount)}
 								shape="circle"
 								showOutline={false}
