@@ -327,48 +327,55 @@ export function VariantList({
 							<div className="py-1 text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
 								<div className="flex justify-between items-center gap-2 min-w-0">
 									<span className="text-default-500 whitespace-nowrap">
-										{v.variant_stock_latest_movement
-											.stock_adjustment_type === "Loss"
-											? "Stock Loss Date"
-											: "Date Delivered"}
+										{((): string => {
+											const type =
+												v.variant_stock_latest_movement
+													.stock_adjustment_type;
+											if (type === "Loss")
+												return "Stock Loss Date";
+											if (type === "Sale")
+												return "Sale Date";
+											if (type === "From Cancelled")
+												return "Restoration Date";
+											return "Date Delivered";
+										})()}
 									</span>
 									<span className="font-medium truncate">
-										{v.variant_stock_latest_movement
-											.stock_adjustment_type === "Loss"
-											? v.variant_stock_latest_movement
-													.stock_change_date
-												? new Date(
-														v.variant_stock_latest_movement.stock_change_date,
-													).toLocaleDateString(
-														"en-US",
-														{
-															month: "short",
-															day: "2-digit",
-															year: "numeric",
-														},
-													)
-												: "N/A"
-											: v.variant_stock_latest_movement
-														.stock_delivery_date
-												? new Date(
-														v.variant_stock_latest_movement.stock_delivery_date,
-													).toLocaleDateString(
-														"en-US",
-														{
-															month: "short",
-															day: "2-digit",
-															year: "numeric",
-														},
-													)
-												: "N/A"}
+										{((): string => {
+											const movement =
+												v.variant_stock_latest_movement;
+											const dateStr =
+												movement.stock_adjustment_type ===
+												"Acquisition"
+													? movement.stock_delivery_date
+													: movement.stock_change_date;
+
+											if (!dateStr) return "N/A";
+
+											return new Date(
+												dateStr,
+											).toLocaleDateString("en-US", {
+												month: "short",
+												day: "2-digit",
+												year: "numeric",
+											});
+										})()}
 									</span>
 								</div>
 								<div className="flex justify-between items-center gap-2 min-w-0">
 									<span className="text-default-500 whitespace-nowrap">
-										{v.variant_stock_latest_movement
-											.stock_adjustment_type === "Loss"
-											? "Total Amount Loss"
-											: "Total Buying Price"}
+										{((): string => {
+											const type =
+												v.variant_stock_latest_movement
+													.stock_adjustment_type;
+											if (type === "Loss")
+												return "Total Amount Loss";
+											if (type === "Sale")
+												return "Sale Amount";
+											if (type === "From Cancelled")
+												return "Adjustment Amount";
+											return "Total Buying Price";
+										})()}
 									</span>
 									<span className="font-medium truncate">
 										{v.variant_stock_latest_movement
@@ -380,22 +387,42 @@ export function VariantList({
 														maximumFractionDigits: 2,
 													},
 												)}`
-											: "N/A"}
+											: v.variant_stock_latest_movement
+														.sale_amount != null
+												? `₱${v.variant_stock_latest_movement.sale_amount.toLocaleString(
+														"en-PH",
+														{
+															minimumFractionDigits: 2,
+															maximumFractionDigits: 2,
+														},
+													)}`
+												: "N/A"}
 									</span>
 								</div>
 								<div className="flex justify-between items-center gap-2 min-w-0">
 									<span className="text-default-500 whitespace-nowrap">
-										{v.variant_stock_latest_movement
-											?.stock_adjustment_type === "Loss"
-											? "Deducted Stocks:"
-											: "Added Stocks:"}
+										{((): string => {
+											const type =
+												v.variant_stock_latest_movement
+													.stock_adjustment_type;
+											if (type === "Loss")
+												return "Deducted Stocks:";
+											if (type === "Sale")
+												return "Sold Stocks:";
+											if (type === "From Cancelled")
+												return "Restored Stocks:";
+											return "Added Stocks:";
+										})()}
 									</span>
 
 									<span
 										className={`font-medium truncate ${
 											v.variant_stock_latest_movement
 												?.stock_adjustment_type ===
-											"Loss"
+												"Loss" ||
+											v.variant_stock_latest_movement
+												?.stock_adjustment_type ===
+												"Sale"
 												? "text-danger"
 												: "text-success"
 										}`}
@@ -423,18 +450,45 @@ export function VariantList({
 
 								<div className="flex justify-between items-center gap-2 min-w-0">
 									<span className="text-default-500 whitespace-nowrap">
-										{v.variant_stock_latest_movement
-											.stock_adjustment_type === "Loss"
-											? "Reason for Loss"
-											: "Supplier"}
+										{((): string => {
+											const type =
+												v.variant_stock_latest_movement
+													.stock_adjustment_type;
+											if (type === "Loss")
+												return "Reason for Loss";
+											if (type === "Sale")
+												return "Transaction Type";
+											if (type === "From Cancelled")
+												return "Reason";
+											return "Supplier";
+										})()}
 									</span>
 									<span className="font-medium truncate text-right">
-										{v.variant_stock_latest_movement
-											.stock_adjustment_type === "Loss"
-											? v.variant_stock_latest_movement
-													.stock_loss_reason
-											: v.variant_stock_latest_movement
-													.stock_supplier}
+										{((): string => {
+											const movement =
+												v.variant_stock_latest_movement;
+											if (
+												movement.stock_adjustment_type ===
+												"Loss"
+											)
+												return (
+													movement.stock_loss_reason ||
+													"N/A"
+												);
+											if (
+												movement.stock_adjustment_type ===
+												"Sale"
+											)
+												return "Customer Sale";
+											if (
+												movement.stock_adjustment_type ===
+												"From Cancelled"
+											)
+												return "Order Cancelled";
+											return (
+												movement.stock_supplier || "N/A"
+											);
+										})()}
 									</span>
 								</div>
 							</div>

@@ -30,7 +30,6 @@ export async function changeOrderStatus(
 		if (userError) throw userError;
 
 		window.dispatchEvent(new Event("baybayani:update-order-table"));
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const userRole = (userData?.User as any)?.user_role;
 		// Send notification if status is "Ready" or "Cancelled"
 		if (
