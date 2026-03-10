@@ -52,7 +52,7 @@ function UserPickerPanel({
 
 			{/* User list */}
 			<div className="flex-1 min-h-0 overflow-y-auto px-2 py-2 space-y-0.5">
-				{loading ? (
+				{loading && rooms === null ? (
 					Array.from({ length: 5 }).map((_, i) => (
 						<div
 							key={i}
