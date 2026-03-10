@@ -20,9 +20,11 @@ export default function RequireApproval({ children }: { children: ReactNode }) {
 		profile?.user_status === "Suspended";
 
 	// Public routes that don't need approval
+	// Admin applicants are special: they cannot browse the shop logged in.
 	const isPublicRoute =
-		location.pathname === "/" ||
-		location.pathname === "/shop" ||
+		(profile?.user_role === "Admin"
+			? false
+			: location.pathname === "/" || location.pathname === "/shop") ||
 		location.pathname === "/login" ||
 		location.pathname === "/signup";
 
@@ -68,6 +70,7 @@ export default function RequireApproval({ children }: { children: ReactNode }) {
 					isOpen={isModalOpen}
 					onOpenChange={setIsModalOpen}
 					status={profile?.user_status || ""}
+					role={profile?.user_role || ""}
 					onSignOut={handleSignOut}
 				/>
 				{/* We still render children but they are covered by the modal backdrop */}

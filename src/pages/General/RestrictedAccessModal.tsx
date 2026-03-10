@@ -19,6 +19,7 @@ interface RestrictedAccessModalProps {
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	status: "For Approval" | "Rejected" | "Suspended" | string;
+	role?: "Individual" | "Cooperative" | "Admin" | string;
 	onSignOut: () => void;
 }
 
@@ -26,11 +27,20 @@ export default function RestrictedAccessModal({
 	isOpen,
 	onOpenChange,
 	status,
+	role,
 	onSignOut,
 }: RestrictedAccessModalProps) {
 	const getStatusContent = () => {
 		switch (status) {
 			case "For Approval":
+				if (role === "Admin") {
+					return {
+						title: "Admin Application Pending",
+						description:
+							"Since you applied for an Administrative role, your account has special access restrictions. You can currently only browse the shop or log out while waiting for manual verification.",
+						color: "primary",
+					};
+				}
 				return {
 					title: "Account Under Review",
 					description:
@@ -38,6 +48,14 @@ export default function RestrictedAccessModal({
 					color: "primary",
 				};
 			case "Rejected":
+				if (role === "Admin") {
+					return {
+						title: "Admin Application Rejected",
+						description:
+							"Your application for an Administrative role has been rejected. Access to administrative tools is disabled. You can currently only browse the shop or log out.",
+						color: "danger",
+					};
+				}
 				return {
 					title: "Application Rejected",
 					description:
@@ -45,6 +63,14 @@ export default function RestrictedAccessModal({
 					color: "danger",
 				};
 			case "Suspended":
+				if (role === "Admin") {
+					return {
+						title: "Admin Account Suspended",
+						description:
+							"Your Administrative account has been suspended. Access to the dashboard and management tools is disabled. You can currently only browse the shop or log out.",
+						color: "warning",
+					};
+				}
 				return {
 					title: "Account Suspended",
 					description:
@@ -117,14 +143,18 @@ export default function RestrictedAccessModal({
 							</div>
 						</ModalBody>
 						<ModalFooter className="flex flex-col gap-2 pb-8 px-8">
-							<Button
-								color="success"
-								variant="solid"
-								className="w-full"
-								onPress={() => (window.location.href = "/shop")}
-							>
-								Back to Shop
-							</Button>
+							{!(role === "Admin") && (
+								<Button
+									color="success"
+									variant="solid"
+									className="w-full"
+									onPress={() =>
+										(window.location.href = "/shop")
+									}
+								>
+									Back to Shop
+								</Button>
+							)}
 							<Button
 								color="danger"
 								variant="light"
