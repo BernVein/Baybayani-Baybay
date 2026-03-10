@@ -31,6 +31,7 @@ export const useFetchProductsUI = (
                         variant_id,
                         variant_price_retail,
                         variant_price_wholesale,
+                        variant_low_stock_threshold,
                         is_soft_deleted,
                         StockMovement ( 
                           effective_stocks,
@@ -98,6 +99,15 @@ export const useFetchProductsUI = (
 						item.Category?.category_name ?? "Uncategorized",
 					item_category_id: item.Category?.category_id ?? null,
 					item_tag: item.Tag?.tag_name ?? undefined,
+					low_stock_variants: variantStocks.filter(
+						(v: any) =>
+							v.currentStock <=
+								(v.variant_low_stock_threshold ?? 0) &&
+							v.currentStock > 0,
+					).length,
+					no_stock_variants: variantStocks.filter(
+						(v: any) => v.currentStock <= 0,
+					).length,
 				};
 			});
 

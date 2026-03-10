@@ -89,10 +89,45 @@ export function ProductTableMobile({
 										</span>
 
 										{item.variant_stock > 0 ? (
-											<span className="text-base font-bold">
-												{item.variant_stock.toLocaleString()}{" "}
-												{item.item_sold_by}s left
-											</span>
+											<div className="flex flex-col items-start">
+												<span className="text-base font-bold">
+													{item.variant_stock.toLocaleString()}{" "}
+													{item.item_sold_by}s left
+												</span>
+												{item.item_variant_count <= 1 &&
+													item.low_stock_variants >
+														0 && (
+														<span className="text-xs font-bold text-warning-500">
+															Low stock
+														</span>
+													)}
+												{item.item_variant_count >
+													1 && (
+													<div className="flex flex-col">
+														{item.no_stock_variants >
+															0 && (
+															<span className="text-xs font-bold text-danger-500">
+																{
+																	item.no_stock_variants
+																}{" "}
+																variant no stock
+															</span>
+														)}
+														{item.no_stock_variants ===
+															0 &&
+															item.low_stock_variants >
+																0 && (
+																<span className="text-xs font-bold text-warning-500">
+																	{
+																		item.low_stock_variants
+																	}{" "}
+																	variant low
+																	stock
+																</span>
+															)}
+													</div>
+												)}
+											</div>
 										) : (
 											<span className="text-base font-bold text-danger-500">
 												Out of stock
