@@ -17,11 +17,14 @@ interface SelectedUser {
 
 //  User Picker Panel
 function UserPickerPanel({
+	rooms,
+	loading,
 	onSelect,
 }: {
+	rooms: any[] | null;
+	loading: boolean;
 	onSelect: (user: SelectedUser) => void;
 }) {
-	const { rooms, loading } = useFetchAdminChatRooms();
 	const [search, setSearch] = useState("");
 
 	const filtered = useMemo(() => {
@@ -138,30 +141,35 @@ export function AdminFloatingChat() {
 	const auth = useAuth();
 	const profile = auth?.profile ?? null;
 	const adminName = profile?.user_name ?? "";
+	const { rooms, loading } = useFetchAdminChatRooms();
 
-	// Mark messages as read when a user is selected
+	const hasUnread = useMemo(() => {
+		return rooms?.some((r) => r.unread_count > 0) ?? false;
+	}, [rooms]);
+
+	// Mark messages as read when a user is selected or when new messages arrive for selected user (if visible)
 	useEffect(() => {
-		if (selectedUser?.id) {
-			const markAsRead = async () => {
-				try {
-					// Update ChatMessage where user_id is the customer and is_read is false
-					// We need to match the room too, but since rooms are 1-on-1 between customer and admins,
-					// matching user_id = customerId is sufficient for 'unread' from their side.
-					const { error } = await supabase
-						.from("ChatMessage")
-						.update({ is_read: true })
-						.eq("user_id", selectedUser.id)
-						.eq("is_read", false);
+		if (isOpen && !minimized && selectedUser?.id) {
+			const room = rooms?.find((r) => r.user_id === selectedUser.id);
+			if (room && room.unread_count > 0) {
+				const markAsRead = async () => {
+					try {
+						const { error } = await supabase
+							.from("ChatMessage")
+							.update({ is_read: true })
+							.eq("user_id", selectedUser.id)
+							.eq("is_read", false);
 
-					if (error) throw error;
-				} catch (err) {
-					console.error("Failed to mark messages as read:", err);
-				}
-			};
+						if (error) throw error;
+					} catch (err) {
+						console.error("Failed to mark messages as read:", err);
+					}
+				};
 
-			markAsRead();
+				markAsRead();
+			}
 		}
-	}, [selectedUser]);
+	}, [selectedUser?.id, rooms, isOpen, minimized]);
 
 	const handleFabClick = () => {
 		if (isOpen) {
@@ -255,7 +263,11 @@ export function AdminFloatingChat() {
 							Connecting…
 						</div>
 					) : (
-						<UserPickerPanel onSelect={setSelectedUser} />
+						<UserPickerPanel
+							rooms={rooms}
+							loading={loading}
+							onSelect={setSelectedUser}
+						/>
 					)}
 				</div>
 			</div>
@@ -274,6 +286,12 @@ export function AdminFloatingChat() {
 				>
 					<MessageCircle className="size-4" />
 					Support Chats
+					{hasUnread && (
+						<span className="absolute -top-1 -right-1 flex h-3 w-3">
+							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+							<span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+						</span>
+					)}
 				</button>
 			)}
 
@@ -293,6 +311,12 @@ export function AdminFloatingChat() {
 					onClick={handleFabClick}
 				>
 					<MessageCircle className="size-7" />
+					{hasUnread && (
+						<span className="absolute top-0 right-0 flex h-4 w-4">
+							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+							<span className="relative inline-flex rounded-full h-4 w-4 bg-red-500"></span>
+						</span>
+					)}
 				</button>
 			)}
 		</>

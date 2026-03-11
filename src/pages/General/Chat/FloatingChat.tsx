@@ -6,6 +6,9 @@ import { RealtimeChat } from "@/pages/General/Chat/realtime-chat";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { useFloatingChat } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
+import { useFetchCustomerUnreadStatus } from "@/data/supabase/Customer/Chat/useFetchCustomerUnreadStatus";
+import { supabase } from "@/config/supabaseclient";
+import { useEffect } from "react";
 
 export function FloatingChat() {
 	const { isOpen, openChat, closeChat } = useFloatingChat();
@@ -14,6 +17,38 @@ export function FloatingChat() {
 	const user = auth?.user ?? null;
 	const profile = auth?.profile ?? null;
 	const { openLoginModal } = useLoginModal();
+	const { hasUnread, refetch: refetchUnread } =
+		useFetchCustomerUnreadStatus();
+
+	// Mark messages as read when chat is opened
+	useEffect(() => {
+		if (isOpen && !minimized && user?.id) {
+			const markAsRead = async () => {
+				try {
+					// Get room ID
+					const { data: roomData } = await supabase
+						.from("ChatRoom")
+						.select("chat_room_id")
+						.eq("user_id", user.id)
+						.maybeSingle();
+
+					if (roomData) {
+						await supabase
+							.from("ChatMessage")
+							.update({ is_read: true })
+							.eq("chat_room_id", roomData.chat_room_id)
+							.neq("user_id", user.id)
+							.eq("is_read", false);
+
+						refetchUnread();
+					}
+				} catch (err) {
+					console.error("Failed to mark messages as read:", err);
+				}
+			};
+			markAsRead();
+		}
+	}, [isOpen, minimized, user?.id, refetchUnread, hasUnread]);
 
 	const handleFabClick = () => {
 		if (!user) {
@@ -109,6 +144,12 @@ export function FloatingChat() {
 				>
 					<MessageCircle className="size-4" />
 					Baybayani Support
+					{hasUnread && (
+						<span className="absolute -top-1 -right-1 flex h-3 w-3">
+							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+							<span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+						</span>
+					)}
 				</button>
 			)}
 
@@ -128,6 +169,12 @@ export function FloatingChat() {
 					onClick={handleFabClick}
 				>
 					<MessageCircle className="size-7" />
+					{hasUnread && (
+						<span className="absolute top-0 right-0 flex h-4 w-4">
+							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+							<span className="relative inline-flex rounded-full h-4 w-4 bg-red-500"></span>
+						</span>
+					)}
 				</button>
 			)}
 		</>
