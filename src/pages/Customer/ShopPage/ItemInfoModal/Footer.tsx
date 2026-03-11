@@ -6,6 +6,7 @@ import { CartIcon } from "@/components/icons";
 import { addToCart } from "@/data/supabase/Customer/Cart/addToCart";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
+import { useClosingTimeContext } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 
 export default function Footer({
 	item_id,
@@ -26,6 +27,7 @@ export default function Footer({
 	const auth = useAuth();
 	const user = auth?.user;
 	const { openLoginModal } = useLoginModal();
+	const { isClosed } = useClosingTimeContext();
 
 	async function addToCartHandler() {
 		if (!user) {
@@ -133,13 +135,15 @@ export default function Footer({
 				<Button
 					color="success"
 					isLoading={isLoading}
-					isDisabled={!isApproved && !!user}
+					isDisabled={(!!user && !isApproved) || isClosed}
 					startContent={!isLoading && <CartIcon className="size-5" />}
 					onPress={addToCartHandler}
 				>
-					{!isApproved && !!user
-						? "Purchase Restricted"
-						: "Add to Cart"}
+					{isClosed
+						? "Store Closed"
+						: !isApproved && !!user
+							? "Purchase Restricted"
+							: "Add to Cart"}
 				</Button>
 			</div>
 		</>
