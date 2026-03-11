@@ -82,6 +82,9 @@ export const RealtimeChat = ({
 		messages: realtimeMessages,
 		sendMessage,
 		isConnected,
+		hasMore,
+		isLoadingMore,
+		loadMoreMessages,
 	} = useRealtimeChat({
 		roomId: resolvedRoomId || "",
 		userId: user?.id || "",
@@ -112,10 +115,33 @@ export const RealtimeChat = ({
 		}
 	}, [allMessages, onMessage]);
 
+	// Keep track of scroll position when loading more messages
+	const handleLoadMore = useCallback(async () => {
+		if (!containerRef.current) return;
+
+		const container = containerRef.current;
+		const scrollHeightBefore = container.scrollHeight;
+		const scrollTopBefore = container.scrollTop;
+
+		await loadMoreMessages();
+
+		// After messages are added, wait for render then adjust scroll
+		requestAnimationFrame(() => {
+			if (containerRef.current) {
+				const scrollHeightAfter = containerRef.current.scrollHeight;
+				const heightDiff = scrollHeightAfter - scrollHeightBefore;
+				containerRef.current.scrollTop = scrollTopBefore + heightDiff;
+			}
+		});
+	}, [loadMoreMessages, containerRef]);
+
 	useEffect(() => {
-		// Scroll to bottom whenever messages change
-		scrollToBottom();
-	}, [allMessages, scrollToBottom]);
+		// Only auto-scroll to bottom if we are near the bottom or it's the initial load
+		// and NOT during load more (handled by handleLoadMore)
+		if (!isLoadingMore) {
+			scrollToBottom();
+		}
+	}, [allMessages.length, scrollToBottom, isLoadingMore]);
 
 	const handleSendMessage = useCallback(
 		(e: React.FormEvent) => {
@@ -151,7 +177,23 @@ export const RealtimeChat = ({
 				ref={containerRef}
 				className="flex-1 overflow-y-auto p-4 space-y-4"
 			>
-				{allMessages.length === 0 ? (
+				{hasMore && (
+					<div className="flex justify-center py-2">
+						<Button
+							variant="ghost"
+							size="sm"
+							className="text-xs text-muted-foreground hover:text-success"
+							onClick={handleLoadMore}
+							disabled={isLoadingMore}
+						>
+							{isLoadingMore
+								? "Loading older messages..."
+								: "Load Previous Messages"}
+						</Button>
+					</div>
+				)}
+
+				{allMessages.length === 0 && !hasMore ? (
 					<div className="text-center text-sm text-muted-foreground">
 						No messages yet. Start the conversation!
 					</div>

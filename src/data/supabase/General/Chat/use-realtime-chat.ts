@@ -28,7 +28,11 @@ export function useRealtimeChat({
 	const [isConnected, setIsConnected] = useState(false);
 	const [isFocused, setIsFocused] = useState(true);
 	const [activeUsers, setActiveUsers] = useState<Set<string>>(new Set());
+	const [hasMore, setHasMore] = useState(true);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const channelRef = useRef<any>(null);
+
+	const PAGE_SIZE = 20;
 
 	// App focus listener
 	useEffect(() => {
@@ -74,7 +78,8 @@ export function useRealtimeChat({
 				`,
 				)
 				.eq("chat_room_id", roomId)
-				.order("created_at", { ascending: true });
+				.order("created_at", { ascending: false })
+				.limit(PAGE_SIZE);
 
 			if (error) {
 				console.error("Error loading messages:", error);
@@ -83,8 +88,8 @@ export function useRealtimeChat({
 			}
 
 			if (data) {
-				setMessages(
-					data.map((msg: any) => ({
+				const formatted = data
+					.map((msg: any) => ({
 						id: msg.chat_message_id,
 						content: msg.message,
 						user: {
@@ -92,13 +97,64 @@ export function useRealtimeChat({
 							name: msg.User?.user_name || "Unknown",
 						},
 						createdAt: msg.created_at,
-					})),
-				);
+					}))
+					.reverse();
+
+				setMessages(formatted);
+				setHasMore(data.length === PAGE_SIZE);
 			}
 		};
 
 		loadMessages();
 	}, [roomId]);
+
+	const loadMoreMessages = useCallback(async () => {
+		if (!roomId || isLoadingMore || !hasMore || messages.length === 0)
+			return;
+
+		setIsLoadingMore(true);
+		const oldestMessage = messages[0];
+
+		const { data, error } = await supabase
+			.from("ChatMessage")
+			.select(
+				`
+				chat_message_id,
+				message,
+				user_id,
+				created_at,
+				User(user_name)
+			`,
+			)
+			.eq("chat_room_id", roomId)
+			.lt("created_at", oldestMessage.createdAt)
+			.order("created_at", { ascending: false })
+			.limit(PAGE_SIZE);
+
+		if (error) {
+			console.error("Error loading more messages:", error);
+			setIsLoadingMore(false);
+			return;
+		}
+
+		if (data) {
+			const moreMessages = data
+				.map((msg: any) => ({
+					id: msg.chat_message_id,
+					content: msg.message,
+					user: {
+						id: msg.user_id,
+						name: msg.User?.user_name || "Unknown",
+					},
+					createdAt: msg.created_at,
+				}))
+				.reverse();
+
+			setMessages((prev) => [...moreMessages, ...prev]);
+			setHasMore(data.length === PAGE_SIZE);
+		}
+		setIsLoadingMore(false);
+	}, [roomId, isLoadingMore, hasMore, messages]);
 
 	// Subscribe to realtime
 	useEffect(() => {
@@ -320,5 +376,12 @@ export function useRealtimeChat({
 		[roomId, userId, username, isConnected, isFocused, activeUsers],
 	);
 
-	return { messages, sendMessage, isConnected };
+	return {
+		messages,
+		sendMessage,
+		isConnected,
+		hasMore,
+		isLoadingMore,
+		loadMoreMessages,
+	};
 }
