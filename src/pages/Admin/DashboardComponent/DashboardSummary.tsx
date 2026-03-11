@@ -11,6 +11,7 @@ import {
 	useDisclosure,
 	Button,
 	TimeInput,
+	addToast,
 } from "@heroui/react";
 
 import {
@@ -23,13 +24,74 @@ import {
 	PencilIcon,
 	XIcon,
 } from "@/components/icons";
+
 import { Time } from "@internationalized/date";
+import { useState, useEffect } from "react";
+import { updateClosingTime } from "@/data/supabase/Admin/Dashboard/updateClosingTime";
+import { useClosingTime } from "@/data/supabase/General/useClosingTime";
 export function DashboardSummary() {
 	const {
 		isOpen: isOpenChangeTime,
 		onOpen: onOpenChangeTime,
 		onOpenChange: onOpenChangeChangeTime,
+		onClose: onCloseChangeTime,
 	} = useDisclosure();
+	const { rawClosingDate } = useClosingTime();
+
+	function supabaseTimeToTimeObject(timeString: string) {
+		const [hour, minute, second] = timeString.split(":").map(Number);
+		return new Time(hour, minute, second);
+	}
+
+	function timeObjectToSupabase(time: Time) {
+		const h = String(time.hour).padStart(2, "0");
+		const m = String(time.minute).padStart(2, "0");
+		const s = String(time.second ?? 0).padStart(2, "0");
+
+		return `${h}:${m}:${s}`;
+	}
+
+	const [closingTime, setClosingTime] = useState<Time | null>(null);
+
+	useEffect(() => {
+		if (rawClosingDate) {
+			setClosingTime(supabaseTimeToTimeObject(rawClosingDate));
+		}
+	}, [rawClosingDate]);
+
+	const [isClosingTimeUpdating, setIsClosingTimeUpdating] =
+		useState<boolean>(false);
+
+	const handleChangeClosingTime = async () => {
+		if (!closingTime) return;
+		setIsClosingTimeUpdating(true);
+
+		const { success } = await updateClosingTime(
+			timeObjectToSupabase(closingTime),
+		);
+		if (success) {
+			addToast({
+				title: "Success",
+				description: "Closing time updated successfully",
+				severity: "success",
+				timeout: 5000,
+				color: "success",
+				shouldShowTimeoutProgress: true,
+			});
+			onCloseChangeTime();
+			setIsClosingTimeUpdating(false);
+		} else {
+			addToast({
+				title: "Error",
+				description: "Something went wrong in updating closing time",
+				severity: "danger",
+				timeout: 5000,
+				color: "danger",
+				shouldShowTimeoutProgress: true,
+			});
+			setIsClosingTimeUpdating(false);
+		}
+	};
 	return (
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
 			<Card className="w-full">
@@ -152,8 +214,10 @@ export function DashboardSummary() {
 							</ModalHeader>
 							<ModalBody>
 								<TimeInput
-									defaultValue={new Time(11, 45)}
-									label="Event Time"
+									label="Closing Time"
+									value={closingTime}
+									onChange={setClosingTime}
+									defaultValue={closingTime}
 								/>
 							</ModalBody>
 							<ModalFooter>
@@ -164,7 +228,14 @@ export function DashboardSummary() {
 								>
 									Close
 								</Button>
-								<Button color="success" onPress={onClose}>
+								<Button
+									color="success"
+									onPress={() => {
+										handleChangeClosingTime();
+										onClose();
+									}}
+									isLoading={isClosingTimeUpdating}
+								>
 									Save
 								</Button>
 							</ModalFooter>
