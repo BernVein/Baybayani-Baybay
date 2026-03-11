@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/config/supabaseclient";
 
@@ -101,9 +99,10 @@ export const useFetchAdminChatRooms = () => {
 	useEffect(() => {
 		fetchRooms();
 
-		// Real-time subscription to ChatMessage table to update list
+		// Real-time subscription to ChatMessage table to update list, band aid fix
+		const channelId = Math.random().toString(36).substring(7);
 		const channel = supabase
-			.channel("admin-chat-list-updates")
+			.channel(`admin-chat-list-updates-${channelId}`)
 			.on(
 				"postgres_changes",
 				{ event: "*", schema: "public", table: "ChatMessage" },
