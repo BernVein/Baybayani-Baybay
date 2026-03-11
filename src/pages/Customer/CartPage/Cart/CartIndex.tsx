@@ -19,6 +19,7 @@ import DeleteMultipleCartItemsModal from "@/pages/Customer/CartPage/DeleteCartIt
 import { useFetchCartItemsUI } from "@/data/supabase/Customer/Cart/useFetchCartItemsUI";
 import { TrashIcon } from "@/components/icons";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { useClosingTimeContext } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 export default function Cart() {
 	const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
 	const {
@@ -36,6 +37,7 @@ export default function Cart() {
 	const isMobile = useIsMobile();
 	const auth = useAuth();
 	const user = auth?.user;
+	const { isClosed } = useClosingTimeContext();
 	const { items, loading, errorMsg, refetch } = useFetchCartItemsUI(
 		user?.id ?? "",
 	);
@@ -250,7 +252,8 @@ export default function Cart() {
 									<Button
 										color="success"
 										isDisabled={
-											selectedItemsId.length === 0
+											selectedItemsId.length === 0 ||
+											isClosed
 										}
 										startContent={
 											<AddToCart className="size-6" />
@@ -259,6 +262,12 @@ export default function Cart() {
 									>
 										Proceed to Checkout
 									</Button>
+									{isClosed && (
+										<p className="text-danger text-xs text-center mt-1">
+											Ordering unavailable — store is
+											closed.
+										</p>
+									)}
 								</>
 							)}
 						</CardBody>
