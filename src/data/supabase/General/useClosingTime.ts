@@ -93,6 +93,7 @@ export function useClosingTime(): ClosingTimeState {
 						const parsed = parseClosingTimeToday(row.closing_time);
 						setClosingDate(parsed);
 						setComputedState(computeState(parsed));
+						setRawClosingDate(row.closing_time);
 					}
 				},
 			)

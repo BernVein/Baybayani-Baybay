@@ -52,23 +52,43 @@ export function DashboardSummary() {
 	}
 
 	const [closingTime, setClosingTime] = useState<Time | null>(null);
+	const [displayedClosingDate, setDisplayedClosingDate] = useState<
+		string | null
+	>(null);
 
 	useEffect(() => {
 		if (rawClosingDate) {
 			setClosingTime(supabaseTimeToTimeObject(rawClosingDate));
+			setDisplayedClosingDate(rawClosingDate);
 		}
 	}, [rawClosingDate]);
+
+	function formatTimeTo12h(timeString: string | null) {
+		if (!timeString) return { hour: "--", minute: "--", period: "" };
+		const [hour, minute] = timeString.split(":").map(Number);
+		const period = hour >= 12 ? "PM" : "AM";
+		const displayHour = hour % 12 || 12;
+		return {
+			hour: String(displayHour),
+			minute: String(minute).padStart(2, "0"),
+			period,
+		};
+	}
 
 	const [isClosingTimeUpdating, setIsClosingTimeUpdating] =
 		useState<boolean>(false);
 
 	const handleChangeClosingTime = async () => {
 		if (!closingTime) return;
+		const previousTime = displayedClosingDate;
+		const newTimeStr = timeObjectToSupabase(closingTime);
+
+		// Optimistic update
+		setDisplayedClosingDate(newTimeStr);
+
 		setIsClosingTimeUpdating(true);
 
-		const { success } = await updateClosingTime(
-			timeObjectToSupabase(closingTime),
-		);
+		const { success } = await updateClosingTime(newTimeStr);
 		if (success) {
 			addToast({
 				title: "Success",
@@ -81,6 +101,8 @@ export function DashboardSummary() {
 			onCloseChangeTime();
 			setIsClosingTimeUpdating(false);
 		} else {
+			// Revert on failure
+			setDisplayedClosingDate(previousTime);
 			addToast({
 				title: "Error",
 				description: "Something went wrong in updating closing time",
@@ -180,8 +202,20 @@ export function DashboardSummary() {
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
 							<div className="flex flex-row items-center gap-2">
-								<span className="text-3xl font-bold">5:00</span>
-								<span>PM</span>
+								<span className="text-3xl font-bold">
+									{formatTimeTo12h(displayedClosingDate).hour}
+									:
+									{
+										formatTimeTo12h(displayedClosingDate)
+											.minute
+									}
+								</span>
+								<span>
+									{
+										formatTimeTo12h(displayedClosingDate)
+											.period
+									}
+								</span>
 							</div>
 
 							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
