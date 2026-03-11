@@ -15,6 +15,7 @@ import { addOrderItems } from "@/data/supabase/Customer/Orders/addOrderItems";
 import { useFetchCartItems } from "@/data/supabase/Customer/Cart/useFetchCartItem";
 import { OrderSuccessfulModal } from "@/pages/Customer/CartPage/CheckoutModal/OrderSuccessfulModal";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { useClosingTimeContext } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 
 export default function CheckoutModalIndex({
 	checkoutModalIsOpen,
@@ -37,6 +38,7 @@ export default function CheckoutModalIndex({
 	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
 	const auth = useAuth();
 	const user = auth?.user;
+	const { isClosed } = useClosingTimeContext();
 	const handleCheckout = async (onClose: () => void) => {
 		try {
 			setIsAddToCartLoading(true);
@@ -52,7 +54,8 @@ export default function CheckoutModalIndex({
 
 	return (
 		<>
-			<Modal backdrop="blur"
+			<Modal
+				backdrop="blur"
 				disableAnimation
 				isOpen={checkoutModalIsOpen}
 				scrollBehavior="inside"
@@ -237,7 +240,8 @@ export default function CheckoutModalIndex({
 										color="success"
 										isDisabled={
 											selectedItems.length === 0 ||
-											isAddToCartLoading
+											isAddToCartLoading ||
+											isClosed
 										}
 										isLoading={isAddToCartLoading}
 										startContent={
@@ -247,7 +251,7 @@ export default function CheckoutModalIndex({
 										}
 										onPress={() => handleCheckout(onClose)}
 									>
-										Checkout
+										{isClosed ? "Store Closed" : "Checkout"}
 									</Button>
 								</div>
 							</ModalFooter>
