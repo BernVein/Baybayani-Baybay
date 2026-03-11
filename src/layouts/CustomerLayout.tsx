@@ -25,6 +25,8 @@ import { User as AuthUser } from "@supabase/supabase-js";
 import { FloatingChatProvider } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { FloatingChat } from "@/pages/General/Chat/FloatingChat";
 import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
+import { ClosingTimeProvider } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
+import { ClosingTimeBanner } from "@/components/General/ClosingTimeBanner";
 
 export default function CustomerLayout({
 	user,
@@ -63,48 +65,54 @@ export default function CustomerLayout({
 	}, []);
 
 	return (
-		<FloatingChatProvider>
-			<div className="relative min-h-screen bg-background text-foreground">
-				{/* Top Navbar */}
-				<div ref={topNavRef} className="fixed top-0 left-0 w-full z-50">
-					<Navbar
-						user={user}
-						profile={profile}
-						setSearchTerm={setSearchTerm}
-						handleSignOut={handleSignOut}
-					/>
+		<ClosingTimeProvider>
+			<FloatingChatProvider>
+				<div className="relative min-h-screen bg-background text-foreground">
+					{/* Top Navbar (+ closing time banner above it) */}
+					<div
+						ref={topNavRef}
+						className="fixed top-0 left-0 w-full z-50"
+					>
+						<ClosingTimeBanner />
+						<Navbar
+							user={user}
+							profile={profile}
+							setSearchTerm={setSearchTerm}
+							handleSignOut={handleSignOut}
+						/>
+					</div>
+
+					{/* Page content */}
+					<main
+						style={{
+							paddingTop: `${navHeight}px`,
+							paddingBottom: `${footerHeight}px`,
+						}}
+					>
+						<Suspense fallback={<CustomerPageSkeleton />}>
+							<Outlet context={{ searchTerm, setSearchTerm }} />
+						</Suspense>
+					</main>
+
+					{/* Bottom Navbar */}
+					<div
+						ref={bottomNavRef}
+						className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
+					>
+						<NavbarMobile
+							user={user}
+							profile={profile}
+							handleSignOut={handleSignOut}
+						/>
+					</div>
+
+					{/* Floating Chat Widget */}
+					<FloatingChat />
+
+					{/* In-app Notification Alert */}
+					{user && <NotificationAlert />}
 				</div>
-
-				{/* Page content */}
-				<main
-					style={{
-						paddingTop: `${navHeight}px`,
-						paddingBottom: `${footerHeight}px`,
-					}}
-				>
-					<Suspense fallback={<CustomerPageSkeleton />}>
-						<Outlet context={{ searchTerm, setSearchTerm }} />
-					</Suspense>
-				</main>
-
-				{/* Bottom Navbar */}
-				<div
-					ref={bottomNavRef}
-					className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
-				>
-					<NavbarMobile
-						user={user}
-						profile={profile}
-						handleSignOut={handleSignOut}
-					/>
-				</div>
-
-				{/* Floating Chat Widget */}
-				<FloatingChat />
-
-				{/* In-app Notification Alert */}
-				{user && <NotificationAlert />}
-			</div>
-		</FloatingChatProvider>
+			</FloatingChatProvider>
+		</ClosingTimeProvider>
 	);
 }
