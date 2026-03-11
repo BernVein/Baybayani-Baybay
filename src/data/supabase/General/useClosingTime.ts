@@ -7,6 +7,7 @@ interface ClosingTimeState {
 	isClosed: boolean;
 	isNearingClose: boolean; // within 2 hours but not yet closed
 	loading: boolean;
+	rawClosingDate: string | null;
 }
 
 function parseClosingTimeToday(timeStr: string): Date {
@@ -46,7 +47,7 @@ export function useClosingTime(): ClosingTimeState {
 		isClosed: false,
 		isNearingClose: false,
 	});
-
+	const [rawClosingDate, setRawClosingDate] = useState<string | null>(null);
 	const fetchClosingTime = useCallback(async () => {
 		const { data, error } = await supabase
 			.from("ClosingTime")
@@ -58,6 +59,7 @@ export function useClosingTime(): ClosingTimeState {
 			const parsed = parseClosingTimeToday(row.closing_time);
 			setClosingDate(parsed);
 			setComputedState(computeState(parsed));
+			setRawClosingDate(data.closing_time);
 		}
 		setLoading(false);
 	}, []);
@@ -101,5 +103,11 @@ export function useClosingTime(): ClosingTimeState {
 		};
 	}, []);
 
-	return { closingTime: closingDate, isClosed, isNearingClose, loading };
+	return {
+		closingTime: closingDate,
+		isClosed,
+		isNearingClose,
+		loading,
+		rawClosingDate,
+	};
 }
