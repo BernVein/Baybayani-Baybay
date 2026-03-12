@@ -150,7 +150,7 @@ export function DashboardSummary() {
 					<div className="flex flex-col gap-y-1">
 						{displayedClosed ? (
 							<div className="flex flex-row items-center justify-between">
-								<span className="text-2xl font-bold text-red-500">
+								<span className="text-2xl font-bold italic text-red-400">
 									Closed Today
 								</span>
 								<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
