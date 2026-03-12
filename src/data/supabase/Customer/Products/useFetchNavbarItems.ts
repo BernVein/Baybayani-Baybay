@@ -7,16 +7,17 @@ export interface NavbarItem {
 	item_title: string;
 }
 
-export const useFetchNavbarItems = () => {
+export const useFetchNavbarItems = (searchQuery: string = "") => {
 	const [items, setItems] = useState<NavbarItem[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [isInitialLoading, setIsInitialLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		const fetchItems = async () => {
 			setLoading(true);
 			try {
-				const { data, error } = await supabase
+				let query = supabase
 					.from("Item")
 					.select(
 						`
@@ -36,7 +37,17 @@ export const useFetchNavbarItems = () => {
 					.order("created_at", {
 						referencedTable: "Variant.StockMovement",
 						ascending: false,
-					});
+					})
+					.limit(10);
+
+				if (searchQuery.trim() !== "") {
+					query = query.ilike(
+						"item_title",
+						`%${searchQuery.trim()}%`,
+					);
+				}
+
+				const { data, error } = await query;
 
 				if (error) throw error;
 
@@ -65,6 +76,9 @@ export const useFetchNavbarItems = () => {
 					.filter(Boolean) as NavbarItem[];
 
 				setItems(mapped);
+				if (searchQuery === "") {
+					setIsInitialLoading(false);
+				}
 			} catch (err: any) {
 				setError(err.message);
 			} finally {
@@ -72,8 +86,12 @@ export const useFetchNavbarItems = () => {
 			}
 		};
 
-		fetchItems();
-	}, []);
+		const handler = setTimeout(() => {
+			fetchItems();
+		}, 300);
 
-	return { items, loading, error };
+		return () => clearTimeout(handler);
+	}, [searchQuery]);
+
+	return { items, loading, isInitialLoading, error };
 };

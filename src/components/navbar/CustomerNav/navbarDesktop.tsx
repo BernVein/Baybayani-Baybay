@@ -54,7 +54,8 @@ export function Navbar({
 	const { readyCount } = useRealtimeReadyOrders(user?.id ?? null);
 	const { openLoginModal } = useLoginModal();
 
-	const { items: fetchedItems, loading } = useFetchNavbarItems();
+	const { items: fetchedItems, isInitialLoading } =
+		useFetchNavbarItems(searchValue);
 	const searchItems = fetchedItems.map((i, index) => ({
 		label: i.item_title,
 		key: `${i.item_title}-${index}`,
@@ -91,20 +92,22 @@ export function Navbar({
 					fullWidth
 					className="w-full opacity-90"
 					defaultItems={searchItems}
-					isDisabled={loading}
+					isDisabled={isInitialLoading}
 					placeholder={
-						loading ? "Gathering items..." : "Search products..."
+						isInitialLoading
+							? "Gathering items..."
+							: "Search products..."
 					}
 					selectorIcon={null}
 					size="sm"
 					startContent={
-						loading ? (
+						isInitialLoading ? (
 							<Spinner color="success" size="sm" />
 						) : (
 							<SearchIcon className="size-5 text-default-500" />
 						)
 					}
-					value={searchValue}
+					inputValue={searchValue}
 					variant="flat"
 					onClear={() => {
 						setSearchValue("");
@@ -120,7 +123,7 @@ export function Navbar({
 							(e.target as HTMLInputElement).blur();
 						}
 					}}
-					onValueChange={(val) => {
+					onInputChange={(val) => {
 						setSearchValue(val);
 
 						if (val.trim() === "") {
