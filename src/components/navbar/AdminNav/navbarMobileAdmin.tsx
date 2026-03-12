@@ -76,7 +76,7 @@ export function NavbarMobileAdmin({
 			>
 				<Link
 					className="flex flex-col items-center"
-					color={active === "Dashboard" ? "success" : "foreground"}
+					color="foreground"
 					href="/admin/dashboard"
 					onClick={(e) => {
 						e.preventDefault();
@@ -87,7 +87,11 @@ export function NavbarMobileAdmin({
 					<div className="w-8 h-8 flex items-center justify-center">
 						<DashboardIcon className="size-7" />
 					</div>
-					<span className="text-sm font-light mt-1">Dashboard</span>
+					<span
+						className={`text-sm mt-1 ${active === "Dashboard" ? "font-bold" : "font-light"}`}
+					>
+						Dashboard
+					</span>
 				</Link>
 			</NavbarItem>
 
@@ -99,7 +103,7 @@ export function NavbarMobileAdmin({
 			>
 				<Link
 					className="flex flex-col items-center"
-					color={active === "Orders" ? "success" : "foreground"}
+					color="foreground"
 					href="/admin/orders"
 					onClick={(e) => {
 						e.preventDefault();
@@ -119,7 +123,11 @@ export function NavbarMobileAdmin({
 							<OrdersIcon className="w-6 h-6" />
 						</Badge>
 					</div>
-					<span className="text-sm font-light mt-1">Orders</span>
+					<span
+						className={`text-sm mt-1 ${active === "Orders" ? "font-bold" : "font-light"}`}
+					>
+						Orders
+					</span>
 				</Link>
 			</NavbarItem>
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />

@@ -51,7 +51,7 @@ export function NavbarMobile({
 			>
 				<Link
 					className="flex flex-col items-center"
-					color={active === "Shop" ? "success" : "foreground"}
+					color="foreground"
 					onClick={(e) => {
 						e.preventDefault();
 						setActive("Shop");
@@ -61,7 +61,11 @@ export function NavbarMobile({
 					<div className="w-8 h-8 flex items-center justify-center">
 						<BaybayaniLogo className="size-7" />
 					</div>
-					<span className="text-sm font-light mt-1">Shop</span>
+					<span
+						className={`text-sm mt-1 ${active === "Shop" ? "font-bold" : "font-light"}`}
+					>
+						Shop
+					</span>
 				</Link>
 			</NavbarItem>
 
@@ -72,7 +76,7 @@ export function NavbarMobile({
 			>
 				<Link
 					className="flex flex-col items-center"
-					color={active === "Orders" ? "success" : "foreground"}
+					color="foreground"
 					onClick={(e) => {
 						e.preventDefault();
 						if (!user) {
@@ -99,7 +103,11 @@ export function NavbarMobile({
 							<OrdersIcon className="w-6 h-6" />
 						)}
 					</div>
-					<span className="text-sm font-light mt-1">Orders</span>
+					<span
+						className={`text-sm mt-1 ${active === "Orders" ? "font-bold" : "font-light"}`}
+					>
+						Orders
+					</span>
 				</Link>
 			</NavbarItem>
 			<Divider className="h-8 bg-gray-300" orientation="vertical" />
@@ -111,7 +119,7 @@ export function NavbarMobile({
 			>
 				<Link
 					className="flex flex-col items-center"
-					color={active === "Cart" ? "success" : "foreground"}
+					color="foreground"
 					onClick={(e) => {
 						e.preventDefault();
 						if (!user) {
@@ -138,7 +146,11 @@ export function NavbarMobile({
 							<CartIcon className="w-6 h-6" />
 						)}
 					</div>
-					<span className="text-sm font-light mt-1">Cart</span>
+					<span
+						className={`text-sm mt-1 ${active === "Cart" ? "font-bold" : "font-light"}`}
+					>
+						Cart
+					</span>
 				</Link>
 			</NavbarItem>
 

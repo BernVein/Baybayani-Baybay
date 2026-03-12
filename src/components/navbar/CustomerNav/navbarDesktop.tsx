@@ -171,7 +171,7 @@ export function Navbar({
 					isActive={active === "Orders"}
 				>
 					<Link
-						color={active === "Orders" ? "success" : "foreground"}
+						color="foreground"
 						href="/orders"
 						onClick={(e) => {
 							e.preventDefault();
@@ -196,7 +196,9 @@ export function Navbar({
 							) : (
 								<OrdersIcon className="size-6" />
 							)}
-							<span className="hidden sm:inline font-normal">
+							<span
+								className={`hidden sm:inline ${active === "Orders" ? "font-bold" : "font-normal"}`}
+							>
 								Orders
 							</span>
 						</div>
@@ -207,7 +209,7 @@ export function Navbar({
 					isActive={active === "Cart"}
 				>
 					<Link
-						color={active === "Cart" ? "success" : "foreground"}
+						color="foreground"
 						href="/cart"
 						onClick={(e) => {
 							e.preventDefault();
@@ -232,7 +234,9 @@ export function Navbar({
 							) : (
 								<CartIcon className="size-6" />
 							)}
-							<span className="hidden sm:inline font-normal">
+							<span
+								className={`hidden sm:inline ${active === "Cart" ? "font-bold" : "font-normal"}`}
+							>
 								Cart
 							</span>
 						</div>
