@@ -7,6 +7,8 @@ import {
 	useDisclosure,
 	addToast,
 	Divider,
+	Card,
+	CardBody,
 } from "@heroui/react";
 import {
 	User,
@@ -154,6 +156,10 @@ export default function Settings() {
 		? ROLE_COLOR[profile.user_role as UserRole]
 		: "default";
 
+	// Check for changes
+	const isNameChanged = userName.trim() !== (profile?.user_name ?? "");
+	const isPhoneChanged = phone.trim() !== (profile?.user_phone_number ?? "");
+
 	return (
 		<div className="min-h-screen bg-background px-4 py-10 flex flex-col items-center">
 			<div className="w-full max-w-lg flex flex-col gap-6">
@@ -207,79 +213,97 @@ export default function Settings() {
 					</div>
 				</div>
 
-				{/* Display name card */}
-				<div className="bg-content1 rounded-2xl p-6 flex flex-col gap-4 shadow-sm border border-default-100">
-					<div className="flex flex-col gap-0.5">
-						<h2 className="font-semibold text-base">
-							Display Name
-						</h2>
-						<p className="text-xs text-default-400">
-							Shown across the platform as your name.
-						</p>
-					</div>
-					<Input
-						label="Name"
-						labelPlacement="outside"
-						placeholder="e.g. Juan dela Cruz"
-						value={userName}
-						onValueChange={setUserName}
-						isInvalid={!!userNameError}
-						errorMessage={userNameError ?? undefined}
-						startContent={
-							<User size={16} className="text-default-400" />
-						}
-					/>
-					<Button
-						color="success"
-						className="font-semibold text-white"
-						startContent={<Save size={16} />}
-						onPress={handleSaveName}
-						isLoading={savingName}
-					>
-						Save Name
-					</Button>
-				</div>
+				{/* Profile Information Card */}
+				<Card className="border-none bg-content1 shadow-sm" radius="lg">
+					<CardBody className="flex flex-col gap-8 p-6">
+						{/* Display Name Section */}
+						<div className="flex flex-col gap-4">
+							<div className="flex flex-col gap-0.5">
+								<h2 className="font-semibold text-base">
+									Display Name
+								</h2>
+								<p className="text-xs text-default-400">
+									Shown across the platform as your name.
+								</p>
+							</div>
+							<div className="flex items-end gap-2">
+								<Input
+									label="Name"
+									labelPlacement="outside"
+									placeholder="e.g. Juan dela Cruz"
+									value={userName}
+									onValueChange={setUserName}
+									isInvalid={!!userNameError}
+									errorMessage={userNameError ?? undefined}
+									startContent={
+										<User
+											size={16}
+											className="text-default-400"
+										/>
+									}
+									className="flex-1"
+								/>
+								<Button
+									color="success"
+									className="min-w-[100px]"
+									startContent={<Save size={16} />}
+									onPress={handleSaveName}
+									isLoading={savingName}
+									isDisabled={
+										!isNameChanged || !!userNameError
+									}
+								>
+									Save
+								</Button>
+							</div>
+						</div>
 
-				{/* Phone number card */}
-				<div className="bg-content1 rounded-2xl p-6 flex flex-col gap-4 shadow-sm border border-default-100">
-					<div className="flex flex-col gap-0.5">
-						<h2 className="font-semibold text-base">
-							Phone Number
-						</h2>
-						<p className="text-xs text-default-400">
-							Must be a valid Philippine mobile number.
-						</p>
-					</div>
-					<Input
-						label="Phone"
-						labelPlacement="outside"
-						placeholder="+63 9XX XXX XXXX"
-						type="tel"
-						value={phone}
-						onValueChange={(val) => setPhone(sanitizePhone(val))}
-						isInvalid={!!phoneFieldError}
-						errorMessage={phoneFieldError ?? undefined}
-						description={
-							!phone || !!phoneFieldError ? undefined : (
-								<span className="text-success text-xs">
-									Looks good!
-								</span>
-							)
-						}
-						startContent={
-							<Phone size={16} className="text-default-400" />
-						}
-					/>
-					<Button
-						color="success"
-						className="font-semibold text-white"
-						startContent={<Save size={16} />}
-						onPress={handleSavePhone}
-						isLoading={savingPhone}
-					>
-						Save Phone
-					</Button>
-				</div>
+						{/* Phone Number Section */}
+						<div className="flex flex-col gap-4">
+							<div className="flex flex-col gap-0.5">
+								<h2 className="font-semibold text-base">
+									Phone Number
+								</h2>
+								<p className="text-xs text-default-400">
+									Must be a valid Philippine mobile number.
+								</p>
+							</div>
+							<div className="flex items-end gap-2">
+								<Input
+									label="Phone"
+									labelPlacement="outside"
+									placeholder="+63 9XX XXX XXXX"
+									type="tel"
+									value={phone}
+									onValueChange={(val) =>
+										setPhone(sanitizePhone(val))
+									}
+									isInvalid={!!phoneFieldError}
+									errorMessage={phoneFieldError ?? undefined}
+									startContent={
+										<Phone
+											size={16}
+											className="text-default-400"
+										/>
+									}
+									className="flex-1"
+								/>
+								<Button
+									color="success"
+									className="min-w-[100px]"
+									startContent={<Save size={16} />}
+									onPress={handleSavePhone}
+									isLoading={savingPhone}
+									isDisabled={
+										!isPhoneChanged || !!phoneFieldError
+									}
+								>
+									Save
+								</Button>
+							</div>
+						</div>
+					</CardBody>
+				</Card>
 
 				{/* Read-only info card */}
 				<div className="bg-content1 rounded-2xl p-6 flex flex-col gap-4 shadow-sm border border-default-100">
