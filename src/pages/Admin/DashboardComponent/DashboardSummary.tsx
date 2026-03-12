@@ -11,6 +11,7 @@ import {
 	useDisclosure,
 	Button,
 	TimeInput,
+	Switch,
 	addToast,
 } from "@heroui/react";
 
@@ -29,6 +30,7 @@ import { Time } from "@internationalized/date";
 import { useState, useEffect } from "react";
 import { updateClosingTime } from "@/data/supabase/Admin/Dashboard/updateClosingTime";
 import { useClosingTime } from "@/data/supabase/General/useClosingTime";
+
 export function DashboardSummary() {
 	const {
 		isOpen: isOpenChangeTime,
@@ -36,7 +38,8 @@ export function DashboardSummary() {
 		onOpenChange: onOpenChangeChangeTime,
 		onClose: onCloseChangeTime,
 	} = useDisclosure();
-	const { rawClosingDate } = useClosingTime();
+	const { rawClosingDate, rawOpeningDate, isClosedForTheDay } =
+		useClosingTime();
 
 	function supabaseTimeToTimeObject(timeString: string) {
 		const [hour, minute, second] = timeString.split(":").map(Number);
@@ -47,14 +50,18 @@ export function DashboardSummary() {
 		const h = String(time.hour).padStart(2, "0");
 		const m = String(time.minute).padStart(2, "0");
 		const s = String(time.second ?? 0).padStart(2, "0");
-
 		return `${h}:${m}:${s}`;
 	}
 
 	const [closingTime, setClosingTime] = useState<Time | null>(null);
+	const [openingTime, setOpeningTime] = useState<Time | null>(null);
 	const [displayedClosingDate, setDisplayedClosingDate] = useState<
 		string | null
 	>(null);
+	const [displayedOpeningDate, setDisplayedOpeningDate] = useState<
+		string | null
+	>(null);
+	const [closedForDay, setClosedForDay] = useState(false);
 
 	useEffect(() => {
 		if (rawClosingDate) {
@@ -62,6 +69,17 @@ export function DashboardSummary() {
 			setDisplayedClosingDate(rawClosingDate);
 		}
 	}, [rawClosingDate]);
+
+	useEffect(() => {
+		if (rawOpeningDate) {
+			setOpeningTime(supabaseTimeToTimeObject(rawOpeningDate));
+			setDisplayedOpeningDate(rawOpeningDate);
+		}
+	}, [rawOpeningDate]);
+
+	useEffect(() => {
+		setClosedForDay(isClosedForTheDay);
+	}, [isClosedForTheDay]);
 
 	function formatTimeTo12h(timeString: string | null) {
 		if (!timeString) return { hour: "--", minute: "--", period: "" };
@@ -79,20 +97,29 @@ export function DashboardSummary() {
 		useState<boolean>(false);
 
 	const handleChangeClosingTime = async () => {
-		if (!closingTime) return;
-		const previousTime = displayedClosingDate;
-		const newTimeStr = timeObjectToSupabase(closingTime);
+		if (!closingTime || !openingTime) return;
+		const previousClosing = displayedClosingDate;
+		const previousOpening = displayedOpeningDate;
+		const previousClosedForDay = isClosedForTheDay;
+
+		const newClosingStr = timeObjectToSupabase(closingTime);
+		const newOpeningStr = timeObjectToSupabase(openingTime);
 
 		// Optimistic update
-		setDisplayedClosingDate(newTimeStr);
+		setDisplayedClosingDate(newClosingStr);
+		setDisplayedOpeningDate(newOpeningStr);
 
 		setIsClosingTimeUpdating(true);
 
-		const { success } = await updateClosingTime(newTimeStr);
+		const { success } = await updateClosingTime(
+			newClosingStr,
+			newOpeningStr,
+			closedForDay,
+		);
 		if (success) {
 			addToast({
 				title: "Success",
-				description: "Closing time updated successfully",
+				description: "Store hours updated successfully",
 				severity: "success",
 				timeout: 5000,
 				color: "success",
@@ -102,10 +129,12 @@ export function DashboardSummary() {
 			setIsClosingTimeUpdating(false);
 		} else {
 			// Revert on failure
-			setDisplayedClosingDate(previousTime);
+			setDisplayedClosingDate(previousClosing);
+			setDisplayedOpeningDate(previousOpening);
+			setClosedForDay(previousClosedForDay);
 			addToast({
 				title: "Error",
-				description: "Something went wrong in updating closing time",
+				description: "Something went wrong updating store hours",
 				severity: "danger",
 				timeout: 5000,
 				color: "danger",
@@ -114,6 +143,10 @@ export function DashboardSummary() {
 			setIsClosingTimeUpdating(false);
 		}
 	};
+
+	const closing12h = formatTimeTo12h(displayedClosingDate);
+	const opening12h = formatTimeTo12h(displayedOpeningDate);
+
 	return (
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
 			<Card className="w-full">
@@ -196,37 +229,55 @@ export function DashboardSummary() {
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500/70 rounded-t-md" />
 			</Card>
-			<Card className="w-full">
-				<CardBody className="gap-y-3">
-					<span className="text-default-500">CLOSING TIME</span>
-					<div className="flex flex-col item-center">
-						<div className="flex flex-row items-center justify-between">
-							<div className="flex flex-row items-center gap-2">
-								<span className="text-3xl font-bold">
-									{formatTimeTo12h(displayedClosingDate).hour}
-									:
-									{
-										formatTimeTo12h(displayedClosingDate)
-											.minute
-									}
-								</span>
-								<span>
-									{
-										formatTimeTo12h(displayedClosingDate)
-											.period
-									}
-								</span>
-							</div>
 
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
-								<ClockIcon className="w-6 h-6 text-white" />
+			{/* Store Hours Card */}
+			<Card className="w-full">
+				<CardBody className="gap-y-2">
+					<span className="text-default-500">STORE HOURS</span>
+					<div className="flex flex-col gap-y-1">
+						{isClosedForTheDay ? (
+							<div className="flex flex-row items-center justify-between">
+								<span className="text-2xl font-bold text-red-500">
+									Closed Today
+								</span>
+								<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
+									<ClockIcon className="w-6 h-6 text-white" />
+								</div>
 							</div>
-						</div>
+						) : (
+							<div className="flex flex-row items-center justify-between">
+								<div className="flex flex-col gap-0.5">
+									<div className="flex flex-row items-center gap-2">
+										<div className="flex flex-row items-center gap-1">
+											<SoloUserIcon className="w-5" />
+											<span>
+												{opening12h.hour}:
+												{opening12h.minute}{" "}
+												{opening12h.period}
+											</span>
+											<Divider
+												className="h-6 m-1"
+												orientation="vertical"
+											/>
+											<UserIcon className="w-5" />
+											<span>
+												{closing12h.hour}:
+												{closing12h.minute}{" "}
+												{closing12h.period}
+											</span>
+										</div>
+									</div>
+								</div>
+								<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
+									<ClockIcon className="w-6 h-6 text-white" />
+								</div>
+							</div>
+						)}
 						<Link onPress={onOpenChangeTime}>
 							<div className="flex flex-row items-center gap-1">
-								<PencilIcon className="w-5 text-default-500" />
-								<span className="text-default-500 italic cursor-pointer">
-									Edit closing time
+								<PencilIcon className="w-6 text-default-500" />
+								<span className="text-lg text-default-500 italic cursor-pointer">
+									Edit store hours
 								</span>
 							</div>
 						</Link>
@@ -234,6 +285,7 @@ export function DashboardSummary() {
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-red-500/70 rounded-t-md" />
 			</Card>
+
 			<Modal
 				isOpen={isOpenChangeTime}
 				onOpenChange={onOpenChangeChangeTime}
@@ -244,15 +296,32 @@ export function DashboardSummary() {
 					{(onClose) => (
 						<>
 							<ModalHeader className="flex flex-col gap-1">
-								Edit Closing Time
+								Edit Store Hours
 							</ModalHeader>
-							<ModalBody>
+							<ModalBody className="gap-4">
+								<TimeInput
+									label="Opening Time"
+									value={openingTime}
+									onChange={setOpeningTime}
+									defaultValue={openingTime}
+									isDisabled={closedForDay}
+								/>
 								<TimeInput
 									label="Closing Time"
 									value={closingTime}
 									onChange={setClosingTime}
 									defaultValue={closingTime}
+									isDisabled={closedForDay}
 								/>
+								<Switch
+									isSelected={closedForDay}
+									onValueChange={setClosedForDay}
+									color="danger"
+								>
+									<span className="text-sm">
+										Closed for the day
+									</span>
+								</Switch>
 							</ModalBody>
 							<ModalFooter>
 								<Button
@@ -260,13 +329,12 @@ export function DashboardSummary() {
 									variant="light"
 									onPress={onClose}
 								>
-									Close
+									Cancel
 								</Button>
 								<Button
 									color="success"
 									onPress={() => {
 										handleChangeClosingTime();
-										onClose();
 									}}
 									isLoading={isClosingTimeUpdating}
 								>
