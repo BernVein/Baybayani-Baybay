@@ -30,6 +30,7 @@ import { Time } from "@internationalized/date";
 import { useState, useEffect } from "react";
 import { updateClosingTime } from "@/data/supabase/Admin/Dashboard/updateClosingTime";
 import { useClosingTime } from "@/data/supabase/General/useClosingTime";
+import { LockIcon, LockOpen } from "lucide-react";
 
 export function DashboardSummary() {
 	const {
@@ -249,7 +250,7 @@ export function DashboardSummary() {
 								<div className="flex flex-col gap-0.5">
 									<div className="flex flex-row items-center gap-2">
 										<div className="flex flex-row items-center gap-1">
-											<SoloUserIcon className="w-5" />
+											<LockOpen className="w-5" />
 											<span>
 												{opening12h.hour}:
 												{opening12h.minute}{" "}
@@ -259,7 +260,7 @@ export function DashboardSummary() {
 												className="h-6 m-1"
 												orientation="vertical"
 											/>
-											<UserIcon className="w-5" />
+											<LockIcon className="w-5" />
 											<span>
 												{closing12h.hour}:
 												{closing12h.minute}{" "}
