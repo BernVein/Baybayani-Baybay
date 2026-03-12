@@ -8,6 +8,7 @@ interface ClosingTimeContextValue {
 	loading: boolean;
 	isClosedForTheDay: boolean;
 	rawClosingDate: string | null;
+	rawOpeningDate: string | null;
 }
 
 const ClosingTimeContext = createContext<ClosingTimeContextValue>({
@@ -17,6 +18,7 @@ const ClosingTimeContext = createContext<ClosingTimeContextValue>({
 	loading: true,
 	isClosedForTheDay: false,
 	rawClosingDate: null,
+	rawOpeningDate: null,
 });
 
 export function ClosingTimeProvider({ children }: { children: ReactNode }) {
