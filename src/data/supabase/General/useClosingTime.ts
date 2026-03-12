@@ -8,6 +8,8 @@ interface ClosingTimeState {
 	isNearingClose: boolean; // within 2 hours but not yet closed
 	loading: boolean;
 	rawClosingDate: string | null;
+	rawOpeningDate: string | null;
+	isClosedForTheDay: boolean;
 }
 
 function parseClosingTimeToday(timeStr: string): Date {
@@ -24,10 +26,15 @@ function parseClosingTimeToday(timeStr: string): Date {
 	);
 }
 
-function computeState(closingDate: Date | null): {
+function computeState(
+	closingDate: Date | null,
+	isClosedForTheDay: boolean,
+): {
 	isClosed: boolean;
 	isNearingClose: boolean;
 } {
+	// If admin explicitly closed the store for the whole day, override everything
+	if (isClosedForTheDay) return { isClosed: true, isNearingClose: false };
 	if (!closingDate) return { isClosed: false, isNearingClose: false };
 
 	const now = new Date();
@@ -48,6 +55,9 @@ export function useClosingTime(): ClosingTimeState {
 		isNearingClose: false,
 	});
 	const [rawClosingDate, setRawClosingDate] = useState<string | null>(null);
+	const [rawOpeningDate, setRawOpeningDate] = useState<string | null>(null);
+	const [isClosedForTheDay, setIsClosedForTheDay] = useState(false);
+
 	const fetchClosingTime = useCallback(async () => {
 		const { data, error } = await supabase
 			.from("ClosingTime")
@@ -57,9 +67,12 @@ export function useClosingTime(): ClosingTimeState {
 		if (!error && data) {
 			const row = data as ClosingTime;
 			const parsed = parseClosingTimeToday(row.closing_time);
+			const closedForDay = row.is_closed_for_the_day ?? false;
 			setClosingDate(parsed);
-			setComputedState(computeState(parsed));
-			setRawClosingDate(data.closing_time);
+			setIsClosedForTheDay(closedForDay);
+			setComputedState(computeState(parsed, closedForDay));
+			setRawClosingDate(row.closing_time);
+			setRawOpeningDate(row.opening_time ?? null);
 		}
 		setLoading(false);
 	}, []);
@@ -74,11 +87,11 @@ export function useClosingTime(): ClosingTimeState {
 		if (!closingDate) return;
 
 		const interval = setInterval(() => {
-			setComputedState(computeState(closingDate));
+			setComputedState(computeState(closingDate, isClosedForTheDay));
 		}, 30_000);
 
 		return () => clearInterval(interval);
-	}, [closingDate]);
+	}, [closingDate, isClosedForTheDay]);
 
 	// Realtime subscription — when admin changes closing time, update immediately
 	useEffect(() => {
@@ -91,9 +104,12 @@ export function useClosingTime(): ClosingTimeState {
 					const row = payload.new as ClosingTime;
 					if (row?.closing_time) {
 						const parsed = parseClosingTimeToday(row.closing_time);
+						const closedForDay = row.is_closed_for_the_day ?? false;
 						setClosingDate(parsed);
-						setComputedState(computeState(parsed));
+						setIsClosedForTheDay(closedForDay);
+						setComputedState(computeState(parsed, closedForDay));
 						setRawClosingDate(row.closing_time);
+						setRawOpeningDate(row.opening_time ?? null);
 					}
 				},
 			)
@@ -110,5 +126,7 @@ export function useClosingTime(): ClosingTimeState {
 		isNearingClose,
 		loading,
 		rawClosingDate,
+		rawOpeningDate,
+		isClosedForTheDay,
 	};
 }
