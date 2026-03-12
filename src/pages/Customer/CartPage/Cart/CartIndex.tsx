@@ -263,8 +263,8 @@ export default function Cart() {
 										Proceed to Checkout
 									</Button>
 									{isClosed && (
-										<p className="text-danger text-xs text-center mt-1">
-											Ordering unavailable — store is
+										<p className="text-danger text-sm text-center mt-1">
+											Ordering unavailable - store is
 											closed.
 										</p>
 									)}
