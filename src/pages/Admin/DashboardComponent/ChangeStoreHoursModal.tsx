@@ -6,7 +6,6 @@ import {
 	ModalFooter,
 	Button,
 	TimeInput,
-	Switch,
 	addToast,
 } from "@heroui/react";
 import { useState, useEffect } from "react";
@@ -136,29 +135,82 @@ export function ChangeStoreHoursModal({
 						<ModalHeader className="flex flex-col gap-1">
 							Edit Store Hours
 						</ModalHeader>
-						<ModalBody className="gap-4">
-							<TimeInput
-								label="Opening Time"
-								value={openingTime}
-								onChange={setOpeningTime}
-								isDisabled={closedForDay}
-							/>
-							<TimeInput
-								label="Closing Time"
-								value={closingTime}
-								onChange={setClosingTime}
-								isDisabled={closedForDay}
-							/>
-							<Switch
-								isSelected={closedForDay}
-								onValueChange={setClosedForDay}
-								color="danger"
-							>
-								<span className="text-sm">
-									Closed for the day
+
+						<ModalBody className="gap-6">
+							{/* Store Status */}
+							<div className="flex flex-col gap-2">
+								<span className="text-sm font-medium text-default-600">
+									Store Status
 								</span>
-							</Switch>
+
+								<div className="flex gap-2">
+									<Button
+										variant={
+											!closedForDay ? "solid" : "bordered"
+										}
+										color={
+											!closedForDay
+												? "success"
+												: "default"
+										}
+										className="flex-1"
+										onPress={() => setClosedForDay(false)}
+									>
+										Open
+									</Button>
+
+									<Button
+										variant={
+											closedForDay ? "solid" : "bordered"
+										}
+										color={
+											closedForDay ? "danger" : "default"
+										}
+										className="flex-1"
+										onPress={() => setClosedForDay(true)}
+									>
+										Closed
+									</Button>
+								</div>
+							</div>
+
+							{/* Time Inputs */}
+							<div className="flex flex-col gap-4 p-4 rounded-xl bg-default-100">
+								<span className="text-sm font-medium text-default-600">
+									Store Hours
+									<p className="text-xs text-default-500">
+										Configure when the store accepts orders
+									</p>
+								</span>
+
+								<div className="flex flex-row gap-3 items-center">
+									<TimeInput
+										label="Opening Time"
+										value={openingTime}
+										variant="bordered"
+										onChange={setOpeningTime}
+										isDisabled={closedForDay}
+										className="flex-1"
+									/>
+
+									<TimeInput
+										label="Closing Time"
+										value={closingTime}
+										variant="bordered"
+										onChange={setClosingTime}
+										isDisabled={closedForDay}
+										className="flex-1"
+									/>
+								</div>
+
+								{closedForDay && (
+									<span className="text-xs text-danger">
+										The store will be closed.
+									</span>
+								)}
+							</div>
 						</ModalBody>
+
 						<ModalFooter>
 							<Button
 								color="danger"
@@ -167,12 +219,13 @@ export function ChangeStoreHoursModal({
 							>
 								Cancel
 							</Button>
+
 							<Button
 								color="success"
 								onPress={handleSave}
 								isLoading={isUpdating}
 							>
-								Save
+								Save Changes
 							</Button>
 						</ModalFooter>
 					</>
