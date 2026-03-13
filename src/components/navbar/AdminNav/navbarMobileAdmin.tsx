@@ -192,11 +192,7 @@ export function NavbarMobileAdmin({
 					</DropdownTrigger>
 
 					<DropdownMenu aria-label="Profile Actions" variant="flat">
-						<DropdownItem
-							key="profile"
-							className="h-14 gap-2"
-							onPress={() => navigate("/profile")}
-						>
+						<DropdownItem key="profile" className="h-14 gap-2">
 							<p className="font-semibold">Signed in as</p>
 							<p className="font-semibold">
 								{profile?.login_user_name}
@@ -210,13 +206,13 @@ export function NavbarMobileAdmin({
 						</DropdownItem>
 						<DropdownItem
 							key="orders"
-							onPress={() => navigate("/orders")}
+							onPress={() => navigate("/admin/orders")}
 						>
 							Orders
 						</DropdownItem>
 						<DropdownItem
 							key="settings"
-							onPress={() => navigate("/settings")}
+							onPress={() => navigate("/admin/settings")}
 						>
 							Settings
 						</DropdownItem>
