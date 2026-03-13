@@ -124,10 +124,10 @@ export default function CustomerAnnouncements() {
 						>
 							<CardHeader className="flex flex-col items-start px-6 pt-6 gap-1">
 								<div className="flex items-center justify-between w-full">
-									<h2 className="text-xl font-bold text-success">
+									<h2 className="text-xl font-bold">
 										{ann.announcement_title}
 									</h2>
-									<span className="text-xs text-default-400">
+									<span className="text-sm text-default-400">
 										{new Date(
 											ann.created_at,
 										).toLocaleDateString("en-PH", {
