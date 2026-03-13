@@ -14,6 +14,7 @@ import {
 	DropdownSection,
 	Chip,
 	useDisclosure,
+	Pagination,
 } from "@heroui/react";
 import { useState } from "react";
 import { CheckIcon, EyeIcon, MoreIconVertical } from "@/components/icons";
@@ -24,6 +25,9 @@ export function OrderTableDesktop({
 	orders,
 	handleOrder,
 	onOpenCancelModal,
+	page,
+	totalPages,
+	onChangePage,
 }: {
 	orders: OrderTableRow[];
 	handleOrder: (
@@ -36,6 +40,9 @@ export function OrderTableDesktop({
 		orderId: string,
 		currentStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	) => void;
+	page: number;
+	totalPages: number;
+	onChangePage: (page: number) => void;
 }) {
 	const [cancelReason, setCancelReason] = useState<string | null>(null);
 	const {
@@ -45,7 +52,25 @@ export function OrderTableDesktop({
 	} = useDisclosure();
 	return (
 		<div className="hidden sm:flex flex-1 min-h-0 flex-col">
-			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
+			<Table
+				isHeaderSticky
+				className="overflow-y-auto h-full w-full"
+				bottomContent={
+					totalPages > 1 && (
+						<div className="flex w-full justify-center">
+							<Pagination
+								isCompact
+								showControls
+								showShadow
+								color="success"
+								page={page}
+								total={totalPages}
+								onChange={onChangePage}
+							/>
+						</div>
+					)
+				}
+			>
 				<TableHeader>
 					<TableColumn>CUSTOMER</TableColumn>
 					<TableColumn>DATE & ORDER ID</TableColumn>

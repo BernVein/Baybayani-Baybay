@@ -19,12 +19,18 @@ export function OrderTable({
 	orderItems: orders,
 	setOrderItems: setOrders,
 	loading,
+	page,
+	totalPages,
+	onChangePage,
 }: {
 	selectedCategories: Selection;
 	searchQuery: string;
 	orderItems: OrderTableRow[] | null;
 	setOrderItems: Dispatch<SetStateAction<OrderTableRow[] | null>>;
 	loading: boolean;
+	page: number;
+	totalPages: number;
+	onChangePage: (page: number) => void;
 }) {
 	const {
 		isOpen: isOpenLoading,
@@ -209,11 +215,17 @@ export function OrderTable({
 				orders={orders || []}
 				handleOrder={handleOrder}
 				onOpenCancelModal={onOpenCancelModalWithData}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
 			/>
 			<OrderTableDesktop
 				orders={orders || []}
 				handleOrder={handleOrder}
 				onOpenCancelModal={onOpenCancelModalWithData}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
 			/>
 			<OrderCancelModal
 				isOpenCancelModal={isOpenCancelModal}

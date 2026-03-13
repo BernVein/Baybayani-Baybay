@@ -36,6 +36,7 @@ export default function Orders() {
 		column: string;
 		direction: "asc" | "desc";
 	} | null>(null);
+	const [page, setPage] = useState<number>(1);
 	const {
 		isOpen: isOpenAddOrder,
 		onOpen: onOpenAddOrder,
@@ -48,11 +49,27 @@ export default function Orders() {
 			: Array.from(selectedCategories).map((key) => String(key));
 	}, [selectedCategories]);
 
-	const { orderItems, setOrderItems, loading, refetch } = useFetchOrderItems(
+	const {
+		orderItems,
+		setOrderItems,
+		loading,
+		totalCount,
+		pageSize,
+		refetch,
+	} = useFetchOrderItems(
 		selectedCategoryArray,
 		searchQuery,
 		sortConfig,
+		page,
 	);
+
+	const totalPages = useMemo(() => {
+		return Math.ceil(totalCount / pageSize);
+	}, [totalCount, pageSize]);
+
+	useEffect(() => {
+		setPage(1);
+	}, [searchQuery, selectedCategories, sortConfig]);
 
 	useEffect(() => {
 		document.title = "Baybayani | Admin | Orders";
@@ -237,6 +254,9 @@ export default function Orders() {
 						orderItems={orderItems}
 						setOrderItems={setOrderItems}
 						loading={loading}
+						page={page}
+						totalPages={totalPages}
+						onChangePage={setPage}
 					/>
 				</div>
 			</div>
