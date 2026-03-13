@@ -6,30 +6,19 @@ import {
 	ProductIconWithX,
 } from "@/components/icons";
 import { ManageCatTagModal } from "@/pages/Admin/ProductsComponent/ManageCatTagModal";
-import { ItemTableRow } from "@/model/ui/Admin/item_table_row";
 import { fetchProductStats } from "@/data/supabase/Admin/Products/fetchProductStats";
 
-export function ProductSummary({
-	items,
-	isLoading,
-}: {
-	items: ItemTableRow[];
-	isLoading: boolean;
-}) {
+export function ProductSummary() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const {
 		lastItemDate,
 		lowStockCount,
+		totalItems,
+		totalInventory,
+		totalCategories,
+		totalTags,
 		loading: isStatLoading,
 	} = fetchProductStats();
-	const totalItems = items.length;
-	const totalInventory = items.reduce(
-		(sum, item) => sum + (item.variant_stock ?? 0),
-		0,
-	);
-	const totalCategories = new Set(
-		items.map((item) => item.item_category_id).filter(Boolean),
-	).size;
 
 	return (
 		<>
@@ -41,7 +30,7 @@ export function ProductSummary({
 							<div className="flex flex-row items-center justify-between">
 								<div className="flex flex-row items-center">
 									<Skeleton
-										isLoaded={!isLoading}
+										isLoaded={!isStatLoading}
 										className="rounded-lg"
 									>
 										<span className="text-3xl font-bold">
@@ -77,7 +66,7 @@ export function ProductSummary({
 							<div className="flex flex-row items-center justify-between">
 								<div className="flex flex-row items-center gap-2">
 									<Skeleton
-										isLoaded={!isLoading}
+										isLoaded={!isStatLoading}
 										className="rounded-lg"
 									>
 										<span className="text-3xl font-bold">
@@ -107,18 +96,29 @@ export function ProductSummary({
 				<Card className="w-full">
 					<CardBody className="gap-y-3">
 						<span className="text-default-500">
-							ITEM CATEGORIES
+							ITEM CATEGORIES & TAGS
 						</span>
 						<div className="flex flex-col item-center">
 							<div className="flex flex-row items-center justify-between">
 								<div className="flex flex-row items-center gap-2">
 									<Skeleton
-										isLoaded={!isLoading}
+										isLoaded={!isStatLoading}
 										className="rounded-lg"
 									>
-										<span className="text-3xl font-bold">
-											{totalCategories}
-										</span>
+										<div className="flex flex-row items-baseline gap-2">
+											<span className="text-3xl font-bold">
+												{totalCategories}
+											</span>
+											<span className="text-default-400 text-sm">
+												Categories
+											</span>
+											<span className="text-3xl font-bold ml-2">
+												{totalTags}
+											</span>
+											<span className="text-default-400 text-sm">
+												Tags
+											</span>
+										</div>
 									</Skeleton>
 								</div>
 
@@ -128,7 +128,7 @@ export function ProductSummary({
 							</div>
 							<Skeleton
 								className="rounded-lg w-3/5"
-								isLoaded={!isLoading}
+								isLoaded={!isStatLoading}
 							>
 								<div className="flex flex-row gap-1 items-start cursor-pointer">
 									<Link
