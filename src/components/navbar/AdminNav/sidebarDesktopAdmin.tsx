@@ -218,11 +218,7 @@ export function SidebarDesktopAdmin({
 							aria-label="Profile Actions"
 							variant="flat"
 						>
-							<DropdownItem
-								key="profile"
-								className="h-14 gap-2"
-								onPress={() => navigate("/admin/profile")}
-							>
+							<DropdownItem key="profile" className="h-14 gap-2">
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">
 									{profile?.login_user_name}
