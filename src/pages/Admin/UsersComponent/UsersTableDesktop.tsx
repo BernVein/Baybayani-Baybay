@@ -14,6 +14,7 @@ import {
 	DropdownItem,
 	Chip,
 	useDisclosure,
+	Pagination,
 } from "@heroui/react";
 
 import {
@@ -33,12 +34,18 @@ import { ShowUserDetailModal } from "./ShowUserDetailModal";
 export function UsersTableDesktop({
 	userProfiles,
 	handleChangeUserStatus,
+	page,
+	totalPages,
+	onChangePage,
 }: {
 	userProfiles: UserProfile[] | null;
 	handleChangeUserStatus: (
 		userID: string,
 		userStatus: "Approved" | "For Approval" | "Rejected" | "Suspended",
 	) => void;
+	page: number;
+	totalPages: number;
+	onChangePage: (page: number) => void;
 }) {
 	const {
 		isOpen: isOpenViewUserDetail,
@@ -51,7 +58,25 @@ export function UsersTableDesktop({
 	console.log(selectedUserProfile);
 	return (
 		<div className="sm:flex hidden flex-1 min-h-0 flex-col">
-			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
+			<Table
+				isHeaderSticky
+				className="overflow-y-auto h-full w-full"
+				bottomContent={
+					totalPages > 1 && (
+						<div className="flex w-full justify-center">
+							<Pagination
+								isCompact
+								showControls
+								showShadow
+								color="success"
+								page={page}
+								total={totalPages}
+								onChange={onChangePage}
+							/>
+						</div>
+					)
+				}
+			>
 				<TableHeader>
 					<TableColumn>USER</TableColumn>
 					<TableColumn>ROLE</TableColumn>
