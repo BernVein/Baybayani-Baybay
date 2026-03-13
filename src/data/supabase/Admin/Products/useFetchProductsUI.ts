@@ -7,14 +7,20 @@ export const useFetchProductsUI = (
 	search: string = "",
 	selectedCategories: string[] = [],
 	sortConfig: { column: string; direction: "asc" | "desc" } | null = null,
+	page: number = 1,
+	pageSize: number = 20,
 ) => {
 	const [allItems, setAllItems] = useState<ItemTableRow[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [totalCount, setTotalCount] = useState<number>(0);
 
 	const fetchItems = useCallback(async () => {
 		setLoading(true);
 		setError(null);
+
+		const from = (page - 1) * pageSize;
+		const to = from + pageSize - 1;
 
 		try {
 			let query = supabase
@@ -25,6 +31,7 @@ export const useFetchProductsUI = (
                     item_sold_by,
                     item_title,
                     item_has_variant,
+					created_at,
                     Category ( category_id, category_name ),
                     Tag ( tag_name ),
                     Variant (
@@ -40,8 +47,49 @@ export const useFetchProductsUI = (
                     ),
                     Item_Image ( item_image_url )
                 `,
+					{ count: "exact" },
 				)
 				.eq("is_soft_deleted", false);
+
+			// Server-side filtering
+			if (search.trim() !== "") {
+				query = query.or(
+					`item_title.ilike.%${search}%,item_sold_by.ilike.%${search}%`,
+				);
+			}
+
+			const categoryKeys = selectedCategories.filter(
+				(k) => k !== "with-variant" && k !== "no-variant",
+			);
+			if (categoryKeys.length > 0) {
+				const hasNull = categoryKeys.includes("null");
+				const numericKeys = categoryKeys
+					.filter((k) => k !== "null")
+					.map(Number);
+
+				if (numericKeys.length > 0 && hasNull) {
+					query = query.or(
+						`category_id.in.(${numericKeys.join(
+							",",
+						)}),category_id.is.null`,
+					);
+				} else if (numericKeys.length > 0) {
+					query = query.in("category_id", numericKeys);
+				} else if (hasNull) {
+					query = query.is("category_id", null);
+				}
+			}
+
+			const variantKeys = selectedCategories.filter(
+				(k) => k === "with-variant" || k === "no-variant",
+			);
+			if (variantKeys.length === 1) {
+				// Only if either one is selected, not both
+				query = query.eq(
+					"item_has_variant",
+					variantKeys[0] === "with-variant",
+				);
+			}
 
 			if (sortConfig) {
 				// Only alphabetical and date can be easily sorted in DB for now
@@ -55,14 +103,16 @@ export const useFetchProductsUI = (
 				}
 			} else {
 				query = query.order("created_at", {
-					referencedTable: "Variant.StockMovement",
 					ascending: false,
 				});
 			}
 
-			const { data, error } = await query;
+			const { data, error, count } = await query.range(from, to);
 
 			if (error) throw error;
+
+			setTotalCount(count ?? 0);
+
 			const formatted: ItemTableRow[] = (data ?? []).map((item: any) => {
 				// Only include variants that are not soft-deleted
 				const variants = (item.Variant ?? []).filter(
@@ -82,7 +132,7 @@ export const useFetchProductsUI = (
 						(p) => typeof p === "number",
 					),
 				);
-				console.log(variants);
+
 				return {
 					item_id: item.item_id,
 					item_variant_count: variants.length,
@@ -115,7 +165,7 @@ export const useFetchProductsUI = (
 		} finally {
 			setLoading(false);
 		}
-	}, [sortConfig]);
+	}, [search, selectedCategories, sortConfig, page, pageSize]);
 
 	useEffect(() => {
 		fetchItems();
@@ -198,6 +248,8 @@ export const useFetchProductsUI = (
 		setAllItems,
 		loading,
 		error,
+		totalCount,
+		pageSize,
 		refetch: fetchItems,
 	};
 };
