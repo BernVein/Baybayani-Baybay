@@ -27,6 +27,7 @@ import { FloatingChat } from "@/pages/General/Chat/FloatingChat";
 import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
 import { ClosingTimeProvider } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 import { ClosingTimeBanner } from "@/components/General/ClosingTimeBanner";
+import { AnnouncementModal } from "@/pages/Customer/AnnouncementModal";
 
 export default function CustomerLayout({
 	user,
@@ -111,6 +112,9 @@ export default function CustomerLayout({
 
 					{/* In-app Notification Alert */}
 					{user && <NotificationAlert />}
+
+					{/* Announcement Modal (trigger on open) */}
+					{user && <AnnouncementModal />}
 				</div>
 			</FloatingChatProvider>
 		</ClosingTimeProvider>
