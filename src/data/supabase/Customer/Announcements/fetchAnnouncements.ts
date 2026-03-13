@@ -9,36 +9,18 @@ export async function fetchAnnouncements(
 		const from = (page - 1) * pageSize;
 		const to = from + pageSize - 1;
 
-		// Fetch announcements with their images
-		const { data, error } = await supabase
+		// Fetch announcements with their images using server-side range for pagination
+		const { data, error, count } = await supabase
 			.from("Announcement")
-			.select("*, images:Announcement_Image(*)")
-			.order("created_at", { ascending: false });
-		// We fetch all and filter for "one per date" in JS for now
-		// because Supabase doesn't easily support DISTINCT ON via select()
+			.select("*, images:Announcement_Image(*)", { count: "exact" })
+			.order("created_at", { ascending: false })
+			.range(from, to);
 
 		if (error) throw error;
 
-		if (!data) return { data: [], total: 0 };
-
-		// Filter to show only one announcement per unique date
-		const seenDates = new Set<string>();
-		const uniqueAnnouncements: Announcement[] = [];
-
-		for (const ann of data) {
-			const date = new Date(ann.created_at).toLocaleDateString();
-			if (!seenDates.has(date)) {
-				seenDates.add(date);
-				uniqueAnnouncements.push(ann as Announcement);
-			}
-		}
-
-		// Apply pagination to the filtered results
-		const paginatedData = uniqueAnnouncements.slice(from, to + 1);
-
 		return {
-			data: paginatedData,
-			total: uniqueAnnouncements.length,
+			data: (data || []) as Announcement[],
+			total: count || 0,
 		};
 	} catch (error) {
 		console.error("Error in fetchAnnouncements:", error);
