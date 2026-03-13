@@ -8,6 +8,7 @@ import {
 	addToast,
 	Image as HeroImage,
 	useDisclosure,
+	CardFooter,
 } from "@heroui/react";
 import { useState, useRef } from "react";
 import { useOutletContext } from "react-router-dom";
@@ -73,7 +74,7 @@ export default function AdminAnnouncements() {
 	};
 
 	return (
-		<div className="flex flex-col gap-8 p-4 h-full">
+		<div className="flex flex-col gap-8 p-4 h-full overflow-y-auto">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
 				<div className="flex flex-row items-center gap-2">
 					<MegaphoneIcon size={20} />
@@ -162,7 +163,7 @@ export default function AdminAnnouncements() {
 											isIconOnly
 											size="sm"
 											color="danger"
-											className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+											className="absolute top-1 right-1 z-10"
 											onPress={() => removeImage(index)}
 										>
 											<TrashIcon className="size-4" />
@@ -177,17 +178,18 @@ export default function AdminAnnouncements() {
 							</div>
 						)}
 					</div>
-
+				</CardBody>
+				<CardFooter>
 					<Button
 						color="success"
 						fullWidth
 						onPress={handleSubmit}
 						isLoading={loading}
-						className="font-bold mt-4"
+						className="font-semibold mt-4"
 					>
 						Post Announcement
 					</Button>
-				</CardBody>
+				</CardFooter>
 			</Card>
 
 			<AnnouncementHistoryModal
