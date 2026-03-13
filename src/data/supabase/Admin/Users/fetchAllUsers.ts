@@ -19,16 +19,22 @@ export const fetchAllUsers = (
 	sortConfig: SortConfig = DEFAULT_SORT_CONFIG,
 	roles: string[] = DEFAULT_ROLES,
 	statuses: string[] = DEFAULT_STATUSES,
+	page: number = 1,
+	pageSize: number = 20,
 ) => {
 	const [userProfiles, setUserProfiles] = useState<UserProfile[] | null>(
 		null,
 	);
 	const [loading, setLoading] = useState(false);
 	const [fetchError, setFetchError] = useState<string | null>(null);
+	const [totalCount, setTotalCount] = useState<number>(0);
 
 	const fetchItem = useCallback(async () => {
 		setLoading(true);
 		setFetchError(null);
+
+		const from = (page - 1) * pageSize;
+		const to = from + pageSize - 1;
 
 		let query = supabase
 			.from("User")
@@ -44,6 +50,7 @@ export const fetchAllUsers = (
 				user_status,
 				created_at
 				`,
+				{ count: "exact" },
 			)
 			.eq("is_soft_deleted", false);
 
@@ -59,16 +66,21 @@ export const fetchAllUsers = (
 			query = query.in("user_status", statuses);
 		}
 
-		const { data, error } = await query.order(sortConfig.column, {
-			ascending: sortConfig.ascending,
-		});
+		const { data, error, count } = await query
+			.order(sortConfig.column, {
+				ascending: sortConfig.ascending,
+			})
+			.range(from, to);
 
 		if (error) {
 			setFetchError(error.message);
 			setUserProfiles([]);
+			setTotalCount(0);
 			setLoading(false);
 			return;
 		}
+
+		setTotalCount(count ?? 0);
 
 		if (!data) {
 			setUserProfiles([]);
@@ -91,7 +103,7 @@ export const fetchAllUsers = (
 
 		setUserProfiles(mappedUsers);
 		setLoading(false);
-	}, [searchTerm, sortConfig, roles, statuses]);
+	}, [searchTerm, sortConfig, roles, statuses, page, pageSize]);
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
@@ -106,6 +118,8 @@ export const fetchAllUsers = (
 		setUserProfiles,
 		loading,
 		fetchError,
+		totalCount,
+		pageSize,
 		refetch: fetchItem,
 	};
 };
