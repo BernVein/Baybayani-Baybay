@@ -23,10 +23,14 @@ const Shop = lazy(() => import("@/pages/Customer/ShopPage/ShopIndex"));
 const Settings = lazy(
 	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings"),
 );
+const CustomerAnnouncements = lazy(
+	() => import("@/pages/Customer/Announcements"),
+);
 const Dashboard = lazy(() => import("@/pages/Admin/Dashboard"));
 const AdminOrders = lazy(() => import("@/pages/Admin/Orders"));
 const AdminProducts = lazy(() => import("@/pages/Admin/Products"));
 const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
+const AdminAnnouncements = lazy(() => import("@/pages/Admin/Announcements"));
 
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
@@ -137,6 +141,16 @@ function App() {
 								}
 								path="/settings"
 							/>
+							<Route
+								element={
+									<RequireAuth>
+										<RequireApproval>
+											<CustomerAnnouncements />
+										</RequireApproval>
+									</RequireAuth>
+								}
+								path="/announcements"
+							/>
 						</Route>
 
 						<Route
@@ -178,6 +192,10 @@ function App() {
 								path="products"
 							/>
 							<Route element={<AdminUsers />} path="users" />
+							<Route
+								element={<AdminAnnouncements />}
+								path="announcements"
+							/>
 							<Route element={<Settings />} path="settings" />
 						</Route>
 
