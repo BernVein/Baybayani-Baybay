@@ -226,7 +226,7 @@ export default function Settings() {
 									Shown across the platform as your name.
 								</p>
 							</div>
-							<div className="flex items-end gap-2">
+							<div className="flex flex-col items-end gap-2">
 								<Input
 									label="Name"
 									labelPlacement="outside"
@@ -245,7 +245,7 @@ export default function Settings() {
 								/>
 								<Button
 									color="success"
-									className="min-w-[100px]"
+									fullWidth
 									startContent={<Save size={16} />}
 									onPress={handleSaveName}
 									isLoading={savingName}
@@ -268,7 +268,7 @@ export default function Settings() {
 									Must be a valid Philippine mobile number.
 								</p>
 							</div>
-							<div className="flex items-end gap-2">
+							<div className="flex flex-col items-end gap-2">
 								<Input
 									label="Phone"
 									labelPlacement="outside"
@@ -290,7 +290,7 @@ export default function Settings() {
 								/>
 								<Button
 									color="success"
-									className="min-w-[100px]"
+									fullWidth
 									startContent={<Save size={16} />}
 									onPress={handleSavePhone}
 									isLoading={savingPhone}
