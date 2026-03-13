@@ -13,7 +13,9 @@ import {
 import { Bell, LogIn } from "lucide-react";
 import { useNotifications } from "@/ContextProvider/NotificationContext/NotificationProvider";
 import { useLoginModal } from "@/ContextProvider/LoginModalContext/LoginModalContext";
+import { useNavigate } from "react-router-dom";
 import { Notification } from "@/model/notification";
+import { MegaphoneIcon } from "@/components/icons";
 
 export function NotificationBell({
 	userId,
@@ -23,6 +25,7 @@ export function NotificationBell({
 	const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
 		useNotifications();
 	const { openLoginModal } = useLoginModal();
+	const navigate = useNavigate();
 
 	const isGuest = !userId;
 
@@ -89,7 +92,21 @@ export function NotificationBell({
 						) : (
 							<Listbox
 								aria-label="Notifications list"
-								onAction={(key) => markAsRead(key as string)}
+								onAction={(key) => {
+									const notificationId = key as string;
+									const notification = notifications.find(
+										(n) =>
+											n.notification_id ===
+											notificationId,
+									);
+
+									markAsRead(notificationId);
+
+									if (notification?.type === "announcement") {
+										document.body.click(); // close popover
+										navigate("/announcements");
+									}
+								}}
 								variant="flat"
 							>
 								{notifications.map((notif: Notification) => (
@@ -139,7 +156,7 @@ export function NotificationBell({
 						)}
 					</ScrollShadow>
 					<Divider />
-					<div className="p-2">
+					<div className="p-2 flex flex-col gap-1">
 						<Button
 							fullWidth
 							variant="light"
@@ -147,6 +164,20 @@ export function NotificationBell({
 							className="text-xs"
 						>
 							View all notifications
+						</Button>
+						<Button
+							fullWidth
+							variant="flat"
+							color="success"
+							size="sm"
+							className="text-xs font-bold"
+							onPress={() => {
+								document.body.click(); // close popover
+								navigate("/announcements");
+							}}
+							startContent={<MegaphoneIcon className="size-4" />}
+						>
+							Announcements
 						</Button>
 					</div>
 				</div>
