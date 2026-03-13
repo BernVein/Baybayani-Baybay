@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 
 import { ProductIcon } from "@/components/icons";
@@ -11,17 +11,21 @@ export default function Products() {
 	const { profile } = useOutletContext<any>();
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const [page, setPage] = useState<number>(1);
 
 	const [sortConfig, setSortConfig] = useState<{
 		column: string;
 		direction: "asc" | "desc";
 	} | null>(null);
 
-	const { items, allItems, setAllItems, loading } = useFetchProductsUI(
-		searchQuery,
-		selectedCategories,
-		sortConfig,
-	);
+	const { items, setAllItems, loading, totalCount, pageSize } =
+		useFetchProductsUI(searchQuery, selectedCategories, sortConfig, page);
+
+	const totalPages = Math.ceil(totalCount / pageSize);
+
+	useEffect(() => {
+		setPage(1);
+	}, [searchQuery, selectedCategories, sortConfig]);
 
 	return (
 		<div className="flex flex-col gap-8 p-4 h-full">
@@ -40,7 +44,7 @@ export default function Products() {
 				</div>
 			</div>
 			<div className="hidden sm:block shrink-0">
-				<ProductSummary items={allItems} isLoading={loading} />
+				<ProductSummary />
 			</div>
 
 			<div className="flex flex-row items-center justify-between shrink-0">
@@ -58,6 +62,9 @@ export default function Products() {
 					items={items}
 					loading={loading}
 					setAllItems={setAllItems}
+					page={page}
+					totalPages={totalPages}
+					onChangePage={setPage}
 				/>
 			</div>
 		</div>
