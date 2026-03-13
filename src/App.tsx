@@ -20,9 +20,6 @@ import LoginModal from "@/pages/General/LoginModal";
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
 const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
 const Shop = lazy(() => import("@/pages/Customer/ShopPage/ShopIndex"));
-const Profile = lazy(
-	() => import("@/pages/Customer/UserAccount/ProfilePage/Profile"),
-);
 const Settings = lazy(
 	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings"),
 );
@@ -134,16 +131,6 @@ function App() {
 								element={
 									<RequireAuth>
 										<RequireApproval>
-											<Profile />
-										</RequireApproval>
-									</RequireAuth>
-								}
-								path="/profile"
-							/>
-							<Route
-								element={
-									<RequireAuth>
-										<RequireApproval>
 											<Settings />
 										</RequireApproval>
 									</RequireAuth>
@@ -191,6 +178,7 @@ function App() {
 								path="products"
 							/>
 							<Route element={<AdminUsers />} path="users" />
+							<Route element={<Settings />} path="settings" />
 						</Route>
 
 						{/* CATCH ALL */}
