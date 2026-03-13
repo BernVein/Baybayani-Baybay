@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserIcon } from "@/components/icons";
 import { useOutletContext } from "react-router-dom";
 import { UsersSummary } from "@/pages/Admin/UsersComponent/UsersSummary";
@@ -27,13 +27,22 @@ export default function Users() {
 	});
 	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+	const [page, setPage] = useState<number>(1);
 
-	const { userProfiles, setUserProfiles, loading } = fetchAllUsers(
-		searchTerm,
-		sortConfig,
-		selectedRoles,
-		selectedStatuses,
-	);
+	const { userProfiles, setUserProfiles, loading, totalCount, pageSize } =
+		fetchAllUsers(
+			searchTerm,
+			sortConfig,
+			selectedRoles,
+			selectedStatuses,
+			page,
+		);
+
+	const totalPages = Math.ceil(totalCount / pageSize);
+
+	useEffect(() => {
+		setPage(1);
+	}, [searchTerm, sortConfig, selectedRoles, selectedStatuses]);
 
 	const handleChangeUserStatus = async (
 		userID: string,
@@ -200,10 +209,16 @@ export default function Users() {
 					<UsersTableMobile
 						userProfiles={userProfiles}
 						handleChangeUserStatus={handleChangeUserStatus}
+						page={page}
+						totalPages={totalPages}
+						onChangePage={setPage}
 					/>
 					<UsersTableDesktop
 						userProfiles={userProfiles}
 						handleChangeUserStatus={handleChangeUserStatus}
+						page={page}
+						totalPages={totalPages}
+						onChangePage={setPage}
 					/>
 				</div>
 			)}
