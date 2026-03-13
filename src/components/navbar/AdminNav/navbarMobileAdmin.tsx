@@ -21,6 +21,7 @@ import {
 	OrdersIcon,
 	ProductIcon,
 	UserIcon,
+	MegaphoneIcon,
 } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { supabase } from "@/config/supabaseclient";
@@ -163,6 +164,13 @@ export function NavbarMobileAdmin({
 								startContent={<UserIcon className="w-5" />}
 							>
 								Users
+							</DropdownItem>
+							<DropdownItem
+								key="announcements"
+								onPress={() => navigate("/admin/announcements")}
+								startContent={<MegaphoneIcon className="w-5" />}
+							>
+								Announcements
 							</DropdownItem>
 						</DropdownSection>
 					</DropdownMenu>
