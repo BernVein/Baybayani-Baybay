@@ -12,6 +12,7 @@ import {
 	Button,
 	DropdownSection,
 	useDisclosure,
+	Pagination,
 } from "@heroui/react";
 import { useState } from "react";
 
@@ -23,10 +24,16 @@ export function ProductTableMobile({
 	items,
 	onOpenDeleteConfirm,
 	setSelectedDeleteItem,
+	page,
+	totalPages,
+	onChangePage,
 }: {
 	items: ItemTableRow[];
 	onOpenDeleteConfirm: () => void;
 	setSelectedDeleteItem: (item: { id: string; name: string }) => void;
+	page: number;
+	totalPages: number;
+	onChangePage: (page: number) => void;
 }) {
 	const {
 		isOpen: isOpenEditItem,
@@ -38,7 +45,25 @@ export function ProductTableMobile({
 
 	return (
 		<div className="sm:hidden flex-1 min-h-0 flex flex-col">
-			<Table isHeaderSticky className="overflow-y-auto h-full w-full">
+			<Table
+				isHeaderSticky
+				className="overflow-y-auto h-full w-full"
+				bottomContent={
+					totalPages > 1 && (
+						<div className="flex w-full justify-center">
+							<Pagination
+								isCompact
+								showControls
+								showShadow
+								color="success"
+								page={page}
+								total={totalPages}
+								onChange={onChangePage}
+							/>
+						</div>
+					)
+				}
+			>
 				<TableHeader>
 					<TableColumn>ITEM</TableColumn>
 					<TableColumn>PRICE & STOCK</TableColumn>
