@@ -27,6 +27,7 @@ import {
 	ProductIcon,
 	LogoutIcon,
 	ClockIcon,
+	MegaphoneIcon,
 } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { UserProfile } from "@/model/userProfile";
@@ -45,6 +46,7 @@ export function SidebarDesktopAdmin({
 		"/admin/orders": "orders",
 		"/admin/products": "products",
 		"/admin/users": "users",
+		"/admin/announcements": "announcements",
 	};
 
 	const isLoggingOut = useRef(false);
@@ -181,6 +183,15 @@ export function SidebarDesktopAdmin({
 							startContent={<UserIcon className="size-6" />}
 						>
 							Users
+						</ListboxItem>
+						<ListboxItem
+							key="announcements"
+							className="mb-3"
+							color="success"
+							onPress={() => navigate("/admin/announcements")}
+							startContent={<MegaphoneIcon className="size-6" />}
+						>
+							Announcements
 						</ListboxItem>
 					</ListboxSection>
 					<ListboxSection title="Account">
