@@ -7,11 +7,18 @@ import {
 	Textarea,
 	addToast,
 	Image as HeroImage,
+	useDisclosure,
 } from "@heroui/react";
 import { useState, useRef } from "react";
 import { useOutletContext } from "react-router-dom";
-import { MegaphoneIcon, PhotoIcon, TrashIcon } from "@/components/icons";
+import {
+	MegaphoneIcon,
+	PhotoIcon,
+	TrashIcon,
+	HistoryIcon,
+} from "@/components/icons";
 import { addAnnouncement } from "@/data/supabase/Admin/Announcements/addAnnouncement";
+import { AnnouncementHistoryModal } from "./AnnouncementsComponent/AnnouncementHistoryModal";
 
 export default function AdminAnnouncements() {
 	const { profile } = useOutletContext<any>();
@@ -20,6 +27,7 @@ export default function AdminAnnouncements() {
 	const [images, setImages] = useState<File[]>([]);
 	const [loading, setLoading] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
@@ -71,16 +79,25 @@ export default function AdminAnnouncements() {
 					<MegaphoneIcon size={20} />
 					<div className="text-3xl font-semibold">Announcements</div>
 				</div>
-				<div className="flex flex-row gap-1 items-center text-muted-foreground">
-					<div className="text-base text-default-500">
-						Logged in as{" "}
-					</div>
-					<div className="text-lg font-semibold">
-						{profile?.user_name ?? "Admin"}
+				<div className="flex items-center gap-4">
+					<div className="flex flex-row gap-1 items-center text-muted-foreground">
+						<div className="text-base text-default-500">
+							Logged in as{" "}
+						</div>
+						<div className="text-lg font-semibold">
+							{profile?.user_name ?? "Admin"}
+						</div>
 					</div>
 				</div>
 			</div>
-
+			<Button
+				color="success"
+				startContent={<HistoryIcon size={20} />}
+				onPress={onOpen}
+				className="font-semibold w-fit mx-auto"
+			>
+				View Announcement History
+			</Button>
 			<Card className="max-w-3xl w-full mx-auto">
 				<CardHeader className="flex flex-col gap-1 items-start px-6 pt-6">
 					<p className="text-lg font-bold">Post Announcement</p>
@@ -172,6 +189,11 @@ export default function AdminAnnouncements() {
 					</Button>
 				</CardBody>
 			</Card>
+
+			<AnnouncementHistoryModal
+				isOpen={isOpen}
+				onOpenChange={onOpenChange}
+			/>
 		</div>
 	);
 }
