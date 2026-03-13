@@ -20,10 +20,16 @@ export function ProductTable({
 	items,
 	loading,
 	setAllItems,
+	page,
+	totalPages,
+	onChangePage,
 }: {
 	items: ItemTableRow[];
 	loading: boolean;
 	setAllItems: React.Dispatch<React.SetStateAction<ItemTableRow[]>>;
+	page: number;
+	totalPages: number;
+	onChangePage: (page: number) => void;
 }) {
 	const {
 		isOpen: isOpenDeleteConfirm,
@@ -64,7 +70,7 @@ export function ProductTable({
 		setIsDeleteLoading(false);
 	};
 
-	if (loading && items.length === 0) {
+	if (loading) {
 		return (
 			<div>
 				{/* --- MOBILE SKELETON --- */}
@@ -165,11 +171,17 @@ export function ProductTable({
 				items={items}
 				onOpenDeleteConfirm={onOpenDeleteConfirm}
 				setSelectedDeleteItem={setSelectedDeleteItem}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
 			/>
 			<ProductTableDesktop
 				items={items}
 				onOpenDeleteConfirm={onOpenDeleteConfirm}
 				setSelectedDeleteItem={setSelectedDeleteItem}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
 			/>
 			<SoftDeleteConfirmationModal
 				isLoading={isDeleteLoading}
