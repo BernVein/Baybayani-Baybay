@@ -1,25 +1,26 @@
 import { useEffect, useState } from "react";
 import {
-	Card,
-	CardBody,
-	CardHeader,
-	Image as HeroImage,
 	Button,
-	ScrollShadow,
 	Modal,
 	ModalContent,
 	ModalBody,
 	useDisclosure,
 	Skeleton,
+	Pagination,
+	Image as HeroImage,
 } from "@heroui/react";
 import { fetchAnnouncements } from "@/data/supabase/Customer/Announcements/fetchAnnouncements";
 import { Announcement } from "@/model/Announcement";
 import { MegaphoneIcon, LeftArrow, XIcon } from "@/components/icons";
 import { useNavigate } from "react-router-dom";
+import { AnnouncementCard } from "@/components/Announcements/AnnouncementCard";
 
 export default function CustomerAnnouncements() {
 	const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [total, setTotal] = useState(0);
+	const [page, setPage] = useState(1);
+	const pageSize = 5;
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const navigate = useNavigate();
@@ -27,17 +28,20 @@ export default function CustomerAnnouncements() {
 	useEffect(() => {
 		const load = async () => {
 			setLoading(true);
-			const { data } = await fetchAnnouncements(1, 100); // Load all for now as it's 1 per date
+			const { data, total } = await fetchAnnouncements(page, pageSize);
 			setAnnouncements(data || []);
+			setTotal(total || 0);
 			setLoading(false);
 		};
 		load();
-	}, []);
+	}, [page]);
 
 	const handleImageClick = (url: string) => {
 		setSelectedImage(url);
 		onOpen();
 	};
+
+	const totalPages = Math.ceil(total / pageSize);
 
 	if (loading) {
 		return (
@@ -53,7 +57,7 @@ export default function CustomerAnnouncements() {
 
 				{/* Announcement Cards */}
 				<div className="flex flex-col gap-10">
-					{[1].map((i) => (
+					{[1, 2, 3].map((i) => (
 						<div
 							key={i}
 							className="border border-divider bg-content1/50 rounded-xl p-6 flex flex-col gap-4"
@@ -115,64 +119,31 @@ export default function CustomerAnnouncements() {
 					<p>No announcements yet.</p>
 				</div>
 			) : (
-				<div className="flex flex-col gap-10">
-					{announcements.map((ann) => (
-						<Card
-							key={ann.announcement_id}
-							shadow="sm"
-							className="border border-divider bg-content1/50"
-						>
-							<CardHeader className="flex flex-col items-start px-6 pt-6 gap-1">
-								<div className="flex items-center justify-between w-full">
-									<h2 className="text-xl font-bold">
-										{ann.announcement_title}
-									</h2>
-									<span className="text-sm text-default-400">
-										{new Date(
-											ann.created_at,
-										).toLocaleDateString("en-PH", {
-											month: "long",
-											day: "numeric",
-											year: "numeric",
-										})}
-									</span>
-								</div>
-								<p className="text-default-600 mt-2 whitespace-pre-wrap">
-									{ann.announcement_body}
-								</p>
-							</CardHeader>
-							<CardBody className="px-6 pb-6">
-								{ann.images && ann.images.length > 0 && (
-									<ScrollShadow
-										orientation="horizontal"
-										className="flex gap-4 pb-4"
-									>
-										{ann.images.map((img) => (
-											<div
-												key={img.announcement_image_id}
-												className="flex-shrink-0 w-[280px] sm:w-[350px] aspect-square rounded-2xl overflow-hidden border border-divider shadow-sm cursor-zoom-in hover:opacity-90 transition-opacity"
-												onClick={() =>
-													handleImageClick(
-														img.announcement_img_url,
-													)
-												}
-											>
-												<HeroImage
-													src={
-														img.announcement_img_url
-													}
-													alt="Announcement"
-													className="w-full h-full object-cover"
-													removeWrapper
-												/>
-											</div>
-										))}
-									</ScrollShadow>
-								)}
-							</CardBody>
-						</Card>
-					))}
-				</div>
+				<>
+					<div className="flex flex-col gap-10">
+						{announcements.map((ann) => (
+							<AnnouncementCard
+								key={ann.announcement_id}
+								announcement={ann}
+								onImageClick={handleImageClick}
+							/>
+						))}
+					</div>
+
+					{totalPages > 1 && (
+						<div className="flex justify-center mt-8">
+							<Pagination
+								total={totalPages}
+								initialPage={1}
+								page={page}
+								onChange={setPage}
+								color="success"
+								variant="flat"
+								showControls
+							/>
+						</div>
+					)}
+				</>
 			)}
 
 			<Modal
