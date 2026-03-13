@@ -6,11 +6,20 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useNotifications } from "@/ContextProvider/NotificationContext/NotificationProvider";
 import { X } from "lucide-react";
 import { Notification } from "@/model/notification";
+import { useNavigate } from "react-router-dom";
 
 export function NotificationAlert() {
 	const { notifications } = useNotifications();
 	const [activeAlert, setActiveAlert] = useState<Notification | null>(null);
 	const lastSeenId = useRef<string | null>(null);
+	const navigate = useNavigate();
+
+	const handleAlertClick = () => {
+		if (activeAlert?.type === "announcement") {
+			navigate("/announcements");
+			setActiveAlert(null);
+		}
+	};
 
 	useEffect(() => {
 		if (notifications.length > 0) {
@@ -49,13 +58,17 @@ export function NotificationAlert() {
 							title={activeAlert.title}
 							description={activeAlert.body}
 							variant="flat"
-							className="shadow-lg border-divider backdrop-blur-md bg-background/80"
+							className="shadow-lg border-divider backdrop-blur-md bg-background/80 cursor-pointer"
+							onClick={handleAlertClick}
 							endContent={
 								<Button
 									isIconOnly
 									size="sm"
 									variant="light"
-									onPress={() => setActiveAlert(null)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setActiveAlert(null);
+									}}
 								>
 									<X className="size-4" />
 								</Button>
