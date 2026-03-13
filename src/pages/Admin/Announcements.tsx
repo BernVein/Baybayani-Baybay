@@ -9,10 +9,12 @@ import {
 	Image as HeroImage,
 } from "@heroui/react";
 import { useState, useRef } from "react";
+import { useOutletContext } from "react-router-dom";
 import { MegaphoneIcon, PhotoIcon, TrashIcon } from "@/components/icons";
 import { addAnnouncement } from "@/data/supabase/Admin/Announcements/addAnnouncement";
 
 export default function AdminAnnouncements() {
+	const { profile } = useOutletContext<any>();
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
 	const [images, setImages] = useState<File[]>([]);
@@ -35,15 +37,6 @@ export default function AdminAnnouncements() {
 			addToast({
 				title: "Error",
 				description: "Please provide a title and body.",
-				color: "danger",
-			});
-			return;
-		}
-
-		if (images.length === 0) {
-			addToast({
-				title: "Error",
-				description: "Please upload at least one image.",
 				color: "danger",
 			});
 			return;
@@ -72,20 +65,25 @@ export default function AdminAnnouncements() {
 	};
 
 	return (
-		<div className="p-5 md:p-8 flex flex-col gap-8">
-			<div className="flex flex-col gap-1">
-				<h1 className="text-2xl font-bold flex items-center gap-2">
-					<MegaphoneIcon className="size-8 text-success" />
-					Announcements
-				</h1>
-				<p className="text-default-500">
-					Post news, updates, or price changes to all users.
-				</p>
+		<div className="flex flex-col gap-8 p-4 h-full">
+			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
+				<div className="flex flex-row items-center gap-2">
+					<MegaphoneIcon size={20} />
+					<div className="text-3xl font-semibold">Announcements</div>
+				</div>
+				<div className="flex flex-row gap-1 items-center text-muted-foreground">
+					<div className="text-base text-default-500">
+						Logged in as{" "}
+					</div>
+					<div className="text-lg font-semibold">
+						{profile?.user_name ?? "Admin"}
+					</div>
+				</div>
 			</div>
 
-			<Card className="max-w-2xl">
+			<Card className="max-w-3xl w-full mx-auto">
 				<CardHeader className="flex flex-col gap-1 items-start px-6 pt-6">
-					<p className="text-lg font-bold">New Announcement</p>
+					<p className="text-lg font-bold">Post Announcement</p>
 					<p className="text-xs text-default-400">
 						This will send a notification to all registered users.
 					</p>
@@ -111,12 +109,11 @@ export default function AdminAnnouncements() {
 
 					<div className="flex flex-col gap-3">
 						<div className="flex items-center justify-between">
-							<span className="text-sm font-medium">Images</span>
+							<span className="font-medium">Images</span>
 							<Button
-								size="sm"
 								color="success"
 								variant="flat"
-								startContent={<PhotoIcon className="size-4" />}
+								startContent={<PhotoIcon className="size-5" />}
 								onPress={() => fileInputRef.current?.click()}
 							>
 								Add Images
@@ -167,7 +164,6 @@ export default function AdminAnnouncements() {
 					<Button
 						color="success"
 						fullWidth
-						size="lg"
 						onPress={handleSubmit}
 						isLoading={loading}
 						className="font-bold mt-4"
