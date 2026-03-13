@@ -7,14 +7,20 @@ export const useFetchOrderItems = (
 	categories?: string[],
 	searchQuery?: string,
 	sortConfig?: { column: string; direction: "asc" | "desc" } | null,
+	page: number = 1,
+	pageSize: number = 20,
 ) => {
 	const [orderItems, setOrderItems] = useState<OrderTableRow[] | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [fetchError, setFetchError] = useState<string | null>(null);
+	const [totalCount, setTotalCount] = useState<number>(0);
 
 	const fetchItem = useCallback(async () => {
 		setLoading(true);
 		setFetchError(null);
+
+		const from = (page - 1) * pageSize;
+		const to = from + pageSize - 1;
 
 		let query = supabase
 			.from("OrderItemUser")
@@ -31,6 +37,7 @@ export const useFetchOrderItems = (
 				VariantSnapshot(variant_snapshot_name, variant_snapshot_id, variant_copy_snapshot_id),
 				cancel_reason
 				`,
+				{ count: "exact" },
 			)
 			.eq("is_soft_deleted", false);
 
@@ -41,22 +48,36 @@ export const useFetchOrderItems = (
 			query = query.or(`order_identifier.ilike.%${searchQuery}%`);
 		}
 
-		let data, error;
+		let data, error, count: number | null;
 
 		if (sortConfig) {
-			const { data: d, error: e } = await query.order(sortConfig.column, {
-				ascending: sortConfig.direction === "asc",
-				referencedTable:
-					sortConfig.column === "item_title" ? "Item" : undefined,
-			});
+			const {
+				data: d,
+				error: e,
+				count: c,
+			} = await query
+				.order(sortConfig.column, {
+					ascending: sortConfig.direction === "asc",
+					referencedTable:
+						sortConfig.column === "item_title" ? "Item" : undefined,
+				})
+				.range(from, to);
 			data = d;
 			error = e;
+			count = c;
 		} else {
-			const { data: d, error: e } = await query.order("created_at", {
-				ascending: false,
-			});
+			const {
+				data: d,
+				error: e,
+				count: c,
+			} = await query
+				.order("created_at", {
+					ascending: false,
+				})
+				.range(from, to);
 			data = d;
 			error = e;
+			count = c;
 		}
 
 		setLoading(false);
@@ -64,9 +85,11 @@ export const useFetchOrderItems = (
 		if (error) {
 			setFetchError(error.message || "Failed to fetch item.");
 			setOrderItems([]);
-
+			setTotalCount(0);
 			return;
 		}
+
+		setTotalCount(count ?? 0);
 
 		if (!data || data.length === 0) {
 			setOrderItems([]);
@@ -105,7 +128,7 @@ export const useFetchOrderItems = (
 		);
 
 		setOrderItems(orderItems);
-	}, [categories, searchQuery, sortConfig]);
+	}, [categories, searchQuery, sortConfig, page, pageSize]);
 
 	useEffect(() => {
 		fetchItem();
@@ -116,6 +139,8 @@ export const useFetchOrderItems = (
 		setOrderItems,
 		loading,
 		fetchError,
+		totalCount,
+		pageSize,
 		refetch: fetchItem,
 	};
 };
