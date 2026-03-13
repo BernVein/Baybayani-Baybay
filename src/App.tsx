@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { addToast, Spinner } from "@heroui/react";
 import { useEffect } from "react";
@@ -33,6 +33,7 @@ const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
 
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
+const NotFound = lazy(() => import("@/pages/General/NotFound"));
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { registerPush } from "@/utils/PushNotification/registerPush";
@@ -179,6 +180,10 @@ function App() {
 								</RequireRole>
 							}
 						>
+							<Route
+								index
+								element={<Navigate to="dashboard" replace />}
+							/>
 							<Route element={<Dashboard />} path="dashboard" />
 							<Route element={<AdminOrders />} path="orders" />
 							<Route
@@ -187,6 +192,9 @@ function App() {
 							/>
 							<Route element={<AdminUsers />} path="users" />
 						</Route>
+
+						{/* CATCH ALL */}
+						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</Suspense>
 			</NotificationProvider>
