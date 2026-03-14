@@ -12,6 +12,7 @@ import {
 import { fetchLatestAnnouncement } from "@/data/supabase/Customer/Announcements/fetchAnnouncements";
 import { Announcement } from "@/model/Announcement";
 import { useNavigate } from "react-router-dom";
+import { BaybayaniLogo } from "@/components/icons";
 
 export function AnnouncementModal() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -86,18 +87,24 @@ export function AnnouncementModal() {
 			size="md"
 			scrollBehavior="inside"
 			hideCloseButton
+			disableAnimation
 		>
 			<ModalContent>
 				<ModalHeader className="flex flex-col gap-1 text-center items-center pt-8">
-					<span className="text-success text-2xl font-black italic">
-						ANNOUNCEMENT!
-					</span>
-					<h2 className="text-xl font-bold">
-						{latestAnn.announcement_title}
-					</h2>
+					<div className="flex items-center gap-2">
+						<BaybayaniLogo className="size-8 text-danger" />
+						<span className="text-success text-2xl font-bold">
+							ANNOUNCEMENT!
+						</span>
+					</div>
+
+					<h2 className="text-xl">{latestAnn.announcement_title}</h2>
 				</ModalHeader>
 				<ModalBody className="pb-6">
 					<div className="flex flex-col gap-4">
+						<p className="text-default-600 line-clamp-4">
+							{latestAnn.announcement_body}
+						</p>
 						{latestAnn.images && latestAnn.images.length > 0 && (
 							<div className="rounded-2xl overflow-hidden border border-divider shadow-md">
 								<HeroImage
@@ -109,9 +116,6 @@ export function AnnouncementModal() {
 								/>
 							</div>
 						)}
-						<p className="text-default-600 line-clamp-4">
-							{latestAnn.announcement_body}
-						</p>
 					</div>
 				</ModalBody>
 				<ModalFooter className="flex flex-col gap-2 pb-8">
@@ -119,11 +123,9 @@ export function AnnouncementModal() {
 						color="success"
 						fullWidth
 						onPress={handleSeeMore}
-						className="font-bold text-lg h-14"
+						className="font-bold"
 					>
-						{latestAnn.images && latestAnn.images.length > 0
-							? "SEE MORE IMAGES"
-							: "VIEW FULL ANNOUNCEMENT"}
+						VIEW FULL ANNOUNCEMENT
 					</Button>
 					<Button
 						variant="light"
