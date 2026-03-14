@@ -108,6 +108,26 @@ export function DashboardSummary({
 								<PesoIcon className="w-4 h-4 text-white" />
 							</div>
 						</div>
+						{loading ? (
+							<Skeleton className="h-4 w-32 rounded mt-2" />
+						) : (
+							<div className="flex flex-row items-baseline gap-1 mt-2">
+								<span className="text-default-400">
+									Avg. Order Value:
+								</span>
+								<span className="font-semibold text-default-600">
+									₱
+									{(
+										(stats?.totalRevenue ?? 0) /
+											(stats?.totalOrders.completed ||
+												1) || 0
+									).toLocaleString(undefined, {
+										minimumFractionDigits: 2,
+										maximumFractionDigits: 2,
+									})}
+								</span>
+							</div>
+						)}
 					</div>
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-green-500/70 rounded-t-md" />
@@ -116,7 +136,7 @@ export function DashboardSummary({
 			<Card className="w-full">
 				<CardBody className="gap-y-3">
 					<span className="text-default-500 font-medium">
-						TOTAL ORDERS
+						TOTAL ORDERS RECEIVED
 					</span>
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
@@ -126,7 +146,9 @@ export function DashboardSummary({
 								) : (
 									<span className="text-3xl font-bold">
 										{(stats?.totalOrders.completed ?? 0) +
-											(stats?.totalOrders.cancelled ?? 0)}
+											(stats?.totalOrders.cancelled ??
+												0) +
+											(stats?.totalOrders.pending ?? 0)}
 									</span>
 								)}
 
@@ -137,6 +159,18 @@ export function DashboardSummary({
 											<Skeleton className="h-4 w-4 rounded" />
 										) : (
 											(stats?.totalOrders.completed ?? 0)
+										)}
+									</span>
+									<Divider
+										className="h-6 m-1"
+										orientation="vertical"
+									/>
+									<ClockIcon className="w-5" />
+									<span>
+										{loading ? (
+											<Skeleton className="h-4 w-4 rounded" />
+										) : (
+											(stats?.totalOrders.pending ?? 0)
 										)}
 									</span>
 									<Divider
@@ -158,6 +192,27 @@ export function DashboardSummary({
 								<TotalOrdersIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
+						{loading ? (
+							<Skeleton className="h-4 w-32 rounded mt-2" />
+						) : (
+							<div className="flex flex-row items-baseline gap-1 mt-2">
+								<span className="text-default-400">
+									Completion Rate:
+								</span>
+								<span className="font-semibold text-default-600">
+									{(
+										((stats?.totalOrders.completed ?? 0) /
+											((stats?.totalOrders.completed ??
+												0) +
+												(stats?.totalOrders.cancelled ??
+													0) +
+												(stats?.totalOrders.pending ??
+													0)) || 0) * 100
+									).toFixed(1)}
+									%
+								</span>
+							</div>
+						)}
 					</div>
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-blue-500/70 rounded-t-md" />
@@ -210,6 +265,18 @@ export function DashboardSummary({
 								<UserIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
+						{loading ? (
+							<Skeleton className="h-4 w-24 rounded mt-2" />
+						) : (
+							<div className="flex flex-row items-baseline gap-1 mt-2">
+								<span className="text-default-400">
+									New Members:
+								</span>
+								<span className="font-semibold text-default-600">
+									{stats?.newCustomersCount ?? 0} users
+								</span>
+							</div>
+						)}
 					</div>
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500/70 rounded-t-md" />
