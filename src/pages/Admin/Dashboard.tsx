@@ -99,11 +99,12 @@ export default function Dashboard() {
 				<Card className="w-full sm:col-span-1 p-4 sm:h-full min-h-[380px]">
 					<CardBody className="gap-2 overflow-hidden">
 						<span className="text-default-500 mb-2">
-							LOW STOCK ITEMS
+							LOW STOCK VARIANTS
 						</span>
 						<DashboardTable
 							loading={loading}
-							emptyContent="No low stock items."
+							emptyContent="No low stock variants."
+							headers={["VARIANT", "STOCK"]}
 							data={stats?.lowStockItems.map((item: any) => ({
 								name: item.name,
 								value: `${item.stock} ${item.unit}`,
@@ -127,11 +128,12 @@ export default function Dashboard() {
 				<Card className="w-full sm:col-span-1 p-4 sm:h-full min-h-[380px]">
 					<CardBody className="gap-2 overflow-hidden">
 						<span className="text-default-500 mb-2">
-							TOP ORDERED ITEMS
+							TOP ORDERED VARIANTS
 						</span>
 						<DashboardTable
 							loading={loading}
 							emptyContent="No orders in this range."
+							headers={["VARIANT", "ORDERS"]}
 							data={stats?.topOrderedItems.map((item: any) => ({
 								name: item.name,
 								value: `${item.count} orders`,
