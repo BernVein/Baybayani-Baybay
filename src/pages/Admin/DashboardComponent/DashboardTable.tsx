@@ -17,19 +17,21 @@ interface DashboardTableProps {
 	}[];
 	loading: boolean;
 	emptyContent?: string;
+	headers?: [string, string];
 }
 
 export function DashboardTable({
 	data,
 	loading,
 	emptyContent = "No data available.",
+	headers = ["ITEM", "QUANTITY"],
 }: DashboardTableProps) {
 	if (loading) {
 		return (
 			<Table isHeaderSticky removeWrapper className="overflow-y-auto">
 				<TableHeader>
-					<TableColumn>ITEM</TableColumn>
-					<TableColumn>QUANTITY</TableColumn>
+					<TableColumn>{headers[0]}</TableColumn>
+					<TableColumn>{headers[1]}</TableColumn>
 				</TableHeader>
 				<TableBody>
 					{[...Array(5)].map((_, i) => (
@@ -58,8 +60,8 @@ export function DashboardTable({
 				className="overflow-y-auto h-full"
 			>
 				<TableHeader>
-					<TableColumn>ITEM</TableColumn>
-					<TableColumn>QUANTITY</TableColumn>
+					<TableColumn>{headers[0]}</TableColumn>
+					<TableColumn>{headers[1]}</TableColumn>
 				</TableHeader>
 
 				<TableBody emptyContent={emptyContent}>
