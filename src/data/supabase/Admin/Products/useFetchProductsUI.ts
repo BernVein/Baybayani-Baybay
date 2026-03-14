@@ -40,7 +40,7 @@ export const useFetchProductsUI = (
                         variant_price_wholesale,
                         variant_low_stock_threshold,
                         is_soft_deleted,
-                        StockMovement ( 
+						StockMovement ( 
                           effective_stocks,
                           created_at
                         )
@@ -49,7 +49,12 @@ export const useFetchProductsUI = (
                 `,
 					{ count: "exact" },
 				)
-				.eq("is_soft_deleted", false);
+				.eq("is_soft_deleted", false)
+				.order("created_at", {
+					foreignTable: "Variant.StockMovement",
+					ascending: false,
+				})
+				.limit(1, { foreignTable: "Variant.StockMovement" });
 
 			// Server-side filtering
 			if (search.trim() !== "") {
