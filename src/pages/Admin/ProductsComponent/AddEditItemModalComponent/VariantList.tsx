@@ -16,6 +16,8 @@ import { EditStockDetailModal } from "@/pages/Admin/ProductsComponent/AddEditIte
 import { SoftDeleteConfirmationModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/SoftDeleteConfirmationModal";
 import { softDeleteVariant } from "@/data/supabase/Admin/Products/softDeleteVariant";
 import { addToast } from "@heroui/react";
+import { Info } from "lucide-react";
+import { StockMovementModal } from "@/pages/Admin/ProductsComponent/AddEditItemModalComponent/VariantListComponent/StockMovementModal";
 
 export function VariantList({
 	isEditDB,
@@ -46,6 +48,11 @@ export function VariantList({
 		isOpen: isOpenEditStock,
 		onOpen: onOpenEditStock,
 		onOpenChange: onOpenChangeEditStock,
+	} = useDisclosure();
+	const {
+		isOpen: isOpenHistory,
+		onOpen: onOpenHistory,
+		onOpenChange: onOpenChangeHistory,
 	} = useDisclosure();
 
 	const [selectedVarIndex, setSelectedVarIndex] = useState<number | null>(
@@ -163,23 +170,42 @@ export function VariantList({
 								</h4>
 							</div>
 							<div className="ml-auto flex flex-row gap-2">
-								{!isEditDB && (
+								{isEditDB && (
 									<Button
 										isIconOnly
 										className="ml-auto"
 										size="sm"
-										isLoading={isFetchingItem}
-										startContent={
-											<PencilIcon className="w-5" />
-										}
+										variant="flat"
+										startContent={<Info className="w-5" />}
 										onPress={() => {
 											setSelectedVarIndex(index);
 											setSelectedVarName(
 												v.variant_name ?? null,
 											);
-											onOpenAddVar();
+											onOpenHistory();
 										}}
 									/>
+								)}
+
+								{!isEditDB && (
+									<>
+										<Button
+											isIconOnly
+											className="ml-auto"
+											size="sm"
+											isLoading={isFetchingItem}
+											startContent={
+												<PencilIcon className="w-5" />
+											}
+											onPress={() => {
+												setSelectedVarIndex(index);
+												setSelectedVarName(
+													v.variant_name ?? null,
+												);
+												onOpenAddVar();
+											}}
+										/>
+									</>
 								)}
 
 								{isEditDB && (
@@ -592,6 +618,18 @@ export function VariantList({
 					}
 				}}
 				onOpenChangeAddVar={onOpenChangeAddVar}
+			/>
+
+			<StockMovementModal
+				isOpen={isOpenHistory}
+				onOpenChange={onOpenChangeHistory}
+				variantId={
+					selectedVarIndex !== null
+						? item.item_variants[selectedVarIndex].variant_id
+						: undefined
+				}
+				variantName={selectedVarName || undefined}
+				itemUnit={item.item_sold_by}
 			/>
 		</>
 	);
