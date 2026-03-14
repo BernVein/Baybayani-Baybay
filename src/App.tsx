@@ -24,7 +24,7 @@ const Settings = lazy(
 	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings"),
 );
 const CustomerAnnouncements = lazy(
-	() => import("@/pages/Customer/Announcements"),
+	() => import("@/pages/Customer/Announcement/Announcements"),
 );
 const Dashboard = lazy(() => import("@/pages/Admin/Dashboard"));
 const AdminOrders = lazy(() => import("@/pages/Admin/Orders"));
