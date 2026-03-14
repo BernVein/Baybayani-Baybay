@@ -1,4 +1,11 @@
-import { Card, CardBody, Divider, Link, useDisclosure } from "@heroui/react";
+import {
+	Card,
+	CardBody,
+	Divider,
+	Link,
+	useDisclosure,
+	Skeleton,
+} from "@heroui/react";
 
 import {
 	PesoIcon,
@@ -18,6 +25,7 @@ import {
 	ChangeStoreHoursModal,
 	StoreHoursSnapshot,
 } from "@/pages/Admin/DashboardComponent/ChangeStoreHoursModal";
+import { DashboardStats } from "@/data/supabase/Admin/Dashboard/useDashboardStats";
 
 function formatTimeTo12h(timeString: string | null) {
 	if (!timeString) return { hour: "--", minute: "--", period: "" };
@@ -31,7 +39,13 @@ function formatTimeTo12h(timeString: string | null) {
 	};
 }
 
-export function DashboardSummary() {
+export function DashboardSummary({
+	stats,
+	loading,
+}: {
+	stats: DashboardStats | null;
+	loading: boolean;
+}) {
 	const {
 		isOpen: isOpenChangeTime,
 		onOpen: onOpenChangeTime,
@@ -64,80 +78,138 @@ export function DashboardSummary() {
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
 			<Card className="w-full">
 				<CardBody className="gap-y-3">
-					<span className="text-default-500">TOTAL REVENUE</span>
+					<span className="text-default-500 font-medium">
+						TOTAL REVENUE
+					</span>
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
 							<div className="flex flex-row items-center">
-								<span className="text-2xl sm:text-2xl">₱</span>
-								<span className="text-3xl font-bold">1.00</span>
+								{loading ? (
+									<Skeleton className="h-8 w-24 rounded-lg" />
+								) : (
+									<>
+										<span className="text-2xl sm:text-2xl">
+											₱
+										</span>
+										<span className="text-3xl font-bold">
+											{stats?.totalRevenue.toLocaleString(
+												undefined,
+												{
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2,
+												},
+											) ?? "0.00"}
+										</span>
+									</>
+								)}
 							</div>
 
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-500/70">
+							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-500/70 shrink-0">
 								<PesoIcon className="w-4 h-4 text-white" />
 							</div>
 						</div>
-						<span className="text-default-500">
-							+12.5% vs last month
-						</span>
 					</div>
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-green-500/70 rounded-t-md" />
 			</Card>
+
 			<Card className="w-full">
 				<CardBody className="gap-y-3">
-					<span className="text-default-500">TOTAL ORDERS</span>
+					<span className="text-default-500 font-medium">
+						TOTAL ORDERS
+					</span>
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
 							<div className="flex flex-row items-center gap-2">
-								<span className="text-3xl font-bold">32</span>
+								{loading ? (
+									<Skeleton className="h-8 w-12 rounded-lg" />
+								) : (
+									<span className="text-3xl font-bold">
+										{(stats?.totalOrders.completed ?? 0) +
+											(stats?.totalOrders.cancelled ?? 0)}
+									</span>
+								)}
+
 								<div className="text-default-500 flex flex-row items-center gap-1 ml-3">
 									<CheckIcon className="w-5" />
-									<span className="text-default-500">20</span>
+									<span>
+										{loading ? (
+											<Skeleton className="h-4 w-4 rounded" />
+										) : (
+											(stats?.totalOrders.completed ?? 0)
+										)}
+									</span>
 									<Divider
 										className="h-6 m-1"
 										orientation="vertical"
 									/>
 									<XIcon className="w-5" />
-									<span>12</span>
+									<span>
+										{loading ? (
+											<Skeleton className="h-4 w-4 rounded" />
+										) : (
+											(stats?.totalOrders.cancelled ?? 0)
+										)}
+									</span>
 								</div>
 							</div>
 
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-500/70">
+							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-500/70 shrink-0">
 								<TotalOrdersIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
-						<span className="text-default-500">
-							-4.3% vs last month
-						</span>
 					</div>
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-blue-500/70 rounded-t-md" />
 			</Card>
+
 			<Card className="w-full">
 				<CardBody className="gap-y-3">
-					<span className="text-default-500">TOTAL CUSTOMERS</span>
+					<span className="text-default-500 font-medium">
+						TOTAL CUSTOMERS
+					</span>
 					<div className="flex flex-col item-center">
 						<div className="flex flex-row items-center justify-between">
 							<div className="flex flex-row items-center gap-2">
-								<span className="text-3xl font-bold">14</span>
+								{loading ? (
+									<Skeleton className="h-8 w-12 rounded-lg" />
+								) : (
+									<span className="text-3xl font-bold">
+										{(stats?.totalCustomers.individual ??
+											0) +
+											(stats?.totalCustomers
+												.cooperative ?? 0)}
+									</span>
+								)}
 								<div className="text-default-500 flex flex-row items-center gap-1 ml-3">
 									<SoloUserIcon className="w-5" />
-									<span className="text-default-500">10</span>
+									<span>
+										{loading ? (
+											<Skeleton className="h-4 w-4 rounded" />
+										) : (
+											(stats?.totalCustomers.individual ??
+											0)
+										)}
+									</span>
 									<Divider
 										className="h-6 m-1"
 										orientation="vertical"
 									/>
 									<UserIcon className="w-5" />
-									<span>4</span>
+									<span>
+										{loading ? (
+											<Skeleton className="h-4 w-4 rounded" />
+										) : (
+											(stats?.totalCustomers
+												.cooperative ?? 0)
+										)}
+									</span>
 								</div>
 							</div>
-							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/70">
+							<div className="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/70 shrink-0">
 								<UserIcon className="w-6 h-6 text-white" />
 							</div>
 						</div>
-						<span className="text-default-500">
-							+3 vs last month
-						</span>
 					</div>
 				</CardBody>
 				<div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500/70 rounded-t-md" />
@@ -146,14 +218,16 @@ export function DashboardSummary() {
 			{/* Store Hours Card */}
 			<Card className="w-full">
 				<CardBody className="gap-y-2">
-					<span className="text-default-500">STORE HOURS</span>
+					<span className="text-default-500 font-medium">
+						STORE HOURS
+					</span>
 					<div className="flex flex-col gap-y-1">
 						{displayedClosed ? (
 							<div className="flex flex-row items-center justify-between">
 								<span className="text-2xl font-bold italic text-red-400">
 									Closed Today
 								</span>
-								<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
+								<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70 shrink-0">
 									<ClockIcon className="w-6 h-6 text-white" />
 								</div>
 							</div>
@@ -181,7 +255,7 @@ export function DashboardSummary() {
 										</div>
 									</div>
 								</div>
-								<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70">
+								<div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-500/70 shrink-0">
 									<ClockIcon className="w-6 h-6 text-white" />
 								</div>
 							</div>
