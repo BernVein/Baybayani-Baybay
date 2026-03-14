@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { fetchAnnouncements } from "@/data/supabase/Customer/Announcements/fetchAnnouncements";
 import { Announcement } from "@/model/Announcement";
-import { AnnouncementCard } from "@/components/Announcements/AnnouncementCard";
+import { AnnouncementCard } from "@/pages/General/Announcement/AnnouncementCard";
 import { XIcon } from "@/components/icons";
 
 interface AnnouncementHistoryModalProps {

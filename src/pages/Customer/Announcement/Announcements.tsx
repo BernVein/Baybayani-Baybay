@@ -13,7 +13,7 @@ import { fetchAnnouncements } from "@/data/supabase/Customer/Announcements/fetch
 import { Announcement } from "@/model/Announcement";
 import { MegaphoneIcon, LeftArrow, XIcon } from "@/components/icons";
 import { useNavigate } from "react-router-dom";
-import { AnnouncementCard } from "@/components/Announcements/AnnouncementCard";
+import { AnnouncementCard } from "@/pages/General/Announcement/AnnouncementCard";
 
 export default function CustomerAnnouncements() {
 	const [announcements, setAnnouncements] = useState<Announcement[]>([]);
