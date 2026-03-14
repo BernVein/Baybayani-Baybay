@@ -7,6 +7,7 @@ export interface DashboardStats {
 	totalOrders: {
 		completed: number;
 		cancelled: number;
+		pending: number;
 	};
 	totalCustomers: {
 		individual: number;
@@ -21,6 +22,7 @@ export interface DashboardStats {
 		unit: string;
 		image: string;
 	}[];
+	newCustomersCount: number;
 	topOrderedItems: {
 		id: string;
 		name: string;
@@ -57,10 +59,11 @@ export function useDashboardStats(
 			let totalRev = 0;
 			let completedCount = 0;
 			let cancelledCount = 0;
+			let pendingCount = 0;
 			const dailyRevenue: Record<string, number> = {};
 			const dailyOrders: Record<
 				string,
-				{ completed: number; cancelled: number }
+				{ completed: number; cancelled: number; pending: number }
 			> = {};
 
 			orderData?.forEach((order: any) => {
@@ -68,7 +71,11 @@ export function useDashboardStats(
 
 				if (!dailyRevenue[date]) dailyRevenue[date] = 0;
 				if (!dailyOrders[date])
-					dailyOrders[date] = { completed: 0, cancelled: 0 };
+					dailyOrders[date] = {
+						completed: 0,
+						cancelled: 0,
+						pending: 0,
+					};
 
 				if (order.status === "Completed") {
 					totalRev += order.subtotal || 0;
@@ -78,13 +85,17 @@ export function useDashboardStats(
 				} else if (order.status === "Cancelled") {
 					cancelledCount++;
 					dailyOrders[date].cancelled++;
+				} else {
+					// Count Pending, Processing, Shipped as pending actions
+					pendingCount++;
+					dailyOrders[date].pending++;
 				}
 			});
 
 			// 2. Customer Counts (Approved users)
 			const { data: userData, error: userError } = await supabase
 				.from("User")
-				.select("user_role")
+				.select("user_role, created_at")
 				.eq("user_status", "Approved")
 				.eq("is_soft_deleted", false);
 
@@ -92,9 +103,19 @@ export function useDashboardStats(
 
 			let individualCount = 0;
 			let cooperativeCount = 0;
+			let newCustomersCount = 0;
+
 			userData?.forEach((u) => {
 				if (u.user_role === "Individual") individualCount++;
 				else if (u.user_role === "Cooperative") cooperativeCount++;
+
+				const userCreatedAt = new Date(u.created_at);
+				if (
+					userCreatedAt >= new Date(start) &&
+					userCreatedAt <= new Date(end)
+				) {
+					newCustomersCount++;
+				}
 			});
 
 			// 3. Low Stock Items (from Variant & StockMovement)
@@ -190,6 +211,7 @@ export function useDashboardStats(
 				totalOrders: {
 					completed: completedCount,
 					cancelled: cancelledCount,
+					pending: pendingCount,
 				},
 				totalCustomers: {
 					individual: individualCount,
@@ -198,6 +220,7 @@ export function useDashboardStats(
 				revenueTrend,
 				orderTrend,
 				lowStockItems,
+				newCustomersCount,
 				topOrderedItems,
 			});
 		} catch (err) {
