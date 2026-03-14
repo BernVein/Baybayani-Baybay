@@ -155,7 +155,7 @@ export function useDashboardStats(
 				) {
 					lowStockItems.push({
 						id: v.variant_id,
-						name: `${v.Item?.item_title} - ${v.variant_name}`,
+						name: v.variant_name,
 						stock: latest.effective_stocks,
 						unit: v.Item?.item_sold_by || "",
 						image: v.Item?.Item_Image?.[0]?.item_image_url || "",
@@ -163,7 +163,7 @@ export function useDashboardStats(
 				}
 			});
 
-			// 4. Top Ordered Items (using orderData from step 1)
+			// 4. Top Ordered Variants (using orderData from step 1)
 			const topOrderedRaw: Record<
 				string,
 				{ name: string; count: number; image: string }
@@ -172,7 +172,7 @@ export function useDashboardStats(
 				await supabase
 					.from("OrderItemUser")
 					.select(
-						"Item(item_id, item_title, Item_Image(item_image_url))",
+						"Item(item_title, Item_Image(item_image_url)), VariantSnapshot(variant_snapshot_name, variant_copy_snapshot_id)",
 					)
 					.eq("status", "Completed")
 					.eq("is_soft_deleted", false)
@@ -182,16 +182,16 @@ export function useDashboardStats(
 			if (topItemsError) throw topItemsError;
 
 			topItemsDetails?.forEach((oi: any) => {
-				const itemId = oi.Item?.item_id;
-				if (!itemId) return;
-				if (!topOrderedRaw[itemId]) {
-					topOrderedRaw[itemId] = {
-						name: oi.Item.item_title,
+				const variantId = oi.VariantSnapshot?.variant_copy_snapshot_id;
+				if (!variantId) return;
+				if (!topOrderedRaw[variantId]) {
+					topOrderedRaw[variantId] = {
+						name: oi.VariantSnapshot.variant_snapshot_name || "",
 						count: 0,
-						image: oi.Item.Item_Image?.[0]?.item_image_url || "",
+						image: oi.Item?.Item_Image?.[0]?.item_image_url || "",
 					};
 				}
-				topOrderedRaw[itemId].count++;
+				topOrderedRaw[variantId].count++;
 			});
 
 			const topOrderedItems = Object.entries(topOrderedRaw)
