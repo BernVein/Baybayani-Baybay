@@ -112,7 +112,8 @@ export function useDashboardStats(
 				const userCreatedAt = new Date(u.created_at);
 				if (
 					userCreatedAt >= new Date(start) &&
-					userCreatedAt <= new Date(end)
+					userCreatedAt <= new Date(end) &&
+					u.user_role !== "Admin"
 				) {
 					newCustomersCount++;
 				}
