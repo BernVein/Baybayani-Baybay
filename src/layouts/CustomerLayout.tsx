@@ -27,7 +27,7 @@ import { FloatingChat } from "@/pages/General/Chat/FloatingChat";
 import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
 import { ClosingTimeProvider } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 import { ClosingTimeBanner } from "@/components/General/ClosingTimeBanner";
-import { AnnouncementModal } from "@/pages/Customer/AnnouncementModal";
+import { AnnouncementModal } from "@/pages/Customer/Announcement/AnnouncementModal";
 
 export default function CustomerLayout({
 	user,
