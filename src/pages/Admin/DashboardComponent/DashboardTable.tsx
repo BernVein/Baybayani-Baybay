@@ -1,124 +1,91 @@
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Avatar,
+	Table,
+	TableHeader,
+	TableColumn,
+	TableBody,
+	TableRow,
+	TableCell,
+	Avatar,
+	Skeleton,
 } from "@heroui/react";
 
-export function DashboardTable() {
-  return (
-    <>
-      <Table isHeaderSticky removeWrapper className="overflow-y-auto">
-        <TableHeader>
-          <TableColumn>ITEM</TableColumn>
-          <TableColumn>NEEDED</TableColumn>
-        </TableHeader>
+interface DashboardTableProps {
+	data?: {
+		name: string;
+		value: string;
+		image?: string;
+	}[];
+	loading: boolean;
+	emptyContent?: string;
+}
 
-        <TableBody emptyContent={"No low stock item."}>
-          <TableRow key="1">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 1</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="2">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 2</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="3">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 3</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="4">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 4</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="5">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 5</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="6">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 6</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="7">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 6</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="8">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 6</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="9">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 6</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="10">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 6</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-          <TableRow key="11">
-            <TableCell>
-              <div className="flex flex-row items-center gap-2">
-                <Avatar size="sm" />
-                <span>Item 6</span>
-              </div>
-            </TableCell>
-            <TableCell>5 kg</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </>
-  );
+export function DashboardTable({
+	data,
+	loading,
+	emptyContent = "No data available.",
+}: DashboardTableProps) {
+	if (loading) {
+		return (
+			<Table isHeaderSticky removeWrapper className="overflow-y-auto">
+				<TableHeader>
+					<TableColumn>ITEM</TableColumn>
+					<TableColumn>QUANTITY</TableColumn>
+				</TableHeader>
+				<TableBody>
+					{[...Array(5)].map((_, i) => (
+						<TableRow key={i}>
+							<TableCell>
+								<div className="flex flex-row items-center gap-2">
+									<Skeleton className="rounded-full w-8 h-8" />
+									<Skeleton className="h-4 w-24 rounded-lg" />
+								</div>
+							</TableCell>
+							<TableCell>
+								<Skeleton className="h-4 w-12 rounded-lg" />
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		);
+	}
+
+	return (
+		<>
+			<Table
+				isHeaderSticky
+				removeWrapper
+				className="overflow-y-auto h-full"
+			>
+				<TableHeader>
+					<TableColumn>ITEM</TableColumn>
+					<TableColumn>QUANTITY</TableColumn>
+				</TableHeader>
+
+				<TableBody emptyContent={emptyContent}>
+					{(data ?? []).map((item, index) => (
+						<TableRow key={index}>
+							<TableCell>
+								<div className="flex flex-row items-center gap-2">
+									<Avatar
+										size="sm"
+										src={item.image}
+										name={item.name}
+									/>
+									<span className="text-sm font-medium line-clamp-1">
+										{item.name}
+									</span>
+								</div>
+							</TableCell>
+							<TableCell>
+								<span className="text-sm text-default-500 whitespace-nowrap">
+									{item.value}
+								</span>
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		</>
+	);
 }
