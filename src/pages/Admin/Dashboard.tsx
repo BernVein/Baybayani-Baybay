@@ -107,6 +107,7 @@ export default function Dashboard() {
 							data={stats?.lowStockItems.map((item: any) => ({
 								name: item.name,
 								value: `${item.stock} ${item.unit}`,
+								image: item.image,
 							}))}
 						/>
 					</CardBody>
