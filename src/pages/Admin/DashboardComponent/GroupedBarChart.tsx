@@ -1,88 +1,71 @@
 import ReactECharts from "echarts-for-react";
+import { Skeleton } from "@heroui/react";
 
-export function GroupedBarChart() {
-  const option = {
-    tooltip: {
-      trigger: "item",
-      axisPointer: {
-        type: "shadow",
-      },
-      formatter: "{b}: {c}",
-    },
-    legend: {
-      data: ["Completed", "Canceled"],
-      top: 0,
-      textStyle: {
-        fontSize: 14,
-        fontWeight: "bold",
-      },
-    },
-    grid: {
-      top: 40,
-      left: "8%",
-      right: "4%",
-      bottom: "10%",
-      containLabel: true,
-    },
-    xAxis: {
-      type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      name: "Day",
-      nameLocation: "middle",
-      nameGap: 30,
-      axisLabel: {
-        fontSize: 14,
-        fontWeight: "normal",
-      },
-      nameTextStyle: {
-        fontSize: 16,
-        fontWeight: "bold",
-      },
-    },
-    yAxis: {
-      type: "value",
-      name: "Orders Count",
-      nameLocation: "middle",
-      nameGap: 35,
-      nameRotate: 90,
-      axisLabel: {
-        fontSize: 14,
-        fontWeight: "normal",
-      },
-      nameTextStyle: {
-        fontSize: 16,
-        fontWeight: "bold",
-      },
-    },
-    series: [
-      {
-        name: "Completed",
-        type: "bar",
-        data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: {
-          color: "#4ade80",
-        },
-        emphasis: {
-          focus: "series",
-        },
-      },
-      {
-        name: "Canceled",
-        type: "bar",
-        data: [20, 50, 30, 10, 15, 25, 40],
-        itemStyle: {
-          color: "#ef4444",
-        },
-        emphasis: {
-          focus: "series",
-        },
-      },
-    ],
-  };
+interface GroupedBarChartProps {
+	data?: { date: string; completed: number; cancelled: number }[];
+	loading: boolean;
+}
 
-  return (
-    <div>
-      <ReactECharts option={option} />
-    </div>
-  );
+export function GroupedBarChart({ data, loading }: GroupedBarChartProps) {
+	if (loading) {
+		return <Skeleton className="w-full h-[300px] rounded-lg m-4" />;
+	}
+
+	const option = {
+		tooltip: {
+			trigger: "axis",
+			axisPointer: {
+				type: "shadow",
+			},
+		},
+		legend: {
+			data: ["Completed", "Cancelled"],
+			top: 0,
+		},
+		grid: {
+			top: 40,
+			left: "8%",
+			right: "4%",
+			bottom: "15%",
+			containLabel: true,
+		},
+		xAxis: {
+			type: "category",
+			data: data?.map((d) => d.date) ?? [],
+			axisLabel: {
+				rotate: 45,
+			},
+		},
+		yAxis: {
+			type: "value",
+			name: "Orders",
+		},
+		series: [
+			{
+				name: "Completed",
+				type: "bar",
+				data: data?.map((d) => d.completed) ?? [],
+				itemStyle: {
+					color: "#4ade80",
+				},
+			},
+			{
+				name: "Cancelled",
+				type: "bar",
+				data: data?.map((d) => d.cancelled) ?? [],
+				itemStyle: {
+					color: "#ef4444",
+				},
+			},
+		],
+	};
+
+	return (
+		<div className="h-[300px]">
+			<ReactECharts
+				option={option}
+				style={{ height: "100%", width: "100%" }}
+			/>
+		</div>
+	);
 }
