@@ -1,6 +1,7 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { ClosingTime } from "@/model/closingTime";
+import { cancelOrdersOnClosing } from "./Orders/cancelOrdersOnClosing";
 
 interface ClosingTimeState {
 	closingTime: Date | null;
@@ -57,6 +58,7 @@ export function useClosingTime(): ClosingTimeState {
 	const [rawClosingDate, setRawClosingDate] = useState<string | null>(null);
 	const [rawOpeningDate, setRawOpeningDate] = useState<string | null>(null);
 	const [isClosedForTheDay, setIsClosedForTheDay] = useState(false);
+	const hasCancelledOrders = useRef(false);
 
 	const fetchClosingTime = useCallback(async () => {
 		const { data, error } = await supabase
@@ -92,6 +94,16 @@ export function useClosingTime(): ClosingTimeState {
 
 		return () => clearInterval(interval);
 	}, [closingDate, isClosedForTheDay]);
+
+	// Trigger cancellation when store closes
+	useEffect(() => {
+		if (isClosed && !hasCancelledOrders.current) {
+			hasCancelledOrders.current = true;
+			cancelOrdersOnClosing();
+		} else if (!isClosed) {
+			hasCancelledOrders.current = false;
+		}
+	}, [isClosed]);
 
 	// Realtime subscription — when admin changes closing time, update immediately
 	useEffect(() => {
