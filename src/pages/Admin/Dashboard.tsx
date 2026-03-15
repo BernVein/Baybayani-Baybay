@@ -71,6 +71,7 @@ export default function Dashboard() {
 					label="Set Date Range"
 					value={dateValue}
 					onChange={(val: any) => val && setDateValue(val)}
+					color="success"
 				/>
 				<Button
 					isIconOnly={isMobile}
