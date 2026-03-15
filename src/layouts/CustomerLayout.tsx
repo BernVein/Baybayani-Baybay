@@ -28,6 +28,8 @@ import { NotificationAlert } from "@/pages/General/Notification/NotificationAler
 import { ClosingTimeProvider } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 import { ClosingTimeBanner } from "@/components/General/ClosingTimeBanner";
 import { AnnouncementModal } from "@/pages/Customer/Announcement/AnnouncementModal";
+import { useClosingCancellations } from "@/data/supabase/Customer/Orders/useClosingCancellations";
+import { ClosingCancellationModal } from "@/pages/Customer/OrdersPage/Components/ClosingCancellationModal";
 
 export default function CustomerLayout({
 	user,
@@ -43,6 +45,8 @@ export default function CustomerLayout({
 	const bottomNavRef = useRef<HTMLDivElement>(null);
 	const [navHeight, setNavHeight] = useState(0);
 	const [footerHeight, setFooterHeight] = useState(0);
+	const { cancelledOrders, markAsRead } = useClosingCancellations(user?.id);
+
 	useEffect(() => {
 		const updateHeights = () => {
 			if (topNavRef.current) {
@@ -115,6 +119,15 @@ export default function CustomerLayout({
 
 					{/* Announcement Modal (trigger on open) */}
 					{user && <AnnouncementModal />}
+
+					{/* Closing Cancellation Modal */}
+					{user && (
+						<ClosingCancellationModal
+							isOpen={cancelledOrders.length > 0}
+							cancelledOrders={cancelledOrders}
+							onDismiss={markAsRead}
+						/>
+					)}
 				</div>
 			</FloatingChatProvider>
 		</ClosingTimeProvider>
