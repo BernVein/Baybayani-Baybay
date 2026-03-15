@@ -17,6 +17,8 @@ interface NotificationContextType {
 	markAsRead: (notificationId: string) => Promise<void>;
 	markAllAsRead: () => Promise<void>;
 	refresh: () => Promise<void>;
+	loadMore: () => void;
+	hasMore: boolean;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
@@ -34,6 +36,8 @@ export function NotificationProvider({
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [unreadCount, setUnreadCount] = useState(0);
 	const [loading, setLoading] = useState(true);
+	const [limit, setLimit] = useState(10);
+	const [hasMore, setHasMore] = useState(true);
 	const channelRef = useRef<any>(null);
 
 	const fetchNotifications = useCallback(async () => {
@@ -41,23 +45,36 @@ export function NotificationProvider({
 			setNotifications([]);
 			setUnreadCount(0);
 			setLoading(false);
+			setHasMore(false);
 			return;
 		}
 
 		try {
 			setLoading(true);
-			const { data, error } = await supabase
+
+			// 1. Fetch notifications with current limit
+			const { data, error, count } = await supabase
 				.from("Notification")
-				.select("*")
+				.select("*", { count: "exact" })
 				.eq("user_id", userId)
 				.order("created_at", { ascending: false })
-				.limit(20);
+				.limit(limit);
 
 			if (error) throw error;
 
 			if (data) {
 				setNotifications(data as Notification[]);
-				const unread = data.filter((n) => !n.is_read).length;
+				setHasMore(count ? data.length < count : false);
+			}
+
+			// 2. Fetch total unread count accurately
+			const { count: unread, error: unreadError } = await supabase
+				.from("Notification")
+				.select("*", { count: "exact", head: true })
+				.eq("user_id", userId)
+				.eq("is_read", false);
+
+			if (!unreadError && unread !== null) {
 				setUnreadCount(unread);
 			}
 		} catch (error) {
@@ -65,7 +82,11 @@ export function NotificationProvider({
 		} finally {
 			setLoading(false);
 		}
-	}, [userId]);
+	}, [userId, limit]);
+
+	const loadMore = useCallback(() => {
+		setLimit((prev) => prev + 10);
+	}, []);
 
 	useEffect(() => {
 		if (!userId) {
@@ -186,6 +207,8 @@ export function NotificationProvider({
 				markAsRead,
 				markAllAsRead,
 				refresh: fetchNotifications,
+				loadMore,
+				hasMore,
 			}}
 		>
 			{children}
