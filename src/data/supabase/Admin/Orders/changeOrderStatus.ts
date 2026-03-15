@@ -4,6 +4,7 @@ export async function changeOrderStatus(
 	orderId: string,
 	orderStatus: "Pending" | "Ready" | "Completed" | "Cancelled",
 	cancelReason?: string,
+	customNotifType?: string,
 ) {
 	try {
 		if (!orderId) throw new Error("Order ID is required");
@@ -104,9 +105,10 @@ export async function changeOrderStatus(
 						title,
 						body,
 						type:
-							orderStatus === "Ready"
+							customNotifType ||
+							(orderStatus === "Ready"
 								? "order_ready"
-								: "order_cancelled",
+								: "order_cancelled"),
 						data: { orderId },
 					});
 
