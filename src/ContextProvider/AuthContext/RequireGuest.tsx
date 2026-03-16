@@ -31,11 +31,17 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 			location.pathname === "/login" || location.pathname === "/signup";
 
 		if (!loading && profile && isAuthPage) {
-			onOpen();
+			const isSilent = sessionStorage.getItem("silentAuthRedirect");
+			if (isSilent) {
+				sessionStorage.removeItem("silentAuthRedirect");
+				navigate("/shop", { replace: true });
+			} else {
+				onOpen();
+			}
 		} else {
 			onClose();
 		}
-	}, [loading, profile, onOpen, onClose, location.pathname]);
+	}, [loading, profile, onOpen, onClose, location.pathname, navigate]);
 
 	if (loading) return null;
 

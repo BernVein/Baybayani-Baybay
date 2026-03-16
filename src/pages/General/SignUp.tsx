@@ -90,12 +90,12 @@ export default function SignUp() {
 
 			addToast({
 				title: "Account Created",
-				description:
-					"Your account is for approval, but you can browse the shop, check announcements, and access settings while waiting.",
-				color: "primary",
+				description: "Your account is now pending for approval",
+				color: "warning",
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
+			sessionStorage.setItem("silentAuthRedirect", "true");
 			navigate("/shop");
 		} catch (error: any) {
 			addToast({
