@@ -10,6 +10,8 @@ import { GroupedBarChart } from "@/pages/Admin/DashboardComponent/GroupedBarChar
 import { DashboardIcon, ExcelIcon } from "@/components/icons";
 import useIsMobile from "@/lib/isMobile";
 import { useDashboardStats } from "@/data/supabase/Admin/Dashboard/useDashboardStats";
+import { useReportData } from "@/data/supabase/Admin/Dashboard/useReportData";
+import { exportReportToExcel } from "@/utils/excelExport";
 
 export default function Dashboard() {
 	const isMobile = useIsMobile();
@@ -46,7 +48,20 @@ export default function Dashboard() {
 		[dateValue],
 	);
 
-	const { stats, loading } = useDashboardStats(formattedRange);
+	const { stats, loading: statsLoading } = useDashboardStats(formattedRange);
+	const {
+		reportData,
+		loading: reportLoading,
+		refetch: refetchReport,
+	} = useReportData(formattedRange);
+
+	const handleExport = async () => {
+		if (reportLoading) return;
+		await refetchReport();
+		exportReportToExcel(reportData, formattedRange);
+	};
+
+	const loading = statsLoading || reportLoading;
 
 	return (
 		<div className="flex flex-col gap-8 p-4">
@@ -74,9 +89,14 @@ export default function Dashboard() {
 					color="success"
 				/>
 				<Button
+					disabled={loading}
+					isLoading={reportLoading}
+					onPress={handleExport}
 					isIconOnly={isMobile}
 					size={isMobile ? "lg" : "md"}
-					startContent={<ExcelIcon className="w-5" />}
+					startContent={
+						!reportLoading && <ExcelIcon className="w-5" />
+					}
 				>
 					{!isMobile && "Export Report"}
 				</Button>
