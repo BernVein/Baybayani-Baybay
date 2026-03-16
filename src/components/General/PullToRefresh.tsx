@@ -43,6 +43,8 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 			if (diff > 10 && e.cancelable) {
 				e.preventDefault();
 			}
+		} else {
+			setPullDistance(0);
 		}
 	};
 
