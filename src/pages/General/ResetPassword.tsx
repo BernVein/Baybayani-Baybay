@@ -42,7 +42,7 @@ export default function ResetPassword() {
 					description: "The reset link is invalid or has expired.",
 					color: "danger",
 				});
-				// navigate("/login");
+				navigate("/shop");
 			}
 		};
 		checkSession();
@@ -80,16 +80,13 @@ export default function ResetPassword() {
 
 			addToast({
 				title: "Success",
-				description:
-					"Password has been reset successfully. You can now log in.",
+				description: "Password has been reset successfully.",
 				color: "success",
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
 
-			// Sign out to clean up the recovery session before going to login
-			await supabase.auth.signOut();
-			navigate("/login");
+			navigate("/shop");
 		} catch (error: any) {
 			addToast({
 				title: "Error",
@@ -103,7 +100,7 @@ export default function ResetPassword() {
 	};
 
 	return (
-		<div className="relative min-h-screen flex items-center justify-center bg-default-50">
+		<div className="relative min-h-screen flex items-center justify-center bg-default-50 p-5">
 			{/* Top-left heading */}
 			<div className="absolute top-10 left-10 flex flex-row items-center gap-2">
 				<BaybayaniLogo className="w-10" />
@@ -187,10 +184,8 @@ export default function ResetPassword() {
 						<Button
 							fullWidth
 							color="success"
-							size="lg"
 							type="submit"
 							isLoading={loading}
-							className="mt-2 font-bold"
 						>
 							Update Password
 						</Button>
