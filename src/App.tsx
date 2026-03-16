@@ -34,6 +34,7 @@ const AdminAnnouncements = lazy(() => import("@/pages/Admin/Announcements"));
 
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
+const ResetPasswordPage = lazy(() => import("@/pages/General/ResetPassword"));
 const NotFound = lazy(() => import("@/pages/General/NotFound"));
 
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
@@ -168,6 +169,10 @@ function App() {
 								</RequireGuest>
 							}
 							path="/signup"
+						/>
+						<Route
+							element={<ResetPasswordPage />}
+							path="/reset-password"
 						/>
 
 						{/* ADMIN ROUTES */}

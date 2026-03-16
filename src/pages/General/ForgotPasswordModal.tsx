@@ -41,7 +41,7 @@ export function ForgotPasswordModal({
 			const siteUrl =
 				import.meta.env.VITE_SITE_URL || window.location.origin;
 			const { error } = await supabase.auth.resetPasswordForEmail(email, {
-				redirectTo: `${siteUrl}/login`,
+				redirectTo: `${siteUrl}/reset-password`,
 			});
 
 			if (error) throw error;
