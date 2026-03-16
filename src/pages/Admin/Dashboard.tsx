@@ -95,7 +95,7 @@ export default function Dashboard() {
 					showMonthAndYearPickers
 					className="max-w-xs"
 					label="Set Date Range"
-					value={dateValue}
+					value={dateValue as any}
 					onChange={(val: any) => val && setDateValue(val)}
 					color="success"
 				/>
