@@ -69,8 +69,10 @@ export function useLogin() {
 		});
 
 		if (userRole === "Admin") {
+			sessionStorage.setItem("silentAuthRedirect", "true");
 			navigate("/admin/dashboard");
 		} else {
+			sessionStorage.setItem("silentAuthRedirect", "true");
 			navigate("/shop");
 		}
 
