@@ -47,16 +47,16 @@ export const RealtimeChat = ({
 
 			try {
 				// Try to find existing room for this customer
-				const { data: existingRoom, error: fetchError } = await supabase
+				const { data: rooms, error: fetchError } = await supabase
 					.from("ChatRoom")
 					.select("chat_room_id")
 					.eq("user_id", customerId)
-					.maybeSingle();
+					.limit(1);
 
 				if (fetchError) throw fetchError;
 
-				if (existingRoom) {
-					setResolvedRoomId(existingRoom.chat_room_id);
+				if (rooms && rooms.length > 0) {
+					setResolvedRoomId(rooms[0].chat_room_id);
 				} else {
 					// Create new room if it doesn't exist
 					const { data: newRoom, error: createError } = await supabase
