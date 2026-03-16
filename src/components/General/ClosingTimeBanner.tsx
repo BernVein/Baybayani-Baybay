@@ -11,15 +11,16 @@ function formatRawTime(rawTime: string | null): string {
 
 export function ClosingTimeBanner() {
 	const {
-		isClosed,
-		isNearingClose,
+		isExempt,
+		realIsClosed: isClosed,
+		realIsNearingClose: isNearingClose,
 		closingTime,
 		isClosedForTheDay,
 		rawClosingDate,
 		rawOpeningDate,
 	} = useClosingTimeContext();
 
-	if (!isClosed && !isNearingClose) return null;
+	if (isExempt || (!isClosed && !isNearingClose)) return null;
 
 	const formattedClosingTime = closingTime
 		? closingTime.toLocaleTimeString("en-PH", {

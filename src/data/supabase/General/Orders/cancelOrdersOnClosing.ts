@@ -16,12 +16,14 @@ export async function cancelOrdersOnClosing() {
 		).toISOString();
 
 		// 2. Fetch Pending/Ready orders created today that haven't been cancelled/completed
+		// EXCLUDE Cooperative users
 		const { data: orders, error: fetchError } = await supabase
 			.from("OrderItemUser")
-			.select("order_item_user_id")
+			.select("order_item_user_id, User!inner(user_role)")
 			.in("status", ["Pending", "Ready"])
 			.gte("created_at", startOfDay)
-			.eq("is_soft_deleted", false);
+			.eq("is_soft_deleted", false)
+			.neq("User.user_role", "Cooperative");
 
 		if (fetchError) throw fetchError;
 		if (!orders || orders.length === 0) {
