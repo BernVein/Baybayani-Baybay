@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, addToast, Button, useDisclosure } from "@heroui/react";
+import { Image, addToast, Button } from "@heroui/react";
 import {
 	BaybayaniLogo,
 	RightArrow,
@@ -12,7 +12,6 @@ import { Step2 } from "@/pages/General/SignUpComponents/Step2";
 import { Step3 } from "@/pages/General/SignUpComponents/Step3";
 import { registerUser } from "@/data/supabase/General/registerUser";
 import { UserProfile } from "@/model/userProfile";
-import { SignUpSuccessModal } from "@/pages/General/SignUpSuccessModal";
 import { useNavigate } from "react-router-dom";
 
 const TOTAL_STEPS = 3;
@@ -21,11 +20,6 @@ export type Role = "Individual" | "Cooperative" | "Admin";
 
 export default function SignUp() {
 	const navigate = useNavigate();
-	const {
-		isOpen: isOpenWarning,
-		onOpen: onOpenWarning,
-		onOpenChange: onOpenChangeWarning,
-	} = useDisclosure();
 	// Step 1 Fields
 	const [step, setStep] = useState(0);
 	const [role, setRole] = useState<Role>("Individual");
@@ -94,7 +88,15 @@ export default function SignUp() {
 			};
 			await registerUser(userProfile, password, idImages);
 
-			onOpenWarning();
+			addToast({
+				title: "Account Created",
+				description:
+					"Your account is for approval, but you can browse the shop, check announcements, and access settings while waiting.",
+				color: "primary",
+				shouldShowTimeoutProgress: true,
+				timeout: 5000,
+			});
+			navigate("/shop");
 		} catch (error: any) {
 			addToast({
 				title: "Account Creation Failed",
@@ -328,10 +330,6 @@ export default function SignUp() {
 					/>
 				</div>
 			</div>
-			<SignUpSuccessModal
-				isOpen={isOpenWarning}
-				onOpenChange={onOpenChangeWarning}
-			/>
 		</div>
 	);
 }
