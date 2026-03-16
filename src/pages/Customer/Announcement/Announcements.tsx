@@ -11,8 +11,7 @@ import {
 } from "@heroui/react";
 import { fetchAnnouncements } from "@/data/supabase/Customer/Announcements/fetchAnnouncements";
 import { Announcement } from "@/model/Announcement";
-import { MegaphoneIcon, LeftArrow, XIcon } from "@/components/icons";
-import { useNavigate } from "react-router-dom";
+import { MegaphoneIcon, XIcon, BaybayaniLogo } from "@/components/icons";
 import { AnnouncementCard } from "@/pages/General/Announcement/AnnouncementCard";
 
 export default function CustomerAnnouncements() {
@@ -23,7 +22,6 @@ export default function CustomerAnnouncements() {
 	const pageSize = 5;
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		const load = async () => {
@@ -45,7 +43,7 @@ export default function CustomerAnnouncements() {
 
 	if (loading) {
 		return (
-			<div className="max-w-5xl mx-auto p-5 md:p-8 flex flex-col gap-8 pb-10">
+			<div className="w-full sm:w-3/4 mx-auto px-5 flex flex-col gap-8 pb-10 pt-5">
 				{/* Header */}
 				<div className="flex items-center gap-4">
 					<Skeleton className="w-10 h-10 rounded-full" />
@@ -92,25 +90,13 @@ export default function CustomerAnnouncements() {
 	}
 
 	return (
-		<div className="max-w-5xl mx-auto p-5 md:p-8 flex flex-col gap-8 pb-10">
-			<div className="flex items-center gap-4">
-				<Button
-					isIconOnly
-					variant="light"
-					onPress={() => navigate(-1)}
-					radius="full"
-				>
-					<LeftArrow className="size-6" />
-				</Button>
-				<div className="flex flex-col">
-					<h1 className="text-2xl font-bold flex items-center gap-2">
-						<MegaphoneIcon className="size-8 text-success" />
-						Announcements
-					</h1>
-					<p className="text-default-500 text-sm">
-						Price updates and announcements.
-					</p>
-				</div>
+		<div className="w-full sm:w-3/4 mx-auto px-5 flex flex-col gap-8 pb-10 pt-5">
+			<div className="flex items-center gap-2">
+				<BaybayaniLogo className="size-7" />
+				<h2 className="text-xl sm:text-3xl font-semibold">
+					Baybayani <span className="text-default-400">|</span>{" "}
+					Announcements
+				</h2>
 			</div>
 
 			{announcements.length === 0 ? (
