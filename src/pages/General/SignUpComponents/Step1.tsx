@@ -43,7 +43,7 @@ export function Step1({
 	const [phoneError, setPhoneError] = useState<string | null>(null);
 
 	const username_length = 5;
-	const usernameRegex = /^[a-zA-Z0-9]+$/;
+	const usernameRegex = /^[a-zA-Z0-9_]+$/;
 	const phoneRegex = /^(?:\+639|09)\d{9}$/;
 	useEffect(() => {
 		if (!phone) {
@@ -68,7 +68,7 @@ export function Step1({
 			return;
 		}
 
-		const cleanUsername = username.toLowerCase().trim();
+		const cleanUsername = username.trim();
 		if (cleanUsername.length < username_length) {
 			setUsernameError(
 				`Username must be at least ${username_length} characters`,
@@ -78,7 +78,7 @@ export function Step1({
 		// Format validation first
 		if (!usernameRegex.test(cleanUsername)) {
 			setUsernameError(
-				"Only letters and numbers allowed (no spaces or special characters)",
+				"Only letters, numbers, and underscores allowed (no spaces or other special characters)",
 			);
 			return;
 		}
@@ -184,7 +184,7 @@ export function Step1({
 				labelPlacement="outside"
 				placeholder="Choose a username"
 				value={username}
-				onValueChange={(val) => setUsername(val.toLowerCase())}
+				onValueChange={(val) => setUsername(val)}
 				isInvalid={!!usernameError || (tried && username.trim() === "")}
 				errorMessage={
 					username.trim() === ""
