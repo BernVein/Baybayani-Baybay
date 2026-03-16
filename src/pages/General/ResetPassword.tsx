@@ -5,19 +5,28 @@ import {
 	CardHeader,
 	Button,
 	addToast,
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	useDisclosure,
 } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { useNavigate } from "react-router-dom";
-import {
-	BaybayaniLogo,
-	EyeFilledIcon,
-	EyeSlashFilledIcon,
-} from "@/components/icons";
+import { BaybayaniLogo } from "@/components/icons";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 
 export default function ResetPassword() {
 	const navigate = useNavigate();
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const [errorTitle, setErrorTitle] = useState("Link Expired");
+	const [errorDescription, setErrorDescription] = useState(
+		"This password reset link is invalid or has already been used.",
+	);
+
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -29,6 +38,25 @@ export default function ResetPassword() {
 	const toggleConfirmVisibility = () =>
 		setIsConfirmVisible(!isConfirmVisible);
 
+	// Check for errors in the URL hash (Supabase recovery errors)
+	useEffect(() => {
+		const hash = window.location.hash;
+		if (hash && hash.includes("error=")) {
+			const params = new URLSearchParams(hash.substring(1)); // remove #
+			const error = params.get("error");
+			const description = params.get("error_description");
+
+			if (error) {
+				setErrorTitle("Invalid Reset Link");
+				setErrorDescription(
+					description?.replace(/\+/g, " ") ||
+						"The link is invalid or has expired. Please request a new one.",
+				);
+				onOpen();
+			}
+		}
+	}, [onOpen]);
+
 	// Check if we have a session (Supabase handles the Hash from the email link)
 	useEffect(() => {
 		const checkSession = async () => {
@@ -36,7 +64,10 @@ export default function ResetPassword() {
 				data: { session },
 			} = await supabase.auth.getSession();
 			console.log("Reset session check:", session);
-			if (!session) {
+
+			// If no session and NO hash error (which means we just landed on the page without a link)
+			const hash = window.location.hash;
+			if (!session && (!hash || !hash.includes("error="))) {
 				addToast({
 					title: "Access Denied",
 					description: "The reset link is invalid or has expired.",
@@ -72,11 +103,11 @@ export default function ResetPassword() {
 
 		setLoading(true);
 		try {
-			const { error } = await supabase.auth.updateUser({
+			const { error: resetError } = await supabase.auth.updateUser({
 				password: password,
 			});
 
-			if (error) throw error;
+			if (resetError) throw resetError;
 
 			addToast({
 				title: "Success",
@@ -101,6 +132,45 @@ export default function ResetPassword() {
 
 	return (
 		<div className="relative min-h-screen flex items-center justify-center bg-default-50 p-5">
+			{/* Error Modal */}
+			<Modal
+				isOpen={isOpen}
+				onOpenChange={onOpenChange}
+				isDismissable={false}
+				hideCloseButton
+				backdrop="blur"
+			>
+				<ModalContent>
+					{(onClose) => (
+						<>
+							<ModalHeader className="flex flex-col gap-1 items-center pt-8">
+								<AlertCircle className="w-12 h-12 text-danger mb-2" />
+								<span className="text-xl font-bold">
+									{errorTitle}
+								</span>
+							</ModalHeader>
+							<ModalBody className="text-center pb-8 px-8">
+								<p className="text-default-500">
+									{errorDescription}
+								</p>
+							</ModalBody>
+							<ModalFooter className="flex-col gap-2">
+								<Button
+									fullWidth
+									color="success"
+									onPress={() => {
+										onClose();
+										navigate("/shop");
+									}}
+								>
+									Back to Shop
+								</Button>
+							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
+
 			{/* Top-left heading */}
 			<div className="absolute top-10 left-10 flex flex-row items-center gap-2">
 				<BaybayaniLogo className="w-10" />
@@ -143,9 +213,9 @@ export default function ResetPassword() {
 										onClick={toggleVisibility}
 									>
 										{isVisible ? (
-											<EyeSlashFilledIcon className="text-2xl text-default-400" />
+											<EyeOff className="text-2xl text-default-400" />
 										) : (
-											<EyeFilledIcon className="text-2xl text-default-400" />
+											<Eye className="text-2xl text-default-400" />
 										)}
 									</button>
 								}
@@ -172,9 +242,9 @@ export default function ResetPassword() {
 										onClick={toggleConfirmVisibility}
 									>
 										{isConfirmVisible ? (
-											<EyeSlashFilledIcon className="text-2xl text-default-400" />
+											<EyeOff className="text-2xl text-default-400" />
 										) : (
-											<EyeFilledIcon className="text-2xl text-default-400" />
+											<Eye className="text-2xl text-default-400" />
 										)}
 									</button>
 								}
