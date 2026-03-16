@@ -8,15 +8,34 @@ export function useFetchStockMovements(
 	pageSize = 20,
 ) {
 	const [movements, setMovements] = useState<StockMovement[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(!!variantId);
 	const [error, setError] = useState<string | null>(null);
 	const [totalCount, setTotalCount] = useState(0);
 	const [page, setPage] = useState(initialPage);
+
+	// Reset state when variantId changes to avoid showing stale data
+	const [prevVariantId, setPrevVariantId] = useState(variantId);
+	const [prevPage, setPrevPage] = useState(page);
+	const [prevPageSize, setPrevPageSize] = useState(pageSize);
+
+	if (
+		prevVariantId !== variantId ||
+		prevPage !== page ||
+		prevPageSize !== pageSize
+	) {
+		setPrevVariantId(variantId);
+		setPrevPage(page);
+		setPrevPageSize(pageSize);
+		setMovements([]);
+		setTotalCount(0);
+		setIsLoading(!!variantId);
+	}
 
 	const fetchMovements = async () => {
 		if (!variantId) {
 			setMovements([]);
 			setTotalCount(0);
+			setIsLoading(false);
 			return;
 		}
 
