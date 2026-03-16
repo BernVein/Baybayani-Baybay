@@ -24,7 +24,10 @@ export default function RequireApproval({ children }: { children: ReactNode }) {
 	const isPublicRoute =
 		(profile?.user_role === "Admin"
 			? false
-			: location.pathname === "/" || location.pathname === "/shop") ||
+			: location.pathname === "/" ||
+				location.pathname === "/shop" ||
+				location.pathname === "/announcements" ||
+				location.pathname === "/settings") ||
 		location.pathname === "/login" ||
 		location.pathname === "/signup";
 
