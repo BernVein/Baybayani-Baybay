@@ -38,6 +38,8 @@ export default function ResetPassword() {
 	const toggleConfirmVisibility = () =>
 		setIsConfirmVisible(!isConfirmVisible);
 
+	const [hasHashError, setHasHashError] = useState(false);
+
 	// Check for errors in the URL hash (Supabase recovery errors)
 	useEffect(() => {
 		const hash = window.location.hash;
@@ -47,6 +49,7 @@ export default function ResetPassword() {
 			const description = params.get("error_description");
 
 			if (error) {
+				setHasHashError(true);
 				setErrorTitle("Invalid Reset Link");
 				setErrorDescription(
 					description?.replace(/\+/g, " ") ||
@@ -59,25 +62,29 @@ export default function ResetPassword() {
 
 	// Check if we have a session (Supabase handles the Hash from the email link)
 	useEffect(() => {
+		if (hasHashError) return; // Wait for hash check to complete/show modal
+
 		const checkSession = async () => {
 			const {
 				data: { session },
 			} = await supabase.auth.getSession();
 			console.log("Reset session check:", session);
 
-			// If no session and NO hash error (which means we just landed on the page without a link)
 			const hash = window.location.hash;
-			if (!session && (!hash || !hash.includes("error="))) {
+			const isErrorHash = hash && hash.includes("error=");
+
+			// If no session and NO hash error (which means we just landed on the page without a link)
+			if (!session && !isErrorHash) {
 				addToast({
 					title: "Access Denied",
 					description: "The reset link is invalid or has expired.",
 					color: "danger",
 				});
-				// navigate("/shop");
+				navigate("/shop");
 			}
 		};
 		checkSession();
-	}, [navigate]);
+	}, [navigate, hasHashError]);
 
 	const handleReset = async (e: React.FormEvent) => {
 		e.preventDefault();
