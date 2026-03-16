@@ -51,6 +51,11 @@ export const registerUser = async (
 		])
 		.select();
 
+	if (tableError) {
+		console.error("Users table insert error:", tableError.message);
+		throw new Error(tableError.message);
+	}
+
 	for (const img of validId) {
 		if (!(img instanceof File)) continue;
 
@@ -73,11 +78,6 @@ export const registerUser = async (
 			user_id: userId,
 			valid_id_img_url: publicUrl,
 		});
-	}
-
-	if (tableError) {
-		console.error("Users table insert error:", tableError.message);
-		throw new Error(tableError.message);
 	}
 
 	await unregisterPush();

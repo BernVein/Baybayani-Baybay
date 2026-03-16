@@ -91,7 +91,7 @@ export function Step1({
 			const { data, error } = await supabase
 				.from("User")
 				.select("login_user_name")
-				.eq("login_user_name", cleanUsername)
+				.ilike("login_user_name", cleanUsername)
 				.maybeSingle();
 
 			if (error) {
