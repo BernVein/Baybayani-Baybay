@@ -30,6 +30,7 @@ import { ClosingTimeBanner } from "@/components/General/ClosingTimeBanner";
 import { AnnouncementModal } from "@/pages/Customer/Announcement/AnnouncementModal";
 import { useClosingCancellations } from "@/data/supabase/Customer/Orders/useClosingCancellations";
 import { ClosingCancellationModal } from "@/pages/Customer/OrdersPage/Components/ClosingCancellationModal";
+import { PullToRefresh } from "@/components/General/PullToRefresh";
 
 export default function CustomerLayout({
 	user,
@@ -93,10 +94,19 @@ export default function CustomerLayout({
 							paddingTop: `${navHeight}px`,
 							paddingBottom: `${footerHeight}px`,
 						}}
+						className="h-[calc(100vh-footerHeight)]" // Ensure it takes full height for pull gesture
 					>
-						<Suspense fallback={<CustomerPageSkeleton />}>
-							<Outlet context={{ searchTerm, setSearchTerm }} />
-						</Suspense>
+						<PullToRefresh
+							onRefresh={async () => {
+								window.location.reload();
+							}}
+						>
+							<Suspense fallback={<CustomerPageSkeleton />}>
+								<Outlet
+									context={{ searchTerm, setSearchTerm }}
+								/>
+							</Suspense>
+						</PullToRefresh>
 					</main>
 
 					{/* Bottom Navbar */}

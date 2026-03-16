@@ -8,6 +8,7 @@ import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { AdminFloatingChat } from "@/pages/Admin/Chat/AdminFloatingChat";
 import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
 import { NotificationBell } from "@/pages/General/Notification/NotificationBell";
+import { PullToRefresh } from "@/components/General/PullToRefresh";
 
 function AdminPageSkeleton() {
 	return (
@@ -66,7 +67,11 @@ export default function AdminLayout() {
 					paddingBottom: `${footerHeight}px`,
 				}}
 			>
-				<div className="flex-1 h-full w-full overflow-y-auto overflow-x-hidden">
+				<PullToRefresh
+					onRefresh={async () => {
+						window.location.reload();
+					}}
+				>
 					<Suspense fallback={<AdminPageSkeleton />}>
 						<Outlet
 							context={{
@@ -77,7 +82,7 @@ export default function AdminLayout() {
 							}}
 						/>
 					</Suspense>
-				</div>
+				</PullToRefresh>
 			</main>
 
 			{/* Bottom Navbar (Mobile Only) */}
