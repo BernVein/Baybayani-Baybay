@@ -6,6 +6,7 @@ import {
 	CardHeader,
 	Checkbox,
 	Button,
+	useDisclosure,
 } from "@heroui/react";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { BaybayaniLogo } from "@/components/icons";
@@ -13,10 +14,16 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
 import { useNavigate } from "react-router-dom";
 import { useTransition } from "react";
+import { ForgotPasswordModal } from "@/pages/General/ForgotPasswordModal";
 
 export default function Login() {
 	const navigate = useNavigate();
 	const [, startTransition] = useTransition();
+	const {
+		isOpen: isOpenForgot,
+		onOpen: onOpenForgot,
+		onOpenChange: onOpenChangeForgot,
+	} = useDisclosure();
 	const {
 		email,
 		setEmail,
@@ -119,7 +126,10 @@ export default function Login() {
 											Remember me
 										</span>
 									</div>
-									<p className="text-xs text-default-500 cursor-pointer hover:underline">
+									<p
+										onClick={onOpenForgot}
+										className="text-xs text-default-500 cursor-pointer hover:underline"
+									>
 										Forgot Password?
 									</p>
 								</div>
@@ -173,6 +183,11 @@ export default function Login() {
 					/>
 				</div>
 			</div>
+
+			<ForgotPasswordModal
+				isOpen={isOpenForgot}
+				onOpenChange={onOpenChangeForgot}
+			/>
 		</div>
 	);
 }
