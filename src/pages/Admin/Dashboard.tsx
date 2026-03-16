@@ -1,4 +1,11 @@
-import { Button, Card, CardBody, DateRangePicker } from "@heroui/react";
+import {
+	Button,
+	Card,
+	CardBody,
+	DateRangePicker,
+	DateValue,
+	RangeValue,
+} from "@heroui/react";
 import { useOutletContext } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
@@ -23,7 +30,7 @@ export default function Dashboard() {
 		`${now.year}-${String(now.month).padStart(2, "0")}-01`,
 	);
 
-	const [dateValue, setDateValue] = useState({
+	const [dateValue, setDateValue] = useState<RangeValue<DateValue>>({
 		start: firstDayOfMonth,
 		end: now,
 	});
