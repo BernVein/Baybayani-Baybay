@@ -226,6 +226,7 @@ export function UsersTableMobile({
 				isOpen={isOpenViewUserDetail}
 				onOpenChange={onOpenChangeViewUserDetail}
 				selectedUserProfile={selectedUserProfile}
+				handleChangeUserStatus={handleChangeUserStatus}
 			/>
 		</div>
 	);

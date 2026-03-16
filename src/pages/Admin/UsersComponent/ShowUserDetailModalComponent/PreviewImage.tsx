@@ -1,4 +1,5 @@
-import { Modal, ModalContent, Image, Button } from "@heroui/react";
+import { Modal, ModalContent, Image, Button, ModalBody } from "@heroui/react";
+import { XIcon } from "@/components/icons";
 
 export function PreviewImage({
 	isPreviewOpen,
@@ -10,37 +11,35 @@ export function PreviewImage({
 	selectedImage: string;
 }) {
 	return (
-		<Modal backdrop="blur"
+		<Modal
 			isOpen={isPreviewOpen}
 			onOpenChange={onPreviewOpenChange}
-			disableAnimation
-			size="full"
-			classNames={{
-				base: "bg-black/90",
-				closeButton: "text-white hover:bg-white/20 text-2xl p-2",
-			}}
+			size="4xl"
+			scrollBehavior="inside"
+			backdrop="blur"
+			hideCloseButton
+			className="bg-transparent shadow-none"
 		>
 			<ModalContent>
-				{(onClose) => (
-					<div className="relative w-full h-full flex items-center justify-center p-4">
+				<ModalBody className="p-0 relative flex items-center justify-center">
+					<Button
+						isIconOnly
+						className="absolute top-4 right-4 z-50 bg-background/50 backdrop-blur-md"
+						radius="full"
+						variant="flat"
+						onPress={() => onPreviewOpenChange(false)}
+					>
+						<XIcon className="size-6" />
+					</Button>
+					{selectedImage && (
 						<Image
 							src={selectedImage}
-							alt="ID Preview"
-							className="max-h-[95vh] w-auto object-contain rounded-lg"
+							alt="Full Preview"
+							className="max-h-[85vh] w-auto object-contain rounded-xl"
 							removeWrapper
 						/>
-						<div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4">
-							<Button
-								color="danger"
-								variant="flat"
-								onPress={onClose}
-								className="font-bold"
-							>
-								Close Preview
-							</Button>
-						</div>
-					</div>
-				)}
+					)}
+				</ModalBody>
 			</ModalContent>
 		</Modal>
 	);

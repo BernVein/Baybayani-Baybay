@@ -23,10 +23,15 @@ export function ShowUserDetailModal({
 	isOpen,
 	onOpenChange,
 	selectedUserProfile,
+	handleChangeUserStatus,
 }: {
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	selectedUserProfile: UserProfile | null;
+	handleChangeUserStatus: (
+		userID: string,
+		userStatus: "Approved" | "For Approval" | "Rejected" | "Suspended",
+	) => void;
 }) {
 	const { userValidIDLink, loading } = fetchUserValidID(
 		selectedUserProfile?.user_id || "",
@@ -43,7 +48,8 @@ export function ShowUserDetailModal({
 		onPreviewOpen();
 	};
 	return (
-		<Modal backdrop="blur"
+		<Modal
+			backdrop="blur"
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
 			disableAnimation
@@ -173,9 +179,33 @@ export function ShowUserDetailModal({
 							>
 								Close
 							</Button>
-							<Button color="success" onPress={onClose}>
-								Approve
-							</Button>
+							{selectedUserProfile?.user_status === "Approved" ? (
+								<Button
+									color="danger"
+									onPress={() => {
+										handleChangeUserStatus(
+											selectedUserProfile?.user_id!,
+											"Suspended",
+										);
+										onClose();
+									}}
+								>
+									Suspend
+								</Button>
+							) : (
+								<Button
+									color="success"
+									onPress={() => {
+										handleChangeUserStatus(
+											selectedUserProfile?.user_id!,
+											"Approved",
+										);
+										onClose();
+									}}
+								>
+									Approve
+								</Button>
+							)}
 						</ModalFooter>
 					</>
 				)}

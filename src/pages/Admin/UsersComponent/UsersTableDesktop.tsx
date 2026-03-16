@@ -270,6 +270,7 @@ export function UsersTableDesktop({
 				selectedUserProfile={selectedUserProfile}
 				isOpen={isOpenViewUserDetail}
 				onOpenChange={onOpenChangeViewUserDetail}
+				handleChangeUserStatus={handleChangeUserStatus}
 			/>
 		</div>
 	);
