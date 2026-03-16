@@ -66,7 +66,6 @@ export function StockMovementModal({
 				return (
 					<Chip
 						variant="flat"
-						size="sm"
 						color={
 							type === "Acquisition"
 								? "success"
@@ -135,81 +134,190 @@ export function StockMovementModal({
 		>
 			<ModalContent>
 				<ModalHeader className="flex gap-2 items-center">
-					<Info className="w-5 h-5 text-primary" />
+					<Info className="w-5 h-5" />
 					<div className="flex flex-col">
 						<span>Stock Movement History</span>
-						<span className="text-tiny text-default-400 font-normal">
+						<span className="text-sm text-default-400 font-normal">
 							{variantName || "Selected Variant"}
 						</span>
 					</div>
 				</ModalHeader>
 				<ModalBody className="pb-6">
-					<Table
-						aria-label="Stock movement history table"
-						removeWrapper
-						className="min-w-full"
-						bottomContent={
-							totalPages > 1 ? (
-								<div className="flex w-full justify-center">
-									<Pagination
-										isCompact
-										showControls
-										showShadow
-										color="success"
-										page={page}
-										total={totalPages}
-										onChange={(page) => setPage(page)}
-									/>
-								</div>
-							) : null
-						}
-					>
-						<TableHeader columns={columns}>
-							{(column) => (
-								<TableColumn
-									key={column.key}
-									align={
-										column.key === "stocks" ||
-										column.key === "amount"
-											? "end"
-											: "start"
-									}
-								>
-									{column.label}
-								</TableColumn>
-							)}
-						</TableHeader>
-						<TableBody
-							items={
-								isLoading
-									? ([...Array(pageSize)].map((_, i) => ({
-											stock_movement_id: `skeleton-${i}`,
-										})) as any)
-									: movements
-							}
-							emptyContent={
-								!isLoading && "No stock movements found."
+					{/* --- DESKTOP TABLE --- */}
+					<div className="hidden sm:block">
+						<Table
+							aria-label="Stock movement history table desktop"
+							removeWrapper
+							className="min-w-full"
+							bottomContent={
+								totalPages > 1 ? (
+									<div className="flex w-full justify-center">
+										<Pagination
+											isCompact
+											showControls
+											showShadow
+											color="success"
+											page={page}
+											total={totalPages}
+											onChange={(page) => setPage(page)}
+										/>
+									</div>
+								) : null
 							}
 						>
-							{(item: any) => (
-								<TableRow key={item.stock_movement_id}>
-									{(columnKey) => (
+							<TableHeader columns={columns}>
+								{(column) => (
+									<TableColumn
+										key={column.key}
+										align={
+											column.key === "stocks" ||
+											column.key === "amount"
+												? "end"
+												: "start"
+										}
+									>
+										{column.label}
+									</TableColumn>
+								)}
+							</TableHeader>
+							<TableBody
+								items={
+									isLoading
+										? ([...Array(pageSize)].map((_, i) => ({
+												stock_movement_id: `skeleton-${i}`,
+											})) as any)
+										: movements
+								}
+								emptyContent={
+									!isLoading && "No stock movements found."
+								}
+							>
+								{(item: any) => (
+									<TableRow key={item.stock_movement_id}>
+										{(columnKey) => (
+											<TableCell>
+												{isLoading ? (
+													columnKey === "type" ? (
+														<Skeleton className="h-6 w-16 rounded-full" />
+													) : (
+														<Skeleton className="h-3 w-full rounded-lg" />
+													)
+												) : (
+													renderCell(item, columnKey)
+												)}
+											</TableCell>
+										)}
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+					</div>
+
+					{/* --- MOBILE TABLE --- */}
+					<div className="block sm:hidden">
+						<Table
+							aria-label="Stock movement history table mobile"
+							removeWrapper
+							className="min-w-full"
+							bottomContent={
+								totalPages > 1 ? (
+									<div className="flex w-full justify-center">
+										<Pagination
+											isCompact
+											showControls
+											showShadow
+											color="success"
+											page={page}
+											total={totalPages}
+											onChange={(page) => setPage(page)}
+										/>
+									</div>
+								) : null
+							}
+						>
+							<TableHeader>
+								<TableColumn>ACTIVITY</TableColumn>
+								<TableColumn align="end">MOVEMENT</TableColumn>
+								<TableColumn align="end">STOCKS</TableColumn>
+							</TableHeader>
+							<TableBody
+								items={
+									isLoading
+										? ([...Array(pageSize)].map((_, i) => ({
+												stock_movement_id: `skeleton-${i}`,
+											})) as any)
+										: movements
+								}
+								emptyContent={
+									!isLoading && "No stock movements found."
+								}
+							>
+								{(item: any) => (
+									<TableRow key={item.stock_movement_id}>
 										<TableCell>
 											{isLoading ? (
-												columnKey === "type" ? (
+												<div className="flex flex-col gap-2">
 													<Skeleton className="h-6 w-16 rounded-full" />
-												) : (
-													<Skeleton className="h-3 w-full rounded-lg" />
-												)
+													<Skeleton className="h-3 w-24 rounded-lg" />
+												</div>
 											) : (
-												renderCell(item, columnKey)
+												<div className="flex flex-col gap-1 items-start">
+													{renderCell(item, "type")}
+													<span className="text-sm text-default-400 leading-tight">
+														{renderCell(
+															item,
+															"reason",
+														)}
+													</span>
+												</div>
 											)}
 										</TableCell>
-									)}
-								</TableRow>
-							)}
-						</TableBody>
-					</Table>
+										<TableCell>
+											{isLoading ? (
+												<div className="flex flex-col gap-2 items-end">
+													<Skeleton className="h-4 w-12 rounded-lg" />
+													<Skeleton className="h-3 w-16 rounded-lg" />
+													<Skeleton className="h-2 w-10 rounded-lg" />
+												</div>
+											) : (
+												<div className="flex flex-col items-end">
+													<div className="flex flex-col items-end leading-tight">
+														<div className="text-xs">
+															{renderCell(
+																item,
+																"change",
+															)}
+														</div>
+														<div className="text-sm sm:text-xs">
+															{renderCell(
+																item,
+																"amount",
+															)}
+														</div>
+													</div>
+													<span className="text-sm text-default-400 mt-0.5">
+														{renderCell(
+															item,
+															"date",
+														)}
+													</span>
+												</div>
+											)}
+										</TableCell>
+										<TableCell>
+											{isLoading ? (
+												<Skeleton className="h-4 w-8 rounded-lg" />
+											) : (
+												<div className="text-sm font-semibold">
+													{renderCell(item, "stocks")}
+												</div>
+											)}
+										</TableCell>
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+					</div>
 				</ModalBody>
 			</ModalContent>
 		</Modal>
