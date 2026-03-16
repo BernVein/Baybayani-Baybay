@@ -1,45 +1,69 @@
 {
-	"name": "Baybayani",
-	"short_name": "Baybayani",
-	"description": "Ani gikan sa Baybay, Para sa Baybayanon: PRESKO, LIMPYO, BARATO",
-	"start_url": "/",
-	"display": "standalone",
-	"background_color": "#ffffff",
-	"theme_color": "#15803d",
-	"screenshots": [
-		{
-			"src": "/login_image.jpg",
-			"sizes": "1280x720",
-			"type": "image/jpeg",
-			"form_factor": "wide",
-			"label": "Login Page"
-		},
-		{
-			"src": "/cover.jpg",
-			"sizes": "1280x720",
-			"type": "image/jpeg",
-			"form_factor": "narrow",
-			"label": "Welcome Screen"
-		}
-	],
-	"icons": [
-		{
-			"src": "/baybayani.svg",
-			"sizes": "any",
-			"type": "image/svg+xml",
-			"purpose": "any"
-		},
-		{
-			"src": "/baybayani.svg",
-			"sizes": "192x192",
-			"type": "image/svg+xml",
-			"purpose": "maskable"
-		},
-		{
-			"src": "/baybayani.svg",
-			"sizes": "512x512",
-			"type": "image/svg+xml",
-			"purpose": "maskable"
-		}
-	]
+  "name": "Baybayani",
+  "short_name": "Baybayani",
+  "description": "Ani gikan sa Baybay, Para sa Baybayanon: PRESKO, LIMPYO, BARATO",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#15803d",
+  "screenshots": [
+    {
+      "src": "/login_image.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Login Page"
+    },
+    {
+      "src": "/cover.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Welcome Screen"
+    }
+  ],
+  "icons": [
+    {
+      "src": "../icons/icon-48.webp",
+      "type": "image/png",
+      "sizes": "48x48",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-72.webp",
+      "type": "image/png",
+      "sizes": "72x72",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-96.webp",
+      "type": "image/png",
+      "sizes": "96x96",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-128.webp",
+      "type": "image/png",
+      "sizes": "128x128",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-192.webp",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-256.webp",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-512.webp",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
 }

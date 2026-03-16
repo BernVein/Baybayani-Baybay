@@ -16,6 +16,7 @@
 		"@capacitor/cli": "^8.1.0",
 		"@capacitor/core": "^8.1.0",
 		"@capacitor/push-notifications": "^8.0.1",
+		"@capacitor/splash-screen": "^8.0.1",
 		"@heroui/button": "2.2.26",
 		"@heroui/code": "2.2.20",
 		"@heroui/dropdown": "2.3.26",
@@ -59,6 +60,7 @@
 		"xlsx-js-style": "^1.2.0"
 	},
 	"devDependencies": {
+		"@capacitor/assets": "^3.0.5",
 		"@eslint/compat": "1.2.8",
 		"@eslint/eslintrc": "3.3.1",
 		"@eslint/js": "9.25.1",

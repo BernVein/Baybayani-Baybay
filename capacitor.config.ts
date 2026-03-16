@@ -8,6 +8,15 @@ const config: CapacitorConfig = {
 		PushNotifications: {
 			presentationOptions: [],
 		},
+		SplashScreen: {
+			launchShowDuration: 2000,
+			backgroundColor: "#ffffffff",
+			showSpinner: false,
+			androidSpinnerStyle: "large",
+			iosSpinnerStyle: "small",
+			splashFullScreen: true,
+			splashImmersive: true,
+		},
 	},
 };
 
