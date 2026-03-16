@@ -8,7 +8,6 @@ import {
 	DropdownMenu,
 	DropdownSection,
 	Avatar,
-	Badge,
 	Divider,
 	addToast,
 } from "@heroui/react";
@@ -113,16 +112,7 @@ export function NavbarMobileAdmin({
 					}}
 				>
 					<div className="w-8 h-8 flex items-center justify-center relative">
-						<Badge
-							className="absolute top-0 right-0 translate-x-1 -translate-y-1"
-							color="danger"
-							content="3"
-							shape="circle"
-							showOutline={false}
-							size="sm"
-						>
-							<OrdersIcon className="w-6 h-6" />
-						</Badge>
+						<OrdersIcon className="w-6 h-6" />
 					</div>
 					<span
 						className={`text-sm mt-1 ${active === "Orders" ? "font-bold" : "font-light"}`}
