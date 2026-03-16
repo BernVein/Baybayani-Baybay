@@ -9,6 +9,7 @@ import {
 	Divider,
 	Card,
 	CardBody,
+	CardHeader,
 } from "@heroui/react";
 import {
 	User,
@@ -21,9 +22,11 @@ import {
 	Clock,
 	XCircle,
 	AlertTriangle,
+	Send,
 	type LucideIcon,
 } from "lucide-react";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { supabase } from "@/config/supabaseclient";
 import { updateUserProfile } from "@/data/supabase/General/User/updateUserProfile";
 import { ImageUploadModal } from "./ImageUploadModal";
 
@@ -135,6 +138,51 @@ export default function Settings() {
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
+		}
+	};
+
+	// Forgot Password logic
+	const [resettingPassword, setResettingPassword] = useState(false);
+
+	const handleForgotPassword = async () => {
+		if (!profile?.login_user_name) {
+			addToast({
+				title: "Error",
+				description: "Username not found. Please contact support.",
+				color: "danger",
+			});
+			return;
+		}
+
+		setResettingPassword(true);
+		try {
+			const email = `${profile.login_user_name}@gmail.com`;
+			const siteUrl =
+				import.meta.env.VITE_SITE_URL || window.location.origin;
+
+			const { error } = await supabase.auth.resetPasswordForEmail(email, {
+				redirectTo: `${siteUrl}/reset-password`,
+			});
+
+			if (error) throw error;
+
+			addToast({
+				title: "Reset Link Sent",
+				description: `A password reset link has been sent to ${email}.`,
+				color: "success",
+				timeout: 5000,
+				shouldShowTimeoutProgress: true,
+			});
+		} catch (error: any) {
+			addToast({
+				title: "Error",
+				description: error.message || "Failed to send reset link",
+				color: "danger",
+				timeout: 5000,
+				shouldShowTimeoutProgress: true,
+			});
+		} finally {
+			setResettingPassword(false);
 		}
 	};
 
@@ -301,6 +349,52 @@ export default function Settings() {
 									Save
 								</Button>
 							</div>
+						</div>
+					</CardBody>
+				</Card>
+
+				{/* Security Card */}
+				<Card className="border-none bg-content1 shadow-sm" radius="lg">
+					<CardHeader className="flex flex-col items-start px-6 pt-6 pb-0 gap-0.5">
+						<h2 className="font-semibold text-base flex items-center gap-2">
+							<Shield size={18} className="text-success" />
+							Security
+						</h2>
+						<p className="text-xs text-default-400">
+							Protect your account and manage access.
+						</p>
+					</CardHeader>
+					<CardBody className="p-6 flex flex-col gap-4">
+						<div className="flex flex-col gap-3">
+							<div className="flex flex-col gap-1">
+								<h3 className="text-sm font-medium">
+									Reset Password
+								</h3>
+								<p className="text-xs text-default-500">
+									Forgot your password? We will send a reset
+									link to your associated virtual email.
+								</p>
+								<p className="text-xs text-default-500">
+									Note: The link will be sent in your email{" "}
+									<strong>
+										{`${profile?.login_user_name}@gmail.com`}
+									</strong>
+									. You have to have access to your email to
+									reset your password.
+								</p>
+							</div>
+							<Button
+								color="success"
+								variant="flat"
+								startContent={
+									!resettingPassword && <Send size={16} />
+								}
+								className="font-medium"
+								onPress={handleForgotPassword}
+								isLoading={resettingPassword}
+							>
+								Send Reset Link
+							</Button>
 						</div>
 					</CardBody>
 				</Card>
