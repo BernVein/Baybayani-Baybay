@@ -82,6 +82,7 @@ export function ItemStockDetail({
 								variant_stock_latest_movement: {
 									...variant.variant_stock_latest_movement,
 									effective_stocks: undefined,
+									stock_change_count: undefined,
 								},
 							});
 
@@ -97,6 +98,7 @@ export function ItemStockDetail({
 							variant_stock_latest_movement: {
 								...variant.variant_stock_latest_movement,
 								effective_stocks: num,
+								stock_change_count: num,
 							},
 						});
 					}}
