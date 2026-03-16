@@ -73,7 +73,7 @@ export default function ResetPassword() {
 					description: "The reset link is invalid or has expired.",
 					color: "danger",
 				});
-				navigate("/shop");
+				// navigate("/shop");
 			}
 		};
 		checkSession();
