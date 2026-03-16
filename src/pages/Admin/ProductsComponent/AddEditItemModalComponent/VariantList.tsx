@@ -157,7 +157,7 @@ export function VariantList({
 												{item.item_sold_by}s
 												{(v
 													.variant_stock_latest_movement
-													.effective_stocks ?? 0) <
+													.effective_stocks ?? 0) <=
 													(v.variant_low_stock_threshold ??
 														0) && (
 													<p className="text-warning text-xs">
