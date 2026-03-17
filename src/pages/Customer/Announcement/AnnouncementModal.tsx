@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
 	Modal,
 	ModalContent,
@@ -9,72 +9,61 @@ import {
 	useDisclosure,
 	Image as HeroImage,
 } from "@heroui/react";
-import { fetchLatestAnnouncement } from "@/data/supabase/Customer/Announcements/fetchAnnouncements";
+import { fetchAnnouncementById } from "@/data/supabase/Customer/Announcements/fetchAnnouncements";
 import { Announcement } from "@/model/Announcement";
 import { useNavigate } from "react-router-dom";
 import { BaybayaniLogo } from "@/components/icons";
+import { useNotifications } from "@/ContextProvider/NotificationContext/NotificationProvider";
 
 export function AnnouncementModal() {
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 	const [latestAnn, setLatestAnn] = useState<Announcement | null>(null);
+	const { notifications, markAsRead } = useNotifications();
 	const navigate = useNavigate();
+	const activeNotificationId = useRef<string | null>(null);
 
 	useEffect(() => {
 		const checkAnnouncement = async () => {
-			const latest = await fetchLatestAnnouncement();
-			if (!latest) return;
-
-			// Check if this announcement was already seen today
-			const lastSeenId = localStorage.getItem(
-				"last_seen_announcement_id",
+			// Find the first unread announcement notification
+			const announcementNotif = notifications.find(
+				(n) => n.type === "announcement" && !n.is_read,
 			);
-			const lastSeenDate = localStorage.getItem(
-				"last_seen_announcement_date",
-			);
-			const today = new Date().toLocaleDateString();
 
-			if (
-				lastSeenId === latest.announcement_id &&
-				lastSeenDate === today
-			) {
+			if (!announcementNotif) {
+				setLatestAnn(null);
 				return;
 			}
 
-			setLatestAnn(latest);
-			onOpen();
+			// Avoid re-fetching same announcement ID multiple times if modal is already open
+			const announcementId = announcementNotif.data?.announcementId;
+			if (!announcementId) return;
+
+			// Store notification ID to mark as read later
+			activeNotificationId.current = announcementNotif.notification_id;
+
+			const announcement = await fetchAnnouncementById(announcementId);
+			if (announcement) {
+				setLatestAnn(announcement);
+				onOpen();
+			}
 		};
 
-		// Check on mount (app open/layout load)
 		checkAnnouncement();
-	}, [onOpen]);
+	}, [notifications, onOpen]);
 
 	const handleSeeMore = () => {
-		if (latestAnn) {
-			localStorage.setItem(
-				"last_seen_announcement_id",
-				latestAnn.announcement_id,
-			);
-			localStorage.setItem(
-				"last_seen_announcement_date",
-				new Date().toLocaleDateString(),
-			);
+		if (activeNotificationId.current) {
+			markAsRead(activeNotificationId.current);
 		}
-		onOpenChange();
+		onClose();
 		navigate("/announcements");
 	};
 
 	const handleClose = () => {
-		if (latestAnn) {
-			localStorage.setItem(
-				"last_seen_announcement_id",
-				latestAnn.announcement_id,
-			);
-			localStorage.setItem(
-				"last_seen_announcement_date",
-				new Date().toLocaleDateString(),
-			);
+		if (activeNotificationId.current) {
+			markAsRead(activeNotificationId.current);
 		}
-		onOpenChange();
+		onClose();
 	};
 
 	if (!latestAnn) return null;

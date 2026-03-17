@@ -44,3 +44,19 @@ export async function fetchLatestAnnouncement() {
 		return null;
 	}
 }
+
+export async function fetchAnnouncementById(announcementId: string) {
+	try {
+		const { data, error } = await supabase
+			.from("Announcement")
+			.select("*, images:Announcement_Image(*)")
+			.eq("announcement_id", announcementId)
+			.maybeSingle();
+
+		if (error) throw error;
+		return data as Announcement | null;
+	} catch (error) {
+		console.error("Error in fetchAnnouncementById:", error);
+		return null;
+	}
+}
