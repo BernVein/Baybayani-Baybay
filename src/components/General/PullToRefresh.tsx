@@ -21,6 +21,16 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 	const MAX_PULL = 150;
 
 	const handleTouchStart = (e: React.TouchEvent) => {
+		// Disable if a modal (dialog) is present or body is scroll-locked
+		const isModalOpen =
+			!!document.querySelector('section[role="dialog"]') ||
+			document.body.style.overflow === "hidden";
+
+		if (isModalOpen) {
+			startY.current = -1;
+			return;
+		}
+
 		if (containerRef.current?.scrollTop === 0) {
 			startY.current = e.touches[0].pageY;
 		} else {
