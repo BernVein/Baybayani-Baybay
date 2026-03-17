@@ -52,30 +52,45 @@ export const registerUser = async (
 
 	if (tableError) {
 		console.error("Users table insert error:", tableError.message);
-		throw new Error(tableError.message);
+		// Note: We don't delete the auth user here because client-side delete is restricted.
+		// The next signup attempt with the same username will likely fail at Auth level anyway.
+		throw new Error(`Profile creation failed: ${tableError.message}`);
 	}
 
-	for (const img of validId) {
-		if (!(img instanceof File)) continue;
+	// ID Upload section - Separate try block to track if account was created but ID failed
+	try {
+		for (const img of validId) {
+			if (!(img instanceof File)) continue;
 
-		const compressedImage = await compressImage(img);
-		const fileExt = img.name.split(".").pop();
-		const fileName = `user-${Date.now()}-${Math.floor(Math.random() * 10000)}.${fileExt}`;
-		const filePath = `user-id/${fileName}`;
+			const compressedImage = await compressImage(img);
+			const fileExt = img.name.split(".").pop();
+			const fileName = `user-${Date.now()}-${Math.floor(Math.random() * 10000)}.${fileExt}`;
+			const filePath = `user-id/${fileName}`;
 
-		const { error: uploadError } = await supabase.storage
-			.from("Valid_Identification")
-			.upload(filePath, compressedImage);
+			const { error: uploadError } = await supabase.storage
+				.from("Valid_Identification")
+				.upload(filePath, compressedImage);
 
-		if (uploadError) throw uploadError;
+			if (uploadError) throw uploadError;
 
-		const publicUrl = supabase.storage
-			.from("Valid_Identification")
-			.getPublicUrl(filePath).data.publicUrl;
+			const publicUrl = supabase.storage
+				.from("Valid_Identification")
+				.getPublicUrl(filePath).data.publicUrl;
 
-		await supabase.from("User_Valid_Identification").insert({
-			user_id: userId,
-			valid_id_img_url: publicUrl,
-		});
+			const { error: idInsertError } = await supabase
+				.from("User_Valid_Identification")
+				.insert({
+					user_id: userId,
+					valid_id_img_url: publicUrl,
+				});
+
+			if (idInsertError) throw idInsertError;
+		}
+	} catch (idError: any) {
+		console.error("ID upload/record error:", idError.message);
+		// We throw a specific error so the UI can know the account exists but ID failed
+		throw new Error(
+			"Account created, but verification ID upload failed. Please contact support or try uploading in settings.",
+		);
 	}
 };

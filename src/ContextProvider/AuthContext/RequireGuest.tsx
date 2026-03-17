@@ -25,10 +25,14 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 	// Open modal as soon as we know the user is logged in
 	// and they are not a new registration waiting for approval
 	useEffect(() => {
-		// Only open the modal if the user is logged in
-		// AND we are on the login or signup page
 		const isAuthPage =
 			location.pathname === "/login" || location.pathname === "/signup";
+
+		// If we are currently in the process of registering, do nothing
+		// This lets SignUp.tsx handle its own lifecycle without interference
+		if (sessionStorage.getItem("isRegistering")) {
+			return;
+		}
 
 		if (!loading && profile && isAuthPage) {
 			const isSilent = sessionStorage.getItem("silentAuthRedirect");

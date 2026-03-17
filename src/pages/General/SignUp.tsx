@@ -75,9 +75,13 @@ export default function SignUp() {
 	const handleRegisterUser = async () => {
 		try {
 			setIsRegistering(true);
+			// Suppress RequireGuest modal and redirect during registration
+			sessionStorage.setItem("isRegistering", "true");
+
 			const nameToUse =
 				role === "Cooperative" ? cooperativeName : fullName;
 			const userProfile: UserProfile = {
+				user_id: "",
 				user_name: nameToUse,
 				user_role: role,
 				user_profile_img_url: `https://api.dicebear.com/6.x/bottts-neutral/svg?seed=${nameToUse}`,
@@ -95,9 +99,26 @@ export default function SignUp() {
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
-			sessionStorage.setItem("silentAuthRedirect", "true");
+			sessionStorage.removeItem("isRegistering");
 			navigate("/shop");
 		} catch (error: any) {
+			const isPartialSuccess = error.message?.includes("Account created");
+
+			if (isPartialSuccess) {
+				addToast({
+					title: "Account Created with Issues",
+					description: error.message,
+					color: "warning",
+					shouldShowTimeoutProgress: true,
+					timeout: 10000,
+				});
+				sessionStorage.removeItem("isRegistering");
+				navigate("/shop");
+				return;
+			}
+
+			// Full failure
+			sessionStorage.removeItem("isRegistering");
 			addToast({
 				title: "Account Creation Failed",
 				description:
