@@ -1,4 +1,6 @@
 import { supabase } from "@/config/supabaseclient";
+import { approveUserNotification } from "./approveUserNotification";
+
 export async function changeUserStatus(
 	userID: string,
 	userStatus: "Approved" | "For Approval" | "Rejected" | "Suspended",
@@ -14,6 +16,10 @@ export async function changeUserStatus(
 			.eq("user_id", userID);
 
 		if (error) throw error;
+
+		if (userStatus === "Approved") {
+			await approveUserNotification(userID);
+		}
 
 		window.dispatchEvent(new Event("baybayani:update-user-table"));
 
