@@ -94,6 +94,7 @@ export const useFetchSingleItem = (item_id: string) => {
 		};
 
 		setItem(mappedItem);
+		console.log(mappedItem);
 	}, [item_id]);
 
 	useEffect(() => {
