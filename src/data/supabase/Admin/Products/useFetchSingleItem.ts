@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-
 import { supabase } from "@/config/supabaseclient";
 import { Item } from "@/model/Item";
 
@@ -94,7 +93,6 @@ export const useFetchSingleItem = (item_id: string) => {
 		};
 
 		setItem(mappedItem);
-		console.log(mappedItem);
 	}, [item_id]);
 
 	useEffect(() => {
