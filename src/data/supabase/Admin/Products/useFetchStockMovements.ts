@@ -62,7 +62,6 @@ export function useFetchStockMovements(
 			setMovements(data || []);
 			setTotalCount(count || 0);
 		} catch (err: any) {
-			console.error("Error fetching stock movements:", err);
 			setError(err.message || "Failed to fetch stock movements");
 		} finally {
 			setIsLoading(false);
