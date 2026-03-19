@@ -32,12 +32,7 @@ export async function approveUserNotification(userId: string) {
 					console.warn(
 						`Push notification SKIPPED for user ${userId}. Reason: ${data.reason}`,
 					);
-				} else {
-					console.log(
-						`Push notification SENT successfully to user ${userId}:`,
-						data,
-					);
-				}
+				} 
 			})
 			.catch((err) =>
 				console.error(
