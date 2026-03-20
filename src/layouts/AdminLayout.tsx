@@ -9,6 +9,7 @@ import { AdminFloatingChat } from "@/pages/Admin/Chat/AdminFloatingChat";
 import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
 import { NotificationBell } from "@/pages/General/Notification/NotificationBell";
 import { PullToRefresh } from "@/components/General/PullToRefresh";
+import useIsMobile from "@/lib/isMobile";
 
 function AdminPageSkeleton() {
 	return (
@@ -34,6 +35,7 @@ export default function AdminLayout() {
 	const auth = useAuth();
 	const user = auth?.user ?? null;
 	const profile = auth?.profile ?? null;
+	const isMobile = useIsMobile();
 
 	useEffect(() => {
 		const updateHeights = () => {
@@ -63,9 +65,11 @@ export default function AdminLayout() {
 			{/* Main Content Area */}
 			<main
 				className="flex-1 h-full overflow-hidden flex flex-col relative"
-				style={{
-					paddingBottom: `${footerHeight}px`,
-				}}
+				style={
+					isMobile
+						? { height: `calc(100dvh - ${footerHeight}px)` }
+						: {}
+				}
 			>
 				<PullToRefresh
 					onRefresh={async () => {
@@ -86,12 +90,14 @@ export default function AdminLayout() {
 			</main>
 
 			{/* Bottom Navbar (Mobile Only) */}
-			<div
-				ref={bottomNavRef}
-				className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
-			>
-				<NavbarMobileAdmin profile={profile} />
-			</div>
+			{!isMobile ? null : (
+				<div
+					ref={bottomNavRef}
+					className="w-full z-50 sm:hidden flex-shrink-0"
+				>
+					<NavbarMobileAdmin profile={profile} />
+				</div>
+			)}
 
 			{/* Admin Floating Chat Widget */}
 			<AdminFloatingChat />
