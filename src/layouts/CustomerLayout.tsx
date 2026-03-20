@@ -73,12 +73,9 @@ export default function CustomerLayout({
 	return (
 		<ClosingTimeProvider>
 			<FloatingChatProvider>
-				<div className="relative min-h-screen bg-background text-foreground">
+				<div className="relative h-[100dvh] w-full bg-background text-foreground overflow-hidden flex flex-col">
 					{/* Top Navbar (+ closing time banner above it) */}
-					<div
-						ref={topNavRef}
-						className="fixed top-0 left-0 w-full z-50"
-					>
+					<div ref={topNavRef} className="w-full z-50 flex-shrink-0">
 						<ClosingTimeBanner />
 						<Navbar
 							user={user}
@@ -91,10 +88,9 @@ export default function CustomerLayout({
 					{/* Page content */}
 					<main
 						style={{
-							paddingTop: `${navHeight}px`,
-							paddingBottom: `${footerHeight}px`,
+							height: `calc(100dvh - ${navHeight + footerHeight}px)`,
 						}}
-						className="h-[calc(100vh-footerHeight)]" // Ensure it takes full height for pull gesture
+						className="flex-1 overflow-hidden relative"
 					>
 						<PullToRefresh
 							onRefresh={async () => {
@@ -112,7 +108,7 @@ export default function CustomerLayout({
 					{/* Bottom Navbar */}
 					<div
 						ref={bottomNavRef}
-						className="fixed bottom-0 left-0 w-full z-50 sm:hidden"
+						className="w-full z-50 sm:hidden flex-shrink-0"
 					>
 						<NavbarMobile
 							user={user}
