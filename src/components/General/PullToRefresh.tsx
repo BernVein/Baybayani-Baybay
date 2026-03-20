@@ -49,12 +49,17 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 			const newDist = Math.min(diff * damping, MAX_PULL);
 			setPullDistance(newDist);
 
-			// Prevent scrolling when pulling down
-			if (diff > 10 && e.cancelable) {
+			// Prevent browser default pull-to-refresh/scroll ONLY if we've moved enough
+			// to committed to our custom pull gesture.
+			if (diff > 5 && e.cancelable) {
 				e.preventDefault();
 			}
 		} else {
-			setPullDistance(0);
+			// If moving finger up (scrolling down), immediately reset pull distance
+			// to allow native scroll to take over without interference.
+			if (pullDistance > 0) {
+				setPullDistance(0);
+			}
 		}
 	};
 
@@ -82,6 +87,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 	return (
 		<div
 			ref={containerRef}
+			style={{ touchAction: "pan-y" }}
 			className="relative w-full h-full overflow-y-auto"
 			onTouchStart={handleTouchStart}
 			onTouchMove={handleTouchMove}
