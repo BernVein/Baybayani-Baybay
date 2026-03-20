@@ -18,6 +18,8 @@ import { Notification } from "@/model/notification";
 import { MegaphoneIcon } from "@/components/icons";
 import { useState } from "react";
 import { AllNotificationsModal } from "./AllNotificationsModal";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { AnnouncementHistoryModal } from "@/pages/Admin/AnnouncementsComponent/AnnouncementHistoryModal";
 
 export function NotificationBell({
 	userId,
@@ -38,7 +40,13 @@ export function NotificationBell({
 
 	const isGuest = !userId;
 
+	const auth = useAuth();
+	const profile = auth?.profile;
+	const isAdmin = profile?.user_role === "Admin";
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isAnnouncementHistoryOpen, setIsAnnouncementHistoryOpen] =
+		useState(false);
 	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
 	const handleViewAll = () => {
@@ -48,7 +56,11 @@ export function NotificationBell({
 
 	const handleAnnouncements = () => {
 		setIsPopoverOpen(false);
-		navigate("/announcements");
+		if (isAdmin) {
+			setIsAnnouncementHistoryOpen(true);
+		} else {
+			navigate("/announcements");
+		}
 	};
 
 	return (
@@ -144,7 +156,13 @@ export function NotificationBell({
 												"announcement"
 											) {
 												setIsPopoverOpen(false);
-												navigate("/announcements");
+												if (isAdmin) {
+													setIsAnnouncementHistoryOpen(
+														true,
+													);
+												} else {
+													navigate("/announcements");
+												}
 											}
 										}}
 										variant="flat"
@@ -249,6 +267,13 @@ export function NotificationBell({
 				isOpen={isModalOpen}
 				onOpenChange={setIsModalOpen}
 				userId={userId}
+			/>
+
+			<AnnouncementHistoryModal
+				isOpen={isAnnouncementHistoryOpen}
+				onOpenChange={() =>
+					setIsAnnouncementHistoryOpen(!isAnnouncementHistoryOpen)
+				}
 			/>
 		</>
 	);
