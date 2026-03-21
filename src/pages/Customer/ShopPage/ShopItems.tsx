@@ -18,6 +18,7 @@ import {
 import ItemCard from "@/pages/Customer/ShopPage/ItemCard";
 import ItemInfoModal from "@/pages/Customer/ShopPage/ItemInfoModal/ItemInfoModalIndex";
 import { useFetchItemCardItems } from "@/data/supabase/Customer/Products/useFetchItemCardItems";
+import useIsMobile from "@/lib/isMobile";
 
 interface ShopItemsProps {
 	activeCategories: string[];
@@ -39,7 +40,7 @@ export default function ShopItems({
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 	const hasFetchedOnce = useRef(false);
-
+	const isMobile = useIsMobile();
 	// Use the hook to fetch items from Supabase
 	const { items, loadMore, hasMore, error, loading } = useFetchItemCardItems(
 		activeCategories,
@@ -204,8 +205,9 @@ export default function ShopItems({
 								variant="flat"
 								startContent={<SortIcon className="size-4" />}
 								className="font-medium"
+								isIconOnly={isMobile}
 							>
-								Sort By
+								{isMobile ? "" : "Sort By"}
 							</Button>
 						</DropdownTrigger>
 						<DropdownMenu
