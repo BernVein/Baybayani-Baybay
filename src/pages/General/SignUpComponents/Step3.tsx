@@ -1,8 +1,10 @@
 const MAX_IMAGES = 2;
 import { TrashIcon } from "@/components/icons";
-import { Button } from "@heroui/react";
+import { Button, addToast } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useRef } from "react";
+import { validateImage } from "@/utils/validateImage";
+
 export function Step3({
 	idImages,
 	setIdImages,
@@ -14,9 +16,26 @@ export function Step3({
 }) {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
-	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleImageChange = async (
+		e: React.ChangeEvent<HTMLInputElement>,
+	) => {
 		const files = Array.from(e.target.files ?? []);
-		setIdImages((prev) => [...prev, ...files].slice(0, MAX_IMAGES));
+		const validFiles: File[] = [];
+
+		for (const file of files) {
+			const isValid = await validateImage(file);
+			if (isValid) {
+				validFiles.push(file);
+			} else {
+				addToast({
+					title: "Invalid Image",
+					description: `The file "${file.name}" is corrupted or not a valid image.`,
+					color: "danger",
+				});
+			}
+		}
+
+		setIdImages((prev) => [...prev, ...validFiles].slice(0, MAX_IMAGES));
 		e.target.value = "";
 	};
 
