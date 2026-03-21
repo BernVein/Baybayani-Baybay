@@ -11,6 +11,7 @@ export function useLogin() {
 	const [loading, setLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const [isSubmitted, setIsSubmitted] = useState(false);
+	const [rememberMe, setRememberMe] = useState(true);
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -33,6 +34,15 @@ export function useLogin() {
 			email: email + "@gmail.com",
 			password,
 		});
+
+		// If "Remember Me" is unchecked, remove the persisted session from
+		// localStorage so the session only lasts until the browser tab is closed.
+		if (!error && !rememberMe) {
+			const storageKey = Object.keys(localStorage).find(
+				(k) => k.startsWith("sb-") && k.endsWith("-auth-token"),
+			);
+			if (storageKey) localStorage.removeItem(storageKey);
+		}
 
 		if (error) {
 			addToast({
@@ -59,7 +69,7 @@ export function useLogin() {
 				.single();
 			userRole = profile?.user_role ?? null;
 		}
-		console.log("Fetched userRole:", userRole, "| user:", user?.id);
+
 		addToast({
 			title: "Success",
 			description: "Logged in successfully",
@@ -104,6 +114,8 @@ export function useLogin() {
 		loading,
 		isVisible,
 		isSubmitted,
+		rememberMe,
+		setRememberMe,
 		toggleVisibility,
 		resetForm,
 		submitLogin,
