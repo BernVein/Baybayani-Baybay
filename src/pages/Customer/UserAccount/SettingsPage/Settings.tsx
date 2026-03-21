@@ -86,6 +86,7 @@ export default function Settings() {
 		});
 		setSavingName(false);
 		if (success) {
+			if (auth?.refresh) await auth.refresh();
 			addToast({
 				title: "Name Updated",
 				description: "Your display name has been saved.",
@@ -123,6 +124,7 @@ export default function Settings() {
 		});
 		setSavingPhone(false);
 		if (success) {
+			if (auth?.refresh) await auth.refresh();
 			addToast({
 				title: "Phone Updated",
 				description: "Your phone number has been saved.",
