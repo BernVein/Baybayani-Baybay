@@ -33,6 +33,13 @@ export const registerUser = async (
 		processedImages.push({ file: compressed, originalName: img.name });
 	}
 
+	// Guard: all uploads were skipped (no valid File objects passed)
+	if (processedImages.length === 0) {
+		throw new Error(
+			"No valid images were provided. Please upload a valid ID image.",
+		);
+	}
+
 	// 2. Proceed with Auth signup only if images are valid and processed
 	const { data: authData, error: authError } = await supabase.auth.signUp({
 		email: profile.login_user_name + "@gmail.com",
@@ -68,14 +75,25 @@ export const registerUser = async (
 
 	if (tableError) {
 		console.error("Users table insert error:", tableError.message);
+		// Rollback: delete the auth user we just created so there's no zombie account.
+		// Uses a SECURITY DEFINER Postgres function, no admin key needed on client.
+		// Cause the user can only delete its own account
+		const { error } = await supabase.rpc("delete_own_auth_user");
+
+		if (error) {
+			console.error("Delete failed:", error);
+			return;
+		}
+
+		await supabase.auth.signOut();
 		throw new Error(`Profile creation failed: ${tableError.message}`);
 	}
 
 	// 4. ID Upload section - All images are already compressed and validated
 	try {
-		for (const { file, originalName } of processedImages) {
-			const fileExt = originalName.split(".").pop();
-			const fileName = `user-${Date.now()}-${Math.floor(Math.random() * 10000)}.${fileExt}`;
+		for (const { file } of processedImages) {
+			// Compressed output is always JPEG — use .jpg regardless of original extension
+			const fileName = `user-${Date.now()}-${Math.floor(Math.random() * 10000)}.jpg`;
 			const filePath = `user-id/${fileName}`;
 
 			const { error: uploadError } = await supabase.storage
