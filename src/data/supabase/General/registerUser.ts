@@ -14,10 +14,26 @@ export const registerUser = async (
 			useWebWorker: true,
 			fileType: "image/jpeg",
 		};
-		const compressedFile = await imageCompression(file, options);
-		return compressedFile;
+		try {
+			const compressedFile = await imageCompression(file, options);
+			return compressedFile;
+		} catch (error) {
+			console.error("Compression error for file:", file.name, error);
+			throw new Error(
+				`Failed to process image "${file.name}". It might be corrupted or not a valid image format.`,
+			);
+		}
 	};
 
+	// 1. Process and compress all images FIRST to ensure they are valid
+	const processedImages: { file: File; originalName: string }[] = [];
+	for (const img of validId) {
+		if (!(img instanceof File)) continue;
+		const compressed = await compressImage(img);
+		processedImages.push({ file: compressed, originalName: img.name });
+	}
+
+	// 2. Proceed with Auth signup only if images are valid and processed
 	const { data: authData, error: authError } = await supabase.auth.signUp({
 		email: profile.login_user_name + "@gmail.com",
 		password,
@@ -33,7 +49,7 @@ export const registerUser = async (
 		throw new Error("No user ID returned from Auth");
 	}
 
-	// Insert user into users table
+	// 3. Insert user into users table
 	const { error: tableError } = await supabase
 		.from("User")
 		.insert([
@@ -52,24 +68,19 @@ export const registerUser = async (
 
 	if (tableError) {
 		console.error("Users table insert error:", tableError.message);
-		// Note: We don't delete the auth user here because client-side delete is restricted.
-		// The next signup attempt with the same username will likely fail at Auth level anyway.
 		throw new Error(`Profile creation failed: ${tableError.message}`);
 	}
 
-	// ID Upload section - Separate try block to track if account was created but ID failed
+	// 4. ID Upload section - All images are already compressed and validated
 	try {
-		for (const img of validId) {
-			if (!(img instanceof File)) continue;
-
-			const compressedImage = await compressImage(img);
-			const fileExt = img.name.split(".").pop();
+		for (const { file, originalName } of processedImages) {
+			const fileExt = originalName.split(".").pop();
 			const fileName = `user-${Date.now()}-${Math.floor(Math.random() * 10000)}.${fileExt}`;
 			const filePath = `user-id/${fileName}`;
 
 			const { error: uploadError } = await supabase.storage
 				.from("Valid_Identification")
-				.upload(filePath, compressedImage);
+				.upload(filePath, file);
 
 			if (uploadError) throw uploadError;
 
@@ -88,7 +99,6 @@ export const registerUser = async (
 		}
 	} catch (idError: any) {
 		console.error("ID upload/record error:", idError.message);
-		// We throw a specific error so the UI can know the account exists but ID failed
 		throw new Error(
 			"Account created, but verification ID upload failed. Please contact support or try uploading in settings.",
 		);
