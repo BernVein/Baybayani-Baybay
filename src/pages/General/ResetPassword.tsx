@@ -90,10 +90,10 @@ export default function ResetPassword() {
 		e.preventDefault();
 		setIsSubmitted(true);
 
-		if (password.length < 6) {
+		if (password.length < 8) {
 			addToast({
 				title: "Validation Error",
-				description: "Password must be at least 6 characters",
+				description: "Password must be at least 8 characters",
 				color: "warning",
 			});
 			return;
@@ -207,11 +207,11 @@ export default function ResetPassword() {
 								New Password
 							</p>
 							<Input
-								placeholder="At least 6 characters"
+								placeholder="At least 8 characters"
 								type={isVisible ? "text" : "password"}
 								value={password}
 								onValueChange={setPassword}
-								isInvalid={isSubmitted && password.length < 6}
+								isInvalid={isSubmitted && password.length < 8}
 								errorMessage="Password too short"
 								endContent={
 									<button
