@@ -22,8 +22,10 @@ export function useReportData(
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<any>(null);
 
-	const fetchReportData = useCallback(async () => {
-		if (!dateRange) return;
+	const fetchReportData = useCallback(async (): Promise<
+		ReportData[] | null
+	> => {
+		if (!dateRange) return null;
 		setLoading(true);
 		setError(null);
 
@@ -87,9 +89,11 @@ export function useReportData(
 			);
 
 			setReportData(formattedData);
+			return formattedData;
 		} catch (err) {
 			console.error("Error fetching report data:", err);
 			setError(err);
+			return null;
 		} finally {
 			setLoading(false);
 		}
