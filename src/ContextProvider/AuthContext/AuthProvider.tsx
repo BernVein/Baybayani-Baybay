@@ -8,12 +8,13 @@ const AuthContext = createContext<{
 	user: AuthUser | null;
 	profile: UserProfile | null;
 	loading: boolean;
+	refresh: () => Promise<void>;
 } | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-	const { user, profile, loading } = fetchUser();
+	const { user, profile, loading, refresh } = fetchUser();
 	return (
-		<AuthContext.Provider value={{ user, profile, loading }}>
+		<AuthContext.Provider value={{ user, profile, loading, refresh }}>
 			{children}
 		</AuthContext.Provider>
 	);
