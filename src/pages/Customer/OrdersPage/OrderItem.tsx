@@ -12,7 +12,7 @@ import {
 import { OrderCard } from "@/model/ui/Customer/order_card";
 import { OrderCancelModal } from "@/pages/General/Orders/OrderCancelModal";
 import { changeOrderStatus } from "@/data/supabase/Admin/Orders/changeOrderStatus";
-import { LoadingModal } from "@/pages/General/Orders/LoadingModal";
+import { LoadingModal } from "@/components/General/LoadingModal";
 
 import { Dispatch, SetStateAction } from "react";
 import { OrderCancelReasonModal } from "@/pages/General/Orders/OrderCancelReasonModal";

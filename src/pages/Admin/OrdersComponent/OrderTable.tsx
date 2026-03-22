@@ -12,7 +12,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { InsufficientStockModal } from "@/pages/Admin/OrdersComponent/InsufficientStockModal";
 import { useDisclosure } from "@heroui/react";
 import { OrderCancelModal } from "@/pages/General/Orders/OrderCancelModal";
-import { LoadingModal } from "@/pages/General/Orders/LoadingModal";
+import { LoadingModal } from "@/components/General/LoadingModal";
 import { OrderTableSkeleton } from "@/components/skeletons/Admin/Orders/OrderTableSkeleton";
 
 export function OrderTable({
