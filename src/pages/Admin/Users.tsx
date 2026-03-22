@@ -29,14 +29,20 @@ export default function Users() {
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 	const [page, setPage] = useState<number>(1);
 
-	const { userProfiles, setUserProfiles, loading, totalCount, pageSize } =
-		fetchAllUsers(
-			searchTerm,
-			sortConfig,
-			selectedRoles,
-			selectedStatuses,
-			page,
-		);
+	const {
+		userProfiles,
+		setUserProfiles,
+		loading,
+		fetchError,
+		totalCount,
+		pageSize,
+	} = fetchAllUsers(
+		searchTerm,
+		sortConfig,
+		selectedRoles,
+		selectedStatuses,
+		page,
+	);
 
 	const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -202,7 +208,14 @@ export default function Users() {
 				/>
 			</div>
 
-			{loading ? (
+			{fetchError ? (
+				<div className="flex flex-col items-center justify-center py-16 gap-3 text-danger">
+					<p className="text-lg font-semibold">
+						Failed to load users
+					</p>
+					<p className="text-sm text-default-500">{fetchError}</p>
+				</div>
+			) : loading ? (
 				renderSkeleton()
 			) : (
 				<div className="flex-1 min-h-0 flex flex-col">
