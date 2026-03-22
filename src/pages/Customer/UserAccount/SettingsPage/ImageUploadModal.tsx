@@ -12,6 +12,7 @@ import {
 import { Camera, Upload, X } from "lucide-react";
 import { uploadProfileImage } from "@/data/supabase/General/User/uploadProfileImage";
 import { updateUserProfile } from "@/data/supabase/General/User/updateUserProfile";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
 interface ImageUploadModalProps {
 	isOpen: boolean;
@@ -52,6 +53,7 @@ export function ImageUploadModal({
 	userId,
 	onSuccess,
 }: ImageUploadModalProps) {
+	const auth = useAuth();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [previewSrc, setPreviewSrc] = useState<string | null>(null);
 	const [previewFile, setPreviewFile] = useState<File | null>(null);
@@ -122,6 +124,8 @@ export function ImageUploadModal({
 			return;
 		}
 
+		if (auth?.refresh) await auth.refresh();
+
 		addToast({
 			title: "Photo Updated",
 			description: "Your profile picture has been updated.",
@@ -130,6 +134,7 @@ export function ImageUploadModal({
 			timeout: 4000,
 		});
 		setUploadingImage(false);
+		handleClearPreview();
 		onSuccess(publicUrl);
 		onClose();
 	};
@@ -224,7 +229,7 @@ export function ImageUploadModal({
 								isDisabled={!previewFile || uploadingImage}
 								startContent={
 									uploadingImage ? (
-										<Spinner size="sm" color="white" />
+										<Spinner size="sm" />
 									) : (
 										<Upload size={16} />
 									)
