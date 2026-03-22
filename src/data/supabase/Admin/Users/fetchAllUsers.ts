@@ -25,7 +25,7 @@ export const fetchAllUsers = (
 	const [userProfiles, setUserProfiles] = useState<UserProfile[] | null>(
 		null,
 	);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [fetchError, setFetchError] = useState<string | null>(null);
 	const [totalCount, setTotalCount] = useState<number>(0);
 
