@@ -55,6 +55,10 @@ export default function Cart() {
 		};
 	}, [refetch]);
 
+	useEffect(() => {
+		document.title = "Baybayani | Cart";
+	}, []);
+
 	const allCartItems = items ?? [];
 
 	const selectedSubtotal = useMemo(
