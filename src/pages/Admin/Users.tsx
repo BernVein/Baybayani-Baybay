@@ -16,7 +16,9 @@ import {
 	TableRow,
 	TableCell,
 	addToast,
+	useDisclosure,
 } from "@heroui/react";
+import { LoadingModal } from "@/components/General/LoadingModal";
 
 export default function Users() {
 	const { profile } = useOutletContext<any>();
@@ -44,6 +46,13 @@ export default function Users() {
 		page,
 	);
 
+	const {
+		isOpen: isOpenLoading,
+		onOpen: onOpenLoading,
+		onClose: onCloseLoading,
+		onOpenChange: onOpenChangeLoading,
+	} = useDisclosure();
+
 	const totalPages = Math.ceil(totalCount / pageSize);
 
 	useEffect(() => {
@@ -54,31 +63,47 @@ export default function Users() {
 		userID: string,
 		userStatus: "Approved" | "For Approval" | "Rejected" | "Suspended",
 	) => {
-		const { success, error } = await changeUserStatus(userID, userStatus);
-		if (success) {
-			addToast({
-				title: "Success",
-				description: `User status changed to ${userStatus} successfully`,
-				color: "success",
-				shouldShowTimeoutProgress: true,
-				timeout: 5000,
-			});
-			setUserProfiles((prev) => {
-				if (!prev) return prev;
-				return prev.map((user) =>
-					user.user_id === userID
-						? { ...user, user_status: userStatus }
-						: user,
-				);
-			});
-		} else {
+		onOpenLoading();
+		try {
+			const { success, error } = await changeUserStatus(
+				userID,
+				userStatus,
+			);
+			if (success) {
+				addToast({
+					title: "Success",
+					description: `User status changed to ${userStatus} successfully`,
+					color: "success",
+					shouldShowTimeoutProgress: true,
+					timeout: 5000,
+				});
+				setUserProfiles((prev) => {
+					if (!prev) return prev;
+					return prev.map((user) =>
+						user.user_id === userID
+							? { ...user, user_status: userStatus }
+							: user,
+					);
+				});
+			} else {
+				addToast({
+					title: "Error",
+					description: error,
+					color: "danger",
+					shouldShowTimeoutProgress: true,
+					timeout: 5000,
+				});
+			}
+		} catch (error: any) {
 			addToast({
 				title: "Error",
-				description: error,
+				description: error?.message || "An unexpected error occurred",
 				color: "danger",
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
+		} finally {
+			onCloseLoading();
 		}
 	};
 
@@ -235,6 +260,12 @@ export default function Users() {
 					/>
 				</div>
 			)}
+			<LoadingModal
+				isOpenLoading={isOpenLoading}
+				onOpenChangeLoading={onOpenChangeLoading}
+				title="Updating Status"
+				message="Please wait while we update the user status."
+			/>
 		</div>
 	);
 }
