@@ -68,8 +68,8 @@ export default function Dashboard() {
 
 	const handleExport = async () => {
 		if (reportLoading) return;
-		await refetchReport();
-		exportReportToExcel(reportData, formattedRange);
+		const freshData = await refetchReport();
+		exportReportToExcel(freshData ?? reportData, formattedRange);
 	};
 
 	const loading = statsLoading || reportLoading;
@@ -100,7 +100,7 @@ export default function Dashboard() {
 					color="success"
 				/>
 				<Button
-					disabled={loading}
+					isDisabled={loading}
 					isLoading={reportLoading}
 					onPress={handleExport}
 					isIconOnly={isMobile}
