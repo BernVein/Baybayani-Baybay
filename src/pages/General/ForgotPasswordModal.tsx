@@ -48,7 +48,7 @@ export function ForgotPasswordModal({
 
 			addToast({
 				title: "Reset Link Sent",
-				description: `A password reset link has been sent to ${email}. Please check your inbox or create the account if it doesn't exist.`,
+				description: `If an account exists for ${email}, a password reset link has been sent. Please check your inbox.`,
 				color: "success",
 				timeout: 5000,
 				shouldShowTimeoutProgress: true,
