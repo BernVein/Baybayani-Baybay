@@ -32,6 +32,8 @@ export default function Login() {
 		loading,
 		isVisible,
 		isSubmitted,
+		rememberMe,
+		setRememberMe,
 		toggleVisibility,
 		submitLogin,
 	} = useLogin();
@@ -118,7 +120,8 @@ export default function Login() {
 								<div className="flex justify-between items-center mt-5 w-full">
 									<div className="flex items-center gap-2">
 										<Checkbox
-											defaultSelected
+											isSelected={rememberMe}
+											onValueChange={setRememberMe}
 											color="success"
 											size="sm"
 										/>
