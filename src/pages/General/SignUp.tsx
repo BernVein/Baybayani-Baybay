@@ -13,6 +13,7 @@ import { Step3 } from "@/pages/General/SignUpComponents/Step3";
 import { registerUser } from "@/data/supabase/General/registerUser";
 import { UserProfile } from "@/model/userProfile";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 
 const TOTAL_STEPS = 3;
 const STEP_LABELS = ["Account Info", "Password", "Valid ID"];
@@ -44,7 +45,7 @@ export default function SignUp() {
 	const step1Valid =
 		(isCooperative
 			? cooperativeName.trim() !== ""
-			: fullName.trim() !== "" && fullName.trim() !== "") &&
+			: fullName.trim() !== "") &&
 		username.trim() !== "" &&
 		phone.trim() !== "";
 
@@ -72,6 +73,7 @@ export default function SignUp() {
 		handleRegisterUser();
 	};
 
+	const auth = useAuth();
 	const handleRegisterUser = async () => {
 		try {
 			setIsRegistering(true);
@@ -91,6 +93,7 @@ export default function SignUp() {
 				user_status: "For Approval",
 			};
 			await registerUser(userProfile, password, idImages);
+			if (auth?.refresh) await auth.refresh();
 
 			addToast({
 				title: "Account Created",
@@ -100,6 +103,7 @@ export default function SignUp() {
 				timeout: 5000,
 			});
 			sessionStorage.removeItem("isRegistering");
+			setIsRegistering(false);
 			navigate("/shop");
 		} catch (error: any) {
 			const isPartialSuccess = error.message?.includes("Account created");
@@ -119,10 +123,15 @@ export default function SignUp() {
 
 			// Full failure
 			sessionStorage.removeItem("isRegistering");
+			const isNetworkError =
+				error.message === "Failed to fetch" ||
+				error.message?.toLowerCase().includes("network");
 			addToast({
 				title: "Account Creation Failed",
-				description:
-					error.message || "Something went wrong. Please try again.",
+				description: isNetworkError
+					? "No internet connection. Please check your network and try again."
+					: error.message ||
+						"Something went wrong. Please try again.",
 				color: "danger",
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
