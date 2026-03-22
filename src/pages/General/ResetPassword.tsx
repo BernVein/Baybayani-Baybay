@@ -68,7 +68,6 @@ export default function ResetPassword() {
 			const {
 				data: { session },
 			} = await supabase.auth.getSession();
-			console.log("Reset session check:", session);
 
 			const hash = window.location.hash;
 			const isErrorHash = hash && hash.includes("error=");
