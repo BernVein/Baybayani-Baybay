@@ -1,8 +1,9 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { addToast, Spinner } from "@heroui/react";
+import { addToast, Spinner, useDisclosure } from "@heroui/react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { LoadingModal } from "@/components/General/LoadingModal";
 import { supabase } from "@/config/supabaseclient";
 import { useNavigate } from "react-router-dom";
 import CustomerLayout from "@/layouts/CustomerLayout";
@@ -53,7 +54,15 @@ function App() {
 	}, [user?.id]);
 	const navigate = useNavigate();
 
+	const {
+		isOpen: isOpenLoading,
+		onOpen: onOpenLoading,
+		onClose: onCloseLoading,
+		onOpenChange: onOpenChangeLoading,
+	} = useDisclosure();
+
 	const handleSignOut = async () => {
+		onOpenLoading();
 		try {
 			await unregisterPush();
 			await supabase.auth.signOut();
@@ -73,6 +82,8 @@ function App() {
 				shouldShowTimeoutProgress: true,
 				timeout: 5000,
 			});
+		} finally {
+			onCloseLoading();
 		}
 	};
 	function ScrollToTop() {
@@ -208,6 +219,12 @@ function App() {
 						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</Suspense>
+				<LoadingModal
+					isOpenLoading={isOpenLoading}
+					onOpenChangeLoading={onOpenChangeLoading}
+					title="Signing out"
+					message="Please wait while we sign you out."
+				/>
 			</NotificationProvider>
 		</LoginModalProvider>
 	);
