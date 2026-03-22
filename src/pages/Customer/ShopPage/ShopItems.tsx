@@ -48,21 +48,22 @@ export default function ShopItems({
 		sortOption,
 	);
 
-	// Infinite scroll: call loadMore() when near bottom
+	// Infinite scroll: show a sentinel div and observe it with IntersectionObserver
+	const sentinelRef = useRef<HTMLDivElement | null>(null);
+
 	useEffect(() => {
-		const handleScroll = () => {
-			if (
-				window.innerHeight + window.scrollY >=
-				document.documentElement.scrollHeight - 100
-			) {
-				if (hasMore) loadMore();
-			}
-		};
-
-		window.addEventListener("scroll", handleScroll);
-
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, [hasMore, loadMore]);
+		if (!sentinelRef.current) return;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && hasMore && !loading) {
+					loadMore();
+				}
+			},
+			{ threshold: 0.1 },
+		);
+		observer.observe(sentinelRef.current);
+		return () => observer.disconnect();
+	}, [hasMore, loading, loadMore]);
 
 	const toastShown = useRef(false);
 
@@ -70,11 +71,14 @@ export default function ShopItems({
 	useEffect(() => {
 		if (loading) return; // wait for items to finish loading
 
+		// Mark as fetched once after the first successful load finishes
+		if (!hasFetchedOnce.current) {
+			hasFetchedOnce.current = true;
+		}
+
 		// Reset toast if items exist
 		if (items.length > 0) {
-			hasFetchedOnce.current = true;
 			toastShown.current = false;
-
 			return;
 		}
 		if (!hasFetchedOnce.current) return;
@@ -153,11 +157,11 @@ export default function ShopItems({
 				}}
 			>
 				<ModalContent className="max-w-sm">
-					<ModalHeader>No Internet Detected</ModalHeader>
+					<ModalHeader>Failed to Load Items</ModalHeader>
 					<ModalBody>
 						<p className="text-sm text-default-500">
-							Unable to load items. Please check your internet
-							connection and try again later.
+							Something went wrong while loading items. Please
+							check your connection and try again.
 						</p>
 					</ModalBody>
 					<ModalFooter>
@@ -269,6 +273,11 @@ export default function ShopItems({
 							</div>
 						))}
 				</div>
+
+				{/* Sentinel for IntersectionObserver infinite scroll */}
+				{hasMore && !loading && (
+					<div ref={sentinelRef} className="h-4 w-full" />
+				)}
 			</div>
 
 			<ItemInfoModal
