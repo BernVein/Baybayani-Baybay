@@ -306,7 +306,7 @@ export default function SignUp() {
 								<Button
 									type="submit"
 									color="success"
-									className="font-semibold text-white"
+									className="font-semibold"
 									endContent={<RightArrow className="w-4" />}
 									isDisabled={checkingUsername}
 								>
@@ -317,7 +317,7 @@ export default function SignUp() {
 									type="submit"
 									color="success"
 									fullWidth={step === 0}
-									className="font-semibold text-white"
+									className="font-semibold"
 									isLoading={isRegistering}
 								>
 									Create Account
