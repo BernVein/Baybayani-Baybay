@@ -108,6 +108,9 @@ export default function OrderItem({
 										{orderItem.item_name}
 									</span>
 								</div>
+								<span className="text-xs italic text-default-500">
+									Order ID: {orderItem.order_identifier}
+								</span>
 							</div>
 
 							<div className="flex flex-col w-1/4 gap-2 items-end">
