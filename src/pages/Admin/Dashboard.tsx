@@ -6,7 +6,7 @@ import {
 	RangeValue,
 } from "@heroui/react";
 import { useOutletContext } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
 	parseDate,
 	getLocalTimeZone,
@@ -27,6 +27,10 @@ import { exportReportToExcel } from "@/utils/excelExport";
 export default function Dashboard() {
 	const isMobile = useIsMobile();
 	const { profile } = useOutletContext<any>();
+
+	useEffect(() => {
+		document.title = "Baybayani | Admin Dashboard";
+	}, []);
 
 	// Default date range: 1st of current month to today
 	const now = today(getLocalTimeZone());
