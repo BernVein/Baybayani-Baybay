@@ -10,7 +10,7 @@ import {
 	useDisclosure,
 	CardFooter,
 } from "@heroui/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import {
 	MegaphoneIcon,
@@ -23,6 +23,10 @@ import { AnnouncementHistoryModal } from "./AnnouncementsComponent/AnnouncementH
 
 export default function AdminAnnouncements() {
 	const { profile } = useOutletContext<any>();
+
+	useEffect(() => {
+		document.title = "Baybayani | Admin Announcements";
+	}, []);
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
 	const [images, setImages] = useState<File[]>([]);
