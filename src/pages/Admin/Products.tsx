@@ -9,6 +9,10 @@ import { useFetchProductsUI } from "@/data/supabase/Admin/Products/useFetchProdu
 
 export default function Products() {
 	const { profile } = useOutletContext<any>();
+
+	useEffect(() => {
+		document.title = "Baybayani | Admin Products";
+	}, []);
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 	const [page, setPage] = useState<number>(1);
