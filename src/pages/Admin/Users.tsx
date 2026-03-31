@@ -22,6 +22,10 @@ import { LoadingModal } from "@/components/General/LoadingModal";
 
 export default function Users() {
 	const { profile } = useOutletContext<any>();
+
+	useEffect(() => {
+		document.title = "Baybayani | Admin Users";
+	}, []);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [sortConfig, setSortConfig] = useState({
 		column: "created_at",
