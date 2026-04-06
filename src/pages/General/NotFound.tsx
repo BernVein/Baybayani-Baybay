@@ -2,12 +2,17 @@ import { Button, Link } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { BaybayaniLogo } from "@/components/icons";
 import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
+import { useEffect } from "react";
 
 const NotFound = () => {
 	const navigate = useNavigate();
 	const auth = useAuth();
 	const isLoggedIn = !!auth?.user;
 	const isAdmin = auth?.profile?.user_role === "Admin";
+
+	useEffect(() => {
+		document.title = "Baybayani | 404 Not Found";
+	}, []);
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen p-4 text-center bg-background">
