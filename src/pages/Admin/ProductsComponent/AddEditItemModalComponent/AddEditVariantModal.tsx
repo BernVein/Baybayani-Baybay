@@ -339,7 +339,8 @@ export function AddEditVariantModal({
 
 	return (
 		<>
-			<Modal backdrop="blur"
+			<Modal
+				backdrop="blur"
 				disableAnimation
 				isDismissable={false}
 				isOpen={isOpenAddVar}
@@ -427,8 +428,8 @@ export function AddEditVariantModal({
 											label="Low Stock Alert Threshold"
 											type="text"
 											value={
-												variant.variant_low_stock_threshold !==
-												undefined
+												variant.variant_low_stock_threshold !=
+												null
 													? String(
 															variant.variant_low_stock_threshold,
 														)
