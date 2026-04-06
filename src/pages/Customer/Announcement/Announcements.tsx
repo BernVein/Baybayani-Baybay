@@ -24,6 +24,10 @@ export default function CustomerAnnouncements() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	useEffect(() => {
+		document.title = "Baybayani | Announcements";
+	}, []);
+
+	useEffect(() => {
 		const load = async () => {
 			setLoading(true);
 			const { data, total } = await fetchAnnouncements(page, pageSize);
