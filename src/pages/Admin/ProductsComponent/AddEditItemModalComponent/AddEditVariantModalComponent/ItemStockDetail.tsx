@@ -68,7 +68,7 @@ export function ItemStockDetail({
 					type="text"
 					value={
 						variant.variant_stock_latest_movement
-							.effective_stocks !== undefined
+							.effective_stocks != null
 							? String(
 									variant.variant_stock_latest_movement
 										.effective_stocks,
@@ -185,7 +185,7 @@ export function ItemStockDetail({
 					type="text"
 					value={
 						variant.variant_stock_latest_movement
-							.stock_adjustment_amount !== undefined
+							.stock_adjustment_amount != null
 							? String(
 									variant.variant_stock_latest_movement
 										.stock_adjustment_amount,
