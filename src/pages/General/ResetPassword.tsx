@@ -22,6 +22,11 @@ import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 export default function ResetPassword() {
 	const navigate = useNavigate();
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+	useEffect(() => {
+		document.title = "Baybayani | Reset Password";
+	}, []);
+
 	const [errorTitle, setErrorTitle] = useState("Link Expired");
 	const [errorDescription, setErrorDescription] = useState(
 		"This password reset link is invalid or has already been used.",
