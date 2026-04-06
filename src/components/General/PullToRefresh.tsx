@@ -79,51 +79,53 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 
 	// Only enable for Android/Mobile Capacitor or if you want it everywhere
 	const isAndroid = Capacitor.getPlatform() === "android";
-
-	if (!isAndroid && process.env.NODE_ENV === "production") {
-		return <>{children}</>;
-	}
+	const isProduction = process.env.NODE_ENV === "production";
+	const enablePull = isAndroid || !isProduction;
 
 	return (
 		<div
 			ref={containerRef}
-			style={{ touchAction: "pan-y" }}
+			style={{ touchAction: enablePull ? "pan-y" : "auto" }}
 			className="relative w-full h-full overflow-y-auto"
-			onTouchStart={handleTouchStart}
-			onTouchMove={handleTouchMove}
-			onTouchEnd={handleTouchEnd}
+			onTouchStart={enablePull ? handleTouchStart : undefined}
+			onTouchMove={enablePull ? handleTouchMove : undefined}
+			onTouchEnd={enablePull ? handleTouchEnd : undefined}
 		>
-			<motion.div
-				style={{
-					height: pullDistance,
-					opacity: pullDistance / PULL_THRESHOLD,
-				}}
-				className="flex items-center justify-center overflow-hidden bg-background/80 backdrop-blur-sm"
-			>
-				<div className="flex flex-col items-center gap-1">
-					<motion.div
-						animate={isRefreshing ? { rotate: 360 } : { rotate: 0 }}
-						transition={
-							isRefreshing
-								? {
-										duration: 1,
-										repeat: Infinity,
-										ease: "linear",
-									}
-								: {}
-						}
-					>
-						<Loader2
-							className={`w-6 h-6 ${isRefreshing ? "text-success" : "text-default-500"}`}
-						/>
-					</motion.div>
-					{pullDistance >= PULL_THRESHOLD && !isRefreshing && (
-						<span className="text-xs text-default-500 font-medium animate-pulse">
-							Release to refresh
-						</span>
-					)}
-				</div>
-			</motion.div>
+			{enablePull && (
+				<motion.div
+					style={{
+						height: pullDistance,
+						opacity: pullDistance / PULL_THRESHOLD,
+					}}
+					className="flex items-center justify-center overflow-hidden bg-background/80 backdrop-blur-sm"
+				>
+					<div className="flex flex-col items-center gap-1">
+						<motion.div
+							animate={
+								isRefreshing ? { rotate: 360 } : { rotate: 0 }
+							}
+							transition={
+								isRefreshing
+									? {
+											duration: 1,
+											repeat: Infinity,
+											ease: "linear",
+										}
+									: {}
+							}
+						>
+							<Loader2
+								className={`w-6 h-6 ${isRefreshing ? "text-success" : "text-default-500"}`}
+							/>
+						</motion.div>
+						{pullDistance >= PULL_THRESHOLD && !isRefreshing && (
+							<span className="text-xs text-default-500 font-medium animate-pulse">
+								Release to refresh
+							</span>
+						)}
+					</div>
+				</motion.div>
+			)}
 			<motion.div
 				animate={{ y: isRefreshing ? 0 : 0 }} // Keep content stable or add slight bounce
 				className="relative z-10"
