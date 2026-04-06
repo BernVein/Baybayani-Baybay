@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Image, addToast, Button } from "@heroui/react";
 import {
 	BaybayaniLogo,
@@ -39,6 +39,10 @@ export default function SignUp() {
 	const [isRegistering, setIsRegistering] = useState(false);
 	// Validation triggered
 	const [tried, setTried] = useState(false);
+
+	useEffect(() => {
+		document.title = "Baybayani | Sign Up";
+	}, []);
 
 	const isCooperative = role === "Cooperative";
 
