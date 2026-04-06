@@ -35,7 +35,7 @@ export function ItemPricingDetail({
 					}
 					type="text"
 					value={
-						variant.variant_price_retail !== undefined
+						variant.variant_price_retail != null
 							? String(variant.variant_price_retail)
 							: ""
 					}
@@ -74,8 +74,7 @@ export function ItemPricingDetail({
 					}
 					type="text"
 					value={
-						variant.variant_price_wholesale !== undefined ||
-						variant.variant_price_wholesale === null
+						variant.variant_price_wholesale != null
 							? String(variant.variant_price_wholesale)
 							: ""
 					}
