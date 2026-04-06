@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	Button,
 	Input,
@@ -69,6 +69,10 @@ export default function Settings() {
 	const auth = useAuth();
 	const profile = auth?.profile ?? null;
 	const user = auth?.user ?? null;
+
+	useEffect(() => {
+		document.title = "Baybayani | Settings";
+	}, []);
 
 	// Editable: display name
 	const [userName, setUserName] = useState(profile?.user_name ?? "");
