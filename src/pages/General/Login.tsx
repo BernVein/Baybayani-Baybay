@@ -13,7 +13,7 @@ import { BaybayaniLogo } from "@/components/icons";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { useLogin } from "@/data/supabase/General/AuthContext/useLogin";
 import { useNavigate } from "react-router-dom";
-import { useTransition } from "react";
+import { useTransition, useEffect } from "react";
 import { ForgotPasswordModal } from "@/pages/General/ForgotPasswordModal";
 
 export default function Login() {
@@ -37,6 +37,10 @@ export default function Login() {
 		toggleVisibility,
 		submitLogin,
 	} = useLogin();
+
+	useEffect(() => {
+		document.title = "Baybayani | Login";
+	}, []);
 
 	return (
 		<div className="relative min-h-screen flex">
