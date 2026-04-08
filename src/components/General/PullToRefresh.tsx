@@ -18,7 +18,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 	const startY = useRef(0);
 
 	const PULL_THRESHOLD = 80;
-	const MAX_PULL = 150;
+	const MAX_PULL = 140;
 
 	const handleTouchStart = (e: React.TouchEvent) => {
 		// Disable if a modal (dialog) is present or body is scroll-locked
@@ -77,7 +77,8 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 		startY.current = -1;
 	};
 
-	// Only enable for Android/Mobile Capacitor or if you want it everywhere
+	// Only enable for Android/Mobile Capacitor
+	// This can sometimes cause an error. Note that this does not work on mobile view on web.
 	const isAndroid = Capacitor.getPlatform() === "android";
 	const isProduction = process.env.NODE_ENV === "production";
 	const enablePull = isAndroid || !isProduction;
