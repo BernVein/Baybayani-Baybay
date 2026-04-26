@@ -124,6 +124,7 @@ export function OrderTable({
 								...o,
 								status: changeToStatus,
 								cancel_reason: cancelReason,
+								last_updated: new Date().toISOString(),
 							}
 						: o,
 				);
