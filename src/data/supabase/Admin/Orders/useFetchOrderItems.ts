@@ -36,7 +36,8 @@ export const useFetchOrderItems = (
 				User(user_role, user_name, user_profile_img_url),
 				Item(item_title, item_sold_by, Item_Image(item_image_url), Tag(tag_name), Category(category_name)),
 				VariantSnapshot(variant_snapshot_name, variant_snapshot_id, variant_copy_snapshot_id),
-				cancel_reason
+				cancel_reason,
+				last_updated
 				`,
 					{ count: "exact" },
 				)
@@ -129,6 +130,7 @@ export const useFetchOrderItems = (
 							orderItem.Item?.Item_Image?.[0]?.item_image_url ??
 							"",
 						cancel_reason: orderItem.cancel_reason,
+						last_updated: orderItem.last_updated,
 					}) as OrderTableRow,
 			);
 
