@@ -15,17 +15,18 @@ export const useFetchOrderItems = (
 	const [fetchError, setFetchError] = useState<string | null>(null);
 	const [totalCount, setTotalCount] = useState<number>(0);
 
-	const fetchItem = useCallback(async () => {
-		setLoading(true);
-		setFetchError(null);
+	const fetchItem = useCallback(
+		async (isSilent = false) => {
+			if (!isSilent) setLoading(true);
+			setFetchError(null);
 
-		const from = (page - 1) * pageSize;
-		const to = from + pageSize - 1;
+			const from = (page - 1) * pageSize;
+			const to = from + pageSize - 1;
 
-		let query = supabase
-			.from("OrderItemUser")
-			.select(
-				`order_item_user_id,
+			let query = supabase
+				.from("OrderItemUser")
+				.select(
+					`order_item_user_id,
 				price_variant,
 				quantity,
 				subtotal,
@@ -37,101 +38,128 @@ export const useFetchOrderItems = (
 				VariantSnapshot(variant_snapshot_name, variant_snapshot_id, variant_copy_snapshot_id),
 				cancel_reason
 				`,
-				{ count: "exact" },
-			)
-			.eq("is_soft_deleted", false);
+					{ count: "exact" },
+				)
+				.eq("is_soft_deleted", false);
 
-		if (categories && categories.length > 0) {
-			query = query.in("status", categories);
-		}
-		if (searchQuery && searchQuery.trim() !== "") {
-			query = query.or(`order_identifier.ilike.%${searchQuery}%`);
-		}
+			if (categories && categories.length > 0) {
+				query = query.in("status", categories);
+			}
+			if (searchQuery && searchQuery.trim() !== "") {
+				query = query.or(`order_identifier.ilike.%${searchQuery}%`);
+			}
 
-		let data, error, count: number | null;
+			let data, error, count: number | null;
 
-		if (sortConfig) {
-			const {
-				data: d,
-				error: e,
-				count: c,
-			} = await query
-				.order(sortConfig.column, {
-					ascending: sortConfig.direction === "asc",
-					referencedTable:
-						sortConfig.column === "item_title" ? "Item" : undefined,
-				})
-				.range(from, to);
-			data = d;
-			error = e;
-			count = c;
-		} else {
-			const {
-				data: d,
-				error: e,
-				count: c,
-			} = await query
-				.order("created_at", {
-					ascending: false,
-				})
-				.range(from, to);
-			data = d;
-			error = e;
-			count = c;
-		}
+			if (sortConfig) {
+				const {
+					data: d,
+					error: e,
+					count: c,
+				} = await query
+					.order(sortConfig.column, {
+						ascending: sortConfig.direction === "asc",
+						referencedTable:
+							sortConfig.column === "item_title"
+								? "Item"
+								: undefined,
+					})
+					.range(from, to);
+				data = d;
+				error = e;
+				count = c;
+			} else {
+				const {
+					data: d,
+					error: e,
+					count: c,
+				} = await query
+					.order("created_at", {
+						ascending: false,
+					})
+					.range(from, to);
+				data = d;
+				error = e;
+				count = c;
+			}
 
-		setLoading(false);
+			setLoading(false);
 
-		if (error) {
-			setFetchError(error.message || "Failed to fetch item.");
-			setOrderItems([]);
-			setTotalCount(0);
-			return;
-		}
+			if (error) {
+				setFetchError(error.message || "Failed to fetch item.");
+				setOrderItems([]);
+				setTotalCount(0);
+				return;
+			}
 
-		setTotalCount(count ?? 0);
+			setTotalCount(count ?? 0);
 
-		if (!data || data.length === 0) {
-			setOrderItems([]);
+			if (!data || data.length === 0) {
+				setOrderItems([]);
 
-			return;
-		}
+				return;
+			}
 
-		const orderItems = data.map(
-			(orderItem: any) =>
-				({
-					order_id: orderItem.order_item_user_id,
-					user_name: orderItem.User?.user_name ?? "Unknown User",
-					user_role: orderItem.User?.user_role ?? "Guest",
-					date_ordered: orderItem.created_at,
-					item_name: orderItem.Item?.item_title ?? "Unknown Item",
-					item_variant_name:
-						orderItem.VariantSnapshot?.variant_snapshot_name ??
-						"Default Variant",
-					item_quantity: orderItem.quantity,
-					subtotal: orderItem.subtotal,
-					price_variant: orderItem.price_variant,
-					status: orderItem.status,
-					item_first_img_url:
-						orderItem.Item?.Item_Image?.[0]?.item_image_url ?? "",
-					user_profile_img_url:
-						orderItem.User?.user_profile_img_url ?? "",
-					item_sold_by: orderItem.Item?.item_sold_by ?? "Unknown",
-					item_variant_id:
-						orderItem.VariantSnapshot?.variant_copy_snapshot_id ??
-						"",
-					order_identifier: orderItem.order_identifier ?? "",
-					item_img_url:
-						orderItem.Item?.Item_Image?.[0]?.item_image_url ?? "",
-					cancel_reason: orderItem.cancel_reason,
-				}) as OrderTableRow,
-		);
+			const orderItems = data.map(
+				(orderItem: any) =>
+					({
+						order_id: orderItem.order_item_user_id,
+						user_name: orderItem.User?.user_name ?? "Unknown User",
+						user_role: orderItem.User?.user_role ?? "Guest",
+						date_ordered: orderItem.created_at,
+						item_name: orderItem.Item?.item_title ?? "Unknown Item",
+						item_variant_name:
+							orderItem.VariantSnapshot?.variant_snapshot_name ??
+							"Default Variant",
+						item_quantity: orderItem.quantity,
+						subtotal: orderItem.subtotal,
+						price_variant: orderItem.price_variant,
+						status: orderItem.status,
+						item_first_img_url:
+							orderItem.Item?.Item_Image?.[0]?.item_image_url ??
+							"",
+						user_profile_img_url:
+							orderItem.User?.user_profile_img_url ?? "",
+						item_sold_by: orderItem.Item?.item_sold_by ?? "Unknown",
+						item_variant_id:
+							orderItem.VariantSnapshot
+								?.variant_copy_snapshot_id ?? "",
+						order_identifier: orderItem.order_identifier ?? "",
+						item_img_url:
+							orderItem.Item?.Item_Image?.[0]?.item_image_url ??
+							"",
+						cancel_reason: orderItem.cancel_reason,
+					}) as OrderTableRow,
+			);
 
-		setOrderItems(orderItems);
-	}, [categories, searchQuery, sortConfig, page, pageSize]);
+			setOrderItems(orderItems);
+		},
+		[categories, searchQuery, sortConfig, page, pageSize],
+	);
 
 	useEffect(() => {
 		fetchItem();
+	}, [fetchItem]);
+
+	useEffect(() => {
+		const channel = supabase
+			.channel("admin-orders-realtime")
+			.on(
+				"postgres_changes",
+				{
+					event: "*",
+					schema: "public",
+					table: "OrderItemUser",
+				},
+				() => {
+					fetchItem(true);
+				},
+			)
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
 	}, [fetchItem]);
 
 	return {
