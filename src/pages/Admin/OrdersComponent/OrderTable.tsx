@@ -205,7 +205,7 @@ export function OrderTable({
 		}
 	};
 
-	if (loading) {
+	if (loading && !orders) {
 		return <OrderTableSkeleton />;
 	}
 
