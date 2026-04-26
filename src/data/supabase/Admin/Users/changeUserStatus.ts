@@ -12,6 +12,7 @@ export async function changeUserStatus(
 			.from("User")
 			.update({
 				user_status: userStatus,
+				last_updated: new Date().toISOString(),
 			})
 			.eq("user_id", userID);
 

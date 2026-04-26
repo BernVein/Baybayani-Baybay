@@ -85,7 +85,11 @@ export default function Users() {
 					if (!prev) return prev;
 					return prev.map((user) =>
 						user.user_id === userID
-							? { ...user, user_status: userStatus }
+							? {
+									...user,
+									user_status: userStatus,
+									last_updated: new Date().toISOString(),
+								}
 							: user,
 					);
 				});

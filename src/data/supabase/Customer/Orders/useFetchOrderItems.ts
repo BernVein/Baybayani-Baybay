@@ -42,7 +42,8 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
                             created_at,
                             status,
                             order_identifier,
-							cancel_reason                           
+							cancel_reason,
+							last_updated
                       `,
 						{ count: "exact" },
 					)
@@ -76,6 +77,7 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 						status: order.status,
 						order_identifier: order.order_identifier,
 						cancel_reason: order.cancel_reason,
+						last_updated: order.last_updated,
 					}),
 				);
 

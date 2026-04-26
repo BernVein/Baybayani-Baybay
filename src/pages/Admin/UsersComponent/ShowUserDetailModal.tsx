@@ -144,6 +144,27 @@ export function ShowUserDetailModal({
 									</>
 								)}
 							</p>
+							{selectedUserProfile?.last_updated && (
+								<p className="text-default-500">
+									Status updated on:{" "}
+									<span className="text-default-900">
+										{
+											formatCreatedAt(
+												selectedUserProfile.last_updated,
+											)?.formattedDate
+										}{" "}
+									</span>
+									<span className="text-default-900 italic">
+										(
+										{
+											formatCreatedAt(
+												selectedUserProfile.last_updated,
+											)?.relativeText
+										}
+										)
+									</span>
+								</p>
+							)}
 							<p>{selectedUserProfile?.user_name}'s Valid IDs:</p>
 							<div className="flex flex-row gap-1 w-full">
 								{Array.from({ length: 2 }).map((_, index) => {

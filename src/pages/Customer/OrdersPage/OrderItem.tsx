@@ -243,6 +243,10 @@ export default function OrderItem({
 							cancelReason={
 								orderItem.cancel_reason ?? "No reason provided."
 							}
+							status={
+								orderItem.status as "Completed" | "Cancelled"
+							}
+							lastUpdated={orderItem.last_updated ?? undefined}
 						/>
 						<LoadingModal
 							isOpenLoading={isOpenLoading}

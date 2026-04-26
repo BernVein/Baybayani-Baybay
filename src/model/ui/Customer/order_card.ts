@@ -12,4 +12,5 @@ export interface OrderCard {
 	status: string;
 	order_identifier: string;
 	cancel_reason?: string | null;
+	last_updated?: string | null;
 }
