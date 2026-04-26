@@ -29,17 +29,18 @@ export const fetchAllUsers = (
 	const [fetchError, setFetchError] = useState<string | null>(null);
 	const [totalCount, setTotalCount] = useState<number>(0);
 
-	const fetchItem = useCallback(async () => {
-		setLoading(true);
-		setFetchError(null);
+	const fetchItem = useCallback(
+		async (isSilent = false) => {
+			if (!isSilent) setLoading(true);
+			setFetchError(null);
 
-		const from = (page - 1) * pageSize;
-		const to = from + pageSize - 1;
+			const from = (page - 1) * pageSize;
+			const to = from + pageSize - 1;
 
-		let query = supabase
-			.from("User")
-			.select(
-				`
+			let query = supabase
+				.from("User")
+				.select(
+					`
 				user_id,
 				user_name,
 				user_role,
@@ -50,60 +51,62 @@ export const fetchAllUsers = (
 				user_status,
 				created_at
 				`,
-				{ count: "exact" },
-			)
-			.eq("is_soft_deleted", false);
+					{ count: "exact" },
+				)
+				.eq("is_soft_deleted", false);
 
-		if (searchTerm) {
-			query = query.ilike("user_name", `%${searchTerm}%`);
-		}
+			if (searchTerm) {
+				query = query.ilike("user_name", `%${searchTerm}%`);
+			}
 
-		if (roles.length > 0) {
-			query = query.in("user_role", roles);
-		}
+			if (roles.length > 0) {
+				query = query.in("user_role", roles);
+			}
 
-		if (statuses.length > 0) {
-			query = query.in("user_status", statuses);
-		}
+			if (statuses.length > 0) {
+				query = query.in("user_status", statuses);
+			}
 
-		const { data, error, count } = await query
-			.order(sortConfig.column, {
-				ascending: sortConfig.ascending,
-			})
-			.range(from, to);
+			const { data, error, count } = await query
+				.order(sortConfig.column, {
+					ascending: sortConfig.ascending,
+				})
+				.range(from, to);
 
-		if (error) {
-			setFetchError(error.message);
-			setUserProfiles([]);
-			setTotalCount(0);
+			if (error) {
+				setFetchError(error.message);
+				setUserProfiles([]);
+				setTotalCount(0);
+				setLoading(false);
+				return;
+			}
+
+			setTotalCount(count ?? 0);
+
+			if (!data) {
+				setUserProfiles([]);
+				setLoading(false);
+				return;
+			}
+
+			const mappedUsers = data.map((user: any) => ({
+				user_id: user.user_id,
+				user_name: user.user_name,
+				user_theme: user.user_theme,
+				login_user_name: user.login_user_name,
+				user_phone_number: user.user_phone_number,
+				user_role: user.user_role,
+				user_profile_img_url: user.user_profile_img_url,
+				user_status: user.user_status,
+
+				created_at: user.created_at,
+			})) as UserProfile[];
+
+			setUserProfiles(mappedUsers);
 			setLoading(false);
-			return;
-		}
-
-		setTotalCount(count ?? 0);
-
-		if (!data) {
-			setUserProfiles([]);
-			setLoading(false);
-			return;
-		}
-
-		const mappedUsers = data.map((user: any) => ({
-			user_id: user.user_id,
-			user_name: user.user_name,
-			user_theme: user.user_theme,
-			login_user_name: user.login_user_name,
-			user_phone_number: user.user_phone_number,
-			user_role: user.user_role,
-			user_profile_img_url: user.user_profile_img_url,
-			user_status: user.user_status,
-
-			created_at: user.created_at,
-		})) as UserProfile[];
-
-		setUserProfiles(mappedUsers);
-		setLoading(false);
-	}, [searchTerm, sortConfig, roles, statuses, page, pageSize]);
+		},
+		[searchTerm, sortConfig, roles, statuses, page, pageSize],
+	);
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
@@ -111,6 +114,27 @@ export const fetchAllUsers = (
 		}, 300); // Small debounce to avoid too many requests while typing
 
 		return () => clearTimeout(handler);
+	}, [fetchItem]);
+
+	useEffect(() => {
+		const channel = supabase
+			.channel("admin-users-realtime")
+			.on(
+				"postgres_changes",
+				{
+					event: "*",
+					schema: "public",
+					table: "User",
+				},
+				() => {
+					fetchItem(true);
+				},
+			)
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
 	}, [fetchItem]);
 
 	return {
