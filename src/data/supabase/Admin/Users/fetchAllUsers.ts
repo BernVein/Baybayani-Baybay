@@ -49,7 +49,8 @@ export const fetchAllUsers = (
 				login_user_name,
 				user_phone_number,
 				user_status,
-				created_at
+				created_at,
+				last_updated
 				`,
 					{ count: "exact" },
 				)
@@ -100,6 +101,7 @@ export const fetchAllUsers = (
 				user_status: user.user_status,
 
 				created_at: user.created_at,
+				last_updated: user.last_updated,
 			})) as UserProfile[];
 
 			setUserProfiles(mappedUsers);
