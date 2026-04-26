@@ -244,7 +244,7 @@ export default function Users() {
 					</p>
 					<p className="text-sm text-default-500">{fetchError}</p>
 				</div>
-			) : loading ? (
+			) : loading && !userProfiles ? (
 				renderSkeleton()
 			) : (
 				<div className="flex-1 min-h-0 flex flex-col">
