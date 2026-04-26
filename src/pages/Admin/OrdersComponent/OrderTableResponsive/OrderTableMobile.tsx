@@ -15,7 +15,7 @@ import {
 	Pagination,
 } from "@heroui/react";
 import { useState } from "react";
-import { CheckIcon, EyeIcon, MoreIconVertical } from "@/components/icons";
+import { ExclamationCircle, MoreIconVertical } from "@/components/icons";
 import { OrderTableRow } from "@/model/ui/Admin/order_table_row";
 import { OrderCancelReasonModal } from "@/pages/General/Orders/OrderCancelReasonModal";
 export function OrderTableMobile({
@@ -41,7 +41,12 @@ export function OrderTableMobile({
 	totalPages: number;
 	onChangePage: (page: number) => void;
 }) {
-	const [cancelReason, setCancelReason] = useState<string | null>(null);
+	const [selectedOrder, setSelectedOrder] = useState<{
+		status: "Completed" | "Cancelled";
+		lastUpdated: string;
+		cancelReason?: string;
+	} | null>(null);
+
 	const {
 		isOpen: isOpenReason,
 		onOpen: onOpenReason,
@@ -233,23 +238,28 @@ export function OrderTableMobile({
 											</DropdownMenu>
 										</Dropdown>
 									)}
-								{order.status === "Cancelled" && (
+								{(order.status === "Cancelled" ||
+									order.status === "Completed") && (
 									<Button
 										startContent={
-											<EyeIcon className="w-5" />
+											<ExclamationCircle className="w-5" />
 										}
 										isIconOnly
 										variant="light"
 										onPress={() => {
-											setCancelReason(
-												order.cancel_reason ?? "",
-											);
+											setSelectedOrder({
+												status: order.status as
+													| "Completed"
+													| "Cancelled",
+												lastUpdated:
+													order.last_updated ??
+													order.date_ordered,
+												cancelReason:
+													order.cancel_reason,
+											});
 											onOpenReason();
 										}}
 									/>
-								)}
-								{order.status === "Completed" && (
-									<CheckIcon className="w-5 ml-2 text-default" />
 								)}
 							</TableCell>
 						</TableRow>
@@ -259,7 +269,9 @@ export function OrderTableMobile({
 			<OrderCancelReasonModal
 				isOpenCancelReasonModal={isOpenReason}
 				onOpenChangeCancelReasonModal={onOpenChangeReason}
-				cancelReason={cancelReason ?? "No reason provided."}
+				cancelReason={selectedOrder?.cancelReason ?? ""}
+				status={selectedOrder?.status ?? "Completed"}
+				lastUpdated={selectedOrder?.lastUpdated}
 			/>
 		</div>
 	);
