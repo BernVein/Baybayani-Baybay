@@ -19,7 +19,7 @@ import {
 } from "@/components/icons";
 
 import { useEffect, useState } from "react";
-import { useClosingTime } from "@/data/supabase/General/useClosingTime";
+import { useClosingTimeContext } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 import { LockIcon, LockOpen } from "lucide-react";
 import {
 	ChangeStoreHoursModal,
@@ -54,7 +54,7 @@ export function DashboardSummary({
 	} = useDisclosure();
 
 	const { rawClosingDate, rawOpeningDate, isClosedForTheDay } =
-		useClosingTime();
+		useClosingTimeContext();
 
 	// Optimistic override (null means "use hook values")
 	const [optimistic, setOptimistic] = useState<StoreHoursSnapshot | null>(
