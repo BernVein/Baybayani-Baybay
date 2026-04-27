@@ -132,7 +132,7 @@ export function useClosingCancellations(userId: string | undefined) {
 		if (!userId) return;
 
 		const channel = supabase
-			.channel(`closing-cancellations-${userId}`)
+			.channel(`closing-cancellations-${userId}-${Math.random()}`)
 			.on(
 				"postgres_changes",
 				{
