@@ -47,7 +47,7 @@ export const useRealtimeReadyOrders = (userId: string | null) => {
 		if (!userId) return;
 
 		const channel = supabase
-			.channel(`ready-orders-${userId}`)
+			.channel(`ready-orders-${userId}-${Math.random()}`)
 			.on(
 				"postgres_changes",
 				{
