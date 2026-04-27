@@ -108,7 +108,7 @@ export function useClosingTime(): ClosingTimeState {
 	// Realtime subscription — when admin changes closing time, update immediately
 	useEffect(() => {
 		const channel = supabase
-			.channel("closing-time-changes")
+			.channel(`closing-time-changes-${Math.random()}`)
 			.on(
 				"postgres_changes",
 				{ event: "*", schema: "public", table: "ClosingTime" },
