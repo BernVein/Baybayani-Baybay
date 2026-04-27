@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { Time } from "@internationalized/date";
 import { updateClosingTime } from "@/data/supabase/Admin/Dashboard/updateClosingTime";
-import { useClosingTime } from "@/data/supabase/General/useClosingTime";
+import { useClosingTimeContext } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 
 function supabaseTimeToTimeObject(timeString: string): Time {
 	const [hour, minute, second] = timeString.split(":").map(Number);
@@ -49,7 +49,7 @@ export function ChangeStoreHoursModal({
 	onRevert,
 }: Props) {
 	const { rawClosingDate, rawOpeningDate, isClosedForTheDay } =
-		useClosingTime();
+		useClosingTimeContext();
 
 	const [closingTime, setClosingTime] = useState<Time | null>(null);
 	const [openingTime, setOpeningTime] = useState<Time | null>(null);
