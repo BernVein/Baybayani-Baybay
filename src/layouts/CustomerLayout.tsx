@@ -25,7 +25,7 @@ import { User as AuthUser } from "@supabase/supabase-js";
 import { FloatingChatProvider } from "@/ContextProvider/FloatingChatContext/FloatingChatContext";
 import { FloatingChat } from "@/pages/General/Chat/FloatingChat";
 import { NotificationAlert } from "@/pages/General/Notification/NotificationAlert";
-import { ClosingTimeProvider } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
+
 import { ClosingTimeBanner } from "@/components/General/ClosingTimeBanner";
 import { AnnouncementModal } from "@/pages/Customer/Announcement/AnnouncementModal";
 import { useClosingCancellations } from "@/data/supabase/Customer/Orders/useClosingCancellations";
@@ -71,7 +71,7 @@ export default function CustomerLayout({
 	}, []);
 
 	return (
-		<ClosingTimeProvider>
+
 			<FloatingChatProvider>
 				<div className="relative h-[100dvh] w-full bg-background text-foreground overflow-hidden flex flex-col">
 					{/* Top Navbar (+ closing time banner above it) */}
@@ -136,6 +136,6 @@ export default function CustomerLayout({
 					)}
 				</div>
 			</FloatingChatProvider>
-		</ClosingTimeProvider>
+
 	);
 }
