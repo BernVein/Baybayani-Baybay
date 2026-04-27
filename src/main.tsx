@@ -7,15 +7,18 @@ import { Provider } from "./provider.tsx";
 import "@/styles/globals.css";
 
 import { AuthProvider } from "@/ContextProvider/AuthContext/AuthProvider";
+import { ClosingTimeProvider } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Provider>
 				<AuthProvider>
-					<main className="text-foreground bg-background">
-						<App />
-					</main>
+					<ClosingTimeProvider>
+						<main className="text-foreground bg-background">
+							<App />
+						</main>
+					</ClosingTimeProvider>
 				</AuthProvider>
 			</Provider>
 		</BrowserRouter>
