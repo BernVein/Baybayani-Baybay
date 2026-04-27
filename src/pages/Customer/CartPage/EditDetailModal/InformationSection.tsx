@@ -171,80 +171,60 @@ export default function InformationSection({
                 {/* Retail info */}
                 <div className="gap-2 flex flex-row justify-between">
                     <span className="text-xs text-default-400">
-                        Last Price Retail:
+                        Retail Price Last Updated:
                     </span>
                     <span className="text-xs text-default-500">
-                        {selectedItemVariant?.variant_last_updated_price_retail ? (
-                            <>
-                                ₱
-                                {selectedItemVariant.variant_last_price_retail?.toFixed(
-                                    2,
-                                )}{" "}
-                                (
-                                {(() => {
-                                    const updatedAt =
-                                        selectedItemVariant.variant_last_updated_price_retail;
-                                    const now = new Date();
-                                    const updatedDate = new Date(updatedAt);
-                                    const diffTime =
-                                        now.getTime() - updatedDate.getTime();
-                                    const diffDays = Math.floor(
-                                        diffTime / (1000 * 60 * 60 * 24),
-                                    );
+                        {(() => {
+                            const updatedAt =
+                                selectedItemVariant?.variant_last_updated_price_retail ||
+                                selectedItemVariant?.last_updated ||
+                                selectedItemVariant?.created_at ||
+                                new Date().toISOString();
+                            const now = new Date();
+                            const updatedDate = new Date(updatedAt);
+                            const diffTime =
+                                now.getTime() - updatedDate.getTime();
+                            const diffDays = Math.floor(
+                                diffTime / (1000 * 60 * 60 * 24),
+                            );
 
-                                    if (diffDays === 0) return "Today";
-                                    if (diffDays === 1) return "1 day ago";
+                            if (diffDays === 0) return "Today";
+                            if (diffDays === 1) return "1 day ago";
 
-                                    return `${diffDays} days ago`;
-                                })()}
-                                )
-                            </>
-                        ) : (
-                            <span className="italic text-default-400">
-                                No change
-                            </span>
-                        )}
+                            return `${diffDays} days ago`;
+                        })()}
                     </span>
                 </div>
 
                 {/* Wholesale info */}
-                <div className="gap-2 flex flex-row justify-between">
-                    <span className="text-xs text-default-400">
-                        Last Price Wholesale:
-                    </span>
-                    <span className="text-xs text-default-500">
-                        {selectedItemVariant?.variant_last_updated_price_wholesale ? (
-                            <>
-                                ₱
-                                {selectedItemVariant.variant_last_price_wholesale?.toFixed(
-                                    2,
-                                )}{" "}
-                                (
-                                {(() => {
-                                    const updatedAt =
-                                        selectedItemVariant.variant_last_updated_price_wholesale;
-                                    const now = new Date();
-                                    const updatedDate = new Date(updatedAt);
-                                    const diffTime =
-                                        now.getTime() - updatedDate.getTime();
-                                    const diffDays = Math.floor(
-                                        diffTime / (1000 * 60 * 60 * 24),
-                                    );
+                {selectedItemVariant?.variant_price_wholesale != null && (
+                    <div className="gap-2 flex flex-row justify-between">
+                        <span className="text-xs text-default-400">
+                            Wholesale Price Last Updated:
+                        </span>
+                        <span className="text-xs text-default-500">
+                            {(() => {
+                                const updatedAt =
+                                    selectedItemVariant?.variant_last_updated_price_wholesale ||
+                                    selectedItemVariant?.last_updated ||
+                                    selectedItemVariant?.created_at ||
+                                    new Date().toISOString();
+                                const now = new Date();
+                                const updatedDate = new Date(updatedAt);
+                                const diffTime =
+                                    now.getTime() - updatedDate.getTime();
+                                const diffDays = Math.floor(
+                                    diffTime / (1000 * 60 * 60 * 24),
+                                );
 
-                                    if (diffDays === 0) return "Today";
-                                    if (diffDays === 1) return "1 day ago";
+                                if (diffDays === 0) return "Today";
+                                if (diffDays === 1) return "1 day ago";
 
-                                    return `${diffDays} days ago`;
-                                })()}
-                                )
-                            </>
-                        ) : (
-                            <span className="italic text-default-400">
-                                No change
-                            </span>
-                        )}
-                    </span>
-                </div>
+                                return `${diffDays} days ago`;
+                            })()}
+                        </span>
+                    </div>
+                )}
 
                 {/* Stocks info */}
                 <div className="gap-2 flex flex-row justify-between">
