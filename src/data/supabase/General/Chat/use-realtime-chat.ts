@@ -164,7 +164,7 @@ export function useRealtimeChat({
 		let channelHandle: any;
 
 		const setupChannel = async () => {
-			const channel = supabase.channel(`chat-${roomId}`, {
+			const channel = supabase.channel(`chat-${roomId}-${Math.random()}`, {
 				config: {
 					presence: {
 						key: userId,
