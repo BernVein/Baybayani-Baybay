@@ -145,7 +145,7 @@ export const useFetchOrderItems = (
 
 	useEffect(() => {
 		const channel = supabase
-			.channel("admin-orders-realtime")
+			.channel(`admin-orders-realtime-${Math.random()}`)
 			.on(
 				"postgres_changes",
 				{
