@@ -514,7 +514,7 @@ export function AddEditItemModal({
 								{!selectedItemId && (
 									<Button
 										color="success"
-										isDisabled={!validate()}
+										isDisabled={itemHasVariant ? item.item_variants.length < 2 : item.item_variants.length < 1}
 										isLoading={
 											selectedItemId
 												? isUpdateLoading
