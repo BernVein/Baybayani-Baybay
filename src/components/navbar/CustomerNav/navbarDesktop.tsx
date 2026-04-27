@@ -61,6 +61,16 @@ export function Navbar({
 		key: `${i.item_title}-${index}`,
 	}));
 
+	const submitSearch = (rawValue?: string) => {
+		const term = (rawValue ?? searchValue).trim();
+		if (location.pathname !== "/") {
+			navigate("/");
+		}
+		setSearchValue(term);
+		setSearchTerm(term);
+		(document.activeElement as HTMLInputElement | null)?.blur();
+	};
+
 	return (
 		<HeroNavBar position="static">
 			{/* Brand */}
@@ -116,11 +126,15 @@ export function Navbar({
 					}}
 					onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
 						if (e.key === "Enter") {
-							if (location.pathname !== "/") {
-								navigate("/");
-							}
-							setSearchTerm(searchValue);
-							(e.target as HTMLInputElement).blur();
+							e.preventDefault();
+							submitSearch(e.currentTarget.value);
+						}
+					}}
+					onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+						// Android WebView keyboards may skip keydown Enter.
+						if (e.key === "Enter" || e.code === "Enter") {
+							e.preventDefault();
+							submitSearch(e.currentTarget.value);
 						}
 					}}
 					onInputChange={(val) => {
@@ -140,17 +154,7 @@ export function Navbar({
 								<AutocompleteItem
 									key={item.key}
 									onClick={() => {
-										// Redirect to shop if user is elsewhere
-										if (location.pathname !== "/") {
-											navigate("/");
-										}
-										setSearchValue(item.label);
-										setSearchTerm(item.label);
-										setTimeout(() => {
-											(
-												document.activeElement as HTMLInputElement
-											)?.blur();
-										}, 100);
+										submitSearch(item.label);
 									}}
 								>
 									{item.label}
