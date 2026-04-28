@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 import { supabase } from "@/config/supabaseclient";
 import { OrderCard } from "@/model/ui/Customer/order_card";
@@ -12,15 +12,15 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 	const [loading, setLoading] = useState(false);
 	const hasFetchedOnce = useRef(false);
 
-	// True only on the very first load (no data to show yet)
-	const initialLoading = loading && !hasFetchedOnce.current;
+	const fetchOrders = useCallback(
+		async (opts?: { background?: boolean }) => {
+			if (!userId) return;
 
-	useEffect(() => {
-		if (!userId) return;
-
-		const fetchData = async () => {
 			try {
-				setLoading(true);
+				if (!opts?.background) {
+					setLoading(true);
+				}
+				setError(null);
 
 				const from = (page - 1) * PAGE_SIZE;
 				const to = from + PAGE_SIZE - 1;
@@ -51,12 +51,12 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 					.eq("is_soft_deleted", false)
 					.order("created_at", { ascending: false })
 					.range(from, to);
-				console.log(rawData);
+
 				if (fetchError) {
 					setError(fetchError);
-
 					return;
 				}
+
 				setTotalPages(Math.ceil((count ?? 0) / PAGE_SIZE));
 				const mapped: OrderCard[] = (rawData ?? []).map(
 					(order: any) => ({
@@ -86,12 +86,48 @@ export const useFetchOrderCards = (userId?: string, page = 1) => {
 			} catch (err) {
 				setError(err);
 			} finally {
-				setLoading(false);
+				if (!opts?.background) {
+					setLoading(false);
+				}
 			}
-		};
+		},
+		[userId, page],
+	);
 
-		fetchData();
-	}, [userId, page]);
+	const fetchOrdersRef = useRef(fetchOrders);
+	fetchOrdersRef.current = fetchOrders;
+
+	// True only on the very first load (no data to show yet)
+	const initialLoading = loading && !hasFetchedOnce.current;
+
+	useEffect(() => {
+		if (!userId) return;
+		void fetchOrders();
+	}, [userId, page, fetchOrders]);
+
+	useEffect(() => {
+		if (!userId) return;
+
+		const channel = supabase
+			.channel(`user-orders-${userId}-${Math.random()}`)
+			.on(
+				"postgres_changes",
+				{
+					event: "*",
+					schema: "public",
+					table: "OrderItemUser",
+					filter: `user_id=eq.${userId}`,
+				},
+				() => {
+					void fetchOrdersRef.current({ background: true });
+				},
+			)
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
+	}, [userId]);
 
 	return { data, setData, error, totalPages, loading, initialLoading };
 };
