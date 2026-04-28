@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 import { supabase } from "@/config/supabaseclient";
 import { ItemCard } from "@/model/ui/Customer/item_card";
@@ -10,13 +10,20 @@ export const useFetchItemCardItems = (
 	itemsPerPage = 8,
 ) => {
 	const [items, setItems] = useState<ItemCard[]>([]);
-	const [page, setPage] = useState(0);
-	const [loading, setLoading] = useState(false);
+	// Start true so the first paint never shows the infinite-scroll sentinel with
+	// loading still false — otherwise IntersectionObserver can fire in the same
+	// tick as fetchItems(0) and race loadMore() (stale closure sees !loading).
+	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [hasMore, setHasMore] = useState(true);
+	const pageRef = useRef(0);
+	const loadMoreInFlightRef = useRef(false);
 
 	const fetchItems = useCallback(
 		async (pageNum = 0, reset = false) => {
+			if (reset) {
+				pageRef.current = 0;
+			}
 			setLoading(true);
 			setError(null);
 
@@ -149,7 +156,6 @@ export const useFetchItemCardItems = (
 
 	// Reset items when filters change
 	useEffect(() => {
-		setPage(0);
 		setItems([]);
 		setHasMore(true);
 		fetchItems(0, true);
@@ -167,13 +173,17 @@ export const useFetchItemCardItems = (
 		};
 	}, [fetchItems]);
 
-	const loadMore = async () => {
-		if (loading || !hasMore) return;
-		const nextPage = page + 1;
-
-		setPage(nextPage);
-		await fetchItems(nextPage);
-	};
+	const loadMore = useCallback(async () => {
+		if (loading || !hasMore || loadMoreInFlightRef.current) return;
+		loadMoreInFlightRef.current = true;
+		const nextPage = pageRef.current + 1;
+		pageRef.current = nextPage;
+		try {
+			await fetchItems(nextPage, false);
+		} finally {
+			loadMoreInFlightRef.current = false;
+		}
+	}, [loading, hasMore, fetchItems]);
 
 	return {
 		items,
