@@ -48,6 +48,11 @@ export default function ShopItems({
 		sortOption,
 	);
 
+	const loadingRef = useRef(loading);
+	const hasMoreRef = useRef(hasMore);
+	loadingRef.current = loading;
+	hasMoreRef.current = hasMore;
+
 	// Infinite scroll: show a sentinel div and observe it with IntersectionObserver
 	const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -55,15 +60,21 @@ export default function ShopItems({
 		if (!sentinelRef.current) return;
 		const observer = new IntersectionObserver(
 			(entries) => {
-				if (entries[0].isIntersecting && hasMore && !loading) {
+				// Read refs so callbacks never use stale render-time loading/hasMore
+				// (IO can fire synchronously on observe() before React re-renders).
+				if (
+					entries[0].isIntersecting &&
+					hasMoreRef.current &&
+					!loadingRef.current
+				) {
 					loadMore();
 				}
 			},
-			{ threshold: 0.1 },
+			{ threshold: 0.1, rootMargin: "120px 0px" },
 		);
 		observer.observe(sentinelRef.current);
 		return () => observer.disconnect();
-	}, [hasMore, loading, loadMore]);
+	}, [loadMore]);
 
 	const toastShown = useRef(false);
 
@@ -255,21 +266,34 @@ export default function ShopItems({
 						/>
 					))}
 
-					{/* Skeleton items */}
+					{/* Initial load: full grid of placeholders */}
 					{loading &&
+						items.length === 0 &&
 						Array.from({ length: 8 }).map((_, index) => (
 							<div
 								key={`skeleton-${index}`}
 								className="flex flex-col gap-2"
 							>
-								<Skeleton className="h-[140px] w-full rounded-lg" />{" "}
-								{/* Image */}
-								<Skeleton className="h-4 w-1/2 rounded" />{" "}
-								{/* Category */}
-								<Skeleton className="h-5 w-full rounded" />{" "}
-								{/* Title */}
-								<Skeleton className="h-4 w-3/4 rounded" />{" "}
-								{/* Price Retail */}
+								<Skeleton className="h-[140px] w-full rounded-lg" />
+								<Skeleton className="h-4 w-1/2 rounded" />
+								<Skeleton className="h-5 w-full rounded" />
+								<Skeleton className="h-4 w-3/4 rounded" />
+							</div>
+						))}
+
+					{/* Loading next page while we already have items */}
+					{loading &&
+						items.length > 0 &&
+						hasMore &&
+						Array.from({ length: 4 }).map((_, index) => (
+							<div
+								key={`skeleton-more-${index}`}
+								className="flex flex-col gap-2"
+							>
+								<Skeleton className="h-[140px] w-full rounded-lg" />
+								<Skeleton className="h-4 w-1/2 rounded" />
+								<Skeleton className="h-5 w-full rounded" />
+								<Skeleton className="h-4 w-3/4 rounded" />
 							</div>
 						))}
 				</div>
