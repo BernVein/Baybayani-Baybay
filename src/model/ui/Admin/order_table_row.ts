@@ -9,6 +9,7 @@ export interface OrderTableRow {
 	item_quantity: number;
 	subtotal: number;
 	price_variant: string;
+	// Pending = defayult, Ready = Order is ready for pickup, Completed = Order has been picked up, Cancelled = Order has been cancelled
 	status: "Pending" | "Ready" | "Completed" | "Cancelled";
 	item_first_img_url: string;
 	user_profile_img_url: string;
