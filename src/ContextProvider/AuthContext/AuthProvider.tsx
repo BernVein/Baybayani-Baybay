@@ -14,6 +14,7 @@ const AuthContext = createContext<{
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const { user, profile, loading, refresh } = fetchUser();
 	return (
+		// protect against null context value, though it should never be null since this provider should wrap the entire app
 		<AuthContext.Provider value={{ user, profile, loading, refresh }}>
 			{children}
 		</AuthContext.Provider>
