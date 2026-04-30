@@ -65,7 +65,8 @@ export function ItemStockDetail({
 								?.effective_stocks <= 0)
 					}
 					label="Acquired Stocks"
-					type="text"
+					type="number"
+					step="any"
 					value={
 						variant.variant_stock_latest_movement
 							.effective_stocks != null
@@ -182,7 +183,8 @@ export function ItemStockDetail({
 							</span>
 						</div>
 					}
-					type="text"
+					type="number"
+					step="any"
 					value={
 						variant.variant_stock_latest_movement
 							.stock_adjustment_amount != null
