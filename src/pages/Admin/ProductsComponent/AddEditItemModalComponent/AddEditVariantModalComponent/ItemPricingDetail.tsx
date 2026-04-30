@@ -33,7 +33,8 @@ export function ItemPricingDetail({
 							</span>
 						</div>
 					}
-					type="text"
+					type="number"
+					step="any"
 					value={
 						variant.variant_price_retail != null
 							? String(variant.variant_price_retail)
@@ -72,7 +73,8 @@ export function ItemPricingDetail({
 							</span>
 						</div>
 					}
-					type="text"
+					type="number"
+					step="any"
 					value={
 						variant.variant_price_wholesale != null
 							? String(variant.variant_price_wholesale)
