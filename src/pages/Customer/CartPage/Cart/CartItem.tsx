@@ -191,7 +191,7 @@ export default function CartItem({
                                     Subtotal
                                 </span>
                                 <span className="text-sm text-default-600">
-                                    ₱{cartItemUser.subtotal.toLocaleString()}
+                                    ₱{cartItemUser.subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                             </div>
 
