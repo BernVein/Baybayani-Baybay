@@ -426,7 +426,8 @@ export function AddEditVariantModal({
 														0)
 											}
 											label="Low Stock Alert Threshold"
-											type="text"
+											type="number"
+											step="any"
 											value={
 												variant.variant_low_stock_threshold !=
 												null
@@ -496,7 +497,8 @@ export function AddEditVariantModal({
 												!!variant.variant_price_wholesale
 											}
 											label="Wholesale Minimum Quantity"
-											type="text"
+											type="number"
+											step="any"
 											value={
 												variant.variant_price_wholesale ==
 												null
