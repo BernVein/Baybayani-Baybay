@@ -91,7 +91,7 @@ export function OrderCartItems({
 								{items.length})
 							</span>
 							<span className="text-sm font-bold text-success-600">
-								Total: ₱{totalSubtotal.toLocaleString()}
+								Total: ₱{totalSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 							</span>
 						</div>
 						<Button
