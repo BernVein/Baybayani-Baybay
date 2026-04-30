@@ -247,7 +247,8 @@ export function EditStockDetailModal({
 												? "Stocks to Add"
 												: "Stocks to Deduct"
 										}
-										type="text"
+										type="number"
+										step="any"
 										value={
 											stockMovement.stock_change_count !==
 											undefined
@@ -391,7 +392,8 @@ export function EditStockDetailModal({
 												</span>
 											</div>
 										}
-										type="text"
+										type="number"
+										step="any"
 										value={
 											stockMovement.stock_adjustment_amount !==
 											undefined
