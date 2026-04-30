@@ -143,7 +143,7 @@ export default function Cart() {
 					</Link>
 				</div>
 			) : (
-				<div className="flex flex-col sm:flex-row gap-3 w-full md:w-3/4 md:mx-auto p-5">
+				<div className="flex flex-col sm:flex-row gap-3 w-full md:w-3/4 md:mx-auto p-5 pb-48 sm:pb-5">
 					<div className="sm:w-3/4">
 						<div className="flex justify-between items-center mb-2">
 							<Checkbox
@@ -230,7 +230,11 @@ export default function Cart() {
 					</div>
 					{/* Right side: Order summary skeleton */}
 					<Card
-						className="w-full sm:w-1/4 self-start sticky top-42 bottom-23 z-20 shadow-sm border border-default-200 rounded-lg"
+						className={
+							isMobile
+								? "fixed bottom-30 left-3 right-3 z-50 rounded-t-lg shadow-lg border border-default-200"
+								: "w-1/4 self-start sticky top-26 z-20 shadow-sm border border-default-200 rounded-lg"
+						}
 						isBlurred={isMobile}
 					>
 						<CardBody className="gap-1">
