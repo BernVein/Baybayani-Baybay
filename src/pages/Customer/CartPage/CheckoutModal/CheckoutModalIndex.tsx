@@ -168,7 +168,7 @@ export default function CheckoutModalIndex({
 																: item
 																		.variant_snapshot
 																		.variant_snapshot_price_retail
-															).toLocaleString()}
+															).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 														</span>
 													</div>
 													{/* price variant */}
@@ -205,7 +205,7 @@ export default function CheckoutModalIndex({
 														</span>
 														<span>
 															₱
-															{item.subtotal.toLocaleString()}
+															{item.subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 														</span>
 													</div>
 												</div>
@@ -222,7 +222,7 @@ export default function CheckoutModalIndex({
 										Total Price:
 									</span>
 									<span className="font-bold text-lg">
-										₱{selectedSubtotal.toLocaleString()}
+										₱{selectedSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 									</span>
 								</div>
 
