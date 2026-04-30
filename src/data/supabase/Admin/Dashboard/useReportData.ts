@@ -81,8 +81,7 @@ export function useReportData(
 							item.Variant?.variant_name || "Unknown Variant",
 						quantity: item.stock_change_count || 0,
 						price: price,
-						total_price:
-							Math.abs(item.stock_change_count || 0) * price,
+						total_price: price,
 						effective_stocks: item.effective_stocks || 0,
 					};
 				},
