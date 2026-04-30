@@ -293,7 +293,7 @@ export default function InformationSection({
                         minValue={1}
                         placeholder="Enter quantity"
                         radius="sm"
-                        step={0.25}
+                        step={0.01}
                         value={quantity}
                         variant="faded"
                         onKeyDown={(e) => {
