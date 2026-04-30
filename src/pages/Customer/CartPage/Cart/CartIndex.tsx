@@ -254,7 +254,7 @@ export default function Cart() {
 											Total Price
 										</span>
 										<span className="text-default-600 font-bold">
-											₱{selectedSubtotal.toLocaleString()}
+											₱{selectedSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 										</span>
 									</div>
 									<Button
