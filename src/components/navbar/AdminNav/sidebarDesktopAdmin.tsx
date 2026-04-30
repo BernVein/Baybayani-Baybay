@@ -31,6 +31,15 @@ import {
 } from "@/components/icons";
 import ThemeSwitcher from "@/components/navbar/themeSwitcher";
 import { UserProfile } from "@/model/userProfile";
+import { useClosingTimeContext } from "@/ContextProvider/ClosingTimeContext/ClosingTimeContext";
+
+function formatTimeString(timeStr: string | null): string {
+	if (!timeStr) return "--:--";
+	const [h, m] = timeStr.split(":").map(Number);
+	const period = h >= 12 ? "PM" : "AM";
+	const hour12 = h % 12 || 12;
+	return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
+}
 
 export function SidebarDesktopAdmin({
 	profile,
@@ -39,6 +48,7 @@ export function SidebarDesktopAdmin({
 }) {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const { rawClosingDate, rawOpeningDate, loading: closingTimeLoading, isClosed } = useClosingTimeContext();
 
 	// Map pathname to the Listbox key
 	const pathToKey: Record<string, string> = {
@@ -107,7 +117,19 @@ export function SidebarDesktopAdmin({
 						<span className="text-[#F9C424]">ANI</span>
 					</p>
 					<p className="text-small text-default-500">
-						Closing time: 5:00 pm
+						{closingTimeLoading ? (
+							"Loading..."
+						) : (
+							<>
+								{formatTimeString(rawOpeningDate)} -{" "}
+								{formatTimeString(rawClosingDate)}
+								{isClosed && (
+									<span className="text-danger font-semibold ml-1">
+										(Closed)
+									</span>
+								)}
+							</>
+						)}
 					</p>
 				</div>
 			</CardHeader>
