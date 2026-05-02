@@ -12,8 +12,8 @@ export function fetchProductStats() {
 	const [error, setError] = useState<any>(null);
 
 	useEffect(() => {
-		async function fetchStats() {
-			setLoading(true);
+		async function fetchStats(showLoading: boolean = true) {
+			if (showLoading) setLoading(true);
 			try {
 				// 1. Get the last item added and total item count
 				const {
@@ -100,6 +100,41 @@ export function fetchProductStats() {
 		}
 
 		fetchStats();
+
+		// Real-time subscription to relevant tables
+		const channelId = Math.random().toString(36).substring(7);
+		const channel = supabase
+			.channel(`admin-product-stats-realtime-${channelId}`)
+			.on(
+				"postgres_changes",
+				{ event: "*", schema: "public", table: "Item" },
+				() => fetchStats(false),
+			)
+			.on(
+				"postgres_changes",
+				{ event: "*", schema: "public", table: "Variant" },
+				() => fetchStats(false),
+			)
+			.on(
+				"postgres_changes",
+				{ event: "*", schema: "public", table: "StockMovement" },
+				() => fetchStats(false),
+			)
+			.on(
+				"postgres_changes",
+				{ event: "*", schema: "public", table: "Category" },
+				() => fetchStats(false),
+			)
+			.on(
+				"postgres_changes",
+				{ event: "*", schema: "public", table: "Tag" },
+				() => fetchStats(false),
+			)
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
 	}, []);
 
 	return {
