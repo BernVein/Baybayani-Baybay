@@ -1,3 +1,4 @@
+import { addToast } from "@heroui/react";
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { supabase } from "@/config/supabaseclient";
@@ -201,17 +202,74 @@ export const useFetchProductsUI = (
 			.on(
 				"postgres_changes",
 				{ event: "*", schema: "public", table: "Item" },
-				() => fetchItems(false),
+				(payload) => {
+					const itemTitle = (payload.new as any)?.item_title;
+					const eventType = payload.eventType;
+
+					addToast({
+						title: "Product Update",
+						description:
+							eventType === "INSERT"
+								? `"${itemTitle || "New Product"}" has been added.`
+								: eventType === "DELETE"
+									? "A product has been removed."
+									: `"${itemTitle || "A product"}" has been updated.`,
+						color: "primary",
+						timeout: 5000,
+						shouldShowTimeoutProgress: true,
+					});
+					fetchItems(false);
+				},
 			)
 			.on(
 				"postgres_changes",
 				{ event: "*", schema: "public", table: "Variant" },
-				() => fetchItems(false),
+				(payload) => {
+					const variantName = (payload.new as any)?.variant_name;
+					const eventType = payload.eventType;
+
+					addToast({
+						title: "Variant Update",
+						description:
+							eventType === "DELETE"
+								? "A product variant has been removed."
+								: `"${variantName || "Variant"}" details or pricing updated.`,
+						color: "secondary",
+						timeout: 5000,
+						shouldShowTimeoutProgress: true,
+					});
+					fetchItems(false);
+				},
 			)
 			.on(
 				"postgres_changes",
 				{ event: "*", schema: "public", table: "StockMovement" },
-				() => fetchItems(false),
+				async (payload) => {
+					const variantId = (payload.new as any)?.variant_id;
+					let description = "Inventory levels have been adjusted.";
+
+					if (variantId) {
+						// Quick lookup for variant name to make toast specific
+						const { data } = await supabase
+							.from("Variant")
+							.select("variant_name")
+							.eq("variant_id", variantId)
+							.single();
+
+						if (data?.variant_name) {
+							description = `Stock for "${data.variant_name}" has been updated.`;
+						}
+					}
+
+					addToast({
+						title: "Stock Update",
+						description,
+						color: "success",
+						timeout: 5000,
+						shouldShowTimeoutProgress: true,
+					});
+					fetchItems(false);
+				},
 			)
 			.subscribe();
 
