@@ -4,10 +4,14 @@ export function formatCreatedAt(createdAt?: string | null) {
 	const created = new Date(createdAt);
 	if (isNaN(created.getTime())) return null;
 
-	const formattedDate = created.toLocaleDateString("en-US", {
+	const formattedDate = created.toLocaleString("en-US", {
 		year: "numeric",
 		month: "short",
 		day: "numeric",
+		hour: "numeric",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: true,
 	});
 
 	const today = new Date();
