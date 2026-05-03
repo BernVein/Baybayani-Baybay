@@ -13,6 +13,7 @@ export interface ReportData {
 	price: number;
 	total_price: number;
 	effective_stocks: number;
+	item_unit: string;
 }
 
 export function useReportData(
@@ -49,7 +50,7 @@ export function useReportData(
 					is_soft_deleted,
 					Variant(
 						variant_name,
-						Item(item_title)
+						Item(item_title, item_sold_by)
 					)
 				`,
 				)
@@ -83,6 +84,7 @@ export function useReportData(
 						price: price,
 						total_price: price,
 						effective_stocks: item.effective_stocks || 0,
+						item_unit: item.Variant?.Item?.item_sold_by || "",
 					};
 				},
 			);
