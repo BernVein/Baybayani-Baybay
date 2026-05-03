@@ -64,11 +64,13 @@ export function exportReportToExcel(
 				? item.item_name
 				: `${item.item_name} (${item.variant_name})`;
 
+		const stockWithUnit = `${displayCount} ${item.item_unit}`.trim();
+
 		return [
 			isAcquisition && item.stock_delivery_date
-				? format(new Date(item.stock_delivery_date), "yyyy-MM-dd")
-				: format(new Date(item.stock_change_date), "yyyy-MM-dd"),
-			displayCount,
+				? format(new Date(item.stock_delivery_date), "yyyy-MM-dd HH:mm:ss")
+				: format(new Date(item.stock_change_date), "yyyy-MM-dd HH:mm:ss"),
+			stockWithUnit,
 			type,
 			reason,
 			productName,
@@ -266,10 +268,10 @@ export function exportReportToExcel(
 	const wb = XLSX.utils.book_new();
 	XLSX.utils.book_append_sheet(wb, ws, "Inventory Report");
 
-	const filename = `Baybayani_Report_${format(
-		new Date(),
-		"yyyyMMdd_HHmm",
-	)}.xlsx`;
+	const filename = `Baybayani Report ${format(
+		new Date(dateRange.start),
+		"MMMM d",
+	)} - ${format(new Date(dateRange.end), "MMMM d")}.xlsx`;
 
 	XLSX.writeFile(wb, filename);
 }
