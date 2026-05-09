@@ -269,6 +269,7 @@ export function AdminFloatingChat() {
 						const { error } = await supabase
 							.from("ChatMessage")
 							.update({ is_read: true })
+							.eq("chat_room_id", room.chat_room_id)
 							.eq("user_id", selectedUser.id)
 							.eq("is_read", false);
 
