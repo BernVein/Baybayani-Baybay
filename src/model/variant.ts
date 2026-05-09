@@ -7,6 +7,7 @@ export interface Variant {
   variant_price_wholesale?: number | null;
   variant_wholesale_item?: number | null;
   variant_last_updated_stock?: string; // timestamptz
+  variant_last_acquisition_date?: string | null; // timestamptz
   variant_last_updated_price_retail?: string | null; // timestamptz
   variant_last_price_retail?: number;
   variant_last_updated_price_wholesale?: string | null; // timestamptz
