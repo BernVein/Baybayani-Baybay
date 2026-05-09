@@ -65,8 +65,63 @@ export const useFetchCartItems = (
 			return;
 		}
 
-		const mapped: CartItemUser[] =
-			data?.map((row: any) => ({
+		const mapped: CartItemUser[] = await Promise.all(
+			(data || []).map(async (row: any) => {
+				const fetchedVariants = row.Item?.Variant
+					? await Promise.all(
+							row.Item.Variant.map(async (v: any) => {
+								const { data: acquisitionRaw } = await supabase
+									.from("StockMovement")
+									.select("stock_change_date, created_at")
+									.eq("variant_id", v.variant_id)
+									.eq("stock_adjustment_type", "Acquisition")
+									.eq("is_soft_deleted", false)
+									.order("created_at", { ascending: false })
+									.limit(1);
+
+								const latestStock = v.StockMovement?.[0] ?? {
+									effective_stocks: 0,
+									created_at: "",
+								};
+
+								return {
+									variant_id: v.variant_id,
+									variant_name: v.variant_name,
+									variant_price_retail: Number(
+										v.variant_price_retail,
+									),
+									variant_price_wholesale:
+										v.variant_price_wholesale ?? null,
+									variant_wholesale_item:
+										v.variant_wholesale_item ?? null,
+									variant_stock_latest_movement: latestStock,
+									variant_last_updated_stock:
+										v.variant_stock_latest_movement
+											?.created_at ?? null,
+									variant_last_acquisition_date:
+										acquisitionRaw?.[0]?.stock_change_date ||
+										acquisitionRaw?.[0]?.created_at ||
+										null,
+									variant_last_updated_price_retail:
+										v.variant_last_updated_price_retail ??
+										null,
+									variant_last_price_retail:
+										v.variant_last_price_retail ??
+										undefined,
+									variant_last_updated_price_wholesale:
+										v.variant_last_updated_price_wholesale ??
+										null,
+									variant_last_price_wholesale:
+										v.variant_last_price_wholesale ?? null,
+									last_updated: v.last_updated ?? "",
+									is_soft_deleted: v.is_soft_deleted ?? false,
+									created_at: v.created_at ?? "",
+								} as Variant;
+							}),
+					  )
+					: [];
+
+				return {
 				cart_item_user_id: row.cart_item_user_id,
 				item: (row.Item
 					? {
@@ -86,47 +141,7 @@ export const useFetchCartItems = (
 							is_soft_deleted: row.Item.is_soft_deleted,
 							last_updated: row.Item.last_updated,
 							created_at: String(row.Item.created_at || ""),
-							item_variants:
-								row.Item.Variant?.map((v: any) => {
-									const latestStock = v
-										.StockMovement?.[0] ?? {
-										effective_stocks: 0,
-										created_at: "",
-									};
-
-									return {
-										variant_id: v.variant_id,
-										variant_name: v.variant_name,
-										variant_price_retail: Number(
-											v.variant_price_retail,
-										),
-										variant_price_wholesale:
-											v.variant_price_wholesale ?? null,
-										variant_wholesale_item:
-											v.variant_wholesale_item ?? null,
-										variant_stock_latest_movement:
-											latestStock,
-										variant_last_updated_stock:
-											v.variant_stock_latest_movement
-												?.created_at ?? null,
-										variant_last_updated_price_retail:
-											v.variant_last_updated_price_retail ??
-											null,
-										variant_last_price_retail:
-											v.variant_last_price_retail ??
-											undefined,
-										variant_last_updated_price_wholesale:
-											v.variant_last_updated_price_wholesale ??
-											null,
-										variant_last_price_wholesale:
-											v.variant_last_price_wholesale ??
-											null,
-										last_updated: v.last_updated ?? "",
-										is_soft_deleted:
-											v.is_soft_deleted ?? false,
-										created_at: v.created_at ?? "",
-									} as Variant;
-								}) ?? [],
+							item_variants: fetchedVariants,
 						}
 					: {
 							item_id: "",
@@ -194,7 +209,8 @@ export const useFetchCartItems = (
 				is_soft_deleted: row.is_soft_deleted,
 				created_at: row.created_at ?? "",
 				updated_at: row.updated_at ?? "",
-			})) ?? [];
+			};
+		}));
 
 		setCartItems(mapped);
 		setLoading(false);
