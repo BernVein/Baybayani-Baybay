@@ -238,6 +238,23 @@ export default function InformationSection({
                         left
                     </span>
                 </div>
+
+                {/* Last Acquisition info */}
+                <div className="gap-2 flex flex-row justify-between">
+                    <span className="text-xs text-default-400">Last Acquisition:</span>
+                    <span className="text-xs text-default-500">
+                        {selectedItemVariant?.variant_last_acquisition_date ? (() => {
+                            const now = new Date();
+                            const updatedDate = new Date(selectedItemVariant.variant_last_acquisition_date);
+                            const diffTime = now.getTime() - updatedDate.getTime();
+                            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                            if (diffDays === 0) return "Today";
+                            if (diffDays === 1) return "1 day ago";
+                            return `${diffDays} days ago`;
+                        })() : "No record"}
+                    </span>
+                </div>
             </div>
 
             <Divider />
