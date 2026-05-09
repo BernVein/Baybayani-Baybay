@@ -49,6 +49,15 @@ export const useFetchItemById = (
 						.order("created_at", { ascending: false })
 						.limit(2);
 
+					const { data: acquisitionRaw } = await supabase
+						.from("StockMovement")
+						.select("stock_change_date, created_at")
+						.eq("variant_id", v.variant_id)
+						.eq("stock_adjustment_type", "Acquisition")
+						.eq("is_soft_deleted", false)
+						.order("created_at", { ascending: false })
+						.limit(1);
+
 					const stockMovements: StockMovement[] =
 						stockMovementsRaw ?? [];
 
@@ -71,6 +80,10 @@ export const useFetchItemById = (
 							v.variant_low_stock_threshold,
 						variant_last_updated_stock:
 							v.variant_last_updated_stock,
+						variant_last_acquisition_date:
+							acquisitionRaw?.[0]?.stock_change_date ||
+							acquisitionRaw?.[0]?.created_at ||
+							null,
 						variant_last_updated_price_retail:
 							v.variant_last_updated_price_retail ?? null,
 						variant_stock_movements: stockMovements,
