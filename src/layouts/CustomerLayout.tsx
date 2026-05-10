@@ -44,6 +44,7 @@ export default function CustomerLayout({
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);
 	const topNavRef = useRef<HTMLDivElement>(null);
 	const bottomNavRef = useRef<HTMLDivElement>(null);
+	const [refreshKey, setRefreshKey] = useState(0);
 	const [navHeight, setNavHeight] = useState(0);
 	const [footerHeight, setFooterHeight] = useState(0);
 	const { cancelledOrders, markAsRead } = useClosingCancellations(user?.id);
@@ -94,13 +95,16 @@ export default function CustomerLayout({
 					>
 						<PullToRefresh
 							onRefresh={async () => {
-								window.location.reload();
+								setRefreshKey((prev) => prev + 1);
+								await new Promise((resolve) => setTimeout(resolve, 500));
 							}}
 						>
 							<Suspense fallback={<CustomerPageSkeleton />}>
-								<Outlet
-									context={{ searchTerm, setSearchTerm }}
-								/>
+								<div key={refreshKey} className="h-full w-full">
+									<Outlet
+										context={{ searchTerm, setSearchTerm }}
+									/>
+								</div>
 							</Suspense>
 						</PullToRefresh>
 					</main>
