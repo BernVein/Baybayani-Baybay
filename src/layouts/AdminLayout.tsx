@@ -31,6 +31,7 @@ function AdminPageSkeleton() {
 export default function AdminLayout() {
 	const [searchTerm, setSearchTerm] = useState<string | null>(null);
 	const bottomNavRef = useRef<HTMLDivElement>(null);
+	const [refreshKey, setRefreshKey] = useState(0);
 	const [footerHeight, setFooterHeight] = useState(0);
 	const auth = useAuth();
 	const user = auth?.user ?? null;
@@ -73,18 +74,21 @@ export default function AdminLayout() {
 			>
 				<PullToRefresh
 					onRefresh={async () => {
-						window.location.reload();
+						setRefreshKey((prev) => prev + 1);
+						await new Promise((resolve) => setTimeout(resolve, 500));
 					}}
 				>
 					<Suspense fallback={<AdminPageSkeleton />}>
-						<Outlet
-							context={{
-								searchTerm,
-								setSearchTerm,
-								user,
-								profile,
-							}}
-						/>
+						<div key={refreshKey} className="h-full w-full">
+							<Outlet
+								context={{
+									searchTerm,
+									setSearchTerm,
+									user,
+									profile,
+								}}
+							/>
+						</div>
 					</Suspense>
 				</PullToRefresh>
 			</main>
