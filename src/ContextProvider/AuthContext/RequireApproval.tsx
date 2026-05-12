@@ -5,6 +5,7 @@ import RestrictedAccessModal from "@/pages/General/RestrictedAccessModal";
 import { supabase } from "@/config/supabaseclient";
 import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 import { addToast } from "@heroui/react";
+import FullPageLoader from "@/components/General/FullPageLoader";
 
 export default function RequireApproval({ children }: { children: ReactNode }) {
 	const auth = useAuth();
@@ -62,7 +63,7 @@ export default function RequireApproval({ children }: { children: ReactNode }) {
 		}
 	};
 
-	if (loading) return null;
+	if (loading) return <FullPageLoader />;
 
 	// If the user is on a restricted route and not approved, show the modal but also provide a fallback or redirect
 	// Actually, the requirement is "they can still normally login but they cannot access any other page, only /shop or /."
