@@ -1,14 +1,14 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { lazy, Suspense } from "react";
-import { addToast, Spinner, useDisclosure } from "@heroui/react";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { LoadingModal } from "@/components/General/LoadingModal";
-import { supabase } from "@/config/supabaseclient";
-import { useNavigate } from "react-router-dom";
-import CustomerLayout from "@/layouts/CustomerLayout";
-import AdminLayout from "@/layouts/AdminLayout";
+import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { addToast, useDisclosure } from "@heroui/react";
 
+// Config & Utils
+import { supabase } from "@/config/supabaseclient";
+import { registerPush } from "@/utils/PushNotification/registerPush";
+import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
+
+// Contexts & Providers
+import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import RequireRole from "@/ContextProvider/AuthContext/RequireRole";
 import RequireAuth from "@/ContextProvider/AuthContext/RequireAuth";
 import RedirectAdmin from "@/ContextProvider/AuthContext/RedirectAdmin";
@@ -16,31 +16,33 @@ import RequireGuest from "@/ContextProvider/AuthContext/RequireGuest";
 import RequireApproval from "@/ContextProvider/AuthContext/RequireApproval";
 import { LoginModalProvider } from "@/ContextProvider/LoginModalContext/LoginModalContext";
 import { NotificationProvider } from "@/ContextProvider/NotificationContext/NotificationProvider";
-import LoginModal from "@/pages/General/LoginModal";
 
+// Components & Layouts
+import CustomerLayout from "@/layouts/CustomerLayout";
+import AdminLayout from "@/layouts/AdminLayout";
+import { LoadingModal } from "@/components/General/LoadingModal";
+import LoginModal from "@/pages/General/LoginModal";
+import FullPageLoader from "@/components/General/FullPageLoader";
+
+// Lazy Loaded Pages - Customer
 const Cart = lazy(() => import("@/pages/Customer/CartPage/Cart/CartIndex"));
 const Orders = lazy(() => import("@/pages/Customer/OrdersPage/OrderIndex"));
 const Shop = lazy(() => import("@/pages/Customer/ShopPage/ShopIndex"));
-const Settings = lazy(
-	() => import("@/pages/Customer/UserAccount/SettingsPage/Settings"),
-);
-const CustomerAnnouncements = lazy(
-	() => import("@/pages/Customer/Announcement/Announcements"),
-);
+const Settings = lazy(() => import("@/pages/Customer/UserAccount/SettingsPage/Settings"));
+const CustomerAnnouncements = lazy(() => import("@/pages/Customer/Announcement/Announcements"));
+
+// Lazy Loaded Pages - Admin
 const Dashboard = lazy(() => import("@/pages/Admin/Dashboard"));
 const AdminOrders = lazy(() => import("@/pages/Admin/Orders"));
 const AdminProducts = lazy(() => import("@/pages/Admin/Products"));
 const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
 const AdminAnnouncements = lazy(() => import("@/pages/Admin/Announcements"));
 
+// Lazy Loaded Pages - General
 const LoginPage = lazy(() => import("@/pages/General/Login"));
 const SignUpPage = lazy(() => import("@/pages/General/SignUp"));
 const ResetPasswordPage = lazy(() => import("@/pages/General/ResetPassword"));
 const NotFound = lazy(() => import("@/pages/General/NotFound"));
-
-import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
-import { registerPush } from "@/utils/PushNotification/registerPush";
-import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
 
 function App() {
 	const auth = useAuth();
@@ -100,13 +102,7 @@ function App() {
 			<NotificationProvider>
 				<LoginModal />
 				<ScrollToTop />
-				<Suspense
-					fallback={
-						<div className="flex h-screen w-screen items-center justify-center">
-							<Spinner color="success" size="lg" />
-						</div>
-					}
-				>
+				<Suspense fallback={<FullPageLoader />}>
 					<Routes>
 						{/* CUSTOMER ROUTES */}
 						<Route
