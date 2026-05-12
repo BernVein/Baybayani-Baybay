@@ -13,6 +13,7 @@ import { useAuth } from "@/ContextProvider/AuthContext/AuthProvider";
 import { ReactNode, useEffect } from "react";
 import { supabase } from "@/config/supabaseclient";
 import { unregisterPush } from "@/utils/PushNotification/unregisterPush";
+import FullPageLoader from "@/components/General/FullPageLoader";
 
 export default function RequireGuest({ children }: { children: ReactNode }) {
 	const auth = useAuth();
@@ -47,7 +48,7 @@ export default function RequireGuest({ children }: { children: ReactNode }) {
 		}
 	}, [loading, profile, onOpen, onClose, location.pathname, navigate]);
 
-	if (loading) return null;
+	if (loading) return <FullPageLoader />;
 
 	const handleLogOut = async () => {
 		try {
