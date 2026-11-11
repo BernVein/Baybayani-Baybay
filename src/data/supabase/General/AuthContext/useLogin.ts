@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 export function useLogin() {
 	const navigate = useNavigate();
 
-	const [email, setEmail] = useState("");
+	// Usernames are always lowercase, so normalize as the user types.
+	const [email, setEmailRaw] = useState("");
+	const setEmail = (value: string) => setEmailRaw(value.toLowerCase());
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
@@ -31,7 +33,7 @@ export function useLogin() {
 		setLoading(true);
 
 		const { error } = await supabase.auth.signInWithPassword({
-			email: email + "@gmail.com",
+			email: email.trim().toLowerCase() + "@gmail.com",
 			password,
 		});
 

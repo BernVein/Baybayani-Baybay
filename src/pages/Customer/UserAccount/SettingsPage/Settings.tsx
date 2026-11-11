@@ -162,7 +162,7 @@ export default function Settings() {
 
 		setResettingPassword(true);
 		try {
-			const email = `${profile.login_user_name}@gmail.com`;
+			const email = `${profile.login_user_name.toLowerCase()}@gmail.com`;
 			const siteUrl =
 				import.meta.env.VITE_SITE_URL || window.location.origin;
 
