@@ -84,16 +84,23 @@ export function useClosingTime(): ClosingTimeState {
 		fetchClosingTime();
 	}, [fetchClosingTime]);
 
-	// Re-evaluate every 30 seconds so the banner appears / disappears automatically
+	// Re-evaluate every 30 seconds so the banner appears / disappears automatically.
+	// The closing time is re-anchored to *today* on each tick, so an app left
+	// open past midnight doesn't keep comparing against yesterday's closing time.
 	useEffect(() => {
-		if (!closingDate) return;
+		if (!rawClosingDate) return;
 
 		const interval = setInterval(() => {
-			setComputedState(computeState(closingDate, isClosedForTheDay));
+			const todaysClosing = parseClosingTimeToday(rawClosingDate);
+
+			setClosingDate((prev) =>
+				prev?.getTime() === todaysClosing.getTime() ? prev : todaysClosing,
+			);
+			setComputedState(computeState(todaysClosing, isClosedForTheDay));
 		}, 30_000);
 
 		return () => clearInterval(interval);
-	}, [closingDate, isClosedForTheDay]);
+	}, [rawClosingDate, isClosedForTheDay]);
 
 	// Trigger cancellation when store closes
 	useEffect(() => {

@@ -5,6 +5,11 @@ const config: CapacitorConfig = {
 	appName: "Baybayani",
 	webDir: "dist",
 	plugins: {
+		// Keep the webview out from under the status bar and the navigation bar.
+		SystemBars: {
+			insetsHandling: "native",
+			initialViewportFitValueHint: "contain",
+		},
 		PushNotifications: {
 			presentationOptions: [],
 		},

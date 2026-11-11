@@ -40,10 +40,14 @@ export default function Footer({
       cartItemUserId: cartItemUser.cart_item_user_id,
       item: cartItemUser.item,
       variant: selectedItemVariant,
+      currentVariantId: cartItemUser.variant_snapshot.variant_copy_snapshot_id,
       rawQuantity: quantity,
     });
 
-    if (result.error === "OUT_OF_STOCK_EXCEEDED") {
+    if (
+      result.error === "OUT_OF_STOCK_EXCEEDED" ||
+      result.error === "INVALID_QUANTITY"
+    ) {
       addToast({
         title: "Failed to update cart item",
         description: result.message,
@@ -109,6 +113,7 @@ export default function Footer({
         </Button>
         <Button
           color="success"
+          isDisabled={!quantity || quantity <= 0}
           isLoading={isLoading}
           startContent={!isLoading && <CartIcon className="size-5" />}
           onPress={editUpdateCartItem}
