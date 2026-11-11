@@ -75,7 +75,7 @@ export function DashboardSummary({
 	const opening12h = formatTimeTo12h(displayedOpening);
 
 	return (
-		<div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+		<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
 			<Card className="w-full">
 				<CardBody className="gap-y-3">
 					<span className="text-default-500 font-medium">

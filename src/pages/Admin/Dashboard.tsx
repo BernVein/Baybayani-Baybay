@@ -119,8 +119,8 @@ export default function Dashboard() {
 
 			<DashboardSummary stats={stats} loading={loading} />
 
-			<div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-stretch h-full sm:min-h-[380px]">
-				<Card className="w-full sm:col-span-3 p-4">
+			<div className="grid grid-cols-1 lg:grid-cols-4 gap-3 items-stretch h-full lg:min-h-[380px]">
+				<Card className="w-full lg:col-span-3 p-4">
 					<CardBody>
 						<span className="text-default-500 mb-4">
 							REVENUE TREND
@@ -132,7 +132,7 @@ export default function Dashboard() {
 					</CardBody>
 				</Card>
 
-				<Card className="w-full sm:col-span-1 p-4 sm:h-full min-h-[380px]">
+				<Card className="w-full lg:col-span-1 p-4 lg:h-full min-h-[380px]">
 					<CardBody className="gap-2 overflow-hidden">
 						<span className="text-default-500 mb-2">
 							LOW STOCK VARIANTS
@@ -151,8 +151,8 @@ export default function Dashboard() {
 				</Card>
 			</div>
 
-			<div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-stretch h-full sm:min-h-[380px]">
-				<Card className="w-full sm:col-span-3 p-4">
+			<div className="grid grid-cols-1 lg:grid-cols-4 gap-3 items-stretch h-full lg:min-h-[380px]">
+				<Card className="w-full lg:col-span-3 p-4">
 					<span className="text-default-500 pt-4 pl-4 mb-4">
 						ORDER TREND
 					</span>
@@ -161,7 +161,7 @@ export default function Dashboard() {
 						loading={loading}
 					/>
 				</Card>
-				<Card className="w-full sm:col-span-1 p-4 sm:h-full min-h-[380px]">
+				<Card className="w-full lg:col-span-1 p-4 lg:h-full min-h-[380px]">
 					<CardBody className="gap-2 overflow-hidden">
 						<span className="text-default-500 mb-2">
 							TOP ORDERED VARIANTS

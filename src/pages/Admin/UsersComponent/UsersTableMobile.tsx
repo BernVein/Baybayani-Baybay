@@ -46,7 +46,7 @@ export function UsersTableMobile({
 		useState<UserProfile | null>(null);
 
 	return (
-		<div className="sm:hidden flex-1 min-h-0 flex flex-col">
+		<div className="lg:hidden flex-1 min-h-0 flex flex-col">
 			<Table
 				isHeaderSticky
 				className="overflow-y-auto h-full w-full"

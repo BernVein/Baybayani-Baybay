@@ -118,7 +118,7 @@ export default function Users() {
 	const renderSkeleton = () => (
 		<div className="flex-1 min-h-0 flex flex-col">
 			{/* --- MOBILE SKELETON --- */}
-			<div className="sm:hidden">
+			<div className="lg:hidden">
 				<Table className="w-full">
 					<TableHeader>
 						<TableColumn>USER INFO</TableColumn>
@@ -154,7 +154,7 @@ export default function Users() {
 			</div>
 
 			{/* --- DESKTOP SKELETON --- */}
-			<div className="sm:flex hidden">
+			<div className="lg:flex hidden">
 				<Table className="w-full">
 					<TableHeader>
 						<TableColumn>USER</TableColumn>

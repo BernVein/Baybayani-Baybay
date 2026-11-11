@@ -30,7 +30,7 @@ export default function OrderIndex() {
 
 	return (
 		<>
-			<div className="w-full sm:w-3/4 mx-auto px-5">
+			<div className="w-full max-w-5xl mx-auto px-4 sm:px-6">
 				{/* Header */}
 				<div className="flex items-center gap-2 mb-5">
 					<BaybayaniLogo className="size-7" />
@@ -42,7 +42,7 @@ export default function OrderIndex() {
 
 				{/* Orders Grid */}
 				<div
-					className="grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity duration-200"
+					className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-opacity duration-200"
 					style={{ opacity: loading && !initialLoading ? 0.6 : 1 }}
 				>
 					{/* Loading Skeleton — only on initial load */}
@@ -101,7 +101,7 @@ export default function OrderIndex() {
 
 				{/* No orders message */}
 				{!loading && orderItems.length === 0 && !error && (
-					<div className="col-span-full flex flex-col items-center justify-center w-full md:w-3/4 md:mx-auto py-16 px-5 text-center">
+					<div className="col-span-full flex flex-col items-center justify-center w-full max-w-5xl mx-auto py-16 px-4 sm:px-6 text-center">
 						<CartIcon className="size-40" />
 						<h3 className="text-xl font-semibold mb-2">
 							You have no orders yet

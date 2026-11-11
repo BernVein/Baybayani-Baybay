@@ -32,7 +32,7 @@ export default function ItemCard({
           <Image
             isZoomed
             alt={item_title}
-            className="w-full object-cover h-[140px] rounded-lg shadow-sm"
+            className="w-full object-cover aspect-[4/3] rounded-lg shadow-sm"
             src={item_first_img}
             width="100%"
           />

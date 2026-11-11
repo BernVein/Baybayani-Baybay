@@ -12,7 +12,7 @@ export function OrderTableSkeleton() {
 	return (
 		<div>
 			{/* --- MOBILE SKELETON --- */}
-			<div className="sm:hidden">
+			<div className="lg:hidden">
 				<Table className="w-full">
 					<TableHeader>
 						<TableColumn>CUSTOMER & ORDER ID</TableColumn>
@@ -46,7 +46,7 @@ export function OrderTableSkeleton() {
 			</div>
 
 			{/* --- DESKTOP SKELETON --- */}
-			<div className="sm:flex hidden">
+			<div className="lg:flex hidden">
 				<Table className="w-full">
 					<TableHeader>
 						<TableColumn>CUSTOMER</TableColumn>

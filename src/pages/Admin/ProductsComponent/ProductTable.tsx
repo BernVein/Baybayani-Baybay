@@ -74,7 +74,7 @@ export function ProductTable({
 		return (
 			<div>
 				{/* --- MOBILE SKELETON --- */}
-				<div className="sm:hidden">
+				<div className="lg:hidden">
 					<Table className="w-full">
 						<TableHeader>
 							<TableColumn>ITEM</TableColumn>
@@ -108,7 +108,7 @@ export function ProductTable({
 				</div>
 
 				{/* --- DESKTOP SKELETON --- */}
-				<div className="sm:flex hidden">
+				<div className="lg:flex hidden">
 					<Table className="w-full">
 						<TableHeader>
 							<TableColumn>ITEM</TableColumn>
