@@ -23,7 +23,7 @@ export default function Shop() {
 	}, []);
 
 	return (
-		<div className="p-5 md:p-10 flex flex-col gap-4 md:w-3/4 mx-auto items-center">
+		<div className="px-4 py-5 sm:px-6 lg:p-10 flex flex-col gap-4 w-full max-w-7xl mx-auto items-center">
 			<ImageHeader />
 
 			<Categories

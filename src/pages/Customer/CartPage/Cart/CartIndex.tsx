@@ -96,7 +96,7 @@ export default function Cart() {
 	return (
 		<>
 			{/* Header */}
-			<div className="flex justify-between items-center w-full md:w-3/4 md:mx-auto px-5">
+			<div className="flex justify-between items-center w-full max-w-5xl mx-auto px-4 sm:px-6">
 				<div className="flex items-center gap-2">
 					<BaybayaniLogo className="size-7" />
 					<h2 className="text-xl sm:text-3xl font-semibold">
@@ -123,7 +123,7 @@ export default function Cart() {
 			</div>
 
 			{!loading && allCartItems.length === 0 ? (
-				<div className="flex flex-col items-center justify-center w-full md:w-3/4 md:mx-auto py-16 px-5 text-center">
+				<div className="flex flex-col items-center justify-center w-full max-w-5xl mx-auto py-16 px-4 sm:px-6 text-center">
 					<CartIcon className="size-40" />
 
 					<h3 className="text-xl font-semibold mb-2">
@@ -143,7 +143,7 @@ export default function Cart() {
 					</Link>
 				</div>
 			) : (
-				<div className="flex flex-col sm:flex-row gap-3 w-full md:w-3/4 md:mx-auto p-5 pb-48 sm:pb-5">
+				<div className="flex flex-col sm:flex-row gap-3 w-full max-w-5xl mx-auto px-4 py-5 sm:px-6 pb-48 sm:pb-5">
 					<div className="sm:w-3/4">
 						<div className="flex justify-between items-center mb-2">
 							<Checkbox

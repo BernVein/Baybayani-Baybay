@@ -36,7 +36,8 @@ export default function AdminLayout() {
 	const auth = useAuth();
 	const user = auth?.user ?? null;
 	const profile = auth?.profile ?? null;
-	const isMobile = useIsMobile();
+	// Phones and portrait tablets get the bottom nav; the sidebar needs >= 1024px.
+	const isMobile = useIsMobile(1024);
 
 	useEffect(() => {
 		const updateHeights = () => {
@@ -57,9 +58,9 @@ export default function AdminLayout() {
 	}, []);
 
 	return (
-		<div className="relative h-[100dvh] w-full bg-background text-foreground overflow-hidden flex flex-col sm:flex-row">
+		<div className="relative h-[100dvh] w-full bg-background text-foreground overflow-hidden flex flex-col lg:flex-row">
 			{/* Sidebar Desktop */}
-			<div className="hidden sm:block w-[330px] h-full flex-shrink-0">
+			<div className="hidden lg:block w-[300px] h-full flex-shrink-0">
 				<SidebarDesktopAdmin profile={profile} />
 			</div>
 
@@ -97,7 +98,7 @@ export default function AdminLayout() {
 			{!isMobile ? null : (
 				<div
 					ref={bottomNavRef}
-					className="w-full z-50 sm:hidden flex-shrink-0"
+					className="w-full z-50 lg:hidden flex-shrink-0"
 				>
 					<NavbarMobileAdmin profile={profile} />
 				</div>

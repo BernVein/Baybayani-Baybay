@@ -57,7 +57,7 @@ export function UsersTableDesktop({
 		useState<UserProfile | null>(null);
 	console.log(selectedUserProfile);
 	return (
-		<div className="sm:flex hidden flex-1 min-h-0 flex-col">
+		<div className="lg:flex hidden flex-1 min-h-0 flex-col">
 			<Table
 				isHeaderSticky
 				className="overflow-y-auto h-full w-full"

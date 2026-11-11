@@ -45,7 +45,7 @@ export default function Login() {
 	return (
 		<div className="relative min-h-screen flex">
 			{/* Top-left welcome heading */}
-			<h1 className="absolute top-10 left-10 flex-row text-4xl font-bold leading-tight z-20 items-center sm:flex hidden">
+			<h1 className="absolute top-10 left-10 flex-row text-4xl font-bold leading-tight z-20 items-center lg:flex hidden">
 				<BaybayaniLogo className="md:w-15 w-10 mr-5" />
 				<span className="mr-2">Welcome to </span>
 				<span className="text-[#36975f]">BAYBAY</span>
@@ -53,15 +53,15 @@ export default function Login() {
 			</h1>
 
 			{/* Login Side */}
-			<div className="flex w-full sm:w-1/2 items-center justify-center z-10">
-				<div className="text-2xl font-bold">
+			<div className="flex w-full lg:w-1/2 items-center justify-center z-10">
+				<div className="text-2xl font-bold w-full flex justify-center px-4">
 					<Card
-						className="p-5 w-100 sm:w-120"
+						className="p-5 w-full max-w-md sm:max-w-lg"
 						classNames={{
 							base: "bg-transparent shadow-none border-none",
 						}}
 					>
-						<div className="flex flex-col gap-2 items-center sm:hidden">
+						<div className="flex flex-col gap-2 items-center lg:hidden">
 							<BaybayaniLogo className="w-15 mr-2" />
 							<div className="flex flex-row items-center justify-center ">
 								<span className="text-[#36975f]">BAYBAY</span>
@@ -175,7 +175,7 @@ export default function Login() {
 			</div>
 
 			{/* Image Side */}
-			<div className="hidden sm:block sm:w-1/2 relative">
+			<div className="hidden lg:block lg:w-1/2 relative">
 				<div
 					className="w-full h-full"
 					style={{

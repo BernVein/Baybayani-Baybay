@@ -245,7 +245,7 @@ export default function ShopItems({
 					</Dropdown>
 				</div>
 
-				<div className="gap-5 grid grid-cols-2 sm:grid-cols-4 mt-2 mb-2">
+				<div className="gap-3 sm:gap-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 mt-2 mb-2">
 					{/* Real items */}
 					{items.map((item) => (
 						<ItemCard
@@ -274,7 +274,7 @@ export default function ShopItems({
 								key={`skeleton-${index}`}
 								className="flex flex-col gap-2"
 							>
-								<Skeleton className="h-[140px] w-full rounded-lg" />
+								<Skeleton className="aspect-[4/3] w-full rounded-lg" />
 								<Skeleton className="h-4 w-1/2 rounded" />
 								<Skeleton className="h-5 w-full rounded" />
 								<Skeleton className="h-4 w-3/4 rounded" />
@@ -290,7 +290,7 @@ export default function ShopItems({
 								key={`skeleton-more-${index}`}
 								className="flex flex-col gap-2"
 							>
-								<Skeleton className="h-[140px] w-full rounded-lg" />
+								<Skeleton className="aspect-[4/3] w-full rounded-lg" />
 								<Skeleton className="h-4 w-1/2 rounded" />
 								<Skeleton className="h-5 w-full rounded" />
 								<Skeleton className="h-4 w-3/4 rounded" />
