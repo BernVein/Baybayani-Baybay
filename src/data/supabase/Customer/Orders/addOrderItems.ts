@@ -7,19 +7,23 @@ export async function addOrderItems(
 ) {
 	if (!cart_items.length) return;
 
+	// 10 fully random characters (36^10 combinations), same xxx-xxx-xxxx shape.
+	// The old version was mostly a timestamp with only 2 random characters,
+	// so items ordered in the same millisecond could share an ID.
 	const generateRandomId = () => {
 		const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+		const id: string[] = [];
 
-		const timePart = Date.now().toString(36);
+		while (id.length < 10) {
+			const bytes = new Uint8Array(16);
+			window.crypto.getRandomValues(bytes);
+			for (const b of bytes) {
+				// 252 = 36 * 7: drop bytes above it so every char is equally likely
+				if (b < 252 && id.length < 10) id.push(chars[b % 36]);
+			}
+		}
 
-		const array = new Uint8Array(10);
-		window.crypto.getRandomValues(array);
-		const randomPart = Array.from(
-			array,
-			(b) => chars[b % chars.length],
-		).join("");
-
-		const combined = (timePart + randomPart).padEnd(10, "0").slice(0, 10);
+		const combined = id.join("");
 		return `${combined.slice(0, 3)}-${combined.slice(3, 6)}-${combined.slice(6, 10)}`;
 	};
 	const orderItems = cart_items.map((cartItemUser: CartItemUser) => ({
