@@ -184,7 +184,12 @@ export function Step1({
 				labelPlacement="outside"
 				placeholder="Choose a username"
 				value={username}
-				onValueChange={(val) => setUsername(val)}
+				// Usernames are stored lowercase so login is consistent.
+				onValueChange={(val) => setUsername(val.toLowerCase())}
+				autoCapitalize="none"
+				autoComplete="username"
+				autoCorrect="off"
+				spellCheck="false"
 				isInvalid={!!usernameError || (tried && username.trim() === "")}
 				errorMessage={
 					username.trim() === ""

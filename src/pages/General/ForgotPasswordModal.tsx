@@ -37,7 +37,7 @@ export function ForgotPasswordModal({
 
 		setIsLoading(true);
 		try {
-			const email = `${username.trim()}@gmail.com`;
+			const email = `${username.trim().toLowerCase()}@gmail.com`;
 			const siteUrl =
 				import.meta.env.VITE_SITE_URL || window.location.origin;
 			const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -123,7 +123,10 @@ export function ForgotPasswordModal({
 								placeholder="Enter your username"
 								labelPlacement="outside"
 								value={username}
-								onValueChange={setUsername}
+								onValueChange={(val) => setUsername(val.toLowerCase())}
+								autoCapitalize="none"
+								autoCorrect="off"
+								spellCheck="false"
 								startContent={
 									<KeyIcon className="w-4 text-default-400" />
 								}

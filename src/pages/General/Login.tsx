@@ -93,6 +93,10 @@ export default function Login() {
 								<Input
 									value={email}
 									onValueChange={setEmail}
+									autoCapitalize="none"
+									autoComplete="username"
+									autoCorrect="off"
+									spellCheck="false"
 									placeholder="Enter your username"
 									isInvalid={isSubmitted && !email.trim()}
 									errorMessage="Please enter your username"

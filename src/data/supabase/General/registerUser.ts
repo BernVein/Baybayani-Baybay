@@ -42,7 +42,7 @@ export const registerUser = async (
 
 	// 2. Proceed with Auth signup only if images are valid and processed
 	const { data: authData, error: authError } = await supabase.auth.signUp({
-		email: profile.login_user_name + "@gmail.com",
+		email: profile.login_user_name.trim().toLowerCase() + "@gmail.com",
 		password,
 	});
 
@@ -66,7 +66,7 @@ export const registerUser = async (
 				user_role: profile.user_role,
 				user_profile_img_url: `https://api.dicebear.com/6.x/bottts-neutral/svg?seed=${profile.user_name}`,
 				user_theme: "light",
-				login_user_name: profile.login_user_name,
+				login_user_name: profile.login_user_name.trim().toLowerCase(),
 				user_phone_number: profile.user_phone_number,
 				user_status: "For Approval",
 			} as UserProfile,
